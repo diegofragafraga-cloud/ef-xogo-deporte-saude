@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superliga Saudable</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d27;
+    --bg3: #242836;
+    --text: #e4e6ed;
+    --text2: #9ca3b4;
+    --accent: #6c63ff;
+    --accent2: #4ecdc4;
+    --gold: #ffd700;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+    --green: #4ade80;
+    --red: #f87171;
+    --orange: #fb923c;
+    --border: #2e3345;
+    --radius: 12px;
+  }
+  .light {
+    --bg: #f5f6fa; --bg2: #ffffff; --bg3: #ebedf3;
+    --text: #1a1d27; --text2: #6b7280; --border: #d1d5db;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; transition: background .3s, color .3s;
+  }
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px; background: var(--bg2);
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; }
+  .back-btn {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all .2s;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .back-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .back-btn svg { width: 18px; height: 18px; }
+  .header h1 { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .header-logo { height: 30px; width: auto; border-radius: 0; }
+  .header-actions { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all .2s;
+  }
+  .icon-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
+
+  .tabs {
+    display: flex; gap: 0; background: var(--bg2);
+    border-bottom: 1px solid var(--border); padding: 0 24px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .tab {
+    padding: 12px 20px; cursor: pointer; font-weight: 600; font-size: .85rem;
+    color: var(--text2); border-bottom: 3px solid transparent;
+    transition: all .2s; display: flex; align-items: center; gap: 6px; white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab svg { width: 16px; height: 16px; }
+
+  .content { padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .hidden { display: none !important; }
+
+  /* Equipos Grid */
+  .teams-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;
+  }
+  .team-card {
+    background: var(--bg2); border: 2px solid var(--border); border-radius: var(--radius);
+    padding: 20px; cursor: pointer; transition: all .2s; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .team-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: var(--team-color);
+  }
+  .team-card:hover { border-color: var(--team-color); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+  .team-card.selected { border-color: var(--team-color); box-shadow: 0 0 0 2px var(--team-color); }
+  .team-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
+  .team-course { font-size: .8rem; color: var(--text2); }
+  .team-students { font-size: .75rem; color: var(--text2); margin-top: 2px; }
+  .team-points { margin-top: 10px; font-size: 1.4rem; font-weight: 800; color: var(--accent2); }
+  .team-points span { font-size: .7rem; font-weight: 400; color: var(--text2); }
+  .team-lites {
+    margin-top: 6px; font-size: .85rem; font-weight: 600; color: var(--gold);
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+  .team-lites svg { width: 14px; height: 14px; }
+
+  /* Panel de anotacion */
+  .annotation-panel {
+    margin-top: 24px; background: var(--bg2);
+    border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+  }
+  .panel-header {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-header h2 { font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+  .panel-close { background: none; border: none; color: var(--text2); cursor: pointer; padding: 4px; }
+  .panel-close:hover { color: var(--red); }
+  .panel-close svg { width: 20px; height: 20px; }
+  .panel-body { padding: 20px; }
+  .proposal-sections {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
+  }
+  .proposal {
+    background: var(--bg3); border-radius: var(--radius);
+    padding: 20px; border: 1px solid var(--border);
+  }
+  .proposal h3 { font-size: .95rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .proposal-desc { font-size: .75rem; color: var(--text2); margin-bottom: 14px; }
+  .field-group { margin-bottom: 12px; }
+  .field-group label { display: block; font-size: .8rem; color: var(--text2); margin-bottom: 4px; font-weight: 500; }
+  .field-row { display: flex; gap: 8px; align-items: center; }
+  input[type="number"], select {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 8px 12px; border-radius: 8px; font-size: .9rem; width: 100%; transition: border-color .2s;
+  }
+  input[type="number"]:focus, select:focus { outline: none; border-color: var(--accent); }
+  .btn {
+    padding: 8px 16px; border-radius: 8px; border: none; font-weight: 600;
+    font-size: .85rem; cursor: pointer; transition: all .2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.15); }
+  .btn-sm { padding: 6px 12px; font-size: .8rem; }
+  .result-box {
+    margin-top: 10px; padding: 8px 12px; background: var(--bg);
+    border-radius: 8px; font-size: .85rem; border: 1px solid var(--border);
+  }
+  .result-box strong { color: var(--accent2); }
+  .history-list { margin-top: 10px; max-height: 120px; overflow-y: auto; font-size: .78rem; }
+  .history-item {
+    display: flex; justify-content: space-between; padding: 4px 8px;
+    border-radius: 4px; margin-bottom: 2px;
+  }
+  .history-item:nth-child(odd) { background: var(--bg); }
+  .history-item .hi-delete {
+    color: var(--text2); cursor: pointer; background: none;
+    border: none; font-size: .7rem; padding: 0 4px;
+  }
+  .history-item .hi-delete:hover { color: var(--red); }
+
+  /* Ranking */
+  .ranking-table {
+    width: 100%; border-collapse: collapse; background: var(--bg2);
+    border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border);
+  }
+  .ranking-table th {
+    background: var(--bg3); padding: 12px 16px; text-align: left;
+    font-size: .8rem; color: var(--text2); font-weight: 600;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .ranking-table td { padding: 12px 16px; border-top: 1px solid var(--border); font-size: .9rem; }
+  .ranking-table tr:hover td { background: var(--bg3); }
+  .rank-pos { width: 40px; font-weight: 800; font-size: 1.1rem; }
+  .rank-1 .rank-pos { color: var(--gold); }
+  .rank-2 .rank-pos { color: var(--silver); }
+  .rank-3 .rank-pos { color: var(--bronze); }
+  .rank-bar { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+  .rank-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .5s ease;
+  }
+  .rank-team { display: flex; align-items: center; gap: 8px; }
+  .rank-team-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .rank-total { font-weight: 700; color: var(--accent2); font-size: 1.05rem; }
+  .rank-lites { color: var(--gold); font-weight: 600; }
+
+  /* Ecotenda */
+  .ecotenda-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;
+  }
+  .eco-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px; text-align: center; transition: all .2s;
+  }
+  .eco-card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+  .eco-icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .eco-name { font-weight: 600; font-size: .95rem; margin-bottom: 6px; }
+  .eco-price {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--bg3); padding: 4px 12px; border-radius: 20px;
+    font-weight: 700; color: var(--gold); font-size: .9rem;
+  }
+
+  /* Normas */
+  .normas-section {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: 24px;
+  }
+  .normas-section h2 {
+    font-size: 1.1rem; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .normas-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+  }
+  .normas-card {
+    background: var(--bg3); border-radius: var(--radius);
+    padding: 20px; border: 1px solid var(--border);
+  }
+  .normas-card h3 { font-size: .95rem; margin-bottom: 12px; color: var(--accent2); }
+  .normas-table {
+    width: 100%; border-collapse: collapse; font-size: .85rem;
+  }
+  .normas-table th {
+    text-align: left; padding: 6px 10px; color: var(--text2);
+    font-size: .75rem; text-transform: uppercase; border-bottom: 1px solid var(--border);
+  }
+  .normas-table td {
+    padding: 6px 10px; border-bottom: 1px solid var(--border);
+  }
+  .normas-table tr:last-child td { border-bottom: none; }
+  .lites-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    color: var(--gold); font-weight: 600;
+  }
+
+  /* Lites summary panel */
+  .lites-summary {
+    margin-top: 16px; background: var(--bg3); border-radius: var(--radius);
+    padding: 16px; border: 1px solid var(--border);
+  }
+  .lites-summary h3 {
+    font-size: .9rem; margin-bottom: 10px; color: var(--gold);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .lites-breakdown { font-size: .82rem; }
+  .lites-breakdown div {
+    display: flex; justify-content: space-between; padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .lites-breakdown div:last-child { border-bottom: none; font-weight: 700; color: var(--gold); }
+
+  /* Modo lectura: ocultar elementos de edicion */
+  body.read-only .annotation-panel { display: none !important; }
+  body.read-only .team-card { cursor: default; }
+  body.read-only .team-card:hover { transform: none; }
+
+  /* Lock indicator */
+  .lock-status {
+    font-size: .7rem; color: var(--text2); display: flex; align-items: center; gap: 4px;
+  }
+  .lock-status.unlocked { color: var(--green); }
+  .lock-status svg { width: 12px; height: 12px; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    display: flex; align-items: center; justify-content: center; z-index: 300;
+  }
+  .modal {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px; width: 320px; max-width: 90vw;
+  }
+  .modal h3 { margin-bottom: 12px; font-size: 1rem; }
+  .modal input[type="password"] {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 14px; border-radius: 8px; font-size: .95rem; width: 100%;
+    margin-bottom: 12px;
+  }
+  .modal input[type="password"]:focus { outline: none; border-color: var(--accent); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .modal .btn-cancel {
+    padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg3); color: var(--text); font-weight: 600;
+    font-size: .85rem; cursor: pointer;
+  }
+
+  /* Tarxeta de credito */
+  .credit-card-selector {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px;
+    margin-bottom: 24px;
+  }
+  .cc-team-btn {
+    background: var(--bg2); border: 2px solid var(--border); border-radius: 10px;
+    padding: 12px; cursor: pointer; text-align: center; transition: all .2s;
+    font-weight: 600; font-size: .85rem; color: var(--text);
+  }
+  .cc-team-btn:hover { border-color: var(--accent); }
+  .cc-team-btn.active { border-color: var(--accent); background: var(--bg3); }
+  .cc-team-btn .cc-bal { font-size: .75rem; color: var(--gold); margin-top: 4px; }
+
+  .credit-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 20px; padding: 28px 32px; max-width: 440px;
+    margin: 0 auto 24px; position: relative; overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,.4); color: #fff;
+  }
+  .light .credit-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  .credit-card::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(255,255,255,.08);
+  }
+  .credit-card::after {
+    content: ''; position: absolute; bottom: -30px; left: -30px;
+    width: 100px; height: 100px; border-radius: 50%;
+    background: rgba(255,255,255,.05);
+  }
+  .cc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .cc-logo { font-weight: 800; font-size: 1rem; letter-spacing: 1px; opacity: .9; }
+  .cc-chip { width: 40px; height: 30px; background: linear-gradient(135deg, #d4af37, #f5d060);
+    border-radius: 6px; }
+  .cc-balance-label { font-size: .7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: .7; }
+  .cc-balance { font-size: 2.2rem; font-weight: 800; margin: 4px 0 16px; }
+  .cc-balance small { font-size: .9rem; font-weight: 400; opacity: .7; }
+  .cc-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cc-team-name { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .cc-course { font-size: .75rem; opacity: .7; }
+  .cc-brand { font-size: .7rem; opacity: .5; letter-spacing: 2px; text-transform: uppercase; }
+
+  .cc-actions {
+    display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  body.read-only .cc-expense-btn { display: none; }
+
+  .transactions {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; max-width: 600px; margin: 0 auto 24px;
+  }
+  .transactions-header {
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    font-weight: 600; font-size: .95rem;
+  }
+  .tx-list { max-height: 350px; overflow-y: auto; }
+  .tx-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px; border-bottom: 1px solid var(--border); font-size: .85rem;
+  }
+  .tx-item:last-child { border-bottom: none; }
+  .tx-left { display: flex; align-items: center; gap: 10px; }
+  .tx-icon {
+    width: 32px; height: 32px; border-radius: 8px; display: flex;
+    align-items: center; justify-content: center; font-size: .9rem;
+  }
+  .tx-icon.income { background: rgba(74,222,128,.15); color: var(--green); }
+  .tx-icon.expense { background: rgba(248,113,113,.15); color: var(--red); }
+  .tx-desc { font-weight: 500; }
+  .tx-date { font-size: .7rem; color: var(--text2); }
+  .tx-amount { font-weight: 700; }
+  .tx-amount.income { color: var(--green); }
+  .tx-amount.expense { color: var(--red); }
+  .tx-empty { padding: 24px; text-align: center; color: var(--text2); font-size: .85rem; }
+
+  /* QR */
+  .qr-container {
+    text-align: center; max-width: 300px; margin: 0 auto;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+  }
+  .qr-container canvas { border-radius: 8px; }
+  .qr-label { font-size: .8rem; color: var(--text2); margin-top: 8px; }
+  .qr-print-btn { margin-top: 12px; }
+
+  /* Expense modal */
+  .modal-wide { width: 380px; }
+  .modal-field { margin-bottom: 12px; }
+  .modal-field label { display: block; font-size: .8rem; color: var(--text2); margin-bottom: 4px; font-weight: 500; }
+  .modal-field select, .modal-field input[type="number"] {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 14px; border-radius: 8px; font-size: .9rem; width: 100%;
+  }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; background: var(--green);
+    color: #000; padding: 12px 20px; border-radius: 8px; font-weight: 600;
+    font-size: .85rem; opacity: 0; transform: translateY(10px);
+    transition: all .3s; z-index: 200;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .header { padding: 12px 16px; }
+    .header h1 { font-size: 1rem; }
+    .tabs { padding: 0 8px; }
+    .tab { padding: 10px 12px; font-size: .78rem; }
+    .content { padding: 16px; }
+    .teams-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .team-card { padding: 14px; }
+    .proposal-sections { grid-template-columns: 1fr; }
+    .ranking-table th, .ranking-table td { padding: 8px 10px; font-size: .8rem; }
+    .ecotenda-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  }
+  @media print {
+    .header, .tabs, .annotation-panel, .header-actions { display: none; }
+    body { background: #fff; color: #000; }
+    .ranking-table { border: 1px solid #ccc; }
+    .ranking-table th { background: #eee; }
+    .ranking-table td { border-color: #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+  <a class="back-btn" href="index.html" title="Volver ao portal">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+    Superliga Saudable
+  </h1>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" onclick="document.getElementById('infoModal').classList.remove('hidden')" title="Que e a Superliga Saudable?">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    </button>
+    <button class="icon-btn" id="lockBtn" onclick="toggleLock()" title="Desbloquear edicion">
+      <svg id="iconLock" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <svg id="iconUnlock" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+    </button>
+    <button class="icon-btn" onclick="exportData()" title="Exportar datos">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+    </button>
+    <button class="icon-btn" onclick="document.getElementById('importFile').click()" title="Importar datos">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+    </button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Cambiar tema">
+      <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="iconSun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('equipos')" id="tabEquipos">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Equipos
+  </div>
+  <div class="tab" onclick="switchTab('ranking')" id="tabRanking">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+    Ranking
+  </div>
+  <div class="tab" onclick="switchTab('ecotenda')" id="tabEcotenda">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/></svg>
+    Ecotenda
+  </div>
+  <div class="tab" onclick="switchTab('tarxetas')" id="tabTarxetas">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+    Tarxetas
+  </div>
+  <div class="tab" onclick="switchTab('simulacros')" id="tabSimulacros">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12"/><path d="M4 14h9"/><path d="m18 5-3-3"/><path d="m21 8-3-3"/><path d="M8 6v14"/><path d="M4 6h4"/></svg>
+    Simulacros
+  </div>
+  <div class="tab" onclick="switchTab('normas')" id="tabNormas">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+    Normas Lites
+  </div>
+</div>
+
+<div class="content">
+  <!-- Vista Equipos -->
+  <div id="viewEquipos">
+    <div class="teams-grid" id="teamsGrid"></div>
+    <div class="annotation-panel hidden" id="annotationPanel">
+      <div class="panel-header">
+        <h2 id="panelTitle"></h2>
+        <button class="panel-close" onclick="closePanel()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="panel-body">
+        <div class="proposal-sections">
+          <!-- FruitCounter -->
+          <div class="proposal">
+            <h3>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 6.5C17.5 4 15.5 2 13 2s-4.5 2-4.5 4.5c0 .88.25 1.7.69 2.4L5.1 13c-.5.5-.5 1.28 0 1.78l4.12 4.12c.5.5 1.28.5 1.78 0l4.1-4.1c.7.44 1.52.7 2.4.7 2.5 0 4.5-2 4.5-4.5S20 4.5 17.5 6.5Z"/><path d="M12 2v4"/></svg>
+              FruitCounter
+            </h3>
+            <p class="proposal-desc">Froitas consumidas pola clase na semana. Max = alumnos x 5</p>
+            <div class="field-group">
+              <label>Semana</label>
+              <select id="fcWeek" onchange="loadWeekData()"></select>
+            </div>
+            <div class="field-group">
+              <label>Total froitas da semana (max: <span id="fcMax">0</span>)</label>
+              <div class="field-row">
+                <input type="number" id="fcFrutas" min="0" placeholder="0">
+                <button class="btn btn-primary btn-sm" onclick="saveFruitCounter()">Gardar</button>
+              </div>
+            </div>
+            <div class="result-box">
+              Porcentaxe: <strong id="fcPct">0%</strong> | Puntos: <strong id="fcPts">0.00</strong>
+            </div>
+            <div class="history-list" id="fcHistory"></div>
+          </div>
+
+          <!-- AFHL -->
+          <div class="proposal">
+            <h3>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6c63ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              AFHL
+            </h3>
+            <p class="proposal-desc">Actividade Fisica en Horario Lectivo. Max 1.2 pts (ref: 150 min)</p>
+            <div class="field-group">
+              <label>Semana</label>
+              <select id="afhlWeek" onchange="loadWeekData()"></select>
+            </div>
+            <div class="field-group">
+              <label>Minutos de AF na semana</label>
+              <div class="field-row">
+                <input type="number" id="afhlMin" min="0" placeholder="0">
+                <button class="btn btn-primary btn-sm" onclick="saveAFHL()">Gardar</button>
+              </div>
+            </div>
+            <div class="result-box">
+              Puntos semana: <strong id="afhlPts">0.00</strong> / 1.20
+            </div>
+            <div class="history-list" id="afhlHistory"></div>
+          </div>
+
+          <!-- Simulacros -->
+          <div class="proposal">
+            <h3>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12"/><path d="M4 14h9"/><path d="m18 5-3-3"/><path d="m21 8-3-3"/><path d="M8 6v14"/><path d="M4 6h4"/></svg>
+              Simulacro Mochila
+            </h3>
+            <p class="proposal-desc">Alumnos que pasan o simulacro. Puntos e lites = nº aprobados</p>
+            <div class="field-group">
+              <label>Simulacro nº</label>
+              <select id="simNum" onchange="loadSimData()">
+                <option value="1">Simulacro 1</option>
+                <option value="2">Simulacro 2</option>
+                <option value="3">Simulacro 3</option>
+                <option value="4">Simulacro 4</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Alumnos aprobados (de <span id="simTotal">0</span>)</label>
+              <div class="field-row">
+                <input type="number" id="simAprobados" min="0" placeholder="0">
+                <button class="btn btn-primary btn-sm" onclick="saveSimulacro()">Gardar</button>
+              </div>
+            </div>
+            <div class="result-box">
+              Puntos: <strong id="simPts">0</strong> | Lites: <strong id="simLites" style="color:var(--gold)">0</strong>
+            </div>
+            <div class="history-list" id="simHistory"></div>
+          </div>
+        </div>
+
+        <!-- Resumo de lites do equipo -->
+        <div class="lites-summary" id="litesSummary">
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            Balance de Lites
+          </h3>
+          <div class="lites-breakdown" id="litesBreakdown"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista Ranking -->
+  <div id="viewRanking" class="hidden">
+    <table class="ranking-table">
+      <thead>
+        <tr>
+          <th style="width:50px">#</th>
+          <th>Equipo</th>
+          <th>FruitCounter</th>
+          <th>AFHL</th>
+          <th>Simulacros</th>
+          <th>Total</th>
+          <th>Lites</th>
+        </tr>
+      </thead>
+      <tbody id="rankingBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Vista Ecotenda -->
+  <div id="viewEcotenda" class="hidden">
+    <div class="ecotenda-grid" id="ecotendaGrid"></div>
+  </div>
+
+  <!-- Vista Simulacros -->
+  <div id="viewSimulacros" class="hidden">
+    <div class="normas-section" style="margin-bottom:20px">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12"/><path d="M4 14h9"/><path d="m18 5-3-3"/><path d="m21 8-3-3"/><path d="M8 6v14"/><path d="M4 6h4"/></svg>
+        Simulacros de Mochila Sa
+      </h2>
+      <p style="font-size:.9rem;color:var(--text);line-height:1.7;margin-bottom:16px">Os simulacros de mochila consisten en comprobar que o peso da mochila do alumnado non supere o 10-15% do seu peso corporal. Realízanse periodicamente e cada alumno/a que pasa o simulacro suma <strong>1 punto e 1 lite</strong> para o seu equipo.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center">
+          <div style="font-size:2rem;margin-bottom:6px">🎒</div>
+          <div style="font-weight:700;font-size:.9rem;margin-bottom:4px">Pesaxe da mochila</div>
+          <div style="font-size:.78rem;color:var(--text2)">Pésase a mochila de cada alumno/a nunha báscula</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center">
+          <div style="font-size:2rem;margin-bottom:6px">⚖️</div>
+          <div style="font-weight:700;font-size:.9rem;margin-bottom:4px">Comparación co peso corporal</div>
+          <div style="font-size:.78rem;color:var(--text2)">A mochila non debe superar o 10-15% do peso do alumno/a</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center">
+          <div style="font-size:2rem;margin-bottom:6px">✅</div>
+          <div style="font-weight:700;font-size:.9rem;margin-bottom:4px">Resultado</div>
+          <div style="font-size:.78rem;color:var(--text2)">Aprobado = 1 punto + 1 lite para o equipo na Superliga</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px">
+        <h3 style="font-size:.95rem;margin-bottom:8px;color:var(--accent2)">Por que é importante?</h3>
+        <ul style="font-size:.85rem;color:var(--text);line-height:1.7;margin-left:18px">
+          <li>O exceso de peso na mochila pode causar dores de costas e problemas posturais</li>
+          <li>Concienciar ao alumnado sobre a importancia de levar só o material necesario</li>
+          <li>Implicar as familias na organización da mochila</li>
+          <li>Crear hábitos saudables desde pequenos</li>
+        </ul>
+      </div>
+
+      <h3 style="font-size:.95rem;margin-bottom:12px;color:var(--accent2)">Infografía interactiva</h3>
+      <p style="font-size:.85rem;color:var(--text2);margin-bottom:12px">Consulta a infografía completa sobre a mochila sa:</p>
+      <div style="position:relative;width:100%;padding-bottom:56.25%;border-radius:12px;overflow:hidden;border:1px solid var(--border)">
+        <iframe src="https://view.genially.com/699c143c69f49d0df4f0e5e5" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allowfullscreen></iframe>
+      </div>
+      <p style="font-size:.78rem;color:var(--text2);margin-top:10px;text-align:center">
+        Infografía creada polo alumnado de 5.º B do CEIP Coirón Dena — Curso 2025-2026
+      </p>
+      <p style="font-size:.75rem;color:var(--text2);margin-top:4px;text-align:center">
+        <a href="https://view.genially.com/699c143c69f49d0df4f0e5e5" target="_blank" style="color:var(--accent2);text-decoration:none">Abrir infografía en pantalla completa</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Vista Normas -->
+  <div id="viewNormas" class="hidden">
+    <div class="normas-grid">
+      <!-- Metodo pago superliga -->
+      <div class="normas-section">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          Metodo de Pago Superliga
+        </h2>
+        <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Lites que recibe cada equipo segundo a sua posicion no ranking</p>
+        <table class="normas-table">
+          <thead><tr><th>Posicion</th><th>Pago</th></tr></thead>
+          <tbody id="normasRanking"></tbody>
+        </table>
+      </div>
+
+      <!-- Froitometro -->
+      <div class="normas-section">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 6.5C17.5 4 15.5 2 13 2s-4.5 2-4.5 4.5c0 .88.25 1.7.69 2.4L5.1 13c-.5.5-.5 1.28 0 1.78l4.12 4.12c.5.5 1.28.5 1.78 0l4.1-4.1c.7.44 1.52.7 2.4.7 2.5 0 4.5-2 4.5-4.5S20 4.5 17.5 6.5Z"/><path d="M12 2v4"/></svg>
+          Froitometro - Metodo de Pago
+        </h2>
+        <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Lites que recibe cada equipo segundo a porcentaxe media de froita</p>
+        <table class="normas-table">
+          <thead><tr><th>Porcentaxe de froita</th><th>Cobro en lites</th></tr></thead>
+          <tbody>
+            <tr><td>100%</td><td><span class="lites-badge">50 lites</span></td></tr>
+            <tr><td>70% a 99%</td><td><span class="lites-badge">25 lites</span></td></tr>
+            <tr><td>50% a 69%</td><td><span class="lites-badge">10 lites</span></td></tr>
+            <tr><td>0% a 49%</td><td><span class="lites-badge">0 lites</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Simulacros -->
+      <div class="normas-section">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12"/><path d="M4 14h9"/><path d="m18 5-3-3"/><path d="m21 8-3-3"/><path d="M8 6v14"/><path d="M4 6h4"/></svg>
+          Simulacros de Mochila
+        </h2>
+        <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">1 lite por cada alumno que aproba o simulacro de peso da mochila</p>
+        <table class="normas-table">
+          <thead><tr><th>Resultado</th><th>Lites</th></tr></thead>
+          <tbody>
+            <tr><td>Cada alumno aprobado</td><td><span class="lites-badge">1 lite</span></td></tr>
+            <tr><td>Exemplo: 14 aprobados</td><td><span class="lites-badge">14 lites</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista Tarxetas de Credito -->
+  <div id="viewTarxetas" class="hidden">
+    <div class="credit-card-selector" id="ccSelector"></div>
+    <div id="ccContent" class="hidden">
+      <div class="credit-card" id="ccCard">
+        <div class="cc-header">
+          <div class="cc-chip"></div>
+          <div class="cc-logo">SUPERLIGA</div>
+        </div>
+        <div class="cc-balance-label">Saldo disponible</div>
+        <div class="cc-balance" id="ccBalance">0 <small>lites</small></div>
+        <div class="cc-footer">
+          <div>
+            <div class="cc-team-name" id="ccTeamName">—</div>
+            <div class="cc-course" id="ccCourse">—</div>
+          </div>
+          <div class="cc-brand">HEALTHY CARD</div>
+        </div>
+      </div>
+
+      <div class="cc-actions">
+        <button class="btn btn-primary cc-expense-btn" onclick="openExpenseModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+          Rexistrar gasto
+        </button>
+        <button class="btn btn-primary" onclick="showQR()" style="background:var(--accent2)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
+          Xerar QR
+        </button>
+      </div>
+
+      <div class="transactions">
+        <div class="transactions-header">Movementos</div>
+        <div class="tx-list" id="txList"></div>
+      </div>
+
+      <div class="qr-container hidden" id="qrContainer">
+        <canvas id="qrCanvas"></canvas>
+        <div class="qr-label" id="qrLabel"></div>
+        <button class="btn btn-primary btn-sm qr-print-btn" onclick="printQR()">Imprimir QR</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal gasto -->
+<div class="modal-overlay hidden" id="expenseModal">
+  <div class="modal modal-wide">
+    <h3>Rexistrar gasto na Ecotenda</h3>
+    <div class="modal-field">
+      <label>Material</label>
+      <select id="expenseItem"></select>
+    </div>
+    <div class="modal-field">
+      <label>Cantidade</label>
+      <input type="number" id="expenseQty" min="1" value="1">
+    </div>
+    <div class="result-box" style="margin-bottom:12px">
+      Custo: <strong id="expenseCost">0</strong> lites
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeExpenseModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveExpense()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal info -->
+<div class="modal-overlay hidden" id="infoModal" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="modal" style="width:500px;max-height:80vh;overflow-y:auto">
+    <h3 style="margin-bottom:16px;font-size:1.1rem">🏆 SUPERLIGA SAUDABLE</h3>
+    <div style="font-size:.88rem;line-height:1.6;color:var(--text)">
+      <p style="margin-bottom:12px">A <strong>Superliga Saudable</strong> é un proxecto do colexio para promover hábitos saudables entre o alumnado. Cada clase forma un equipo que compite de forma saudable ao longo do curso.</p>
+      <p style="margin-bottom:8px;font-weight:600;color:var(--accent2)">Como se gañan puntos?</p>
+      <ul style="margin:0 0 12px 20px">
+        <li><strong>FruitCounter:</strong> cada semana cóntanse as froitas que trae a clase. Cantas máis froitas, máis puntos e lites para a Ecotenda.</li>
+        <li><strong>AFHL:</strong> minutos de actividade física que fai a clase en horario lectivo.</li>
+        <li><strong>Simulacros de mochila:</strong> compróbanse os pesos das mochilas. Cada alumno/a que leva un peso axeitado suma 1 punto e 1 lite.</li>
+      </ul>
+      <p style="margin-bottom:8px;font-weight:600;color:var(--accent2)">Que son os lites?</p>
+      <p style="margin-bottom:12px">Os <strong>lites</strong> son a moeda ficticia da Superliga. Gáñanse completando as propostas saudables e pola posición no ranking. Con eles pódense alugar materiais de xogo na <strong>Ecotenda</strong> durante os recreos.</p>
+      <p style="margin-bottom:8px;font-weight:600;color:var(--accent2)">Patios DINS</p>
+      <p style="margin-bottom:12px">Cada clase ten tarxetas de xogos que rotan a diario. Para alugar materiais hai que ir á Ecotenda ao lado do patio e pagar cos lites da tarxeta de crédito da clase.</p>
+      <p style="margin-bottom:8px;font-weight:600;color:var(--accent2)">Tarxeta de Crédito</p>
+      <p>Cada clase ten unha tarxeta de crédito virtual onde se rexistran os ingresos (lites gañados) e os gastos (alugueiro na Ecotenda). O QR da tarxeta permite acceder rapidamente aos datos da conta.</p>
+    </div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn btn-primary" onclick="document.getElementById('infoModal').classList.add('hidden')">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal contrasinal -->
+<div class="modal-overlay hidden" id="passwordModal">
+  <div class="modal">
+    <h3>Introducir contrasinal</h3>
+    <input type="password" id="passwordInput" placeholder="Contrasinal..." onkeydown="if(event.key==='Enter')checkPassword()">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closePasswordModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="checkPassword()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const TEAMS = [
+  { id: 'xirasois', name: 'XIRASOIS', course: '1º', students: 20, color: '#e74c3c' },
+  { id: 'nube', name: 'NUBE', course: '2ºA', students: 13, color: '#3498db' },
+  { id: 'drakis', name: 'DRAKIS', course: '2ºB', students: 13, color: '#9b59b6' },
+  { id: 'atribo', name: 'A TRIBO', course: '3º', students: 16, color: '#e67e22' },
+  { id: 'terra', name: 'TERRA', course: '4ºA', students: 17, color: '#27ae60' },
+  { id: 'planta', name: 'PLANTA', course: '4ºB', students: 17, color: '#2ecc71' },
+  { id: 'bolboretaa', name: 'BOLBORETA A', course: '5ºA', students: 14, color: '#f39c12' },
+  { id: 'bolboretab', name: 'BOLBORETA B', course: '5ºB', students: 13, color: '#d4ac0d' },
+  { id: 'mundial', name: 'MUNDIAL', course: '6ºA', students: 15, color: '#1abc9c' },
+  { id: 'fantasma', name: 'FANTASMA', course: '6ºB', students: 13, color: '#95a5a6' },
+  { id: 'ratiprofes', name: 'RATIPROFES', course: 'Profes', students: 24, color: '#e84393' },
+  { id: '3anos', name: '3 ANOS', course: 'EI 3', students: 16, color: '#fd79a8' },
+  { id: '4anos', name: '4 ANOS', course: 'EI 4', students: 19, color: '#a29bfe' },
+  { id: '5anos', name: '5 ANOS', course: 'EI 5', students: 18, color: '#00cec9' },
+];
+
+// Lites por posicion no ranking
+const LITES_POR_POSICION = [15, 13, 10, 7, 5, 4, 3, 2, 2, 1, 0, 0, 0, 0];
+
+// Froitometro: porcentaxe media → lites
+function froitometroLites(pctMedia) {
+  if (pctMedia >= 100) return 50;
+  if (pctMedia >= 70) return 25;
+  if (pctMedia >= 50) return 10;
+  return 0;
+}
+
+// Ecotenda materiais
+const ECOTENDA = [
+  { name: 'Tirolina', price: 10, icon: '🧗' },
+  { name: 'Badminton', price: 6, icon: '🏸' },
+  { name: 'Pluma Jazzmiton', price: 3, icon: '🪶' },
+  { name: 'Pelota Baloncesto', price: 8, icon: '🏀' },
+  { name: 'Pelota Dachball', price: 3, icon: '🔵' },
+  { name: 'Diana', price: 7, icon: '🎯' },
+  { name: 'Dardo', price: 1, icon: '🎯' },
+  { name: 'Pelota Tenis Mesa', price: 6, icon: '🏓' },
+  { name: 'Palas Tenis Mesa', price: 8, icon: '🏓' },
+  { name: 'Taller Musical', price: 6, icon: '🥁' },
+  { name: 'Recre-Arte', price: 7, icon: '🎨' },
+  { name: 'Bate Beisbol', price: 4, icon: '⚾' },
+  { name: 'Pelota e Guante', price: 4, icon: '🧤' },
+  { name: 'Aros-Raqueta', price: 5, icon: '🎾' },
+];
+
+const AFHL_REF_MIN = 150;
+const AFHL_MAX_PTS = 1.2;
+
+// Contrasinal para modo edicion (cambiar aqui)
+const EDIT_PASSWORD = 'superliga2026';
+
+// URL da API compartida (Cloudflare Worker)
+const API_URL = 'https://superliga-api.diegofragafraga.workers.dev';
+
+let selectedTeam = null;
+let data = {};
+let editMode = false;
+let syncing = false;
+
+// Cargar datos: primeiro da API, fallback a localStorage
+function loadData() {
+  // Cargar localStorage como cache inmediato
+  try {
+    const saved = localStorage.getItem('superliga_data');
+    if (saved) data = JSON.parse(saved);
+  } catch(e) { data = {}; }
+
+  // Despois sincronizar coa API
+  fetchRemoteData();
+}
+
+async function fetchRemoteData() {
+  try {
+    const res = await fetch(API_URL + '/data');
+    if (res.ok) {
+      const remote = await res.json();
+      if (remote && Object.keys(remote).length > 0) {
+        data = remote;
+        localStorage.setItem('superliga_data', JSON.stringify(data));
+        renderTeams();
+        if (selectedTeam) {
+          loadWeekData();
+          loadSimData();
+          renderLitesSummary();
+        }
+      }
+    }
+  } catch(e) {
+    // Sen conexion, usamos localStorage
+    console.log('API non dispoñible, usando datos locais');
+  }
+}
+
+// Gardar datos: localStorage + API
+function saveData() {
+  localStorage.setItem('superliga_data', JSON.stringify(data));
+  syncToRemote();
+}
+
+async function syncToRemote() {
+  if (syncing) return;
+  syncing = true;
+  try {
+    await fetch(API_URL + '/data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  } catch(e) {
+    console.log('Erro ao sincronizar coa API');
+  }
+  syncing = false;
+}
+
+function ensureTeamData(teamId) {
+  if (!data[teamId]) data[teamId] = { fruitcounter: {}, afhl: {}, simulacros: {} };
+}
+
+function getFCMax(team) { return team.students * 5; }
+
+function calcFCPoints(frutas, max) {
+  if (max === 0) return { pct: 0, pts: 0 };
+  const pct = (frutas / max) * 100;
+  const pts = pct / 100;
+  return { pct: Math.min(pct, 100), pts: Math.min(pts, 1) };
+}
+
+function calcAFHLPoints(minutos) {
+  return Math.min((minutos / AFHL_REF_MIN) * AFHL_MAX_PTS, AFHL_MAX_PTS);
+}
+
+function getTeamTotals(teamId) {
+  ensureTeamData(teamId);
+  const td = data[teamId];
+  let fcTotal = 0, afhlTotal = 0, simTotal = 0;
+  let fcWeeks = 0, fcPctSum = 0;
+
+  for (const week in td.fruitcounter) {
+    fcTotal += td.fruitcounter[week].pts || 0;
+    fcPctSum += td.fruitcounter[week].pct || 0;
+    fcWeeks++;
+  }
+  for (const week in td.afhl) {
+    afhlTotal += td.afhl[week].pts || 0;
+  }
+  for (const sim in td.simulacros) {
+    simTotal += td.simulacros[sim].pts || 0;
+  }
+
+  // Porcentaxe media de froita para o froitometro
+  const fcPctMedia = fcWeeks > 0 ? fcPctSum / fcWeeks : 0;
+
+  return {
+    fc: Math.round(fcTotal * 100) / 100,
+    afhl: Math.round(afhlTotal * 100) / 100,
+    sim: Math.round(simTotal * 100) / 100,
+    total: Math.round((fcTotal + afhlTotal + simTotal) * 100) / 100,
+    fcPctMedia: Math.round(fcPctMedia * 10) / 10,
+    simLites: simTotal, // 1 lite por aprobado
+  };
+}
+
+// Calcular lites totais dun equipo
+function getTeamLites(teamId) {
+  const ranked = getRankedTeams();
+  const pos = ranked.findIndex(t => t.id === teamId);
+  const totals = getTeamTotals(teamId);
+  // Solo asignar lites de ranking se hai puntos reais na liga
+  const hayPuntos = ranked.some(t => t.total > 0);
+  const litesRanking = (hayPuntos && pos >= 0 && totals.total > 0) ? LITES_POR_POSICION[pos] : 0;
+  // Solo asignar lites de froitometro se hai datos de froita
+  const litesFroitometro = totals.fcPctMedia > 0 ? froitometroLites(totals.fcPctMedia) : 0;
+  const litesSimulacros = totals.simLites;
+  return {
+    ranking: litesRanking,
+    froitometro: litesFroitometro,
+    simulacros: litesSimulacros,
+    total: litesRanking + litesFroitometro + litesSimulacros,
+    fcPctMedia: totals.fcPctMedia,
+  };
+}
+
+function getRankedTeams() {
+  return TEAMS.map(t => ({ ...t, ...getTeamTotals(t.id) }))
+    .sort((a, b) => b.total - a.total);
+}
+
+// Render equipos
+function renderTeams() {
+  const grid = document.getElementById('teamsGrid');
+  grid.innerHTML = '';
+  TEAMS.forEach(team => {
+    const totals = getTeamTotals(team.id);
+    const lites = getTeamLites(team.id);
+    const card = document.createElement('div');
+    card.className = 'team-card' + (selectedTeam === team.id ? ' selected' : '');
+    card.style.setProperty('--team-color', team.color);
+    card.onclick = () => selectTeam(team.id);
+    card.innerHTML = `
+      <div class="team-name">${team.name}</div>
+      <div class="team-course">${team.course}</div>
+      <div class="team-students">${team.students} ${team.course === 'Profes' ? 'profes' : 'alumnos'}</div>
+      <div class="team-points">${totals.total.toFixed(2)} <span>pts</span></div>
+      <div class="team-lites">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        ${lites.total} lites
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function selectTeam(teamId) {
+  if (!editMode) return;
+  selectedTeam = teamId;
+  ensureTeamData(teamId);
+  const team = TEAMS.find(t => t.id === teamId);
+  document.getElementById('annotationPanel').classList.remove('hidden');
+  document.getElementById('panelTitle').innerHTML = `
+    <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${team.color};margin-right:4px"></span>
+    ${team.name} — ${team.course}
+  `;
+  document.getElementById('fcMax').textContent = getFCMax(team);
+  document.getElementById('simTotal').textContent = team.students;
+  loadWeekData();
+  loadSimData();
+  renderLitesSummary();
+  renderTeams();
+  document.getElementById('annotationPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closePanel() {
+  selectedTeam = null;
+  document.getElementById('annotationPanel').classList.add('hidden');
+  renderTeams();
+}
+
+function renderLitesSummary() {
+  if (!selectedTeam) return;
+  const lites = getTeamLites(selectedTeam);
+  const el = document.getElementById('litesBreakdown');
+  el.innerHTML = `
+    <div><span>Ranking (posicion)</span><span class="lites-badge">${lites.ranking} lites</span></div>
+    <div><span>Froitometro (${lites.fcPctMedia.toFixed(1)}% media)</span><span class="lites-badge">${lites.froitometro} lites</span></div>
+    <div><span>Simulacros mochila</span><span class="lites-badge">${lites.simulacros} lites</span></div>
+    <div><span>TOTAL LITES</span><span class="lites-badge">${lites.total} lites</span></div>
+  `;
+}
+
+function populateWeeks() {
+  const fcSelect = document.getElementById('fcWeek');
+  const afhlSelect = document.getElementById('afhlWeek');
+  fcSelect.innerHTML = '';
+  afhlSelect.innerHTML = '';
+  for (let i = 1; i <= 40; i++) {
+    fcSelect.innerHTML += `<option value="${i}">Semana ${i}</option>`;
+    afhlSelect.innerHTML += `<option value="${i}">Semana ${i}</option>`;
+  }
+}
+
+function loadWeekData() {
+  if (!selectedTeam) return;
+  const td = data[selectedTeam];
+  const fcWeek = document.getElementById('fcWeek').value;
+  const afhlWeek = document.getElementById('afhlWeek').value;
+
+  const fcData = td.fruitcounter[fcWeek];
+  if (fcData) {
+    document.getElementById('fcFrutas').value = fcData.frutas;
+    document.getElementById('fcPct').textContent = fcData.pct.toFixed(1) + '%';
+    document.getElementById('fcPts').textContent = fcData.pts.toFixed(2);
+  } else {
+    document.getElementById('fcFrutas').value = '';
+    document.getElementById('fcPct').textContent = '0%';
+    document.getElementById('fcPts').textContent = '0.00';
+  }
+
+  const afhlData = td.afhl[afhlWeek];
+  if (afhlData) {
+    document.getElementById('afhlMin').value = afhlData.min;
+    document.getElementById('afhlPts').textContent = afhlData.pts.toFixed(2);
+  } else {
+    document.getElementById('afhlMin').value = '';
+    document.getElementById('afhlPts').textContent = '0.00';
+  }
+
+  renderFCHistory();
+  renderAFHLHistory();
+}
+
+function loadSimData() {
+  if (!selectedTeam) return;
+  const td = data[selectedTeam];
+  const simNum = document.getElementById('simNum').value;
+  const simData = td.simulacros[simNum];
+  if (simData) {
+    document.getElementById('simAprobados').value = simData.aprobados;
+    document.getElementById('simPts').textContent = simData.pts;
+    document.getElementById('simLites').textContent = simData.pts;
+  } else {
+    document.getElementById('simAprobados').value = '';
+    document.getElementById('simPts').textContent = '0';
+    document.getElementById('simLites').textContent = '0';
+  }
+  renderSimHistory();
+}
+
+function saveFruitCounter() {
+  if (!selectedTeam) return;
+  const team = TEAMS.find(t => t.id === selectedTeam);
+  const week = document.getElementById('fcWeek').value;
+  const frutas = parseInt(document.getElementById('fcFrutas').value) || 0;
+  const max = getFCMax(team);
+  const result = calcFCPoints(frutas, max);
+  data[selectedTeam].fruitcounter[week] = { frutas, pct: result.pct, pts: result.pts };
+  saveData();
+  document.getElementById('fcPct').textContent = result.pct.toFixed(1) + '%';
+  document.getElementById('fcPts').textContent = result.pts.toFixed(2);
+  renderFCHistory();
+  renderLitesSummary();
+  renderTeams();
+  showToast('FruitCounter gardado');
+}
+
+function saveAFHL() {
+  if (!selectedTeam) return;
+  const week = document.getElementById('afhlWeek').value;
+  const min = parseInt(document.getElementById('afhlMin').value) || 0;
+  const pts = calcAFHLPoints(min);
+  data[selectedTeam].afhl[week] = { min, pts };
+  saveData();
+  document.getElementById('afhlPts').textContent = pts.toFixed(2);
+  renderAFHLHistory();
+  renderLitesSummary();
+  renderTeams();
+  showToast('AFHL gardado');
+}
+
+function saveSimulacro() {
+  if (!selectedTeam) return;
+  const simNum = document.getElementById('simNum').value;
+  const aprobados = parseInt(document.getElementById('simAprobados').value) || 0;
+  data[selectedTeam].simulacros[simNum] = { aprobados, pts: aprobados };
+  saveData();
+  document.getElementById('simPts').textContent = aprobados;
+  document.getElementById('simLites').textContent = aprobados;
+  renderSimHistory();
+  renderLitesSummary();
+  renderTeams();
+  showToast('Simulacro gardado');
+}
+
+function renderFCHistory() {
+  const el = document.getElementById('fcHistory');
+  if (!selectedTeam) { el.innerHTML = ''; return; }
+  const td = data[selectedTeam];
+  const weeks = Object.keys(td.fruitcounter).sort((a,b) => a - b);
+  if (!weeks.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.78rem;padding:4px">Sen datos</div>'; return; }
+  el.innerHTML = weeks.map(w => {
+    const d = td.fruitcounter[w];
+    return `<div class="history-item">
+      <span>Sem ${w}: ${d.frutas} froitas → ${d.pct.toFixed(1)}% → ${d.pts.toFixed(2)} pts</span>
+      <button class="hi-delete" onclick="deleteFCWeek('${w}')" title="Eliminar">x</button>
+    </div>`;
+  }).join('');
+}
+
+function renderAFHLHistory() {
+  const el = document.getElementById('afhlHistory');
+  if (!selectedTeam) { el.innerHTML = ''; return; }
+  const td = data[selectedTeam];
+  const weeks = Object.keys(td.afhl).sort((a,b) => a - b);
+  if (!weeks.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.78rem;padding:4px">Sen datos</div>'; return; }
+  el.innerHTML = weeks.map(w => {
+    const d = td.afhl[w];
+    return `<div class="history-item">
+      <span>Sem ${w}: ${d.min} min → ${d.pts.toFixed(2)} pts</span>
+      <button class="hi-delete" onclick="deleteAFHLWeek('${w}')" title="Eliminar">x</button>
+    </div>`;
+  }).join('');
+}
+
+function renderSimHistory() {
+  const el = document.getElementById('simHistory');
+  if (!selectedTeam) { el.innerHTML = ''; return; }
+  const td = data[selectedTeam];
+  const sims = Object.keys(td.simulacros).sort((a,b) => a - b);
+  if (!sims.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.78rem;padding:4px">Sen datos</div>'; return; }
+  el.innerHTML = sims.map(s => {
+    const d = td.simulacros[s];
+    return `<div class="history-item">
+      <span>Sim ${s}: ${d.aprobados} aprobados → ${d.pts} pts / ${d.pts} lites</span>
+      <button class="hi-delete" onclick="deleteSimulacro('${s}')" title="Eliminar">x</button>
+    </div>`;
+  }).join('');
+}
+
+function deleteFCWeek(week) {
+  if (!selectedTeam) return;
+  delete data[selectedTeam].fruitcounter[week];
+  saveData(); loadWeekData(); renderLitesSummary(); renderTeams();
+}
+function deleteAFHLWeek(week) {
+  if (!selectedTeam) return;
+  delete data[selectedTeam].afhl[week];
+  saveData(); loadWeekData(); renderLitesSummary(); renderTeams();
+}
+function deleteSimulacro(sim) {
+  if (!selectedTeam) return;
+  delete data[selectedTeam].simulacros[sim];
+  saveData(); loadSimData(); renderLitesSummary(); renderTeams();
+}
+
+// Ranking
+function renderRanking() {
+  const body = document.getElementById('rankingBody');
+  const ranked = getRankedTeams();
+  const maxTotal = ranked[0]?.total || 1;
+
+  body.innerHTML = ranked.map((t, i) => {
+    const pos = i + 1;
+    const rankClass = pos <= 3 ? `rank-${pos}` : '';
+    const barWidth = maxTotal > 0 ? (t.total / maxTotal) * 100 : 0;
+    const lites = getTeamLites(t.id);
+    return `<tr class="${rankClass}">
+      <td class="rank-pos">${pos}</td>
+      <td>
+        <div class="rank-team">
+          <div class="rank-team-dot" style="background:${t.color}"></div>
+          <div>
+            <div style="font-weight:600">${t.name}</div>
+            <div style="font-size:.75rem;color:var(--text2)">${t.course}</div>
+          </div>
+        </div>
+      </td>
+      <td>${t.fc.toFixed(2)}</td>
+      <td>${t.afhl.toFixed(2)}</td>
+      <td>${t.sim}</td>
+      <td>
+        <div class="rank-total">${t.total.toFixed(2)}</div>
+        <div class="rank-bar"><div class="rank-bar-fill" style="width:${barWidth}%"></div></div>
+      </td>
+      <td class="rank-lites">${lites.total}</td>
+    </tr>`;
+  }).join('');
+}
+
+// Ecotenda
+function renderEcotenda() {
+  const grid = document.getElementById('ecotendaGrid');
+  grid.innerHTML = ECOTENDA.map(item => `
+    <div class="eco-card">
+      <div class="eco-icon">${item.icon}</div>
+      <div class="eco-name">${item.name}</div>
+      <div class="eco-price">${item.price} lites</div>
+    </div>
+  `).join('');
+}
+
+// Normas ranking
+function renderNormasRanking() {
+  const body = document.getElementById('normasRanking');
+  body.innerHTML = LITES_POR_POSICION.map((lites, i) => `
+    <tr>
+      <td style="font-weight:600">${i + 1}ª</td>
+      <td><span class="lites-badge">${lites} lites</span></td>
+    </tr>
+  `).join('');
+}
+
+// Tarxetas de credito
+let selectedCC = null;
+
+function renderCCSelector() {
+  const el = document.getElementById('ccSelector');
+  el.innerHTML = TEAMS.map(t => {
+    const bal = getCCBalance(t.id);
+    return `<div class="cc-team-btn ${selectedCC === t.id ? 'active' : ''}" onclick="selectCC('${t.id}')" style="border-top:3px solid ${t.color}">
+      ${t.name}
+      <div class="cc-bal">${bal} lites</div>
+    </div>`;
+  }).join('');
+}
+
+function getCCBalance(teamId) {
+  const lites = getTeamLites(teamId);
+  const expenses = getTeamExpenses(teamId);
+  return lites.total - expenses;
+}
+
+function getTeamExpenses(teamId) {
+  ensureTeamData(teamId);
+  const td = data[teamId];
+  if (!td.gastos) return 0;
+  return td.gastos.reduce((sum, g) => sum + g.total, 0);
+}
+
+function selectCC(teamId) {
+  selectedCC = teamId;
+  const team = TEAMS.find(t => t.id === teamId);
+  const bal = getCCBalance(teamId);
+  const lites = getTeamLites(teamId);
+
+  document.getElementById('ccContent').classList.remove('hidden');
+  document.getElementById('ccBalance').innerHTML = `${bal} <small>lites</small>`;
+  document.getElementById('ccTeamName').textContent = team.name;
+  document.getElementById('ccCourse').textContent = team.course;
+  document.getElementById('ccCard').style.borderTop = `4px solid ${team.color}`;
+  document.getElementById('qrContainer').classList.add('hidden');
+
+  renderTransactions(teamId, lites);
+  renderCCSelector();
+}
+
+function renderTransactions(teamId, lites) {
+  const el = document.getElementById('txList');
+  ensureTeamData(teamId);
+  const td = data[teamId];
+  const transactions = [];
+
+  // Ingresos por ranking
+  if (lites.ranking > 0) {
+    transactions.push({ type: 'income', desc: 'Ranking Superliga', amount: lites.ranking, date: 'Automatico', icon: '🏆' });
+  }
+  // Ingresos por froitometro
+  if (lites.froitometro > 0) {
+    transactions.push({ type: 'income', desc: `Froitometro (${lites.fcPctMedia.toFixed(0)}%)`, amount: lites.froitometro, date: 'Automatico', icon: '🍎' });
+  }
+  // Ingresos por simulacros
+  if (lites.simulacros > 0) {
+    transactions.push({ type: 'income', desc: 'Simulacros mochila', amount: lites.simulacros, date: 'Automatico', icon: '🎒' });
+  }
+  // Gastos
+  if (td.gastos) {
+    td.gastos.forEach((g, i) => {
+      transactions.push({ type: 'expense', desc: `${g.item} x${g.qty}`, amount: g.total, date: g.date, icon: '🛒', idx: i });
+    });
+  }
+
+  if (transactions.length === 0) {
+    el.innerHTML = '<div class="tx-empty">Sen movementos</div>';
+    return;
+  }
+
+  el.innerHTML = transactions.map(tx => `
+    <div class="tx-item">
+      <div class="tx-left">
+        <div class="tx-icon ${tx.type}">${tx.icon}</div>
+        <div>
+          <div class="tx-desc">${tx.desc}</div>
+          <div class="tx-date">${tx.date}</div>
+        </div>
+      </div>
+      <div class="tx-amount ${tx.type}">
+        ${tx.type === 'income' ? '+' : '-'}${tx.amount} lites
+        ${tx.type === 'expense' && editMode ? `<button class="hi-delete" onclick="deleteExpense(${tx.idx})" title="Eliminar">x</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// Gastos
+function openExpenseModal() {
+  if (!selectedCC || !editMode) return;
+  const sel = document.getElementById('expenseItem');
+  sel.innerHTML = ECOTENDA.map(e => `<option value="${e.name}" data-price="${e.price}">${e.name} — ${e.price} lites</option>`).join('');
+  document.getElementById('expenseQty').value = 1;
+  updateExpenseCost();
+  document.getElementById('expenseModal').classList.remove('hidden');
+  // Actualizar custo ao cambiar
+  sel.onchange = updateExpenseCost;
+  document.getElementById('expenseQty').oninput = updateExpenseCost;
+}
+
+function updateExpenseCost() {
+  const sel = document.getElementById('expenseItem');
+  const price = parseInt(sel.selectedOptions[0]?.dataset.price) || 0;
+  const qty = parseInt(document.getElementById('expenseQty').value) || 1;
+  document.getElementById('expenseCost').textContent = price * qty;
+}
+
+function closeExpenseModal() {
+  document.getElementById('expenseModal').classList.add('hidden');
+}
+
+function saveExpense() {
+  if (!selectedCC) return;
+  const sel = document.getElementById('expenseItem');
+  const item = sel.value;
+  const price = parseInt(sel.selectedOptions[0]?.dataset.price) || 0;
+  const qty = parseInt(document.getElementById('expenseQty').value) || 1;
+  const total = price * qty;
+
+  ensureTeamData(selectedCC);
+  if (!data[selectedCC].gastos) data[selectedCC].gastos = [];
+  const today = new Date().toISOString().slice(0, 10);
+  data[selectedCC].gastos.push({ item, qty, price, total, date: today });
+  saveData();
+
+  closeExpenseModal();
+  selectCC(selectedCC);
+  showToast('Gasto rexistrado');
+}
+
+function deleteExpense(idx) {
+  if (!selectedCC || !editMode) return;
+  data[selectedCC].gastos.splice(idx, 1);
+  saveData();
+  selectCC(selectedCC);
+}
+
+// QR
+function showQR() {
+  if (!selectedCC) return;
+  const team = TEAMS.find(t => t.id === selectedCC);
+  const container = document.getElementById('qrContainer');
+  container.classList.remove('hidden');
+
+  // Construir URL co hash para abrir directamente a tarxeta
+  const baseUrl = window.location.href.split('#')[0].split('?')[0];
+  const url = baseUrl + '?tarxeta=' + selectedCC;
+
+  const canvas = document.getElementById('qrCanvas');
+  generateQR(canvas, url, 200);
+  document.getElementById('qrLabel').textContent = `${team.name} — ${team.course}`;
+  container.scrollIntoView({ behavior: 'smooth' });
+}
+
+function printQR() {
+  if (!selectedCC) return;
+  const team = TEAMS.find(t => t.id === selectedCC);
+  const canvas = document.getElementById('qrCanvas');
+  const dataUrl = canvas.toDataURL();
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>QR ${team.name}</title>
+    <style>body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;text-align:center}
+    img{width:250px;height:250px;margin-bottom:16px}h2{margin:0;font-size:1.5rem}p{color:#666;margin:4px 0}
+    @media print{button{display:none}}</style></head>
+    <body><h2>${team.name}</h2><p>${team.course}</p><img src="${dataUrl}"><p>Escanea para ver a tua tarxeta de credito</p>
+    <button onclick="window.print()">Imprimir</button></body></html>`);
+  win.document.close();
+}
+
+// Xerador QR minimo (QR Code en canvas)
+function generateQR(canvas, text, size) {
+  // Usa a API de Google Charts como fallback fiable para xerar QR
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() {
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, size, size);
+    ctx.drawImage(img, 0, 0, size, size);
+  };
+  img.onerror = function() {
+    // Fallback: mostrar texto da URL
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = '#000';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('QR non disponible offline', size/2, size/2 - 8);
+    ctx.fillText('URL: ' + text.slice(0, 40), size/2, size/2 + 12);
+  };
+  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
+}
+
+// Solapas
+function switchTab(tab) {
+  ['equipos','ranking','ecotenda','simulacros','normas','tarxetas'].forEach(t => {
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+    document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', t !== tab);
+  });
+  if (tab === 'ranking') renderRanking();
+  if (tab === 'ecotenda') renderEcotenda();
+  if (tab === 'tarxetas') renderCCSelector();
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  const isLight = document.body.classList.contains('light');
+  document.getElementById('iconMoon').classList.toggle('hidden', isLight);
+  document.getElementById('iconSun').classList.toggle('hidden', !isLight);
+  localStorage.setItem('superliga_theme', isLight ? 'light' : 'dark');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `superliga_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Datos exportados');
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      data = JSON.parse(e.target.result);
+      saveData();
+      renderTeams();
+      if (selectedTeam) { selectTeam(selectedTeam); }
+      showToast('Datos importados');
+    } catch(err) { showToast('Erro ao importar'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// Modo lectura/edicion
+function toggleLock() {
+  if (editMode) {
+    // Bloquear
+    editMode = false;
+    document.body.classList.add('read-only');
+    document.getElementById('iconLock').classList.remove('hidden');
+    document.getElementById('iconUnlock').classList.add('hidden');
+    closePanel();
+    showToast('Modo lectura activado');
+  } else {
+    // Mostrar modal de contrasinal
+    document.getElementById('passwordModal').classList.remove('hidden');
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('passwordInput').focus();
+  }
+}
+
+function checkPassword() {
+  const input = document.getElementById('passwordInput').value;
+  if (input === EDIT_PASSWORD) {
+    editMode = true;
+    document.body.classList.remove('read-only');
+    document.getElementById('iconLock').classList.add('hidden');
+    document.getElementById('iconUnlock').classList.remove('hidden');
+    closePasswordModal();
+    showToast('Modo edicion activado');
+  } else {
+    showToast('Contrasinal incorrecta');
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('passwordInput').focus();
+  }
+}
+
+function closePasswordModal() {
+  document.getElementById('passwordModal').classList.add('hidden');
+}
+
+function init() {
+  loadData();
+  populateWeeks();
+  // Iniciar en modo lectura
+  document.body.classList.add('read-only');
+  renderTeams();
+  renderNormasRanking();
+  if (localStorage.getItem('superliga_theme') === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('iconMoon').classList.add('hidden');
+    document.getElementById('iconSun').classList.remove('hidden');
+  }
+  // Se accede con ?tarxeta=id, abrir directamente esa tarxeta
+  const params = new URLSearchParams(window.location.search);
+  const tarxetaParam = params.get('tarxeta');
+  if (tarxetaParam && TEAMS.find(t => t.id === tarxetaParam)) {
+    switchTab('tarxetas');
+    selectCC(tarxetaParam);
+  }
+
+  // Auto-refresh cada 30s para modo lectura (ver datos actualizados)
+  setInterval(fetchRemoteData, 30000);
+}
+
+init();
+</script>
+</body>
+</html>

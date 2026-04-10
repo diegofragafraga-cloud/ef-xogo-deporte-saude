@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patios DINS - CEIP Coiron Dena</title>
+<style>
+  :root {
+    --bg: #0b0d13; --bg2: #13161f; --bg3: #1c2030;
+    --text: #e8eaf0; --text2: #8b92a8; --accent: #f59e0b;
+    --accent2: #fbbf24; --border: #252a3a; --radius: 14px;
+    --green: #4ade80; --red: #f87171;
+  }
+  .light {
+    --bg: #f0f2f7; --bg2: #ffffff; --bg3: #e8eaf0;
+    --text: #13161f; --text2: #6b7280; --border: #d1d5db;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+  }
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px; background: var(--bg2);
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .back-btn {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: all .2s; flex-shrink: 0;
+  }
+  .back-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .back-btn svg { width: 18px; height: 18px; }
+  .header h1 { font-size: 1.2rem; font-weight: 700; }
+  .header h1 span { color: var(--accent2); }
+  .icon-btn {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all .2s;
+  }
+  .icon-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .hidden { display: none !important; }
+
+  .tabs {
+    display: flex; background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .tab {
+    padding: 12px 18px; cursor: pointer; font-weight: 600; font-size: .82rem;
+    color: var(--text2); border-bottom: 3px solid transparent;
+    transition: all .2s; white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .content { max-width: 960px; margin: 0 auto; padding: 24px; }
+
+  .section-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
+  }
+  .section-card h2 {
+    font-size: 1.05rem; margin-bottom: 16px; color: var(--accent2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-card p { font-size: .88rem; line-height: 1.7; margin-bottom: 10px; }
+
+  .img-full {
+    width: 100%; border-radius: 10px; margin: 12px 0;
+    border: 1px solid var(--border);
+  }
+
+  /* Obxectivos */
+  .obx-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin: 12px 0;
+  }
+  .obx-card {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; text-align: center;
+  }
+  .obx-card .obx-label { font-size: .68rem; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .obx-card .obx-text { font-size: .85rem; font-weight: 600; }
+
+  /* Funcions */
+  .funcions-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px; margin-top: 12px;
+  }
+  .funcion-card {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; text-align: center;
+  }
+  .funcion-card h4 { font-size: .85rem; color: var(--accent2); margin-bottom: 6px; }
+  .funcion-card p { font-size: .78rem; color: var(--text2); line-height: 1.5; }
+  .funcion-icon { font-size: 1.5rem; margin-bottom: 8px; }
+
+  /* ========== TARXETAS HTML ========== */
+  .tarxetas-html-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px; margin-top: 16px;
+  }
+  .tarxeta-html {
+    border-radius: 14px; padding: 24px 20px; text-align: center;
+    position: relative; min-height: 160px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: grab; user-select: none; transition: transform .2s, box-shadow .2s;
+  }
+  .tarxeta-html:active { cursor: grabbing; }
+  .tarxeta-html:hover { transform: scale(1.03); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+  .tarxeta-html .t-num {
+    position: absolute; bottom: 10px; left: 0; right: 0;
+    text-align: center; font-style: italic; font-size: .8rem; opacity: .7;
+  }
+  .tarxeta-html .t-xogo { font-weight: 800; font-size: 1.1rem; margin: 3px 0; text-shadow: 0 1px 2px rgba(0,0,0,.15); }
+  .tarxeta-html .t-lite { font-weight: 700; color: #c0392b; font-size: 1rem; }
+  .tarxeta-html .t-free { font-weight: 800; font-size: 1.1rem; color: #1a1a2e; }
+  .t1 { background: linear-gradient(135deg, #87ceeb, #5dade2); color: #1a1a2e; }
+  .t2 { background: linear-gradient(135deg, #f5cba7, #e8a87c); color: #1a1a2e; }
+  .t3 { background: linear-gradient(135deg, #f9d423, #f8961e); color: #1a1a2e; }
+  .t4 { background: linear-gradient(135deg, #f7dc6f, #f1c40f); color: #1a1a2e; }
+  .t5 { background: linear-gradient(135deg, #f5cba7, #f8a5c2); color: #1a1a2e; }
+  .t6 { background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #d4fc79); color: #1a1a2e; }
+
+  /* ========== PANEL ROTATIVO INTERACTIVO ========== */
+  .panel-rotativo { margin-top: 16px; }
+  .panel-instruccion {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 16px; margin-bottom: 16px; font-size: .82rem; color: var(--text2);
+    text-align: center;
+  }
+  .panel-instruccion svg { width: 16px; height: 16px; vertical-align: middle; margin-right: 4px; }
+
+  /* Panel visual con imaxe de fondo */
+  .panel-visual {
+    position: relative; width: 100%; max-width: 700px; margin: 0 auto 24px;
+  }
+  .panel-visual img { width: 100%; display: block; border-radius: 12px; }
+  .drop-zone {
+    position: absolute; border: 2px dashed transparent; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s; overflow: hidden;
+  }
+  .drop-zone:hover { border-color: rgba(255,255,255,.4); }
+  .drop-zone.drag-over { border-color: var(--accent); background: rgba(245,158,11,.2); }
+  .drop-zone.has-card { border-color: transparent; background: none; }
+  .drop-zone .dz-placeholder {
+    font-size: .6rem; color: rgba(255,255,255,.4); text-align: center;
+    pointer-events: none;
+  }
+  .drop-zone.has-card .dz-placeholder { display: none; }
+  .drop-zone img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; pointer-events: none; }
+
+  /* Tarxeta mini dentro do slot */
+  .tarxeta-mini {
+    width: 100%; border-radius: 10px; padding: 12px; text-align: center;
+    cursor: grab; user-select: none; font-size: .82rem;
+  }
+  .tarxeta-mini:active { cursor: grabbing; }
+  .tarxeta-mini .tm-num { font-size: .7rem; opacity: .6; }
+  .tarxeta-mini .tm-xogos { font-weight: 700; font-size: .85rem; }
+
+  /* Tarxetas arrastrables (pool) */
+  .tarxetas-pool {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    padding: 16px; background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius); min-height: 60px;
+  }
+  .tarxetas-pool-label {
+    width: 100%; text-align: center; font-size: .75rem; color: var(--text2);
+    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .pool-card {
+    padding: 10px 16px; border-radius: 10px; cursor: grab; user-select: none;
+    font-weight: 700; font-size: .82rem; transition: transform .15s;
+    touch-action: none;
+  }
+  .pool-card:active { cursor: grabbing; transform: scale(1.08); }
+  .pool-card.dragging { opacity: .4; }
+  .pool-card img { width: 100%; border-radius: 8px; display: block; pointer-events: none; }
+
+  .tarxeta-mini img { width: 100%; border-radius: 8px; display: block; pointer-events: none; }
+
+  .btn-reset {
+    margin-top: 12px; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg3); color: var(--text2); font-size: .8rem; cursor: pointer;
+    display: block; margin-left: auto; margin-right: auto;
+  }
+  .btn-reset:hover { color: var(--red); border-color: var(--red); }
+
+  /* ========== PARTICIPACION TABLA ========== */
+  .part-table {
+    width: 100%; border-collapse: collapse; font-size: .8rem;
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .part-table th {
+    background: var(--bg3); padding: 8px 6px; text-align: center;
+    font-size: .68rem; color: var(--text2); text-transform: uppercase; letter-spacing: .5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .part-table td {
+    padding: 8px 6px; text-align: center; border-bottom: 1px solid var(--border);
+  }
+  .part-table tr:last-child td { border-bottom: none; }
+  .part-equipo {
+    font-weight: 700; font-size: .78rem; color: #fff; padding: 4px 10px;
+    border-radius: 6px; display: inline-block; min-width: 90px;
+  }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; background: var(--green);
+    color: #000; padding: 12px 20px; border-radius: 8px; font-weight: 600;
+    font-size: .85rem; opacity: 0; transform: translateY(10px);
+    transition: all .3s; z-index: 200;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .header h1 { font-size: 1rem; }
+    .content { padding: 16px; }
+    .section-card { padding: 20px; }
+    .equipos-drop-grid { grid-template-columns: 1fr 1fr; }
+    .tarxetas-html-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 500px) {
+    .equipos-drop-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <a class="back-btn" href="../index.html" title="Volver ao portal">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </a>
+    <h1>Patios <span>DINS</span></h1>
+  </div>
+  <button class="icon-btn" onclick="toggleTheme()">
+    <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <svg id="iconSun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+  </button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('presentacion')">Presentacion</div>
+  <div class="tab" onclick="switchTab('tarxetas')">Tarxetas</div>
+  <div class="tab" onclick="switchTab('zonas')">Zonas do patio</div>
+  <div class="tab" onclick="switchTab('responsables')">Responsables</div>
+  <div class="tab" onclick="switchTab('participacion')">Participacion</div>
+</div>
+
+<div class="content">
+
+  <!-- ==================== PRESENTACION ==================== -->
+  <div id="viewPresentacion">
+    <div class="section-card">
+      <h2>Que son os Patios DINS?</h2>
+      <p><strong>Dinamicos, Inclusivos e Sostibles.</strong> Unha proposta para favorecer a inclusion entre o alumnado e lograr que coñezan gran variedade de recursos ludicos para o seu tempo libre.</p>
+      <p>O enfoque fusiona o dinamico co inclusivo e sostible: fomentar a actividade fisica, ofrecer alternativas de xogo e tamen coidar a saude mental e social.</p>
+    </div>
+    <div class="section-card">
+      <h2>Obxectivos</h2>
+      <div class="obx-grid">
+        <div class="obx-card"><div class="obx-label">Potenciar</div><div class="obx-text">O xogo e o deporte entre o alumnado menos participativo</div></div>
+        <div class="obx-card"><div class="obx-label">Diminuir</div><div class="obx-text">Os conflitos no patio</div></div>
+        <div class="obx-card"><div class="obx-label">Mellorar</div><div class="obx-text">A coeducacion e as habilidades sociais</div></div>
+        <div class="obx-card"><div class="obx-label">Ofrecer</div><div class="obx-text">Alternativas para ocupar o tempo libre</div></div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h2>Funcions dos encargados</h2>
+      <p>Cada equipo ten 4 encargados rotativos:</p>
+      <div class="funcions-grid">
+        <div class="funcion-card"><div class="funcion-icon">📦</div><h4>Material</h4><p>Levar e recoller o material do patio.</p></div>
+        <div class="funcion-card"><div class="funcion-icon">🌿</div><h4>Hixiene ambiental</h4><p>Coidar o contorno, evitar lixo. Ecopatrulla.</p></div>
+        <div class="funcion-card"><div class="funcion-icon">✅</div><h4>Seguridade</h4><p>Que todos xoguen respectando normas.</p></div>
+        <div class="funcion-card"><div class="funcion-icon">📋</div><h4>Secretario/a</h4><p>Anotar participacion e puntos.</p></div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h2>Como funciona?</h2>
+      <p>Hai <strong>6 tarxetas</strong> con xogos diferentes. Cada clase comeza cunha e cada 6 dias lectivos rotan. Os xogos marcados como <strong style="color:#c0392b">lite</strong> requiren alugar material na Ecotenda cos lites da Superliga.</p>
+    </div>
+  </div>
+
+  <!-- ==================== TARXETAS ==================== -->
+  <div id="viewTarxetas" class="hidden">
+    <!-- Panel interactivo -->
+    <div class="section-card">
+      <h2>Panel rotativo interactivo</h2>
+      <div class="panel-instruccion">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M10 20H4v-6"/><path d="m20 4-6.7 6.7"/><path d="m4 20 6.7-6.7"/></svg>
+        Arrastra cada tarxeta ao equipo correspondente para configurar a rotacion actual
+      </div>
+
+      <div class="panel-visual" id="panelVisual">
+        <img src="pd_tarxetas_rotacion.png" alt="Panel rotativo">
+        <!-- As drop zones posicionanse con JS sobre cada equipo -->
+      </div>
+
+      <div class="tarxetas-pool" id="tarxetasPool">
+        <div class="tarxetas-pool-label">Tarxetas disponibles (arrastra arriba)</div>
+      </div>
+
+      <button class="btn-reset" onclick="resetPanel()">Resetear panel</button>
+    </div>
+
+    <!-- As 6 tarxetas en HTML -->
+    <div class="section-card">
+      <h2>Tarxetas de xogos 2025-2026</h2>
+      <div class="tarxetas-html-grid" id="tarxetasGrid"></div>
+    </div>
+  </div>
+
+  <!-- ==================== ZONAS ==================== -->
+  <div id="viewZonas" class="hidden">
+    <div class="section-card">
+      <h2>Zonas do patio</h2>
+      <p>O patio esta dividido en 6 zonas para os diferentes xogos:</p>
+      <img class="img-full" src="pd_zonas.png" alt="Mapa de zonas do patio">
+    </div>
+  </div>
+
+  <!-- ==================== RESPONSABLES ==================== -->
+  <div id="viewResponsables" class="hidden">
+    <div class="section-card">
+      <h2>Parellas responsables - Curso 2025-2026</h2>
+      <p>Encargados de Material, Hixiene ambiental, Seguridade e Secretariado por equipo:</p>
+      <img class="img-full" src="pd_parellas.png" alt="Parellas responsables">
+    </div>
+  </div>
+
+  <!-- ==================== PARTICIPACION ==================== -->
+  <div id="viewParticipacion" class="hidden">
+    <div class="section-card">
+      <h2>Lista de participacion - 3º Trimestre</h2>
+      <p>Reconto de participacion do alumnado. Cada 6 dias lectivos rotanse as tarxetas:</p>
+      <div style="overflow-x:auto; margin-top:12px;">
+        <table class="part-table">
+          <thead>
+            <tr>
+              <th>Equipo</th>
+              <th>T1<br><span style="font-weight:400;font-size:.6rem">Colpbol<br>Slackline<br>Combas</span></th>
+              <th>T2<br><span style="font-weight:400;font-size:.6rem">Bolos<br>Badminton<br>T.Musical</span></th>
+              <th>T3<br><span style="font-weight:400;font-size:.6rem">Palas<br>21 Basket<br>Recre-Arte</span></th>
+              <th>T4<br><span style="font-weight:400;font-size:.6rem">Dachball<br>Pinfuvote<br>Diana</span></th>
+              <th>T5<br><span style="font-weight:400;font-size:.6rem">T.Mesa<br>Beisbol<br>Xadrez</span></th>
+              <th>T6<br><span style="font-weight:400;font-size:.6rem">P.Inimiga<br>Estructura<br>Aros</span></th>
+            </tr>
+          </thead>
+          <tbody id="partBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Datos
+const TARXETAS = [
+  { id: 1, bg: 'linear-gradient(135deg, #87ceeb, #5dade2)', xogos: ['Colpbol-Tenis', 'Slackline', 'Combas'], lites: [false, true, false] },
+  { id: 2, bg: 'linear-gradient(135deg, #f5cba7, #e8a87c)', xogos: ['Bolos', 'Badminton', 'Taller Musical'], lites: [false, true, true] },
+  { id: 3, bg: 'linear-gradient(135deg, #f9d423, #f8961e)', xogos: ['Palas', '21 Basket', 'Recre-Arte'], lites: [false, true, true] },
+  { id: 4, bg: 'linear-gradient(135deg, #f7dc6f, #f1c40f)', xogos: ['Dachball', 'Pinfuvote', 'Diana'], lites: [true, false, true] },
+  { id: 5, bg: 'linear-gradient(135deg, #f5cba7, #f8a5c2)', xogos: ['Tenis de Mesa', 'Beisbol', 'Xadrez'], lites: [false, true, false] },
+  { id: 6, bg: 'linear-gradient(135deg, #a1c4fd, #c2e9fb, #c6f6d5)', xogos: ['Pelota Inimiga', 'Estructura', 'Aros-Raqueta'], lites: [false, false, true] },
+];
+
+const EQUIPOS = [
+  { curso: '1º', names: 'XIRASOIS', color: '#e74c3c' },
+  { curso: '2º', names: 'NUBE / DRAKYS', color: '#9b59b6' },
+  { curso: '3º', names: 'A TRIBO', color: '#e67e22' },
+  { curso: '4º', names: 'TERRA / PLANTA', color: '#f1c40f' },
+  { curso: '5º', names: 'BOLBORETA A / B', color: '#87ceeb' },
+  { curso: '6º', names: 'FANTASMA / MUNDIAL', color: '#27ae60' },
+];
+
+const EQUIPOS_PART = [
+  { name: 'XIRASOIS', color: '#e74c3c' },
+  { name: 'NUBE', color: '#3498db' },
+  { name: 'DRAKYS', color: '#9b59b6' },
+  { name: 'A TRIBO', color: '#e67e22' },
+  { name: 'TERRA', color: '#27ae60' },
+  { name: 'PLANTA', color: '#2ecc71' },
+  { name: 'BOLBORETA A', color: '#f39c12' },
+  { name: 'BOLBORETA B', color: '#d4ac0d' },
+  { name: 'FANTASMA', color: '#95a5a6' },
+  { name: 'MUNDIAL', color: '#1abc9c' },
+];
+
+// Estado do panel (que tarxeta ten cada equipo)
+let panelState = JSON.parse(localStorage.getItem('patios_panel') || 'null') || {};
+
+// Render tarxetas HTML (vista)
+function renderTarxetasGrid() {
+  document.getElementById('tarxetasGrid').innerHTML = TARXETAS.map(t => `
+    <div class="tarxeta-card-img" style="border-radius:14px;overflow:hidden;border:2px solid var(--border);transition:all .2s">
+      <img src="pd_tarxeta_${t.id}.png" alt="Tarxeta ${t.id}" style="width:100%;display:block">
+    </div>
+  `).join('');
+}
+
+// Posicions das drop zones sobre a imaxe (en % relativo)
+// Correspondencia coa imaxe pd_tarxetas_rotacion.png:
+// 0=1º Xirasois (esquerda arriba), 1=2º Nube/Drakys (centro arriba),
+// 2=3º A Tribo (dereita arriba), 3=4º Terra/Planta (esquerda abaixo),
+// 4=5º Bolboreta (centro abaixo), 5=6º Fantasma/Mundial (dereita abaixo)
+const DROP_POSITIONS = [
+  { left: 3, top: 5, width: 28, height: 42 },    // 1º
+  { left: 36, top: 0, width: 28, height: 42 },    // 2º
+  { left: 69, top: 5, width: 28, height: 42 },    // 3º
+  { left: 3, top: 52, width: 28, height: 44 },    // 4º
+  { left: 36, top: 56, width: 28, height: 44 },   // 5º
+  { left: 69, top: 52, width: 28, height: 44 },   // 6º
+];
+
+// Render panel rotativo
+function renderPanel() {
+  const panel = document.getElementById('panelVisual');
+  const pool = document.getElementById('tarxetasPool');
+  const assigned = Object.values(panelState);
+
+  // Eliminar drop zones anteriores
+  panel.querySelectorAll('.drop-zone').forEach(el => el.remove());
+
+  // Crear drop zones sobre a imaxe
+  EQUIPOS.forEach((eq, i) => {
+    const pos = DROP_POSITIONS[i];
+    const tid = panelState[i];
+    const tarxeta = tid != null ? TARXETAS.find(t => t.id === tid) : null;
+    const dz = document.createElement('div');
+    dz.className = 'drop-zone' + (tarxeta ? ' has-card' : '');
+    dz.dataset.equipo = i;
+    dz.style.cssText = `left:${pos.left}%;top:${pos.top}%;width:${pos.width}%;height:${pos.height}%`;
+    dz.ondragover = (e) => { e.preventDefault(); dz.classList.add('drag-over'); };
+    dz.ondragleave = () => dz.classList.remove('drag-over');
+    dz.ondrop = (e) => dropCard(e, i);
+
+    if (tarxeta) {
+      dz.innerHTML = renderMiniCard(tarxeta, i);
+    } else {
+      dz.innerHTML = '<span class="dz-placeholder">Soltar aqui</span>';
+    }
+    panel.appendChild(dz);
+  });
+
+  // Pool con tarxetas non asignadas
+  const unassigned = TARXETAS.filter(t => !assigned.includes(t.id));
+  pool.innerHTML = '<div class="tarxetas-pool-label">Tarxetas disponibles (arrastra arriba)</div>' +
+    (unassigned.length === 0 ? '<div style="color:var(--green);font-size:.82rem">Todas as tarxetas asignadas</div>' : '') +
+    unassigned.map(t => `
+      <div class="pool-card" draggable="true" ondragstart="dragStart(event, ${t.id})" data-tid="${t.id}" style="padding:4px;background:var(--bg2);border-radius:10px;max-width:140px">
+        <img src="pd_tarxeta_${t.id}.png" alt="Tarxeta ${t.id}">
+      </div>
+    `).join('');
+
+  // Touch events para movil
+  addTouchDrag();
+}
+
+function renderMiniCard(t, eqIdx) {
+  return `<div class="tarxeta-mini" draggable="true" ondragstart="dragStartFromSlot(event, ${t.id}, ${eqIdx})" data-tid="${t.id}">
+    <img src="pd_tarxeta_${t.id}.png" alt="Tarxeta ${t.id}">
+  </div>`;
+}
+
+// Drag & Drop
+let draggedTid = null;
+let draggedFromEquipo = null;
+
+function dragStart(e, tid) {
+  draggedTid = tid;
+  draggedFromEquipo = null;
+  e.dataTransfer.effectAllowed = 'move';
+  e.target.classList.add('dragging');
+}
+
+function dragStartFromSlot(e, tid, eqIdx) {
+  draggedTid = tid;
+  draggedFromEquipo = eqIdx;
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function dropCard(e, eqIdx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (draggedTid == null) return;
+
+  // Se xa hai tarxeta neste equipo, devolvela ao pool
+  if (panelState[eqIdx] != null && panelState[eqIdx] !== draggedTid) {
+    // A anterior volve ao pool
+  }
+
+  // Se vinha doutro equipo, limpar o anterior
+  if (draggedFromEquipo != null && draggedFromEquipo !== eqIdx) {
+    delete panelState[draggedFromEquipo];
+  }
+
+  panelState[eqIdx] = draggedTid;
+  draggedTid = null;
+  draggedFromEquipo = null;
+  savePanelState();
+  renderPanel();
+  showToast('Tarxeta asignada');
+}
+
+function resetPanel() {
+  panelState = {};
+  savePanelState();
+  renderPanel();
+  showToast('Panel reseteado');
+}
+
+function savePanelState() {
+  localStorage.setItem('patios_panel', JSON.stringify(panelState));
+}
+
+// Touch drag para movil
+function addTouchDrag() {
+  document.querySelectorAll('[draggable="true"]').forEach(el => {
+    el.addEventListener('touchstart', handleTouchStart, { passive: false });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    el.addEventListener('touchend', handleTouchEnd, { passive: false });
+  });
+}
+
+let touchClone = null;
+let touchTid = null;
+let touchFromEq = null;
+
+function handleTouchStart(e) {
+  const el = e.currentTarget;
+  touchTid = parseInt(el.dataset.tid || el.closest('[draggable]')?.dataset?.tid);
+  if (!touchTid) {
+    // Tarxeta mini dentro dun slot
+    const mini = el.closest('.tarxeta-mini');
+    if (mini) {
+      const match = mini.outerHTML.match(/Tarxeta n.º (\d)/);
+      if (match) touchTid = parseInt(match[1]);
+    }
+  }
+  touchFromEq = el.closest('.equipo-drop')?.dataset?.equipo;
+  touchFromEq = touchFromEq != null ? parseInt(touchFromEq) : null;
+
+  touchClone = el.cloneNode(true);
+  touchClone.style.position = 'fixed';
+  touchClone.style.zIndex = '1000';
+  touchClone.style.opacity = '.8';
+  touchClone.style.pointerEvents = 'none';
+  touchClone.style.width = el.offsetWidth + 'px';
+  document.body.appendChild(touchClone);
+  const touch = e.touches[0];
+  touchClone.style.left = (touch.clientX - 40) + 'px';
+  touchClone.style.top = (touch.clientY - 20) + 'px';
+}
+
+function handleTouchMove(e) {
+  e.preventDefault();
+  if (!touchClone) return;
+  const touch = e.touches[0];
+  touchClone.style.left = (touch.clientX - 40) + 'px';
+  touchClone.style.top = (touch.clientY - 20) + 'px';
+}
+
+function handleTouchEnd(e) {
+  if (touchClone) {
+    touchClone.remove();
+    touchClone = null;
+  }
+  if (touchTid == null) return;
+  const touch = e.changedTouches[0];
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  const dropZone = target?.closest('.equipo-drop');
+  if (dropZone) {
+    const eqIdx = parseInt(dropZone.dataset.equipo);
+    if (touchFromEq != null && touchFromEq !== eqIdx) delete panelState[touchFromEq];
+    panelState[eqIdx] = touchTid;
+    savePanelState();
+    renderPanel();
+    showToast('Tarxeta asignada');
+  }
+  touchTid = null;
+  touchFromEq = null;
+}
+
+// Participacion
+function renderParticipacion() {
+  document.getElementById('partBody').innerHTML = EQUIPOS_PART.map(eq => `
+    <tr>
+      <td><span class="part-equipo" style="background:${eq.color}">${eq.name}</span></td>
+      <td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+  `).join('');
+}
+
+// Tabs
+const TABS = ['presentacion','tarxetas','zonas','responsables','participacion'];
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((el, i) => el.classList.toggle('active', TABS[i] === tab));
+  TABS.forEach(t => {
+    const v = document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (v) v.classList.toggle('hidden', t !== tab);
+  });
+  if (tab === 'tarxetas') { renderPanel(); renderTarxetasGrid(); }
+  if (tab === 'participacion') renderParticipacion();
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  const l = document.body.classList.contains('light');
+  document.getElementById('iconMoon').classList.toggle('hidden', l);
+  document.getElementById('iconSun').classList.toggle('hidden', !l);
+  localStorage.setItem('ef_theme', l ? 'light' : 'dark');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// Init
+if (localStorage.getItem('ef_theme') === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('iconMoon').classList.add('hidden');
+  document.getElementById('iconSun').classList.remove('hidden');
+}
+</script>
+</body>
+</html>

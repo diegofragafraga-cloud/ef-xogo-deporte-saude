@@ -1,0 +1,8 @@
+name = "superliga-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "SUPERLIGA_KV"
+id = "b477a1dedb6f4b55b072708e3e88aad8"
