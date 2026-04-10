@@ -135,6 +135,52 @@
   }
   .footer a { color: var(--accent2); text-decoration: none; }
 
+  /* Splash de benvida */
+  .splash {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #0b0d13;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: opacity .6s ease, visibility .6s ease;
+  }
+  .splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+  .splash-icon {
+    width: 80px; height: 80px; margin-bottom: 24px;
+    animation: bounceIn .8s ease both;
+  }
+  .splash-icon svg { width: 100%; height: 100%; stroke: var(--accent2); }
+  .splash-title {
+    font-size: 2rem; font-weight: 800; text-align: center;
+    opacity: 0; animation: fadeUp .7s ease .4s both;
+  }
+  .splash-title span { color: var(--accent2); }
+  .splash-sub {
+    font-size: .95rem; color: var(--text2); margin-top: 8px;
+    opacity: 0; animation: fadeUp .7s ease .7s both;
+  }
+  .splash-bar {
+    width: 120px; height: 3px; background: var(--bg3);
+    border-radius: 3px; margin-top: 28px; overflow: hidden;
+    opacity: 0; animation: fadeUp .5s ease .9s both;
+  }
+  .splash-bar-fill {
+    height: 100%; width: 0; border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    animation: loadBar 1.2s ease 1s both;
+  }
+  @keyframes bounceIn {
+    0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+    60% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes loadBar {
+    to { width: 100%; }
+  }
+
   /* Boton suxerencias flotante */
   .fab-sux {
     position: fixed; bottom: 24px; right: 24px; z-index: 200;
@@ -215,6 +261,16 @@
 </style>
 </head>
 <body>
+
+<!-- Splash benvida -->
+<div class="splash" id="splash">
+  <div class="splash-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+  </div>
+  <div class="splash-title">Benvidos a <span>EF</span></div>
+  <div class="splash-sub">Xogo, Deporte e Saude</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
 
 <!-- Theme toggle -->
 <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
@@ -388,6 +444,15 @@ async function enviarSuxerencia() {
     document.getElementById('suxModal').classList.add('hidden');
     document.getElementById('suxContent').innerHTML = '<h3>Buzón de suxerencias</h3><p class="modal-sub">Deixanos a tua opinion, idea ou suxerencia.</p><textarea id="suxText" placeholder="Escribe aqui a tua suxerencia..."></textarea><div class="modal-actions"><button class="btn-cancel" onclick="document.getElementById(\'suxModal\').classList.add(\'hidden\')">Cancelar</button><button class="btn-send" onclick="enviarSuxerencia()">Enviar</button></div>';
   }, 3000);
+}
+
+// Splash: mostrar só a primeira vez da sesion
+if (!sessionStorage.getItem('splash_seen')) {
+  sessionStorage.setItem('splash_seen', 'true');
+  setTimeout(() => document.getElementById('splash').classList.add('hide'), 3000);
+  setTimeout(() => document.getElementById('splash').remove(), 3700);
+} else {
+  document.getElementById('splash').remove();
 }
 
 // Restaurar tema

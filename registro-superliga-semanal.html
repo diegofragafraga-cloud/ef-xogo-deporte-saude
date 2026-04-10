@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superliga Saludable — Rexistro Semanal</title>
+<style>
+  :root {
+    --primary: #1a7a4c;
+    --primary-light: #e8f5ee;
+    --accent: #f59e0b;
+    --text: #1e293b;
+    --border: #cbd5e1;
+    --bg: #ffffff;
+    --row-alt: #f8fafc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: #f1f5f9;
+    padding: 20px;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--bg);
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  /* Cabecera */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 3px solid var(--primary);
+  }
+
+  .logo {
+    width: 56px;
+    height: 56px;
+    background: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo svg { width: 32px; height: 32px; }
+
+  .header-text h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+  }
+
+  .header-text p {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  /* Campos de info */
+  .info-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .info-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .info-field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    white-space: nowrap;
+  }
+
+  .info-field .line {
+    flex: 1;
+    border-bottom: 1.5px solid var(--border);
+    min-width: 80px;
+    height: 24px;
+  }
+
+  /* Tabla principal */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    background: var(--primary);
+    color: white;
+    padding: 10px 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  thead th:first-child {
+    border-radius: 8px 0 0 0;
+    text-align: left;
+    padding-left: 14px;
+  }
+
+  thead th:last-child {
+    border-radius: 0 8px 0 0;
+  }
+
+  /* Subheader con iconos */
+  .sub-header {
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.85;
+    display: block;
+    margin-top: 2px;
+  }
+
+  tbody td {
+    padding: 12px 8px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  tbody td:first-child {
+    text-align: left;
+    padding-left: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    width: 110px;
+  }
+
+  tbody tr:nth-child(even) {
+    background: var(--row-alt);
+  }
+
+  tbody tr:hover {
+    background: var(--primary-light);
+  }
+
+  /* Celdas de entrada */
+  .input-cell {
+    min-width: 60px;
+    height: 28px;
+    border: 1.5px dashed var(--border);
+    border-radius: 6px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  /* Fila de totales */
+  .total-row td {
+    background: var(--primary-light) !important;
+    font-weight: 700;
+    color: var(--primary);
+    border-top: 2px solid var(--primary);
+    font-size: 0.95rem;
+  }
+
+  .total-row td:first-child {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+  }
+
+  /* Leyenda */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: #475569;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-despertar { background: #8b5cf6; }
+  .dot-descanso { background: #0ea5e9; }
+  .dot-hervat { background: #f59e0b; }
+
+  /* Notas */
+  .notes {
+    margin-top: 16px;
+  }
+
+  .notes-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    margin-bottom: 6px;
+  }
+
+  .notes-area {
+    width: 100%;
+    min-height: 60px;
+    border: 1.5px dashed var(--border);
+    border-radius: 8px;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+
+  /* Estilos de impresión */
+  @media print {
+    body {
+      background: white;
+      padding: 0;
+    }
+
+    .page {
+      box-shadow: none;
+      padding: 16px;
+      border-radius: 0;
+      max-width: 100%;
+    }
+
+    .header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+    }
+
+    .logo {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    thead th {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .total-row td {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    tbody tr:nth-child(even) {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .legend {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .legend-dot {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    tbody td { padding: 10px 6px; }
+
+    .input-cell {
+      border: 1px dashed #aaa;
+      height: 24px;
+    }
+
+    .notes-area { min-height: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- Cabecera -->
+  <div class="header">
+    <div class="logo">
+      <!-- Lucide: heart-pulse -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+        <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>Superliga Saludable</h1>
+      <p>Rexistro semanal de actividade física en horario lectivo</p>
+    </div>
+  </div>
+
+  <!-- Info de clase y semana -->
+  <div class="info-row">
+    <div class="info-field">
+      <label>Clase</label>
+      <div class="line"></div>
+    </div>
+    <div class="info-field">
+      <label>Semana do</label>
+      <div class="line"></div>
+    </div>
+    <div class="info-field">
+      <label>ao</label>
+      <div class="line"></div>
+    </div>
+  </div>
+
+  <!-- Leyenda -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot dot-despertar"></div>
+      <span><strong>Espertares máxicos:</strong> activación ao comezo da xornada</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot dot-descanso"></div>
+      <span><strong>Descansos activos:</strong> pausas con movemento entre clases</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot dot-hervat"></div>
+      <span><strong>Método HERVAT:</strong> hidratación, estiramentos, respiración, vista, audición, tacto</span>
+    </div>
+  </div>
+
+  <!-- Tabla de registro -->
+  <table>
+    <thead>
+      <tr>
+        <th>Día</th>
+        <th>
+          Espertares máxicos
+          <span class="sub-header">minutos</span>
+        </th>
+        <th>
+          Descansos activos
+          <span class="sub-header">minutos</span>
+        </th>
+        <th>
+          Método HERVAT
+          <span class="sub-header">minutos</span>
+        </th>
+        <th>
+          Total
+          <span class="sub-header">minutos</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Luns</td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+      </tr>
+      <tr>
+        <td>Martes</td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+      </tr>
+      <tr>
+        <td>Mércores</td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+      </tr>
+      <tr>
+        <td>Xoves</td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+      </tr>
+      <tr>
+        <td>Venres</td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+      </tr>
+      <tr class="total-row">
+        <td>Total semanal</td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+        <td><div class="input-cell"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Notas -->
+  <div class="notes">
+    <div class="notes-label">Observacións</div>
+    <div class="notes-area"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>CEIP Coirón-Dena · Proxecto Dena Activa</span>
+    <span>Superliga Saludable 2025-2026</span>
+  </div>
+</div>
+
+</body>
+</html>

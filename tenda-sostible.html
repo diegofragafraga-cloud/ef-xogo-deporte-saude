@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="gl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenda Sostible — Xogos no Patio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* === CUSTOM PROPERTIES === */
+        :root {
+            --bg-primary: #1a1d23;
+            --bg-secondary: #22262e;
+            --bg-card: #282c35;
+            --text-primary: #f0f2f5;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --border: rgba(255,255,255,0.06);
+            --shadow: rgba(0,0,0,0.3);
+
+            /* Acentos por sección */
+            --accent-1: #4ade80; /* portada - verde sostible */
+            --accent-2: #34d399; /* que é - esmeralda */
+            --accent-3: #fbbf24; /* por que - ámbar */
+            --accent-4: #60a5fa; /* como funciona - azul */
+            --accent-5: #a78bfa; /* aluguer - violeta */
+            --accent-6: #f472b6; /* quen xestiona - rosa */
+            --accent-7: #fb923c; /* que xogos - laranxa */
+            --accent-8: #2dd4bf; /* normas - teal */
+            --accent-9: #4ade80; /* beneficios - verde */
+            --accent-10: #34d399; /* cierre - esmeralda */
+
+            --font-title: 'Baloo 2', cursive;
+            --font-main: 'Nunito', sans-serif;
+
+            --title-size: clamp(1.8rem, 5vw, 4rem);
+            --h2-size: clamp(1.3rem, 3.5vw, 2.5rem);
+            --h3-size: clamp(1rem, 2.5vw, 1.5rem);
+            --body-size: clamp(0.8rem, 1.5vw, 1.125rem);
+            --small-size: clamp(0.7rem, 1vw, 0.875rem);
+            --slide-padding: clamp(1.5rem, 5vw, 5rem);
+            --content-gap: clamp(0.5rem, 2vw, 2rem);
+            --element-gap: clamp(0.25rem, 1vw, 1rem);
+
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.6s;
+
+            /* Formas decorativas */
+            --shape-opacity: 0.08;
+        }
+
+        .light {
+            --bg-primary: #e8ebe4;
+            --bg-secondary: #dfe3da;
+            --bg-card: #d6dace;
+            --text-primary: #1a1d23;
+            --text-secondary: #4b5563;
+            --text-muted: #6b7280;
+            --border: rgba(0,0,0,0.08);
+            --shadow: rgba(0,0,0,0.1);
+            --shape-opacity: 0.12;
+        }
+
+        /* === RESET === */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* === VIEWPORT FITTING === */
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+        body {
+            height: 100%;
+            overflow-x: hidden;
+            font-family: var(--font-main);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background 0.4s, color 0.4s;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: var(--bg-primary);
+            transition: background 0.4s;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* === FORMAS DECORATIVAS GEOMÉTRICAS === */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: var(--shape-opacity);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .shape-circle { border-radius: 50%; }
+        .shape-square { border-radius: 20%; }
+        .shape-triangle {
+            border-radius: 0;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .shape-diamond {
+            border-radius: 0;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        /* === TIPOGRAFÍA === */
+        .eyebrow {
+            font-family: var(--font-main);
+            font-size: var(--small-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: clamp(0.5rem, 1.5vw, 1.5rem);
+        }
+
+        h1 {
+            font-family: var(--font-title);
+            font-size: var(--title-size);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: clamp(0.3rem, 1vw, 1rem);
+        }
+
+        h2 {
+            font-family: var(--font-title);
+            font-size: var(--h2-size);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: clamp(0.5rem, 1.5vw, 1.5rem);
+        }
+
+        .subtitle {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            max-width: min(80vw, 600px);
+            line-height: 1.5;
+        }
+
+        .accent { font-weight: 800; }
+
+        /* === CARDS === */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+            gap: clamp(0.75rem, 2vw, 1.5rem);
+            width: min(90vw, 900px);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: clamp(12px, 2vw, 20px);
+            padding: clamp(1rem, 2.5vw, 2rem);
+            text-align: center;
+            transition: transform 0.3s var(--ease-out-expo), background 0.4s;
+            max-height: min(50vh, 350px);
+        }
+        .card:hover { transform: translateY(-4px); }
+
+        .card-icon {
+            width: clamp(40px, 6vw, 64px);
+            height: clamp(40px, 6vw, 64px);
+            margin: 0 auto clamp(0.5rem, 1vw, 1rem);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-icon svg {
+            width: clamp(20px, 3vw, 32px);
+            height: clamp(20px, 3vw, 32px);
+        }
+
+        .card-title {
+            font-family: var(--font-title);
+            font-size: var(--h3-size);
+            font-weight: 700;
+            margin-bottom: clamp(0.25rem, 0.5vw, 0.5rem);
+        }
+
+        .card-desc {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* === TIMELINE / PASOS === */
+        .steps {
+            display: flex;
+            align-items: flex-start;
+            gap: clamp(0.5rem, 2vw, 2rem);
+            width: min(90vw, 850px);
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: clamp(36px, 5vw, 56px);
+            height: clamp(36px, 5vw, 56px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto clamp(0.4rem, 1vw, 0.8rem);
+            font-family: var(--font-title);
+            font-size: var(--h3-size);
+            font-weight: 800;
+            color: var(--bg-primary);
+        }
+
+        .step-title {
+            font-family: var(--font-title);
+            font-size: clamp(0.9rem, 2vw, 1.3rem);
+            font-weight: 700;
+            margin-bottom: clamp(0.2rem, 0.5vw, 0.4rem);
+        }
+
+        .step-desc {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .step-arrow {
+            position: absolute;
+            right: clamp(-16px, -2vw, -24px);
+            top: clamp(14px, 2vw, 24px);
+            color: var(--text-muted);
+            font-size: var(--body-size);
+        }
+
+        /* === ROLES GRID === */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.75rem, 2vw, 1.5rem);
+            width: min(90vw, 800px);
+        }
+
+        .role-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: clamp(12px, 2vw, 20px);
+            padding: clamp(0.8rem, 2vw, 1.5rem);
+            text-align: center;
+            transition: background 0.4s;
+        }
+
+        .role-icon {
+            width: clamp(36px, 5vw, 52px);
+            height: clamp(36px, 5vw, 52px);
+            margin: 0 auto clamp(0.3rem, 0.8vw, 0.6rem);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .role-icon svg {
+            width: clamp(18px, 2.5vw, 28px);
+            height: clamp(18px, 2.5vw, 28px);
+        }
+
+        .role-title {
+            font-family: var(--font-title);
+            font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+            font-weight: 700;
+            margin-bottom: clamp(0.15rem, 0.3vw, 0.3rem);
+        }
+
+        .role-desc {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        /* === XOGOS GRID === */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.6rem, 1.5vw, 1.2rem);
+            width: min(90vw, 750px);
+        }
+
+        .game-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: clamp(10px, 1.5vw, 16px);
+            padding: clamp(0.6rem, 1.5vw, 1.2rem);
+            display: flex;
+            align-items: center;
+            gap: clamp(0.4rem, 1vw, 0.8rem);
+            transition: background 0.4s;
+        }
+
+        .game-icon {
+            width: clamp(32px, 4vw, 44px);
+            height: clamp(32px, 4vw, 44px);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .game-icon svg {
+            width: clamp(16px, 2vw, 24px);
+            height: clamp(16px, 2vw, 24px);
+        }
+
+        .game-name {
+            font-family: var(--font-title);
+            font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+            font-weight: 700;
+        }
+
+        /* === NORMAS LIST === */
+        .normas-list {
+            list-style: none;
+            width: min(80vw, 600px);
+            text-align: left;
+        }
+
+        .normas-list li {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 1.5vw, 1rem);
+            padding: clamp(0.5rem, 1vw, 0.8rem) 0;
+            font-size: var(--body-size);
+            border-bottom: 1px solid var(--border);
+        }
+        .normas-list li:last-child { border-bottom: none; }
+
+        .norma-check {
+            width: clamp(28px, 3.5vw, 40px);
+            height: clamp(28px, 3.5vw, 40px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .norma-check svg {
+            width: clamp(14px, 2vw, 22px);
+            height: clamp(14px, 2vw, 22px);
+        }
+
+        /* === SPLIT LAYOUT === */
+        .split {
+            display: flex;
+            align-items: center;
+            gap: clamp(1.5rem, 4vw, 4rem);
+            width: min(90vw, 900px);
+            text-align: left;
+        }
+
+        .split-visual {
+            flex: 0 0 auto;
+            width: clamp(120px, 20vw, 240px);
+            height: clamp(120px, 20vw, 240px);
+            border-radius: clamp(20px, 3vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .split-visual svg {
+            width: clamp(50px, 8vw, 100px);
+            height: clamp(50px, 8vw, 100px);
+        }
+
+        .split-text { flex: 1; }
+
+        .split-list {
+            list-style: none;
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+        }
+        .split-list li {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            padding: clamp(0.2rem, 0.5vw, 0.4rem) 0;
+            display: flex;
+            align-items: center;
+            gap: clamp(0.3rem, 0.8vw, 0.6rem);
+        }
+        .split-list li svg {
+            width: clamp(14px, 1.5vw, 18px);
+            height: clamp(14px, 1.5vw, 18px);
+            flex-shrink: 0;
+        }
+
+        /* === ANIMACIONES === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.6s, transform 0.6s var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal,
+        .slide.visible .reveal-scale {
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal:nth-child(1) { transition-delay: 0.1s; }
+        .reveal:nth-child(2) { transition-delay: 0.2s; }
+        .reveal:nth-child(3) { transition-delay: 0.3s; }
+        .reveal:nth-child(4) { transition-delay: 0.4s; }
+        .reveal:nth-child(5) { transition-delay: 0.5s; }
+        .reveal:nth-child(6) { transition-delay: 0.6s; }
+
+        /* Stagger para grids */
+        .stagger > *:nth-child(1) { transition-delay: 0.1s; }
+        .stagger > *:nth-child(2) { transition-delay: 0.15s; }
+        .stagger > *:nth-child(3) { transition-delay: 0.2s; }
+        .stagger > *:nth-child(4) { transition-delay: 0.25s; }
+        .stagger > *:nth-child(5) { transition-delay: 0.3s; }
+        .stagger > *:nth-child(6) { transition-delay: 0.35s; }
+
+        .stagger > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s var(--ease-out-expo),
+                        transform 0.5s var(--ease-out-expo);
+        }
+        .slide.visible .stagger > * {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* === PROGRESS BAR === */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-1);
+            z-index: 100;
+            transition: width 0.4s var(--ease-out-expo), background 0.4s;
+        }
+
+        /* === NAV DOTS === */
+        .nav-dots {
+            position: fixed;
+            right: clamp(12px, 2vw, 24px);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 1vh, 12px);
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+        }
+        .nav-dot.active {
+            background: var(--accent-1);
+            transform: scale(1.4);
+        }
+
+        /* === THEME TOGGLE === */
+        .theme-toggle {
+            position: fixed;
+            top: clamp(12px, 2vw, 24px);
+            right: clamp(12px, 2vw, 24px);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: clamp(36px, 4vw, 44px);
+            height: clamp(36px, 4vw, 44px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: background 0.3s;
+            color: var(--text-primary);
+        }
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* === SLIDE COUNTER === */
+        .slide-counter {
+            position: fixed;
+            bottom: clamp(12px, 2vw, 24px);
+            right: clamp(12px, 2vw, 24px);
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            font-family: var(--font-main);
+            font-weight: 600;
+            z-index: 100;
+        }
+
+        /* === BREAKPOINTS === */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+                --title-size: clamp(1.4rem, 4.5vw, 2.5rem);
+                --h2-size: clamp(1.1rem, 3vw, 1.75rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+                --title-size: clamp(1.2rem, 4vw, 2rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+            }
+            .nav-dots, .decorative { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.5rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+                --body-size: clamp(0.65rem, 1vw, 0.85rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root { --title-size: clamp(1.4rem, 7vw, 2.5rem); }
+            .steps { flex-direction: column; align-items: center; }
+            .step-arrow { display: none; }
+            .roles-grid { grid-template-columns: repeat(2, 1fr); }
+            .games-grid { grid-template-columns: repeat(2, 1fr); }
+            .split { flex-direction: column; text-align: center; }
+            .split-list { text-align: left; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* === PRINT === */
+        @media print {
+            .slide { page-break-after: always; height: auto; min-height: 100vh; }
+            .nav-dots, .theme-toggle, .progress-bar, .slide-counter { display: none; }
+            .reveal, .stagger > * { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- UI -->
+    <div class="progress-bar"></div>
+    <nav class="nav-dots" aria-label="Navegación de slides"></nav>
+    <button class="theme-toggle" aria-label="Cambiar tema">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sun" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+    <div class="slide-counter">1/10</div>
+
+    <!-- SLIDE 1: PORTADA -->
+    <section class="slide" id="slide-1" role="region" aria-label="Portada" data-accent="var(--accent-1)">
+        <div class="shape shape-circle" style="width:clamp(200px,30vw,400px);height:clamp(200px,30vw,400px);background:var(--accent-1);top:-8%;right:-5%;"></div>
+        <div class="shape shape-triangle" style="width:clamp(80px,12vw,160px);height:clamp(80px,12vw,160px);background:var(--accent-3);bottom:15%;left:8%;"></div>
+        <div class="shape shape-diamond" style="width:clamp(60px,8vw,120px);height:clamp(60px,8vw,120px);background:var(--accent-4);top:20%;left:15%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-1)">CEIP</div>
+            <h1 class="reveal">Tenda <span class="accent" style="color:var(--accent-1)">Sostible</span></h1>
+            <p class="subtitle reveal">Xogos no patio, xestionados polo alumnado</p>
+        </div>
+    </section>
+
+    <!-- SLIDE 2: QUE É? -->
+    <section class="slide" id="slide-2" role="region" aria-label="Que é?" data-accent="var(--accent-2)">
+        <div class="shape shape-circle" style="width:clamp(150px,20vw,300px);height:clamp(150px,20vw,300px);background:var(--accent-2);bottom:-10%;left:-5%;"></div>
+        <div class="shape shape-square" style="width:clamp(60px,8vw,120px);height:clamp(60px,8vw,120px);background:var(--accent-5);top:12%;right:10%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-2)">01 — Que é?</div>
+            <h2 class="reveal">Un servizo de <span class="accent" style="color:var(--accent-2)">préstamo de xogos</span></h2>
+            <p class="subtitle reveal">Xestionado polo propio alumnado, a Tenda Sostible pon á disposición de toda a comunidade educativa xogos para o recreo e para levar a casa. Reutilizar, compartir e xogar mellor.</p>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: POR QUE? -->
+    <section class="slide" id="slide-3" role="region" aria-label="Por que?" data-accent="var(--accent-3)">
+        <div class="shape shape-triangle" style="width:clamp(120px,15vw,220px);height:clamp(120px,15vw,220px);background:var(--accent-3);top:-5%;left:10%;"></div>
+        <div class="shape shape-circle" style="width:clamp(80px,10vw,160px);height:clamp(80px,10vw,160px);background:var(--accent-6);bottom:10%;right:8%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-3)">02 — Por que?</div>
+            <h2 class="reveal">Reutilizar, compartir, <span class="accent" style="color:var(--accent-3)">xogar máis e mellor</span></h2>
+            <div class="cards stagger" style="margin-top:clamp(0.5rem,2vw,1.5rem)">
+                <div class="card">
+                    <div class="card-icon" style="background:rgba(76,175,80,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9m-9 9a9 9 0 0 1 9-9"/></svg>
+                    </div>
+                    <div class="card-title">Sostibilidade</div>
+                    <div class="card-desc">Reducimos residuos reutilizando xogos</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background:rgba(251,191,36,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div class="card-title">Convivencia</div>
+                    <div class="card-desc">Compartir xogos une ao alumnado</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background:rgba(96,165,250,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                    </div>
+                    <div class="card-title">Diversión</div>
+                    <div class="card-desc">Máis opcións para o recreo</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: COMO FUNCIONA -->
+    <section class="slide" id="slide-4" role="region" aria-label="Como funciona" data-accent="var(--accent-4)">
+        <div class="shape shape-square" style="width:clamp(140px,18vw,260px);height:clamp(140px,18vw,260px);background:var(--accent-4);bottom:-8%;right:-3%;"></div>
+        <div class="shape shape-diamond" style="width:clamp(70px,9vw,130px);height:clamp(70px,9vw,130px);background:var(--accent-7);top:15%;left:5%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-4)">03 — Como funciona</div>
+            <h2 class="reveal">Préstamo no <span class="accent" style="color:var(--accent-4)">recreo</span></h2>
+            <div class="steps stagger" style="margin-top:clamp(0.5rem,2vw,1.5rem)">
+                <div class="step">
+                    <div class="step-number" style="background:var(--accent-4)">1</div>
+                    <div class="step-title">Pedir</div>
+                    <div class="step-desc">Vai á Tenda e elixe un xogo</div>
+                    <span class="step-arrow">→</span>
+                </div>
+                <div class="step">
+                    <div class="step-number" style="background:var(--accent-4)">2</div>
+                    <div class="step-title">Xogar</div>
+                    <div class="step-desc">Desfruta no patio durante o recreo</div>
+                    <span class="step-arrow">→</span>
+                </div>
+                <div class="step">
+                    <div class="step-number" style="background:var(--accent-4)">3</div>
+                    <div class="step-title">Devolver</div>
+                    <div class="step-desc">Devolve o xogo ao rematar</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: ALUGUER PARA CASA -->
+    <section class="slide" id="slide-5" role="region" aria-label="Aluguer para casa" data-accent="var(--accent-5)">
+        <div class="shape shape-circle" style="width:clamp(180px,22vw,320px);height:clamp(180px,22vw,320px);background:var(--accent-5);top:-6%;left:-8%;"></div>
+        <div class="shape shape-triangle" style="width:clamp(60px,7vw,100px);height:clamp(60px,7vw,100px);background:var(--accent-8);bottom:20%;right:12%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-5)">04 — Aluguer</div>
+            <h2 class="reveal">Leva xogos <span class="accent" style="color:var(--accent-5)">a casa</span></h2>
+            <div class="split reveal" style="margin-top:clamp(0.5rem,2vw,1.5rem)">
+                <div class="split-visual" style="background:rgba(167,139,250,0.15)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--accent-5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div class="split-text">
+                    <h2 style="font-size:var(--h3-size);margin-bottom:clamp(0.3rem,1vw,0.8rem)">Xogos en familia</h2>
+                    <ul class="split-list">
+                        <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Préstamo dunha semana</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Rexistro sinxelo con nome e curso</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Coidar e devolver en bo estado</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Totalmente gratuíto</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 6: QUEN XESTIONA -->
+    <section class="slide" id="slide-6" role="region" aria-label="Quen xestiona" data-accent="var(--accent-6)">
+        <div class="shape shape-diamond" style="width:clamp(130px,16vw,240px);height:clamp(130px,16vw,240px);background:var(--accent-6);top:-4%;right:5%;"></div>
+        <div class="shape shape-square" style="width:clamp(50px,7vw,100px);height:clamp(50px,7vw,100px);background:var(--accent-2);bottom:12%;left:6%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-6)">05 — Quen xestiona</div>
+            <h2 class="reveal">Os nenos e nenas <span class="accent" style="color:var(--accent-6)">organizan</span> a tenda</h2>
+            <div class="roles-grid stagger" style="margin-top:clamp(0.5rem,2vw,1.5rem)">
+                <div class="role-card">
+                    <div class="role-icon" style="background:rgba(244,114,182,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div class="role-title">Encargado/a</div>
+                    <div class="role-desc">Abre e pecha a tenda</div>
+                </div>
+                <div class="role-card">
+                    <div class="role-icon" style="background:rgba(244,114,182,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                    </div>
+                    <div class="role-title">Rexistro</div>
+                    <div class="role-desc">Apunta préstamos e devolucións</div>
+                </div>
+                <div class="role-card">
+                    <div class="role-icon" style="background:rgba(244,114,182,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                    </div>
+                    <div class="role-title">Coidado</div>
+                    <div class="role-desc">Revisa que todo estea en bo estado</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 7: QUE XOGOS -->
+    <section class="slide" id="slide-7" role="region" aria-label="Que xogos" data-accent="var(--accent-7)">
+        <div class="shape shape-circle" style="width:clamp(160px,20vw,300px);height:clamp(160px,20vw,300px);background:var(--accent-7);bottom:-8%;left:-6%;"></div>
+        <div class="shape shape-triangle" style="width:clamp(70px,9vw,130px);height:clamp(70px,9vw,130px);background:var(--accent-1);top:10%;right:8%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-7)">06 — Catálogo</div>
+            <h2 class="reveal">Que <span class="accent" style="color:var(--accent-7)">xogos</span> hai?</h2>
+            <div class="games-grid stagger" style="margin-top:clamp(0.5rem,2vw,1.5rem)">
+                <div class="game-item">
+                    <div class="game-icon" style="background:rgba(251,146,60,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-5"/></svg>
+                    </div>
+                    <div class="game-name">Patio</div>
+                </div>
+                <div class="game-item">
+                    <div class="game-icon" style="background:rgba(251,146,60,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                    </div>
+                    <div class="game-name">Mesa</div>
+                </div>
+                <div class="game-item">
+                    <div class="game-icon" style="background:rgba(251,146,60,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    </div>
+                    <div class="game-name">Construción</div>
+                </div>
+                <div class="game-item">
+                    <div class="game-icon" style="background:rgba(251,146,60,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <div class="game-name">Cartas</div>
+                </div>
+                <div class="game-item">
+                    <div class="game-icon" style="background:rgba(251,146,60,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"/><path d="M2 20h20"/><path d="M14 12v.01"/></svg>
+                    </div>
+                    <div class="game-name">Deportivo</div>
+                </div>
+                <div class="game-item">
+                    <div class="game-icon" style="background:rgba(251,146,60,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H2v13h20V7h-5l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>
+                    </div>
+                    <div class="game-name">Creativos</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 8: NORMAS -->
+    <section class="slide" id="slide-8" role="region" aria-label="Normas" data-accent="var(--accent-8)">
+        <div class="shape shape-square" style="width:clamp(140px,18vw,260px);height:clamp(140px,18vw,260px);background:var(--accent-8);top:-6%;right:-4%;"></div>
+        <div class="shape shape-circle" style="width:clamp(70px,9vw,130px);height:clamp(70px,9vw,130px);background:var(--accent-3);bottom:15%;left:10%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-8)">07 — Normas</div>
+            <h2 class="reveal">Regras <span class="accent" style="color:var(--accent-8)">sinxelas</span></h2>
+            <ul class="normas-list stagger" style="margin-top:clamp(0.5rem,2vw,1.5rem)">
+                <li>
+                    <div class="norma-check" style="background:rgba(45,212,191,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    </div>
+                    Coida o material como se fose teu
+                </li>
+                <li>
+                    <div class="norma-check" style="background:rgba(45,212,191,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    </div>
+                    Devolve o xogo ao rematar o recreo
+                </li>
+                <li>
+                    <div class="norma-check" style="background:rgba(45,212,191,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    </div>
+                    Comparte e deixa xogar a todos
+                </li>
+                <li>
+                    <div class="norma-check" style="background:rgba(45,212,191,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    </div>
+                    Se algo se rompe, avisa ao encargado
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- SLIDE 9: BENEFICIOS -->
+    <section class="slide" id="slide-9" role="region" aria-label="Beneficios" data-accent="var(--accent-9)">
+        <div class="shape shape-triangle" style="width:clamp(160px,20vw,300px);height:clamp(160px,20vw,300px);background:var(--accent-9);bottom:-6%;right:-4%;"></div>
+        <div class="shape shape-diamond" style="width:clamp(80px,10vw,150px);height:clamp(80px,10vw,150px);background:var(--accent-6);top:8%;left:8%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-9)">08 — Beneficios</div>
+            <h2 class="reveal">Que <span class="accent" style="color:var(--accent-9)">gañamos</span> todos?</h2>
+            <div class="cards stagger" style="margin-top:clamp(0.5rem,2vw,1.5rem)">
+                <div class="card">
+                    <div class="card-icon" style="background:rgba(74,222,128,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                    </div>
+                    <div class="card-title">Responsabilidade</div>
+                    <div class="card-desc">O alumnado asume compromisos reais</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background:rgba(74,222,128,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                    </div>
+                    <div class="card-title">Sostibilidade</div>
+                    <div class="card-desc">Reutilizar en vez de comprar novo</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background:rgba(74,222,128,0.15)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    </div>
+                    <div class="card-title">Convivencia</div>
+                    <div class="card-desc">Recreos máis inclusivos e divertidos</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 10: CIERRE -->
+    <section class="slide" id="slide-10" role="region" aria-label="Cierre" data-accent="var(--accent-10)">
+        <div class="shape shape-circle" style="width:clamp(250px,35vw,500px);height:clamp(250px,35vw,500px);background:var(--accent-10);top:-15%;left:-10%;"></div>
+        <div class="shape shape-diamond" style="width:clamp(100px,14vw,200px);height:clamp(100px,14vw,200px);background:var(--accent-3);bottom:10%;right:8%;"></div>
+        <div class="shape shape-triangle" style="width:clamp(70px,9vw,130px);height:clamp(70px,9vw,130px);background:var(--accent-5);top:20%;right:20%;"></div>
+        <div class="slide-content">
+            <div class="eyebrow reveal" style="color:var(--accent-10)">Tenda Sostible</div>
+            <h1 class="reveal">Xogar é <span class="accent" style="color:var(--accent-10)">aprender</span></h1>
+            <p class="subtitle reveal" style="margin-top:clamp(0.3rem,1vw,1rem)">Préstamos no recreo · Aluguer para casa · Xestionado polo alumnado</p>
+        </div>
+    </section>
+
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.current = 0;
+                this.total = this.slides.length;
+                this.isAnimating = false;
+                this.initKeyboard();
+                this.initTouch();
+                this.initObserver();
+                this.initNavDots();
+                this.initThemeToggle();
+                this.updateUI();
+            }
+
+            move(direction) {
+                const next = this.current + direction;
+                if (next >= 0 && next < this.total && !this.isAnimating) {
+                    this.isAnimating = true;
+                    this.current = next;
+                    this.slides[this.current].scrollIntoView({ behavior: 'smooth' });
+                    this.updateUI();
+                    setTimeout(() => { this.isAnimating = false; }, 600);
+                }
+            }
+
+            goTo(index) {
+                if (index >= 0 && index < this.total) {
+                    this.current = index;
+                    this.slides[this.current].scrollIntoView({ behavior: 'smooth' });
+                    this.updateUI();
+                }
+            }
+
+            initKeyboard() {
+                document.addEventListener('keydown', e => {
+                    if (['ArrowRight', 'ArrowDown', ' ', 'PageDown', 'Enter'].includes(e.key)) {
+                        e.preventDefault(); this.move(1);
+                    }
+                    if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
+                        e.preventDefault(); this.move(-1);
+                    }
+                });
+            }
+
+            initTouch() {
+                let touchStartX = 0, touchStartY = 0;
+                document.addEventListener('touchstart', e => {
+                    touchStartX = e.changedTouches[0].screenX;
+                    touchStartY = e.changedTouches[0].screenY;
+                }, { passive: true });
+                document.addEventListener('touchend', e => {
+                    const diffX = touchStartX - e.changedTouches[0].screenX;
+                    const diffY = Math.abs(touchStartY - e.changedTouches[0].screenY);
+                    if (Math.abs(diffX) > 50 && diffY < 100) this.move(diffX > 0 ? 1 : -1);
+                    else if (Math.abs(diffX) < 20 && diffY < 20) this.move(1);
+                }, { passive: true });
+            }
+
+            initObserver() {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            this.current = [...this.slides].indexOf(entry.target);
+                            this.updateUI();
+                        }
+                    });
+                }, { threshold: 0.5 });
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            initNavDots() {
+                const nav = document.querySelector('.nav-dots');
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'nav-dot';
+                    dot.setAttribute('aria-label', `Ir ao slide ${i + 1}`);
+                    dot.addEventListener('click', () => this.goTo(i));
+                    nav.appendChild(dot);
+                });
+            }
+
+            initThemeToggle() {
+                const btn = document.querySelector('.theme-toggle');
+                const html = document.documentElement;
+                const iconMoon = btn.querySelector('.icon-moon');
+                const iconSun = btn.querySelector('.icon-sun');
+
+                btn.addEventListener('click', () => {
+                    const isDark = html.classList.contains('dark');
+                    html.classList.toggle('dark', !isDark);
+                    html.classList.toggle('light', isDark);
+                    iconMoon.style.display = isDark ? 'none' : 'block';
+                    iconSun.style.display = isDark ? 'block' : 'none';
+                });
+            }
+
+            updateUI() {
+                // Contador
+                const counter = document.querySelector('.slide-counter');
+                if (counter) counter.textContent = `${this.current + 1}/${this.total}`;
+
+                // Barra de progreso
+                const bar = document.querySelector('.progress-bar');
+                if (bar) {
+                    bar.style.width = `${((this.current + 1) / this.total) * 100}%`;
+                    const accent = this.slides[this.current].dataset.accent;
+                    if (accent) bar.style.background = accent;
+                }
+
+                // Nav dots
+                const dots = document.querySelectorAll('.nav-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.current);
+                    if (i === this.current) {
+                        const accent = this.slides[this.current].dataset.accent;
+                        if (accent) dot.style.background = accent;
+                    } else {
+                        dot.style.background = '';
+                    }
+                });
+            }
+        }
+
+        new SlidePresentation();
+    </script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Got Talent - Ficha de Inscripción</title>
+<style>
+  @media print {
+    body { background: white; color: black; }
+    .page { box-shadow: none; border: none; margin: 0; padding: 20px; }
+    .no-print { display: none; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f0f0;
+    color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .page {
+    background: white;
+    width: 100%;
+    max-width: 700px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    border-bottom: 3px solid #1a1a1a;
+    padding-bottom: 20px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .header p {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .section {
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 12px;
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .field .line {
+    border-bottom: 1.5px solid #ccc;
+    height: 28px;
+    width: 100%;
+  }
+
+  .field .line-short {
+    border-bottom: 1.5px solid #ccc;
+    height: 28px;
+    width: 120px;
+    display: inline-block;
+  }
+
+  .options {
+    display: flex;
+    gap: 24px;
+    margin-top: 8px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .circle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .textarea-box {
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    height: 80px;
+    width: 100%;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .note {
+    background: #f8f8f8;
+    border-left: 3px solid #333;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #555;
+    border-radius: 0 8px 8px 0;
+    margin-top: 24px;
+  }
+
+  .footer {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1.5px solid #ddd;
+  }
+
+  .firma-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 16px;
+  }
+
+  .firma-box {
+    text-align: center;
+  }
+
+  .firma-box .firma-line {
+    border-bottom: 1.5px solid #ccc;
+    height: 60px;
+    margin-bottom: 6px;
+  }
+
+  .firma-box span {
+    font-size: 12px;
+    color: #888;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>Got Talent</h1>
+    <p>Ficha de inscripción — Música y Danza — 5º y 6º Primaria</p>
+  </div>
+
+  <!-- Datos personales -->
+  <div class="section">
+    <div class="section-title">Datos del participante</div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Nombre y apellidos</label>
+        <div class="line"></div>
+      </div>
+      <div class="field">
+        <label>Curso y grupo</label>
+        <div class="line"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modalidad -->
+  <div class="section">
+    <div class="section-title">Modalidad</div>
+    <div class="options">
+      <div class="option"><div class="circle"></div> Individual</div>
+      <div class="option"><div class="circle"></div> Dúo</div>
+      <div class="option"><div class="circle"></div> Grupo (máx. 5)</div>
+    </div>
+    <div class="field" style="margin-top: 16px;">
+      <label>Si es dúo o grupo, nombres de los compañeros/as</label>
+      <div class="line"></div>
+      <div class="line" style="margin-top: 12px;"></div>
+    </div>
+  </div>
+
+  <!-- Actuación -->
+  <div class="section">
+    <div class="section-title">La actuación</div>
+    <div class="field">
+      <label>Nombre artístico o del grupo</label>
+      <div class="line"></div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Canción elegida</label>
+        <div class="line"></div>
+      </div>
+      <div class="field">
+        <label>Artista / grupo</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Estilo de danza</label>
+      <div class="options">
+        <div class="option"><div class="checkbox"></div> Urbano</div>
+        <div class="option"><div class="checkbox"></div> Moderno</div>
+        <div class="option"><div class="checkbox"></div> Libre</div>
+        <div class="option"><div class="checkbox"></div> Otro:</div>
+        <div class="line-short"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Describe brevemente tu actuación</label>
+      <div class="textarea-box"></div>
+    </div>
+    <div class="field">
+      <label>Duración estimada</label>
+      <div class="options">
+        <div class="option"><div class="circle"></div> 1-2 min</div>
+        <div class="option"><div class="circle"></div> 2-3 min</div>
+        <div class="option"><div class="circle"></div> 3-4 min</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Necesidades -->
+  <div class="section">
+    <div class="section-title">Necesidades técnicas</div>
+    <div class="field">
+      <label>¿Qué necesitas para tu actuación?</label>
+      <div class="options" style="flex-wrap: wrap;">
+        <div class="option"><div class="checkbox"></div> Altavoz</div>
+        <div class="option"><div class="checkbox"></div> Espacio amplio</div>
+        <div class="option"><div class="checkbox"></div> Colchonetas</div>
+        <div class="option"><div class="checkbox"></div> Otro:</div>
+        <div class="line-short"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    Recuerda: la canción debe ser apropiada para el centro escolar. El profesorado se reserva el derecho de pedir un cambio de canción si lo considera necesario.
+  </div>
+
+  <!-- Firma -->
+  <div class="footer">
+    <div class="grid-2">
+      <div class="field">
+        <label>Fecha</label>
+        <div class="line"></div>
+      </div>
+      <div class="field">
+        <label>Firma del alumno/a</label>
+        <div class="line"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

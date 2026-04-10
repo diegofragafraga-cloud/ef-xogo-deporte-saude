@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Got Talent - Rúbrica de Evaluación</title>
+<style>
+  @media print {
+    body { background: white; color: black; }
+    .page { box-shadow: none; border: none; margin: 0; padding: 15px; }
+    .page-break { page-break-after: always; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f0f0;
+    color: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+  }
+
+  .page {
+    background: white;
+    width: 100%;
+    max-width: 800px;
+    padding: 36px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    border-bottom: 3px solid #1a1a1a;
+    padding-bottom: 16px;
+  }
+
+  .header h1 { font-size: 24px; font-weight: 800; }
+  .header p { font-size: 13px; color: #666; margin-top: 4px; }
+
+  .meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+
+  .meta-field label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .meta-field .line {
+    border-bottom: 1.5px solid #ccc;
+    height: 24px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  th {
+    background: #1a1a1a;
+    color: white;
+    padding: 10px 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  th:first-child { text-align: left; border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #e5e5e5;
+    vertical-align: top;
+  }
+
+  td:not(:first-child) {
+    text-align: center;
+    width: 60px;
+  }
+
+  tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+  tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+
+  .criterio { font-weight: 600; }
+  .descripcion { font-size: 11px; color: #777; margin-top: 3px; }
+
+  .score-cell {
+    width: 44px;
+    height: 44px;
+  }
+
+  .total-row {
+    background: #f5f5f5;
+    font-weight: 700;
+  }
+
+  .total-row td { border-bottom: none; }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .obs-box {
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    height: 70px;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .decision {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    margin-top: 12px;
+    padding: 16px;
+    background: #f8f8f8;
+    border-radius: 8px;
+  }
+
+  .decision-label {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .circle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .pass { color: #2d7a3a; }
+  .fail { color: #b33; }
+
+  .legend {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: #fafafa;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #666;
+    border: 1px solid #eee;
+  }
+
+  .legend strong { color: #333; }
+
+  .firma-line {
+    border-bottom: 1.5px solid #ccc;
+    width: 200px;
+    height: 40px;
+    margin-top: 24px;
+  }
+
+  .firma-label {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Página 1: Rúbrica de evaluación -->
+<div class="page">
+  <div class="header">
+    <h1>Got Talent — Rúbrica de Evaluación</h1>
+    <p>Jurado del profesorado</p>
+  </div>
+
+  <div class="meta">
+    <div class="meta-field">
+      <label>Participante / grupo</label>
+      <div class="line"></div>
+    </div>
+    <div class="meta-field">
+      <label>Ronda</label>
+      <div class="line"></div>
+    </div>
+    <div class="meta-field">
+      <label>Fecha</label>
+      <div class="line"></div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Criterio</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        <th>5</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="criterio">Ritmo y musicalidad</div>
+          <div class="descripcion">Se mueve al ritmo de la música, respeta los tiempos y los acentos</div>
+        </td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="criterio">Creatividad</div>
+          <div class="descripcion">Originalidad en los movimientos, transiciones y uso del espacio</div>
+        </td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="criterio">Expresión corporal</div>
+          <div class="descripcion">Transmite emociones, energía y conexión con la música</div>
+        </td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="criterio">Puesta en escena</div>
+          <div class="descripcion">Entrada, salida, presencia escénica, contacto visual con el público</div>
+        </td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="criterio">Coordinación grupal</div>
+          <div class="descripcion">Sincronización entre miembros (solo dúos/grupos). Individual: no puntuar</div>
+        </td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr class="total-row">
+        <td>TOTAL</td>
+        <td colspan="5" style="text-align: right; padding-right: 24px; font-size: 18px;">/ 25</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="legend">
+    <strong>Escala:</strong> 1 = Necesita mucho trabajo · 2 = En desarrollo · 3 = Adecuado · 4 = Muy bien · 5 = Excelente
+  </div>
+
+  <div class="section-title">Observaciones</div>
+  <div class="obs-box"></div>
+
+  <div class="section-title">Puntos fuertes</div>
+  <div class="obs-box"></div>
+
+  <div class="section-title">Aspectos a mejorar (para feedback al alumno/a)</div>
+  <div class="obs-box"></div>
+
+  <div class="decision">
+    <span class="decision-label">Decisión:</span>
+    <div class="option pass"><div class="circle"></div> Pasa a la siguiente ronda</div>
+    <div class="option fail"><div class="circle"></div> Eliminado/a</div>
+  </div>
+
+  <div class="firma-line"></div>
+  <div class="firma-label">Firma del miembro del jurado</div>
+</div>
+
+</body>
+</html>
