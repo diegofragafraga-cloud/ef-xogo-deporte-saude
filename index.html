@@ -254,8 +254,66 @@
     .portals { padding: 0 16px 40px; }
     .portals-grid { grid-template-columns: 1fr; }
   }
+  /* Barra de estadísticas */
+  .stats-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: var(--bg2); border-top: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    transition: background .3s, border-color .3s;
+  }
+  .stats-bar-content {
+    display: flex; align-items: center; justify-content: center;
+    gap: 32px; padding: 8px 24px;
+    font-size: .8rem; color: var(--text2);
+  }
+  .stats-bar .stat-item {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .stats-bar .stat-item svg {
+    width: 14px; height: 14px; opacity: .6;
+  }
+  .stats-bar .stat-value {
+    font-weight: 600; color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Barra de progreso visual del tempo */
+  .time-progress {
+    width: 100%; height: 3px; background: var(--border);
+  }
+  .time-progress-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent), #e040fb);
+    border-radius: 0 2px 2px 0;
+    transition: width 1s linear;
+  }
+
+  /* Botón actualizar */
+  .btn-reload {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 16px; padding: 10px 22px;
+    background: rgba(108,99,255,.15); border: 1px solid rgba(108,99,255,.3);
+    color: var(--accent); border-radius: 12px;
+    font-size: .85rem; font-weight: 600; cursor: pointer;
+    transition: all .25s;
+  }
+  .btn-reload:hover {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+    transform: scale(1.05);
+  }
+  .btn-reload:active { transform: scale(.97); }
+  .btn-reload svg { width: 16px; height: 16px; }
+  .btn-reload.spinning svg {
+    animation: spin .6s ease;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Ajustar footer y FAB para no tapar la barra */
+  .footer { padding-bottom: 56px !important; }
+  .fab-sux { bottom: 64px; }
+
   @media print {
-    .theme-toggle { display: none; }
+    .theme-toggle, .stats-bar { display: none; }
     body { background: #fff; color: #000; }
   }
 </style>
@@ -288,6 +346,10 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Mestres: <strong style="color:rgba(255,255,255,.85)">Brais &amp; Diego</strong>
     </div>
+    <button class="btn-reload" onclick="reloadPage(this)" title="Actualizar para ver cambios">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+      Actualizar páxina
+    </button>
   </div>
 </section>
 
@@ -406,6 +468,23 @@
   </div>
 </div>
 
+<!-- Barra de estadísticas -->
+<div class="stats-bar">
+  <div class="time-progress"><div class="time-progress-fill" id="timeProgress"></div></div>
+  <div class="stats-bar-content">
+    <div class="stat-item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Tempo na páxina:</span>
+      <span class="stat-value" id="sessionTimer">00:00</span>
+    </div>
+    <div class="stat-item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Visitas:</span>
+      <span class="stat-value" id="visitCounter">0</span>
+    </div>
+  </div>
+</div>
+
 <!-- Footer -->
 <footer class="footer">
   CEIP Coiron Dena &middot; Brais &amp; Diego &middot; Educacion Fisica, Xogo, Deporte e Saude
@@ -454,6 +533,30 @@ if (!sessionStorage.getItem('splash_seen')) {
 } else {
   document.getElementById('splash').remove();
 }
+
+// Cronómetro de sesión con barra visual
+// A barra enche ao 100% en 30 minutos (1800s)
+const SESSION_MAX = 1800;
+const sessionStart = Date.now();
+setInterval(() => {
+  const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
+  const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const secs = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('sessionTimer').textContent = mins + ':' + secs;
+  const pct = Math.min((elapsed / SESSION_MAX) * 100, 100);
+  document.getElementById('timeProgress').style.width = pct + '%';
+}, 1000);
+
+// Botón de recarga
+function reloadPage(btn) {
+  btn.classList.add('spinning');
+  setTimeout(() => location.reload(true), 400);
+}
+
+// Contador de visitas (por navegador)
+const visits = parseInt(localStorage.getItem('ef_visits') || '0') + 1;
+localStorage.setItem('ef_visits', visits);
+document.getElementById('visitCounter').textContent = visits;
 
 // Restaurar tema
 if (localStorage.getItem('ef_theme') === 'light') {
