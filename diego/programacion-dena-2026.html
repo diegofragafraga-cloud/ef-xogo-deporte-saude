@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programación Dena 2026</title>
+<style>
+  :root {
+    --bg: #0b0d13; --bg2: #13161f; --bg3: #1c2030;
+    --text: #e8eaf0; --text2: #8b92a8; --accent: #10b981;
+    --accent2: #34d399; --border: #252a3a; --danger: #ef4444;
+    --radius: 14px;
+  }
+  .light { --bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+  }
+  .hidden { display:none !important; }
+
+  .header {
+    display:flex; align-items:center; gap:12px;
+    padding:12px 20px; background:var(--bg2);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+  }
+  .back-btn {
+    background:var(--bg3); border:1px solid var(--border); color:var(--text);
+    width:36px; height:36px; border-radius:8px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    text-decoration:none; transition:all .2s; flex-shrink:0;
+  }
+  .back-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .back-btn svg { width:18px; height:18px; }
+  .header h1 { font-size:1.1rem; font-weight:700; display:flex; align-items:center; gap:10px; }
+  .badge-title { background:var(--accent); color:#fff; padding:3px 10px; border-radius:8px; font-size:.72rem; letter-spacing:1px; text-transform:uppercase; }
+  .header-right { margin-left:auto; display:flex; gap:8px; }
+  .icon-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text); width:36px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+  .icon-btn:hover { background:var(--accent); color:#fff; }
+  .icon-btn svg { width:16px; height:16px; }
+  .logout-btn { background:transparent; border:1px solid var(--border); color:var(--text2); padding:6px 12px; border-radius:8px; cursor:pointer; font-size:.78rem; font-weight:600; transition:all .15s; }
+  .logout-btn:hover { background:var(--danger); color:#fff; border-color:var(--danger); }
+
+  /* Password gate */
+  .gate { min-height: calc(100vh - 60px); display:flex; align-items:center; justify-content:center; padding:24px; background: radial-gradient(circle at 30% 20%, rgba(16,185,129,.08), transparent 55%), radial-gradient(circle at 75% 70%, rgba(52,211,153,.06), transparent 55%); }
+  .gate-box { background:var(--bg2); border:1px solid var(--border); border-radius: var(--radius); padding:36px 32px; max-width: 440px; width:100%; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+  .gate-ico { width:56px; height:56px; border-radius:14px; background: linear-gradient(135deg,#065f46,#10b981); display:flex; align-items:center; justify-content:center; margin-bottom:18px; }
+  .gate-ico svg { width:28px; height:28px; stroke:#fff; }
+  .gate h2 { font-size:1.45rem; font-weight:800; margin-bottom:6px; }
+  .gate p.sub { color:var(--text2); font-size:.92rem; margin-bottom:24px; line-height:1.5; }
+  .gate form { display:flex; flex-direction:column; gap:14px; }
+  .gate label { font-size:.78rem; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:1px; }
+  .gate input[type="password"] {
+    background: var(--bg3); border:1.5px solid var(--border); color:var(--text);
+    padding:14px 16px; border-radius:10px; font-size:1rem; font-family:inherit;
+    transition: all .15s; outline: none;
+  }
+  .gate input[type="password"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(16,185,129,.15); }
+  .gate button {
+    background: var(--accent); color:#fff; border:none; padding:14px 20px;
+    border-radius:10px; font-size:.95rem; font-weight:700; cursor:pointer;
+    transition: all .15s; display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .gate button:hover { background: var(--accent2); transform: translateY(-1px); }
+  .gate button svg { width:18px; height:18px; }
+  .gate .err {
+    background: rgba(239,68,68,.12); color:var(--danger); border:1px solid rgba(239,68,68,.3);
+    padding:10px 14px; border-radius:8px; font-size:.85rem; font-weight:600;
+  }
+  .gate .err.hidden { display:none; }
+  .gate-note { margin-top:20px; padding-top:18px; border-top:1px solid var(--border); font-size:.78rem; color:var(--text2); line-height:1.5; }
+
+  /* Iframe frame */
+  .frame-wrap { width:100%; height: calc(100vh - 60px); background: var(--bg); }
+  .frame-wrap iframe { width:100%; height:100%; border:0; display:block; background:#fff; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="index.html" title="Volver aos recursos de Diego">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1><span class="badge-title">Diego</span> Programación Dena 2026</h1>
+  <div class="header-right">
+    <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Pechar sesión</button>
+    <button class="icon-btn" onclick="toggleTheme()">
+      <svg id="m" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="s" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- Pantalla de contrasinal -->
+<div id="gate" class="gate">
+  <div class="gate-box">
+    <div class="gate-ico">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h2>Programación Dena 2026</h2>
+    <p class="sub">Acceso restrinxido. Introduce o contrasinal para ver a programación completa (SdA, Mochilas, 4º curso, Competencial, Avaliación).</p>
+    <form onsubmit="checkPassword(event)">
+      <label for="pw">Contrasinal</label>
+      <input id="pw" type="password" autocomplete="current-password" autofocus placeholder="••••••••••••••">
+      <div id="err" class="err hidden">Contrasinal incorrecto. Téntao de novo.</div>
+      <button type="submit">
+        Entrar
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </form>
+    <div class="gate-note">Este espazo é de uso profesional. Se es profesorado do centro e necesitas o contrasinal, solicítao a Diego.</div>
+  </div>
+</div>
+
+<!-- Contido protexido -->
+<div id="content" class="frame-wrap hidden">
+  <iframe src="https://xogamos-na-rua.pages.dev/" title="Programación Dena 2026" allow="fullscreen"></iframe>
+</div>
+
+<script>
+  const KEY = 'prog_dena_2026_ok';
+  const HASH = '484f2fd254eb062c0b9620a21afe91fa5f6799c1df7d70fb1258f048df5b3fa0';
+
+  async function sha256(str) {
+    const buf = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function checkPassword(e) {
+    e.preventDefault();
+    const pw = document.getElementById('pw').value;
+    const err = document.getElementById('err');
+    const hashed = await sha256(pw);
+    if (hashed === HASH) {
+      sessionStorage.setItem(KEY, '1');
+      showContent();
+    } else {
+      err.classList.remove('hidden');
+      document.getElementById('pw').value = '';
+      document.getElementById('pw').focus();
+    }
+  }
+
+  function showContent() {
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('content').classList.remove('hidden');
+    document.getElementById('logoutBtn').classList.remove('hidden');
+  }
+
+  function logout() {
+    sessionStorage.removeItem(KEY);
+    location.reload();
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('light');
+    document.getElementById('m').classList.toggle('hidden');
+    document.getElementById('s').classList.toggle('hidden');
+    localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  }
+
+  // Cargar tema
+  if (localStorage.getItem('ef_theme') === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('m').classList.add('hidden');
+    document.getElementById('s').classList.remove('hidden');
+  }
+
+  // Se xa autenticado na sesión, mostrar contido
+  if (sessionStorage.getItem(KEY) === '1') showContent();
+</script>
+
+</body>
+</html>

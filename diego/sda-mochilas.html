@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SdA Mochilas Pesadas - Recurso EF</title>
+<style>
+  :root {
+    --bg: #0b0d13; --bg2: #13161f; --bg3: #1c2030;
+    --text: #e8eaf0; --text2: #8b92a8; --accent: #10b981;
+    --accent2: #34d399; --border: #252a3a; --radius: 14px;
+    --gold: #fbbf24; --red: #f87171;
+  }
+  .light {
+    --bg: #f0f2f7; --bg2: #ffffff; --bg3: #e8eaf0;
+    --text: #13161f; --text2: #6b7280; --border: #d1d5db;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+  }
+  .header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 24px; background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: all .2s; flex-shrink: 0;
+  }
+  .back-btn:hover { background: var(--accent); color: #fff; }
+  .back-btn svg { width: 18px; height: 18px; }
+  .header h1 { font-size: 1.1rem; font-weight: 700; }
+  .hidden { display: none !important; }
+  .content { max-width: 800px; margin: 0 auto; padding: 32px 24px; }
+
+  /* Hero */
+  .resource-hero {
+    background: linear-gradient(135deg, #065f46, #10b981);
+    border-radius: var(--radius); padding: 40px 32px; margin-bottom: 24px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .resource-hero::before {
+    content: ''; position: absolute; top: -30px; right: -30px;
+    width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,.08);
+  }
+  .rh-badge {
+    display: inline-block; padding: 5px 14px; border-radius: 20px;
+    background: rgba(255,255,255,.15); font-size: .7rem; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; color: #fff;
+  }
+  .resource-hero h2 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .resource-hero p { font-size: .95rem; color: rgba(255,255,255,.8); line-height: 1.6; }
+  .rh-meta {
+    margin-top: 16px; display: flex; gap: 12px; justify-content: center;
+    flex-wrap: wrap; font-size: .78rem; color: rgba(255,255,255,.7);
+  }
+  .rh-meta span { background: rgba(255,255,255,.12); padding: 4px 12px; border-radius: 8px; }
+
+  /* Tarjetas */
+  .resource-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 16px; overflow: hidden;
+  }
+  .rc-header {
+    padding: 20px 24px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .rc-header h3 { font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .rc-num {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: .8rem; color: #fff; flex-shrink: 0;
+  }
+  .rc-body { padding: 0 24px 24px; }
+  .rc-body p { font-size: .88rem; line-height: 1.7; margin-bottom: 10px; }
+  .rc-body ul { margin: 0 0 12px 20px; font-size: .85rem; line-height: 1.8; }
+  .badge-free {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    background: rgba(74,222,128,.15); color: var(--accent2);
+    font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .badge-premium {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    background: rgba(251,191,36,.15); color: var(--gold);
+    font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+  }
+
+  /* Contenido bloqueado */
+  .rc-locked .rc-body {
+    max-height: 100px; overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+  }
+  .rc-lock-overlay {
+    padding: 20px 24px; text-align: center;
+    border-top: 1px solid var(--border); background: var(--bg3);
+  }
+  .rc-lock-overlay svg { width: 24px; height: 24px; color: var(--gold); margin-bottom: 8px; }
+  .rc-lock-overlay p { font-size: .82rem; color: var(--text2); margin-bottom: 12px; }
+  .btn-unlock {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 10px; border: none;
+    background: var(--gold); color: #000; font-weight: 700;
+    font-size: .85rem; cursor: pointer; transition: filter .2s;
+  }
+  .btn-unlock:hover { filter: brightness(1.1); }
+
+  /* Modal suscripción */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    display: flex; align-items: center; justify-content: center; z-index: 300;
+  }
+  .modal-sub {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; width: 400px; max-width: 90vw;
+  }
+  .modal-sub h3 { font-size: 1.05rem; margin-bottom: 12px; }
+  .modal-sub label { display: block; font-size: .8rem; color: var(--text2); margin-bottom: 4px; font-weight: 500; }
+  .modal-sub input, .modal-sub textarea {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 14px; border-radius: 10px; font-size: .9rem; width: 100%;
+    margin-bottom: 12px; font-family: inherit;
+  }
+  .modal-sub textarea { min-height: 70px; resize: vertical; }
+  .modal-sub input:focus, .modal-sub textarea:focus { outline: none; border-color: var(--accent); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .btn-cancel {
+    padding: 10px 18px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg3); color: var(--text); font-weight: 600; font-size: .85rem; cursor: pointer;
+  }
+  .btn-send {
+    padding: 10px 18px; border-radius: 10px; border: none;
+    background: var(--accent); color: #fff; font-weight: 600; font-size: .85rem; cursor: pointer;
+  }
+  .btn-send:hover { filter: brightness(1.15); }
+  .sux-ok { text-align: center; padding: 20px; color: var(--accent2); font-weight: 600; }
+  .sux-ok svg { width: 40px; height: 40px; margin: 0 auto 8px; display: block; }
+
+  .footer-resource {
+    text-align: center; padding: 32px 24px; font-size: .78rem; color: var(--text2);
+  }
+  .footer-resource a { color: var(--accent2); text-decoration: none; }
+
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 200;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .theme-toggle:hover { background: var(--accent); color: #fff; }
+  .theme-toggle svg { width: 16px; height: 16px; }
+
+  @media (max-width: 768px) {
+    .resource-hero h2 { font-size: 1.4rem; }
+    .content { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="document.body.classList.toggle('light');document.getElementById('m').classList.toggle('hidden');document.getElementById('s').classList.toggle('hidden')">
+  <svg id="m" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+  <svg id="s" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+</button>
+
+<div class="header">
+  <a class="back-btn" href="index.html" title="Volver">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>Recurso: SdA Mochilas Pesadas</h1>
+</div>
+
+<div class="content">
+
+  <!-- Hero -->
+  <div class="resource-hero">
+    <div class="rh-badge">Situación de Aprendizaje</div>
+    <h2>Mochilas Pesadas</h2>
+    <p>ABP para 5.º de Primaria: investigar, medir y concienciar sobre el peso de las mochilas y la salud postural. Producto final: tutorial digital.</p>
+    <div class="rh-meta">
+      <span>5.º Primaria</span>
+      <span>Educación Física</span>
+      <span>12 sesiones de 35 min</span>
+      <span>Metodología ABP</span>
+      <span>ODS 3: Salud y Bienestar</span>
+    </div>
+  </div>
+
+  <!-- TARJETA 1: VISIBLE -->
+  <div class="resource-card">
+    <div class="rc-header">
+      <h3><span class="rc-num">1</span> Descripción del reto</h3>
+      <span class="badge-free">Acceso libre</span>
+    </div>
+    <div class="rc-body">
+      <p><strong>Contexto:</strong> En el colegio se observa que muchos niños y niñas llegan a las aulas cargando mochilas excesivamente pesadas. Esta situación puede tener efectos negativos sobre su salud física y su bienestar general, tal y como advierte la Organización Mundial de la Salud.</p>
+      <p><strong>Historia:</strong> En la escuela de Vilaviva, un grupo de alumnos de 5.º de Primaria se encuentra con un inesperado problema al comienzo del curso: varios compañeros acuden a la enfermería con dolores de espalda y hombros. Al investigar, descubren que todos llevan mochilas muy pesadas. Un día reciben una misteriosa mensaje de un antiguo alumno del centro, ahora fisioterapeuta, que les propone una misión: convertirse en los <strong>"Defensores de la Salud Postural"</strong> del colegio.</p>
+      <p><strong>Reto:</strong> El alumnado deberá medir el peso de las mochilas, calcular el peso recomendado según la OMS (10-15% del peso corporal), investigar los riesgos para la salud y crear un tutorial digital para concienciar a la comunidad educativa.</p>
+      <p><strong>Producto final:</strong> Elaboración de un tutorial digital (vídeo, presentación interactiva, infografía o podcast) que será difundido en el centro para concienciar a toda la comunidad escolar.</p>
+    </div>
+  </div>
+
+  <!-- TARJETA 2: BLOQUEADA -->
+  <div class="resource-card rc-locked">
+    <div class="rc-header">
+      <h3><span class="rc-num">2</span> Secuencia didáctica (12 sesiones)</h3>
+      <span class="badge-premium">Premium</span>
+    </div>
+    <div class="rc-body">
+      <p>Secuencia completa con 12 sesiones detalladas, recursos necesarios y temporalización:</p>
+      <ul>
+        <li><strong>Sesión 1:</strong> ¿Qué sabemos sobre las mochilas? — Lluvia de ideas y conocimientos previos</li>
+        <li><strong>Sesión 1:</strong> Mensaje misterioso — Lectura dramatizada y reparto de roles cooperativos</li>
+        <li><strong>Sesiones 2-3:</strong> Pesando las mochilas — Medición, registro de datos y cálculo del peso corporal</li>
+        <li><strong>Sesiones 3-4:</strong> Calculando el límite recomendado — Análisis, gráficos y tablas</li>
+        <li><strong>Sesiones 4-5:</strong> Investigación sobre la salud postural — Búsqueda guiada y mapa mental</li>
+        <li><strong>Sesión 6:</strong> Debate y reflexión cooperativa — Propuestas de mejora</li>
+        <li><strong>Sesiones 7-8:</strong> Planificando el tutorial digital — Guion y storyboard</li>
+        <li><strong>Sesiones 8-10:</strong> Creando el producto final — Grabación, edición y diseño</li>
+        <li><strong>Sesión 11:</strong> Exposición y difusión a la comunidad educativa</li>
+        <li><strong>Sesión 12:</strong> Autoevaluación, coevaluación y campaña de sensibilización</li>
+      </ul>
+    </div>
+    <div class="rc-lock-overlay">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <p>Contenido completo con todas las sesiones, materiales, recursos y descripción paso a paso</p>
+      <button class="btn-unlock" onclick="openSuscripcion()">Solicitar acceso</button>
+    </div>
+  </div>
+
+  <!-- TARJETA 3: BLOQUEADA -->
+  <div class="resource-card rc-locked">
+    <div class="rc-header">
+      <h3><span class="rc-num">3</span> Competencias, criterios y rúbricas de evaluación</h3>
+      <span class="badge-premium">Premium</span>
+    </div>
+    <div class="rc-body">
+      <p>Vinculación curricular LOMLOE completa con competencias clave, competencias específicas de Educación Física, criterios de evaluación, saberes básicos y rúbricas con 3 niveles de logro:</p>
+      <ul>
+        <li>Competencia emprendedora — Creación de soluciones innovadoras</li>
+        <li>Competencia personal, social y de aprender a aprender</li>
+        <li>Competencia matemática y STEM — Medición y cálculo</li>
+        <li>Rúbricas con indicadores de logro (1-2, 3-4 y 5 puntos) para cada criterio</li>
+        <li>Saberes básicos: higiene postural y vida activa y saludable</li>
+      </ul>
+    </div>
+    <div class="rc-lock-overlay">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <p>Incluye rúbricas detalladas, criterios de evaluación y vinculación curricular LOMLOE</p>
+      <button class="btn-unlock" onclick="openSuscripcion()">Solicitar acceso</button>
+    </div>
+  </div>
+
+  <!-- TARJETA 4: BLOQUEADA -->
+  <div class="resource-card rc-locked">
+    <div class="rc-header">
+      <h3><span class="rc-num">4</span> Materiales descargables y atención a la diversidad</h3>
+      <span class="badge-premium">Premium</span>
+    </div>
+    <div class="rc-body">
+      <p>Pack completo de materiales listos para usar en el aula y medidas de atención a la diversidad (ordinarias y extraordinarias):</p>
+      <ul>
+        <li>Mensaje misterioso del fisioterapeuta (imprimible)</li>
+        <li>Hojas de registro de datos (peso mochila / peso corporal)</li>
+        <li>Plantilla de guion para el tutorial digital</li>
+        <li>Rúbricas de autoevaluación y coevaluación</li>
+        <li>Carteles para la campaña de sensibilización</li>
+        <li>Medidas DUA, adaptaciones curriculares y apoyos especializados</li>
+        <li>Estrategias metodológicas y tipos de agrupamiento</li>
+      </ul>
+    </div>
+    <div class="rc-lock-overlay">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <p>Todos los materiales en formato descargable, listos para imprimir y usar</p>
+      <button class="btn-unlock" onclick="openSuscripcion()">Solicitar acceso</button>
+    </div>
+  </div>
+
+  <div class="footer-resource">
+    Creado por <strong>Diego Fraga</strong> — CEIP Coirón Dena<br>
+    <a href="mailto:pradosfraga@gmail.com">pradosfraga@gmail.com</a>
+  </div>
+</div>
+
+<!-- Modal suscripción -->
+<div class="modal-overlay hidden" id="subModal" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="modal-sub" id="subContent">
+    <h3>Solicitar acceso al recurso</h3>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:16px">Suscríbete para recibir el recurso completo. Te contactaremos con los detalles.</p>
+    <label>Nombre</label>
+    <input type="text" id="subNombre" placeholder="Tu nombre...">
+    <label>Email *</label>
+    <input type="email" id="subEmail" placeholder="tu@email.com">
+    <label>Mensaje (opcional)</label>
+    <textarea id="subMsg" placeholder="¿Qué te interesa del recurso? ¿Alguna pregunta?"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('subModal').classList.add('hidden')">Cancelar</button>
+      <button class="btn-send" onclick="enviarSuscripcion()">Suscribirme</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openSuscripcion() {
+  document.getElementById('subModal').classList.remove('hidden');
+}
+
+async function enviarSuscripcion() {
+  const email = document.getElementById('subEmail').value.trim();
+  const nombre = document.getElementById('subNombre').value.trim();
+  const mensaje = document.getElementById('subMsg').value.trim();
+  if (!email) { document.getElementById('subEmail').style.borderColor = 'var(--red)'; return; }
+
+  const btn = document.querySelector('.btn-send');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+
+  try {
+    await fetch('https://superliga-api.diegofragafraga.workers.dev/suscripciones', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, nombre, mensaje, recurso: 'SdA Mochilas Pesadas' }),
+    });
+    document.getElementById('subContent').innerHTML = '<div class="sux-ok"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>¡Suscripción enviada!<br><span style="font-size:.82rem;font-weight:400;color:var(--text2)">Te contactaremos pronto con el acceso al recurso.</span></div>';
+  } catch(e) {
+    document.getElementById('subContent').innerHTML = '<div class="sux-ok" style="color:var(--red)">Error al enviar. Inténtalo de nuevo.</div>';
+  }
+  setTimeout(() => {
+    document.getElementById('subModal').classList.add('hidden');
+    location.reload();
+  }, 3000);
+}
+</script>
+</body>
+</html>

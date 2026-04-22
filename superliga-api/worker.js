@@ -103,6 +103,74 @@ location.reload();
         return jsonResponse({ ok: true });
       }
 
+      // POST /suscripciones — nova subscrición
+      if (path === '/suscripciones' && request.method === 'POST') {
+        const body = await request.json();
+        const email = (body.email || '').trim();
+        const nombre = (body.nombre || '').trim();
+        const mensaje = (body.mensaje || '').trim();
+        const recurso = (body.recurso || '').trim();
+        if (!email) return jsonResponse({ error: 'Email obrigatorio' }, 400);
+        const lista = await env.SUPERLIGA_KV.get('suscripciones', 'json') || [];
+        lista.push({ email, nombre, mensaje, recurso, data: new Date().toISOString().slice(0, 16).replace('T', ' ') });
+        await env.SUPERLIGA_KV.put('suscripciones', JSON.stringify(lista));
+        return jsonResponse({ ok: true, total: lista.length });
+      }
+
+      // GET /suscripciones — panel de suscripciones
+      if (path === '/suscripciones' && request.method === 'GET') {
+        const lista = await env.SUPERLIGA_KV.get('suscripciones', 'json') || [];
+        const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Suscripciones</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,system-ui,sans-serif;background:#0b0d13;color:#e8eaf0;min-height:100vh;padding:24px}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+h1{font-size:1.3rem;font-weight:700}
+h1 span{color:#fbbf24}
+.actions{display:flex;gap:8px}
+.btn{padding:8px 16px;border-radius:8px;border:none;font-weight:600;font-size:.85rem;cursor:pointer}
+.btn-refresh{background:#6c63ff;color:#fff}
+.btn-delete{background:#f87171;color:#fff}
+.btn:hover{filter:brightness(1.15)}
+.count{font-size:.85rem;color:#8b92a8;margin-bottom:16px}
+.list{display:flex;flex-direction:column;gap:10px}
+.card{background:#13161f;border:1px solid #252a3a;border-radius:12px;padding:16px}
+.card-date{font-size:.72rem;color:#8b92a8;margin-bottom:4px}
+.card-email{font-weight:700;font-size:.95rem;color:#4ecdc4}
+.card-name{font-size:.85rem;color:#e8eaf0;margin-top:2px}
+.card-msg{font-size:.82rem;color:#8b92a8;margin-top:4px;font-style:italic}
+.card-recurso{font-size:.72rem;color:#fbbf24;margin-top:4px}
+.empty{text-align:center;padding:60px 24px;color:#8b92a8;font-size:.95rem}
+</style></head><body>
+<div class="header">
+<h1>Panel de <span>Suscripciones</span></h1>
+<div class="actions">
+<button class="btn btn-refresh" onclick="location.reload()">Actualizar</button>
+<button class="btn btn-delete" onclick="if(confirm('Borrar todas las suscripciones?'))borrar()">Borrar todas</button>
+</div>
+</div>
+<div class="count">${lista.length} suscripcion${lista.length !== 1 ? 'es' : ''}</div>
+<div class="list">
+${lista.length === 0 ? '<div class="empty">No hay suscripciones</div>' :
+  lista.slice().reverse().map(s => '<div class="card"><div class="card-date">' + s.data + '</div><div class="card-email">' + (s.email||'').replace(/</g,'&lt;') + '</div>' + (s.nombre ? '<div class="card-name">' + s.nombre.replace(/</g,'&lt;') + '</div>' : '') + (s.mensaje ? '<div class="card-msg">' + s.mensaje.replace(/</g,'&lt;') + '</div>' : '') + (s.recurso ? '<div class="card-recurso">Recurso: ' + s.recurso.replace(/</g,'&lt;') + '</div>' : '') + '</div>').join('')}
+</div>
+<script>
+async function borrar(){
+await fetch(location.origin+'/suscripciones',{method:'DELETE'});
+location.reload();
+}
+</script>
+</body></html>`;
+        return new Response(html, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', ...CORS_HEADERS } });
+      }
+
+      // DELETE /suscripciones
+      if (path === '/suscripciones' && request.method === 'DELETE') {
+        await env.SUPERLIGA_KV.put('suscripciones', '[]');
+        return jsonResponse({ ok: true });
+      }
+
       // GET /ping — test de conexion
       if (path === '/ping') {
         return jsonResponse({ pong: true });

@@ -150,11 +150,17 @@
     border-radius: 4px; margin-bottom: 2px;
   }
   .history-item:nth-child(odd) { background: var(--bg); }
-  .history-item .hi-delete {
+  .history-item .hi-actions { display: inline-flex; gap: 2px; align-items: center; }
+  .history-item .hi-edit, .history-item .hi-delete {
     color: var(--text2); cursor: pointer; background: none;
-    border: none; font-size: .7rem; padding: 0 4px;
+    border: none; font-size: .7rem; padding: 2px 5px;
+    display: inline-flex; align-items: center; border-radius: 4px;
+    transition: all .15s;
   }
-  .history-item .hi-delete:hover { color: var(--red); }
+  .history-item .hi-edit:hover { color: var(--accent); background: rgba(59,130,246,0.1); }
+  .history-item .hi-delete:hover { color: var(--red); background: rgba(248,113,113,0.1); }
+  .history-item .hi-edit svg { width: 12px; height: 12px; }
+  .history-item.locked { opacity: .65; }
 
   /* Ranking */
   .ranking-table {
@@ -331,7 +337,18 @@
   .cc-actions {
     display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;
   }
-  body.read-only .cc-expense-btn { display: none; }
+  body.read-only .cc-expense-btn,
+  body.read-only .cc-income-btn { display: none; }
+  .cc-income-btn { background: var(--green) !important; color: #0b0d13 !important; }
+
+  /* Modo "solo tarxeta": acceso via QR. Cada tarxeta é coma un cliente privado. */
+  body.solo-card .tabs,
+  body.solo-card .credit-card-selector,
+  body.solo-card .header-actions,
+  body.solo-card .back-btn { display: none !important; }
+  body.solo-card .header { justify-content: center; }
+  body.solo-card .header h1 { font-size: 1.1rem; }
+  body.solo-card .content { padding-top: 20px; }
 
   .transactions {
     background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
@@ -375,10 +392,11 @@
   .modal-wide { width: 380px; }
   .modal-field { margin-bottom: 12px; }
   .modal-field label { display: block; font-size: .8rem; color: var(--text2); margin-bottom: 4px; font-weight: 500; }
-  .modal-field select, .modal-field input[type="number"] {
+  .modal-field select, .modal-field input[type="number"], .modal-field input[type="text"] {
     background: var(--bg); border: 1px solid var(--border); color: var(--text);
     padding: 10px 14px; border-radius: 8px; font-size: .9rem; width: 100%;
   }
+  .modal-field select:focus, .modal-field input:focus { outline: none; border-color: var(--accent); }
 
   .toast {
     position: fixed; bottom: 24px; right: 24px; background: var(--green);
@@ -585,7 +603,8 @@
           <th>AFHL</th>
           <th>Simulacros</th>
           <th>Total</th>
-          <th>Lites</th>
+          <th>Lites sem</th>
+          <th>Lites totais</th>
         </tr>
       </thead>
       <tbody id="rankingBody"></tbody>
@@ -721,6 +740,10 @@
       </div>
 
       <div class="cc-actions">
+        <button class="btn btn-primary cc-income-btn" onclick="openIncomeModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+          Rexistrar ingreso
+        </button>
         <button class="btn btn-primary cc-expense-btn" onclick="openExpenseModal()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
           Rexistrar gasto
@@ -767,6 +790,25 @@
   </div>
 </div>
 
+<!-- Modal ingreso -->
+<div class="modal-overlay hidden" id="incomeModal">
+  <div class="modal modal-wide">
+    <h3>Rexistrar ingreso manual</h3>
+    <div class="modal-field">
+      <label>Concepto</label>
+      <input type="text" id="incomeConcept" placeholder="Ex: Premio especial, bonificacion...">
+    </div>
+    <div class="modal-field">
+      <label>Lites</label>
+      <input type="number" id="incomeAmount" min="1" value="1">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeIncomeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveIncome()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal info -->
 <div class="modal-overlay hidden" id="infoModal" onclick="if(event.target===this)this.classList.add('hidden')">
   <div class="modal" style="width:500px;max-height:80vh;overflow-y:auto">
@@ -806,6 +848,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script>
 const TEAMS = [
   { id: 'xirasois', name: 'XIRASOIS', course: '1º', students: 20, color: '#e74c3c' },
@@ -816,8 +859,8 @@ const TEAMS = [
   { id: 'planta', name: 'PLANTA', course: '4ºB', students: 17, color: '#2ecc71' },
   { id: 'bolboretaa', name: 'BOLBORETA A', course: '5ºA', students: 14, color: '#f39c12' },
   { id: 'bolboretab', name: 'BOLBORETA B', course: '5ºB', students: 13, color: '#d4ac0d' },
-  { id: 'mundial', name: 'MUNDIAL', course: '6ºA', students: 15, color: '#1abc9c' },
-  { id: 'fantasma', name: 'FANTASMA', course: '6ºB', students: 13, color: '#95a5a6' },
+  { id: 'mundial', name: 'MUNDIAL', course: '6ºB', students: 15, color: '#1abc9c' },
+  { id: 'fantasma', name: 'FANTASMA', course: '6ºA', students: 13, color: '#95a5a6' },
   { id: 'ratiprofes', name: 'RATIPROFES', course: 'Profes', students: 24, color: '#e84393' },
   { id: '3anos', name: '3 ANOS', course: 'EI 3', students: 16, color: '#fd79a8' },
   { id: '4anos', name: '4 ANOS', course: 'EI 4', students: 19, color: '#a29bfe' },
@@ -827,12 +870,59 @@ const TEAMS = [
 // Lites por posicion no ranking
 const LITES_POR_POSICION = [15, 13, 10, 7, 5, 4, 3, 2, 2, 1, 0, 0, 0, 0];
 
-// Froitometro: porcentaxe media → lites
-function froitometroLites(pctMedia) {
-  if (pctMedia >= 100) return 50;
-  if (pctMedia >= 70) return 25;
-  if (pctMedia >= 50) return 10;
+// Dias tras os que unha entrada queda bloqueada fronte a edicion
+const LOCK_DAYS = 7;
+const LOCK_MS = LOCK_DAYS * 86400000;
+
+function isLocked(entry) {
+  if (!entry || !entry.savedAt) return false; // legacy (sen timestamp) → editable
+  return (Date.now() - entry.savedAt) > LOCK_MS;
+}
+
+// Froitometro: porcentaxe → lites (aplicado por semana)
+function froitometroLites(pct) {
+  if (pct >= 100) return 50;
+  if (pct >= 70) return 25;
+  if (pct >= 50) return 10;
   return 0;
+}
+
+// Devolve todas as semanas que teñan polo menos un dato (fc ou afhl) en calquera equipo
+function getAllWeeks() {
+  const weeks = new Set();
+  TEAMS.forEach(t => {
+    const td = data[t.id];
+    if (!td) return;
+    Object.keys(td.fruitcounter || {}).forEach(w => weeks.add(w));
+    Object.keys(td.afhl || {}).forEach(w => weeks.add(w));
+  });
+  return [...weeks].sort((a, b) => parseInt(a) - parseInt(b));
+}
+
+function getLatestWeek() {
+  const ws = getAllWeeks();
+  return ws.length ? ws[ws.length - 1] : null;
+}
+
+// Calcula as lites que un equipo gañou nunha semana concreta (ranking + froita desa semana)
+function getWeeklyLites(teamId, week) {
+  // Puntos desa semana para cada equipo (fc pts + afhl pts)
+  const weeklyTotals = TEAMS.map(t => {
+    const td = data[t.id] || {};
+    const fc = td.fruitcounter?.[week]?.pts || 0;
+    const afhl = td.afhl?.[week]?.pts || 0;
+    return { id: t.id, total: fc + afhl };
+  }).sort((a, b) => b.total - a.total);
+
+  const myTotal = weeklyTotals.find(w => w.id === teamId)?.total || 0;
+  const hayPuntos = weeklyTotals.some(w => w.total > 0);
+  const pos = weeklyTotals.findIndex(w => w.id === teamId);
+  const ranking = (hayPuntos && pos >= 0 && myTotal > 0) ? LITES_POR_POSICION[pos] : 0;
+
+  const fcPct = data[teamId]?.fruitcounter?.[week]?.pct || 0;
+  const froita = fcPct > 0 ? froitometroLites(fcPct) : 0;
+
+  return { ranking, froita, total: ranking + froita };
 }
 
 // Ecotenda materiais
@@ -970,24 +1060,30 @@ function getTeamTotals(teamId) {
   };
 }
 
-// Calcular lites totais dun equipo
+// Lites totais dun equipo: acumulativo semana a semana (nunca se perden)
 function getTeamLites(teamId) {
-  const ranked = getRankedTeams();
-  const pos = ranked.findIndex(t => t.id === teamId);
+  const weeks = getAllWeeks();
+  let ranking = 0, froita = 0;
+  weeks.forEach(w => {
+    const wl = getWeeklyLites(teamId, w);
+    ranking += wl.ranking;
+    froita += wl.froita;
+  });
   const totals = getTeamTotals(teamId);
-  // Solo asignar lites de ranking se hai puntos reais na liga
-  const hayPuntos = ranked.some(t => t.total > 0);
-  const litesRanking = (hayPuntos && pos >= 0 && totals.total > 0) ? LITES_POR_POSICION[pos] : 0;
-  // Solo asignar lites de froitometro se hai datos de froita
-  const litesFroitometro = totals.fcPctMedia > 0 ? froitometroLites(totals.fcPctMedia) : 0;
-  const litesSimulacros = totals.simLites;
+  const simulacros = totals.simLites;
   return {
-    ranking: litesRanking,
-    froitometro: litesFroitometro,
-    simulacros: litesSimulacros,
-    total: litesRanking + litesFroitometro + litesSimulacros,
+    ranking,
+    froitometro: froita,
+    simulacros,
+    total: ranking + froita + simulacros,
     fcPctMedia: totals.fcPctMedia,
   };
+}
+
+// Lites ganadas na última semana con datos (para a columna "Lites sem")
+function getCurrentWeekLites(teamId) {
+  const w = getLatestWeek();
+  return w ? getWeeklyLites(teamId, w).total : 0;
 }
 
 function getRankedTeams() {
@@ -1050,8 +1146,8 @@ function renderLitesSummary() {
   const lites = getTeamLites(selectedTeam);
   const el = document.getElementById('litesBreakdown');
   el.innerHTML = `
-    <div><span>Ranking (posicion)</span><span class="lites-badge">${lites.ranking} lites</span></div>
-    <div><span>Froitometro (${lites.fcPctMedia.toFixed(1)}% media)</span><span class="lites-badge">${lites.froitometro} lites</span></div>
+    <div><span>Ranking semanal (acumulado)</span><span class="lites-badge">${lites.ranking} lites</span></div>
+    <div><span>Froitometro semanal (acumulado)</span><span class="lites-badge">${lites.froitometro} lites</span></div>
     <div><span>Simulacros mochila</span><span class="lites-badge">${lites.simulacros} lites</span></div>
     <div><span>TOTAL LITES</span><span class="lites-badge">${lites.total} lites</span></div>
   `;
@@ -1119,10 +1215,14 @@ function saveFruitCounter() {
   if (!selectedTeam) return;
   const team = TEAMS.find(t => t.id === selectedTeam);
   const week = document.getElementById('fcWeek').value;
+  if (isLocked(data[selectedTeam].fruitcounter[week])) {
+    showToast('Sem ' + week + ' bloqueada (+ de ' + LOCK_DAYS + ' días)');
+    return;
+  }
   const frutas = parseInt(document.getElementById('fcFrutas').value) || 0;
   const max = getFCMax(team);
   const result = calcFCPoints(frutas, max);
-  data[selectedTeam].fruitcounter[week] = { frutas, pct: result.pct, pts: result.pts };
+  data[selectedTeam].fruitcounter[week] = { frutas, pct: result.pct, pts: result.pts, savedAt: Date.now() };
   saveData();
   document.getElementById('fcPct').textContent = result.pct.toFixed(1) + '%';
   document.getElementById('fcPts').textContent = result.pts.toFixed(2);
@@ -1135,9 +1235,13 @@ function saveFruitCounter() {
 function saveAFHL() {
   if (!selectedTeam) return;
   const week = document.getElementById('afhlWeek').value;
+  if (isLocked(data[selectedTeam].afhl[week])) {
+    showToast('Sem ' + week + ' bloqueada (+ de ' + LOCK_DAYS + ' días)');
+    return;
+  }
   const min = parseInt(document.getElementById('afhlMin').value) || 0;
   const pts = calcAFHLPoints(min);
-  data[selectedTeam].afhl[week] = { min, pts };
+  data[selectedTeam].afhl[week] = { min, pts, savedAt: Date.now() };
   saveData();
   document.getElementById('afhlPts').textContent = pts.toFixed(2);
   renderAFHLHistory();
@@ -1149,8 +1253,12 @@ function saveAFHL() {
 function saveSimulacro() {
   if (!selectedTeam) return;
   const simNum = document.getElementById('simNum').value;
+  if (isLocked(data[selectedTeam].simulacros[simNum])) {
+    showToast('Sim ' + simNum + ' bloqueado (+ de ' + LOCK_DAYS + ' días)');
+    return;
+  }
   const aprobados = parseInt(document.getElementById('simAprobados').value) || 0;
-  data[selectedTeam].simulacros[simNum] = { aprobados, pts: aprobados };
+  data[selectedTeam].simulacros[simNum] = { aprobados, pts: aprobados, savedAt: Date.now() };
   saveData();
   document.getElementById('simPts').textContent = aprobados;
   document.getElementById('simLites').textContent = aprobados;
@@ -1168,9 +1276,16 @@ function renderFCHistory() {
   if (!weeks.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.78rem;padding:4px">Sen datos</div>'; return; }
   el.innerHTML = weeks.map(w => {
     const d = td.fruitcounter[w];
-    return `<div class="history-item">
-      <span>Sem ${w}: ${d.frutas} froitas → ${d.pct.toFixed(1)}% → ${d.pts.toFixed(2)} pts</span>
-      <button class="hi-delete" onclick="deleteFCWeek('${w}')" title="Eliminar">x</button>
+    const locked = isLocked(d);
+    const wl = getWeeklyLites(selectedTeam, w);
+    return `<div class="history-item${locked ? ' locked' : ''}">
+      <span>Sem ${w}: ${d.frutas} froitas → ${d.pct.toFixed(1)}% → ${d.pts.toFixed(2)} pts · <span style="color:var(--gold)">${wl.total} lites</span>${locked ? ' 🔒' : ''}</span>
+      <div class="hi-actions">
+        ${locked ? '' : `<button class="hi-edit" onclick="editFCWeek('${w}')" title="Editar contido">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+        </button>`}
+        ${locked ? '' : `<button class="hi-delete" onclick="deleteFCWeek('${w}')" title="Eliminar">x</button>`}
+      </div>
     </div>`;
   }).join('');
 }
@@ -1183,9 +1298,15 @@ function renderAFHLHistory() {
   if (!weeks.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.78rem;padding:4px">Sen datos</div>'; return; }
   el.innerHTML = weeks.map(w => {
     const d = td.afhl[w];
-    return `<div class="history-item">
-      <span>Sem ${w}: ${d.min} min → ${d.pts.toFixed(2)} pts</span>
-      <button class="hi-delete" onclick="deleteAFHLWeek('${w}')" title="Eliminar">x</button>
+    const locked = isLocked(d);
+    return `<div class="history-item${locked ? ' locked' : ''}">
+      <span>Sem ${w}: ${d.min} min → ${d.pts.toFixed(2)} pts${locked ? ' 🔒' : ''}</span>
+      <div class="hi-actions">
+        ${locked ? '' : `<button class="hi-edit" onclick="editAFHLWeek('${w}')" title="Editar contido">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+        </button>`}
+        ${locked ? '' : `<button class="hi-delete" onclick="deleteAFHLWeek('${w}')" title="Eliminar">x</button>`}
+      </div>
     </div>`;
   }).join('');
 }
@@ -1198,9 +1319,15 @@ function renderSimHistory() {
   if (!sims.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.78rem;padding:4px">Sen datos</div>'; return; }
   el.innerHTML = sims.map(s => {
     const d = td.simulacros[s];
-    return `<div class="history-item">
-      <span>Sim ${s}: ${d.aprobados} aprobados → ${d.pts} pts / ${d.pts} lites</span>
-      <button class="hi-delete" onclick="deleteSimulacro('${s}')" title="Eliminar">x</button>
+    const locked = isLocked(d);
+    return `<div class="history-item${locked ? ' locked' : ''}">
+      <span>Sim ${s}: ${d.aprobados} aprobados → ${d.pts} pts / ${d.pts} lites${locked ? ' 🔒' : ''}</span>
+      <div class="hi-actions">
+        ${locked ? '' : `<button class="hi-edit" onclick="editSimulacro('${s}')" title="Editar contido">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+        </button>`}
+        ${locked ? '' : `<button class="hi-delete" onclick="deleteSimulacro('${s}')" title="Eliminar">x</button>`}
+      </div>
     </div>`;
   }).join('');
 }
@@ -1221,6 +1348,32 @@ function deleteSimulacro(sim) {
   saveData(); loadSimData(); renderLitesSummary(); renderTeams();
 }
 
+// Editar entrada xa gardada: carga os datos no formulario para modificalos
+function editFCWeek(week) {
+  if (!selectedTeam) return;
+  document.getElementById('fcWeek').value = week;
+  loadWeekData();
+  const input = document.getElementById('fcFrutas');
+  input.focus(); input.select();
+  showToast('Editando Sem ' + week + ' — modifica e garda');
+}
+function editAFHLWeek(week) {
+  if (!selectedTeam) return;
+  document.getElementById('afhlWeek').value = week;
+  loadWeekData();
+  const input = document.getElementById('afhlMin');
+  input.focus(); input.select();
+  showToast('Editando Sem ' + week + ' — modifica e garda');
+}
+function editSimulacro(sim) {
+  if (!selectedTeam) return;
+  document.getElementById('simNum').value = sim;
+  loadSimData();
+  const input = document.getElementById('simAprobados');
+  input.focus(); input.select();
+  showToast('Editando Sim ' + sim + ' — modifica e garda');
+}
+
 // Ranking
 function renderRanking() {
   const body = document.getElementById('rankingBody');
@@ -1232,6 +1385,7 @@ function renderRanking() {
     const rankClass = pos <= 3 ? `rank-${pos}` : '';
     const barWidth = maxTotal > 0 ? (t.total / maxTotal) * 100 : 0;
     const lites = getTeamLites(t.id);
+    const weekLites = getCurrentWeekLites(t.id);
     return `<tr class="${rankClass}">
       <td class="rank-pos">${pos}</td>
       <td>
@@ -1250,6 +1404,7 @@ function renderRanking() {
         <div class="rank-total">${t.total.toFixed(2)}</div>
         <div class="rank-bar"><div class="rank-bar-fill" style="width:${barWidth}%"></div></div>
       </td>
+      <td style="color:var(--text2);font-size:.85rem">${weekLites}</td>
       <td class="rank-lites">${lites.total}</td>
     </tr>`;
   }).join('');
@@ -1295,7 +1450,8 @@ function renderCCSelector() {
 function getCCBalance(teamId) {
   const lites = getTeamLites(teamId);
   const expenses = getTeamExpenses(teamId);
-  return lites.total - expenses;
+  const manualIncome = getTeamManualIncome(teamId);
+  return lites.total + manualIncome - expenses;
 }
 
 function getTeamExpenses(teamId) {
@@ -1303,6 +1459,13 @@ function getTeamExpenses(teamId) {
   const td = data[teamId];
   if (!td.gastos) return 0;
   return td.gastos.reduce((sum, g) => sum + g.total, 0);
+}
+
+function getTeamManualIncome(teamId) {
+  ensureTeamData(teamId);
+  const td = data[teamId];
+  if (!td.ingresos) return 0;
+  return td.ingresos.reduce((sum, i) => sum + i.amount, 0);
 }
 
 function selectCC(teamId) {
@@ -1334,11 +1497,17 @@ function renderTransactions(teamId, lites) {
   }
   // Ingresos por froitometro
   if (lites.froitometro > 0) {
-    transactions.push({ type: 'income', desc: `Froitometro (${lites.fcPctMedia.toFixed(0)}%)`, amount: lites.froitometro, date: 'Automatico', icon: '🍎' });
+    transactions.push({ type: 'income', desc: 'Froitometro (acumulado)', amount: lites.froitometro, date: 'Automatico', icon: '🍎' });
   }
   // Ingresos por simulacros
   if (lites.simulacros > 0) {
     transactions.push({ type: 'income', desc: 'Simulacros mochila', amount: lites.simulacros, date: 'Automatico', icon: '🎒' });
+  }
+  // Ingresos manuais
+  if (td.ingresos) {
+    td.ingresos.forEach((ing, i) => {
+      transactions.push({ type: 'income', desc: ing.concept, amount: ing.amount, date: ing.date, icon: '💰', manualIdx: i });
+    });
   }
   // Gastos
   if (td.gastos) {
@@ -1364,6 +1533,7 @@ function renderTransactions(teamId, lites) {
       <div class="tx-amount ${tx.type}">
         ${tx.type === 'income' ? '+' : '-'}${tx.amount} lites
         ${tx.type === 'expense' && editMode ? `<button class="hi-delete" onclick="deleteExpense(${tx.idx})" title="Eliminar">x</button>` : ''}
+        ${tx.type === 'income' && tx.manualIdx !== undefined && editMode ? `<button class="hi-delete" onclick="deleteIncome(${tx.manualIdx})" title="Eliminar">x</button>` : ''}
       </div>
     </div>
   `).join('');
@@ -1419,19 +1589,68 @@ function deleteExpense(idx) {
   selectCC(selectedCC);
 }
 
+// Ingresos manuais
+function openIncomeModal() {
+  if (!selectedCC || !editMode) return;
+  document.getElementById('incomeConcept').value = '';
+  document.getElementById('incomeAmount').value = 1;
+  document.getElementById('incomeModal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('incomeConcept').focus(), 50);
+}
+
+function closeIncomeModal() {
+  document.getElementById('incomeModal').classList.add('hidden');
+}
+
+function saveIncome() {
+  if (!selectedCC) return;
+  const concept = document.getElementById('incomeConcept').value.trim();
+  const amount = parseInt(document.getElementById('incomeAmount').value) || 0;
+  if (!concept || amount <= 0) {
+    showToast('Concepto e lites son obrigatorios');
+    return;
+  }
+  ensureTeamData(selectedCC);
+  if (!data[selectedCC].ingresos) data[selectedCC].ingresos = [];
+  const today = new Date().toISOString().slice(0, 10);
+  data[selectedCC].ingresos.push({ concept, amount, date: today });
+  saveData();
+
+  closeIncomeModal();
+  selectCC(selectedCC);
+  showToast('Ingreso rexistrado');
+}
+
+function deleteIncome(idx) {
+  if (!selectedCC || !editMode) return;
+  data[selectedCC].ingresos.splice(idx, 1);
+  saveData();
+  selectCC(selectedCC);
+}
+
 // QR
+// URL base para os QR — sempre apunta a produción para que os QR funcionen
+// aínda que se xeren desde file:// ou desde un deploy preview
+const QR_PROD_URL = 'https://superliga-saudable.pages.dev/';
+
+function getPublicTarxetaURL(teamId) {
+  const proto = window.location.protocol;
+  // Se estamos en local (file://) ou nun preview, usar sempre o dominio de produción
+  const base = (proto === 'http:' || proto === 'https:')
+    ? window.location.href.split('#')[0].split('?')[0]
+    : QR_PROD_URL;
+  return base + '?tarxeta=' + teamId;
+}
+
 function showQR() {
   if (!selectedCC) return;
   const team = TEAMS.find(t => t.id === selectedCC);
   const container = document.getElementById('qrContainer');
   container.classList.remove('hidden');
 
-  // Construir URL co hash para abrir directamente a tarxeta
-  const baseUrl = window.location.href.split('#')[0].split('?')[0];
-  const url = baseUrl + '?tarxeta=' + selectedCC;
-
+  const url = getPublicTarxetaURL(selectedCC);
   const canvas = document.getElementById('qrCanvas');
-  generateQR(canvas, url, 200);
+  generateQR(canvas, url, 220);
   document.getElementById('qrLabel').textContent = `${team.name} — ${team.course}`;
   container.scrollIntoView({ behavior: 'smooth' });
 }
@@ -1451,33 +1670,32 @@ function printQR() {
   win.document.close();
 }
 
-// Xerador QR minimo (QR Code en canvas)
+// Xerador QR: usa a librería local `qrcode` (node-qrcode), xérase no cliente
+// sen depender de APIs externas, evitando problemas de CORS e fallos de rede
 function generateQR(canvas, text, size) {
-  // Usa a API de Google Charts como fallback fiable para xerar QR
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = function() {
-    canvas.width = size;
-    canvas.height = size;
+  if (typeof QRCode === 'undefined' || !QRCode.toCanvas) {
+    // Fallback se a librería non cargou: API externa
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, size, size);
-    ctx.drawImage(img, 0, 0, size, size);
-  };
-  img.onerror = function() {
-    // Fallback: mostrar texto da URL
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, size, size);
-    ctx.fillStyle = '#000';
-    ctx.font = '12px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('QR non disponible offline', size/2, size/2 - 8);
-    ctx.fillText('URL: ' + text.slice(0, 40), size/2, size/2 + 12);
-  };
-  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
+    canvas.width = size; canvas.height = size;
+    const img = new Image();
+    img.onload = () => { ctx.fillStyle = '#fff'; ctx.fillRect(0,0,size,size); ctx.drawImage(img, 0, 0, size, size); };
+    img.onerror = () => {
+      ctx.fillStyle = '#fff'; ctx.fillRect(0,0,size,size);
+      ctx.fillStyle = '#000'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('Sen conexión — abre:', size/2, size/2 - 8);
+      ctx.fillText(text.slice(0, 38), size/2, size/2 + 10);
+    };
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
+    return;
+  }
+  QRCode.toCanvas(canvas, text, {
+    width: size,
+    margin: 2,
+    errorCorrectionLevel: 'M',
+    color: { dark: '#000000', light: '#ffffff' }
+  }, err => {
+    if (err) console.error('Erro xerando QR:', err);
+  });
 }
 
 // Solapas
@@ -1584,10 +1802,11 @@ function init() {
     document.getElementById('iconMoon').classList.add('hidden');
     document.getElementById('iconSun').classList.remove('hidden');
   }
-  // Se accede con ?tarxeta=id, abrir directamente esa tarxeta
+  // Se accede con ?tarxeta=id, abrir directamente esa tarxeta en modo "cliente"
   const params = new URLSearchParams(window.location.search);
   const tarxetaParam = params.get('tarxeta');
   if (tarxetaParam && TEAMS.find(t => t.id === tarxetaParam)) {
+    document.body.classList.add('solo-card');
     switchTab('tarxetas');
     selectCC(tarxetaParam);
   }
