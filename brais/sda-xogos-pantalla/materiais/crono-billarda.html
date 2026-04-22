@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crono · billarda · UD9 S6 · Ficha de cronometraxe por equipo</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 14px 0; }
+
+  .print-hint {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: #5c3a21; color: #fbf7ef;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10; max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef; color: #5c3a21; border: none;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    margin-left: 6px; font-size: 12px; font-weight: 600;
+  }
+
+  .page {
+    width: 210mm; min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 14px auto; padding: 10mm 12mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    background-image:
+      radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%);
+  }
+
+  .head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 4mm; margin-bottom: 5mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .head .tit { font-size: 10pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .head .sub { font-size: 8.5pt; color: #8b5e3c; margin-top: 2px; }
+  .head .nome {
+    font-size: 17pt; color: #5c3a21;
+  }
+
+  .datos {
+    display: flex; gap: 6mm; margin-bottom: 5mm;
+    font-size: 10pt; color: #5c3a21;
+  }
+  .datos .campo { flex: 1; display: flex; align-items: baseline; gap: 3mm; }
+  .datos .lbl { font-weight: 700; letter-spacing: 0.04em; }
+  .datos .liña {
+    flex: 1; border-bottom: 1.5px solid #8b5e3c; height: 6mm;
+  }
+
+  .intro {
+    font-size: 10pt; color: #6b5b47; line-height: 1.45;
+    text-align: center; margin-bottom: 6mm;
+    padding: 3mm 6mm; background: rgba(139,94,60,0.06);
+    border-radius: 3mm; font-style: italic;
+  }
+
+  table.crono {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 6mm;
+    background: rgba(255,255,255,0.5);
+  }
+  table.crono th, table.crono td {
+    border: 1.5px solid #8b5e3c;
+    padding: 4mm 3mm;
+    font-size: 12pt;
+    text-align: center;
+    vertical-align: middle;
+  }
+  table.crono th {
+    background: rgba(139,94,60,0.15);
+    color: #5c3a21;
+    font-size: 11pt;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  table.crono td.etiq {
+    background: rgba(184,134,11,0.12);
+    color: #5c3a21;
+    font-weight: 700;
+    font-size: 12pt;
+    width: 26%;
+  }
+  table.crono td.celda {
+    height: 16mm;
+    color: #2a2018;
+  }
+  table.crono tr.total td {
+    background: rgba(91,124,42,0.15);
+    color: #4a6620;
+    font-size: 11.5pt;
+    font-weight: 700;
+    height: 14mm;
+  }
+  table.crono tr.total td.etiq {
+    background: rgba(91,124,42,0.25);
+    color: #2d4510;
+  }
+
+  .trocamos {
+    margin-top: 3mm;
+    padding: 5mm 6mm;
+    border: 2.5px dashed #1f4e79;
+    border-radius: 3mm;
+    background: rgba(225,235,248,0.45);
+  }
+  .trocamos h3 {
+    font-size: 12pt; color: #1f4e79;
+    margin-bottom: 3mm;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+  .trocamos .filas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm 6mm;
+  }
+  .trocamos .item {
+    display: flex; align-items: baseline; gap: 3mm;
+    font-size: 10.5pt; color: #2a2018;
+  }
+  .trocamos .item .lbl { font-weight: 700; color: #1f4e79; white-space: nowrap; }
+  .trocamos .item .liña {
+    flex: 1; border-bottom: 1.5px solid #1f4e79; height: 6mm;
+  }
+  .trocamos .pregunta {
+    grid-column: 1 / -1;
+    margin-top: 2mm;
+    padding-top: 3mm;
+    border-top: 1.5px dashed #8aa7c9;
+    font-size: 10.5pt;
+  }
+  .trocamos .pregunta .lbl { color: #1f4e79; font-weight: 700; }
+  .trocamos .pregunta .liña {
+    display: inline-block; width: 55%;
+    border-bottom: 1.5px solid #1f4e79; height: 6mm;
+    vertical-align: baseline;
+  }
+
+  .rodape {
+    margin-top: 7mm;
+    text-align: center;
+    font-size: 9pt;
+    color: #8b5e3c;
+    font-style: italic;
+    padding-top: 3mm;
+    border-top: 1.5px dashed #c9a987;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0; box-shadow: none;
+      min-height: auto; height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    table.crono th, table.crono td, table.crono tr.total td, .trocamos {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P &rarr; activar <strong>"Imprimir gráficos de fondo"</strong> para as cores.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="sub">UD9 · Sesión 6 · Ficha de cronometraxe por equipo</div>
+    </div>
+    <div class="nome">Crono · billarda</div>
+  </div>
+
+  <div class="datos">
+    <div class="campo"><span class="lbl">Equipo:</span><span class="liña"></span></div>
+    <div class="campo"><span class="lbl">Data:</span><span class="liña"></span></div>
+    <div class="campo"><span class="lbl">Secretario do cronómetro:</span><span class="liña"></span></div>
+  </div>
+
+  <div class="intro">
+    Cada equipo xoga <strong>3 rondas de 5 min</strong>. Anota o tempo real e os puntos conseguidos en cada ronda.
+  </div>
+
+  <table class="crono">
+    <thead>
+      <tr>
+        <th>Ronda</th>
+        <th>Tempo (min)</th>
+        <th>Puntos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="etiq">Ronda 1</td>
+        <td class="celda"></td>
+        <td class="celda"></td>
+      </tr>
+      <tr>
+        <td class="etiq">Ronda 2</td>
+        <td class="celda"></td>
+        <td class="celda"></td>
+      </tr>
+      <tr>
+        <td class="etiq">Ronda 3</td>
+        <td class="celda"></td>
+        <td class="celda"></td>
+      </tr>
+      <tr class="total">
+        <td class="etiq">TOTAL da ficha</td>
+        <td>5 + 5 + 5 = ______ min</td>
+        <td>suma total ______</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="trocamos">
+    <h3>Trocamos ficha con outro equipo</h3>
+    <div class="filas">
+      <div class="item"><span class="lbl">Outro equipo:</span><span class="liña"></span></div>
+      <div class="item"><span class="lbl">Os seus minutos:</span><span class="liña"></span></div>
+      <div class="item"><span class="lbl">Os seus puntos:</span><span class="liña"></span></div>
+      <div class="item"><span class="lbl">Os nosos minutos:</span><span class="liña"></span></div>
+      <div class="pregunta">
+        <span class="lbl">Quen xogou máis tempo?</span>
+        <span class="liña"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="rodape">
+    ✦ Avoa Carmela · SdA Xogos vs Pantalla · cronometraxe real ✦
+  </div>
+</div>
+
+</body>
+</html>

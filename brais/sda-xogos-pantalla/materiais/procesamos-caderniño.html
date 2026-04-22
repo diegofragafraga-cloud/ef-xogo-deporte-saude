@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procesamos o Caderniño · UD9 S8 · Datos da semana</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 14px 0; }
+
+  .print-hint {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: #5c3a21; color: #fbf7ef;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10; max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef; color: #5c3a21; border: none;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    margin-left: 6px; font-size: 12px; font-weight: 600;
+  }
+
+  .page {
+    width: 210mm; min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 14px auto; padding: 9mm 11mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    background-image:
+      radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%);
+  }
+
+  .head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 3mm; margin-bottom: 4mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .head .tit { font-size: 10pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .head .sub { font-size: 8.5pt; color: #8b5e3c; margin-top: 2px; }
+  .head .nome {
+    font-size: 16pt; color: #5c3a21;
+  }
+
+  .seccion {
+    margin-bottom: 5mm;
+    padding: 4mm 5mm;
+    border: 2.5px solid var(--cor-seccion, #8b5e3c);
+    border-radius: 3mm;
+    background: rgba(255,255,255,0.45);
+    position: relative;
+  }
+  .seccion .tag {
+    position: absolute;
+    top: -3mm; left: 5mm;
+    background: var(--cor-seccion, #8b5e3c);
+    color: #fbf7ef;
+    padding: 1mm 4mm;
+    border-radius: 1.5mm;
+    font-size: 9.5pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .seccion.individual { --cor-seccion: #1f4e79; }
+  .seccion.equipo { --cor-seccion: #5b7c2a; }
+
+  .datos {
+    display: flex; gap: 5mm; margin: 2mm 0 4mm 0;
+    font-size: 9.5pt; color: #5c3a21;
+  }
+  .datos .campo { flex: 1; display: flex; align-items: baseline; gap: 2mm; }
+  .datos .lbl { font-weight: 700; }
+  .datos .liña {
+    flex: 1; border-bottom: 1.5px solid #8b5e3c; height: 5mm;
+  }
+
+  .intro {
+    font-size: 9.5pt; color: #6b5b47; line-height: 1.4;
+    margin-bottom: 3mm;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .fila-tabla {
+    display: grid;
+    grid-template-columns: 1fr 90mm;
+    gap: 4mm;
+    align-items: flex-start;
+  }
+
+  table.sem, table.eq {
+    width: 100%; border-collapse: collapse;
+    background: rgba(255,255,255,0.55);
+    font-size: 10pt;
+  }
+  table.sem th, table.sem td, table.eq th, table.eq td {
+    border: 1.5px solid #8b5e3c;
+    padding: 1.8mm 2mm;
+    text-align: center;
+    vertical-align: middle;
+  }
+  table.sem th, table.eq th {
+    background: rgba(31,78,121,0.15);
+    color: #1f4e79;
+    font-size: 9.5pt;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  table.eq th {
+    background: rgba(91,124,42,0.18);
+    color: #2d4510;
+  }
+  table.sem td.dia, table.eq td.nome {
+    background: rgba(184,134,11,0.10);
+    color: #5c3a21;
+    font-weight: 700;
+    text-align: left;
+    padding-left: 3mm;
+  }
+  table.sem tr.total td, table.eq tr.total td {
+    background: rgba(31,78,121,0.12);
+    font-weight: 700;
+    color: #1f4e79;
+    font-size: 10.5pt;
+  }
+  table.eq tr.total td {
+    background: rgba(91,124,42,0.18);
+    color: #2d4510;
+  }
+  table.sem tr.dif td {
+    background: rgba(166,56,36,0.10);
+    color: #7a2818;
+    font-size: 9.5pt;
+    font-weight: 700;
+  }
+  table.sem td.celda, table.eq td.celda { height: 7.5mm; }
+
+  .multibase {
+    padding: 3mm;
+    border: 1.5px dashed #c9a987;
+    border-radius: 2mm;
+    background: rgba(255,255,255,0.5);
+    text-align: center;
+  }
+  .multibase h4 {
+    font-size: 9pt;
+    color: #8b5e3c;
+    margin-bottom: 2mm;
+    font-style: italic;
+  }
+  .multibase svg { width: 100%; max-width: 80mm; height: auto; }
+  .multibase .nota { font-size: 8pt; color: #8b5e3c; margin-top: 2mm; font-style: italic; }
+
+  .conclusion {
+    margin-top: 3mm;
+    padding: 3mm 4mm;
+    border: 1.5px dashed #5b7c2a;
+    border-radius: 2mm;
+    background: rgba(216,232,196,0.35);
+    font-size: 10pt;
+    color: #2d4510;
+    line-height: 1.6;
+  }
+  .conclusion .liña-inline {
+    display: inline-block;
+    width: 18mm;
+    border-bottom: 1.5px solid #5b7c2a;
+    height: 4mm;
+    vertical-align: baseline;
+    margin: 0 1mm;
+  }
+
+  .rodape {
+    margin-top: 4mm;
+    text-align: center;
+    font-size: 9pt;
+    color: #8b5e3c;
+    font-style: italic;
+    padding-top: 2.5mm;
+    border-top: 1.5px dashed #c9a987;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0; box-shadow: none;
+      min-height: auto; height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .seccion, table.sem td, table.eq td, table.sem th, table.eq th, .conclusion {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P &rarr; activar <strong>"Imprimir gráficos de fondo"</strong> para as cores.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="sub">UD9 · Sesión 8 · Procesamos os datos da semana</div>
+    </div>
+    <div class="nome">Procesamos o Caderniño</div>
+  </div>
+
+  <!-- PARTE 1: INDIVIDUAL -->
+  <div class="seccion individual">
+    <div class="tag">Parte 1 · Individual</div>
+    <div class="datos">
+      <div class="campo"><span class="lbl">Detective:</span><span class="liña"></span></div>
+      <div class="campo"><span class="lbl">Equipo:</span><span class="liña"></span></div>
+      <div class="campo"><span class="lbl">Data:</span><span class="liña"></span></div>
+    </div>
+    <div class="intro">
+      Coas anotacións do teu Caderniño desta semana, completa estas contas.
+    </div>
+
+    <div class="fila-tabla">
+      <table class="sem">
+        <thead>
+          <tr>
+            <th style="width: 34%;">Día</th>
+            <th>Pantalla (min)</th>
+            <th>Xogo (min)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="dia">Luns</td><td class="celda"></td><td class="celda"></td></tr>
+          <tr><td class="dia">Martes</td><td class="celda"></td><td class="celda"></td></tr>
+          <tr><td class="dia">Mércores</td><td class="celda"></td><td class="celda"></td></tr>
+          <tr><td class="dia">Xoves</td><td class="celda"></td><td class="celda"></td></tr>
+          <tr><td class="dia">Venres</td><td class="celda"></td><td class="celda"></td></tr>
+          <tr><td class="dia">Sábado</td><td class="celda"></td><td class="celda"></td></tr>
+          <tr><td class="dia">Domingo</td><td class="celda"></td><td class="celda"></td></tr>
+          <tr class="total"><td class="dia">TOTAL semana</td><td class="celda"></td><td class="celda"></td></tr>
+          <tr class="dif"><td colspan="3" style="text-align: left; padding-left: 3mm;">
+            Diferenza &nbsp;·&nbsp; pantalla − xogo = ______ &nbsp;·&nbsp; xogo − pantalla = ______
+          </td></tr>
+        </tbody>
+      </table>
+
+      <div class="multibase">
+        <h4>Lembra: podes usar os bloques multibase</h4>
+        <svg viewBox="0 0 200 90" fill="none" stroke="#5c3a21" stroke-width="1.2">
+          <!-- Decenas (3 barras) -->
+          <g>
+            <rect x="5" y="15" width="12" height="60" fill="#e1ebf6" stroke="#1f4e79" stroke-width="1.5"/>
+            <line x1="5" y1="21" x2="17" y2="21"/>
+            <line x1="5" y1="27" x2="17" y2="27"/>
+            <line x1="5" y1="33" x2="17" y2="33"/>
+            <line x1="5" y1="39" x2="17" y2="39"/>
+            <line x1="5" y1="45" x2="17" y2="45"/>
+            <line x1="5" y1="51" x2="17" y2="51"/>
+            <line x1="5" y1="57" x2="17" y2="57"/>
+            <line x1="5" y1="63" x2="17" y2="63"/>
+            <line x1="5" y1="69" x2="17" y2="69"/>
+          </g>
+          <g>
+            <rect x="22" y="15" width="12" height="60" fill="#e1ebf6" stroke="#1f4e79" stroke-width="1.5"/>
+            <line x1="22" y1="21" x2="34" y2="21"/>
+            <line x1="22" y1="27" x2="34" y2="27"/>
+            <line x1="22" y1="33" x2="34" y2="33"/>
+            <line x1="22" y1="39" x2="34" y2="39"/>
+            <line x1="22" y1="45" x2="34" y2="45"/>
+            <line x1="22" y1="51" x2="34" y2="51"/>
+            <line x1="22" y1="57" x2="34" y2="57"/>
+            <line x1="22" y1="63" x2="34" y2="63"/>
+            <line x1="22" y1="69" x2="34" y2="69"/>
+          </g>
+          <g>
+            <rect x="39" y="15" width="12" height="60" fill="#e1ebf6" stroke="#1f4e79" stroke-width="1.5"/>
+            <line x1="39" y1="21" x2="51" y2="21"/>
+            <line x1="39" y1="27" x2="51" y2="27"/>
+            <line x1="39" y1="33" x2="51" y2="33"/>
+            <line x1="39" y1="39" x2="51" y2="39"/>
+            <line x1="39" y1="45" x2="51" y2="45"/>
+            <line x1="39" y1="51" x2="51" y2="51"/>
+            <line x1="39" y1="57" x2="51" y2="57"/>
+            <line x1="39" y1="63" x2="51" y2="63"/>
+            <line x1="39" y1="69" x2="51" y2="69"/>
+          </g>
+          <text x="28" y="85" text-anchor="middle" font-size="9" font-family="Comic Sans MS" fill="#1f4e79" stroke="none">decenas</text>
+
+          <!-- Unidades (6 cubiños) -->
+          <g>
+            <rect x="75" y="57" width="12" height="12" fill="#fbe8b8" stroke="#8b6508" stroke-width="1.5"/>
+            <rect x="92" y="57" width="12" height="12" fill="#fbe8b8" stroke="#8b6508" stroke-width="1.5"/>
+            <rect x="109" y="57" width="12" height="12" fill="#fbe8b8" stroke="#8b6508" stroke-width="1.5"/>
+            <rect x="75" y="42" width="12" height="12" fill="#fbe8b8" stroke="#8b6508" stroke-width="1.5"/>
+            <rect x="92" y="42" width="12" height="12" fill="#fbe8b8" stroke="#8b6508" stroke-width="1.5"/>
+            <rect x="109" y="42" width="12" height="12" fill="#fbe8b8" stroke="#8b6508" stroke-width="1.5"/>
+          </g>
+          <text x="98" y="85" text-anchor="middle" font-size="9" font-family="Comic Sans MS" fill="#8b6508" stroke="none">unidades</text>
+
+          <!-- Signo + -->
+          <text x="63" y="55" text-anchor="middle" font-size="24" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">+</text>
+
+          <!-- Igual -->
+          <text x="135" y="50" text-anchor="middle" font-size="20" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">=</text>
+          <text x="170" y="52" text-anchor="middle" font-size="14" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3D + 6U</text>
+          <text x="170" y="68" text-anchor="middle" font-size="16" font-family="Comic Sans MS" fill="#a63824" stroke="none" font-weight="bold">= 36</text>
+        </svg>
+        <div class="nota">3 decenas + 6 unidades = 36</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTE 2: EQUIPO -->
+  <div class="seccion equipo">
+    <div class="tag">Parte 2 · Equipo</div>
+    <div class="intro">
+      En equipo: xuntade os totais de cada un e calculade a cifra do equipo.
+    </div>
+
+    <table class="eq">
+      <thead>
+        <tr>
+          <th style="width: 40%;">Nome do detective</th>
+          <th>Total pantalla (min)</th>
+          <th>Total xogo (min)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="nome celda"></td><td class="celda"></td><td class="celda"></td></tr>
+        <tr><td class="nome celda"></td><td class="celda"></td><td class="celda"></td></tr>
+        <tr><td class="nome celda"></td><td class="celda"></td><td class="celda"></td></tr>
+        <tr><td class="nome celda"></td><td class="celda"></td><td class="celda"></td></tr>
+        <tr><td class="nome celda"></td><td class="celda"></td><td class="celda"></td></tr>
+        <tr class="total"><td class="nome">TOTAL EQUIPO</td><td class="celda"></td><td class="celda"></td></tr>
+      </tbody>
+    </table>
+
+    <div class="conclusion">
+      O noso equipo vimos <span class="liña-inline"></span> min de pantalla e xogamos <span class="liña-inline"></span> min.
+      Xogamos <span class="liña-inline"></span> min <strong>menos / máis</strong> que o que vimos de pantalla.
+    </div>
+  </div>
+
+  <div class="rodape">
+    ✦ Datos reais da clase para o Panel do Mural "Canto xogamos?" ✦
+  </div>
+</div>
+
+</body>
+</html>

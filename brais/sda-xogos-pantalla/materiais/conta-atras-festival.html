@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conta atrás ao Festival · UD9 S7 · Cartel de parede</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 14px 0; }
+
+  .print-hint {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: #5c3a21; color: #fbf7ef;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10; max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef; color: #5c3a21; border: none;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    margin-left: 6px; font-size: 12px; font-weight: 600;
+  }
+
+  .page {
+    width: 210mm; min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 14px auto; padding: 10mm 12mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    background-image:
+      radial-gradient(ellipse at top left, rgba(184,134,11,0.12), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(166,56,36,0.10), transparent 55%),
+      radial-gradient(ellipse at center, rgba(91,124,42,0.05), transparent 70%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 4mm; margin-bottom: 4mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .head .tit { font-size: 10pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .head .sub { font-size: 8.5pt; color: #8b5e3c; margin-top: 2px; }
+
+  .titulo {
+    text-align: center;
+    margin: 3mm 0 5mm 0;
+  }
+  .titulo h1 {
+    font-size: 22pt;
+    color: #a63824;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+  }
+  .titulo h1 span { color: #b8860b; }
+
+  .deco-top, .deco-bot {
+    display: flex; justify-content: center; gap: 6mm;
+    margin: 2mm 0;
+  }
+  .deco-top svg, .deco-bot svg { width: 28px; height: 28px; }
+
+  .caixa-numero {
+    margin: 4mm auto 5mm auto;
+    width: 130mm;
+    border: 6px double #a63824;
+    border-radius: 5mm;
+    padding: 6mm 5mm 3mm 5mm;
+    text-align: center;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 0 0 3px rgba(184,134,11,0.25), 0 4px 12px rgba(166,56,36,0.15);
+    position: relative;
+  }
+  .caixa-numero .numero {
+    font-size: 110pt;
+    color: #a63824;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-shadow: 3px 3px 0 #fbe8b8;
+  }
+  .caixa-numero .etiq-dias {
+    font-size: 14pt;
+    color: #8b6508;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 2mm;
+  }
+  .caixa-numero .serpentina-e, .caixa-numero .serpentina-d {
+    position: absolute;
+    top: -4mm;
+  }
+  .caixa-numero .serpentina-e { left: -6mm; }
+  .caixa-numero .serpentina-d { right: -6mm; }
+  .caixa-numero .serpentina-e svg, .caixa-numero .serpentina-d svg { width: 40px; height: 40px; }
+
+  .data-festival {
+    text-align: center;
+    font-size: 15pt;
+    color: #5b7c2a;
+    margin-bottom: 5mm;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .data-festival strong { color: #2d4510; }
+
+  .conta-dias {
+    padding: 5mm 5mm 4mm 5mm;
+    border: 2.5px dashed #8b5e3c;
+    border-radius: 3mm;
+    background: rgba(255,255,255,0.55);
+  }
+  .conta-dias h3 {
+    font-size: 11pt;
+    color: #5c3a21;
+    margin-bottom: 3mm;
+    text-align: center;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .conta-dias .filas {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2mm;
+  }
+  .conta-dias .celda {
+    border: 1.5px solid #8b5e3c;
+    border-radius: 1.5mm;
+    padding: 2mm 0;
+    text-align: center;
+    font-size: 14pt;
+    color: #5c3a21;
+    background: rgba(251,232,184,0.35);
+    font-weight: 700;
+  }
+  .conta-dias .lenda {
+    margin-top: 3mm;
+    text-align: center;
+    font-size: 9pt;
+    color: #8b5e3c;
+    font-style: italic;
+  }
+
+  .billarda-svg {
+    position: absolute;
+    bottom: 18mm;
+    left: 10mm;
+    opacity: 0.55;
+  }
+  .billarda-svg svg { width: 70px; height: 70px; }
+
+  .buxaina-svg {
+    position: absolute;
+    bottom: 18mm;
+    right: 10mm;
+    opacity: 0.55;
+  }
+  .buxaina-svg svg { width: 70px; height: 70px; }
+
+  .rodape {
+    margin-top: 6mm;
+    text-align: center;
+    font-size: 9.5pt;
+    color: #8b5e3c;
+    font-style: italic;
+    padding-top: 3mm;
+    border-top: 1.5px dashed #c9a987;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0; box-shadow: none;
+      min-height: auto; height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .caixa-numero, .conta-dias .celda {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P &rarr; activar <strong>"Imprimir gráficos de fondo"</strong> para as cores.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="sub">UD9 · Sesión 7 · Cartel de parede para actualizar día a día</div>
+    </div>
+  </div>
+
+  <div class="deco-top">
+    <svg viewBox="0 0 24 24" fill="#b8860b" stroke="#8b6508" stroke-width="1"><polygon points="12,2 14.5,9 22,9 16,13.5 18.5,21 12,16.5 5.5,21 8,13.5 2,9 9.5,9"/></svg>
+    <svg viewBox="0 0 24 24" fill="#a63824" stroke="#7a2818" stroke-width="1"><polygon points="12,2 14.5,9 22,9 16,13.5 18.5,21 12,16.5 5.5,21 8,13.5 2,9 9.5,9"/></svg>
+    <svg viewBox="0 0 24 24" fill="#5b7c2a" stroke="#2d4510" stroke-width="1"><polygon points="12,2 14.5,9 22,9 16,13.5 18.5,21 12,16.5 5.5,21 8,13.5 2,9 9.5,9"/></svg>
+    <svg viewBox="0 0 24 24" fill="#b8860b" stroke="#8b6508" stroke-width="1"><polygon points="12,2 14.5,9 22,9 16,13.5 18.5,21 12,16.5 5.5,21 8,13.5 2,9 9.5,9"/></svg>
+  </div>
+
+  <div class="titulo">
+    <h1>Conta atrás ao <span>Festival</span><br>dos Xogos Tradicionais</h1>
+  </div>
+
+  <div class="caixa-numero">
+    <div class="serpentina-e">
+      <svg viewBox="0 0 40 40" fill="none" stroke="#a63824" stroke-width="2.5" stroke-linecap="round">
+        <path d="M5 35 Q 10 25, 15 28 Q 20 31, 22 22 Q 24 13, 30 15 Q 36 17, 35 5"/>
+      </svg>
+    </div>
+    <div class="serpentina-d">
+      <svg viewBox="0 0 40 40" fill="none" stroke="#5b7c2a" stroke-width="2.5" stroke-linecap="round">
+        <path d="M35 35 Q 30 25, 25 28 Q 20 31, 18 22 Q 16 13, 10 15 Q 4 17, 5 5"/>
+      </svg>
+    </div>
+    <div class="numero">53</div>
+    <div class="etiq-dias">Días</div>
+  </div>
+
+  <div class="data-festival">
+    Festival: <strong>Venres 26 xuño</strong>
+  </div>
+
+  <div class="conta-dias">
+    <h3>Cada día de mates, riscamos un número</h3>
+    <div class="filas">
+      <div class="celda">53</div>
+      <div class="celda">52</div>
+      <div class="celda">51</div>
+      <div class="celda">50</div>
+      <div class="celda">49</div>
+      <div class="celda">48</div>
+      <div class="celda">47</div>
+      <div class="celda">46</div>
+      <div class="celda">45</div>
+      <div class="celda">44</div>
+      <div class="celda">43</div>
+      <div class="celda">42</div>
+      <div class="celda">41</div>
+      <div class="celda">40</div>
+      <div class="celda">39</div>
+      <div class="celda">38</div>
+      <div class="celda">37</div>
+      <div class="celda">36</div>
+      <div class="celda">35</div>
+      <div class="celda">34</div>
+      <div class="celda">33</div>
+      <div class="celda">32</div>
+      <div class="celda">31</div>
+      <div class="celda">30</div>
+    </div>
+    <div class="lenda">Risca con rotulador cada número que pase. O seguinte xa está marcado no cartel grande.</div>
+  </div>
+
+  <div class="deco-bot">
+    <svg viewBox="0 0 24 24" fill="#5b7c2a" stroke="#2d4510" stroke-width="1"><polygon points="12,2 14.5,9 22,9 16,13.5 18.5,21 12,16.5 5.5,21 8,13.5 2,9 9.5,9"/></svg>
+    <svg viewBox="0 0 24 24" fill="#b8860b" stroke="#8b6508" stroke-width="1"><polygon points="12,2 14.5,9 22,9 16,13.5 18.5,21 12,16.5 5.5,21 8,13.5 2,9 9.5,9"/></svg>
+    <svg viewBox="0 0 24 24" fill="#a63824" stroke="#7a2818" stroke-width="1"><polygon points="12,2 14.5,9 22,9 16,13.5 18.5,21 12,16.5 5.5,21 8,13.5 2,9 9.5,9"/></svg>
+    <svg viewBox="0 0 24 24" fill="#5b7c2a" stroke="#2d4510" stroke-width="1"><polygon points="12,2 14.5,9 22,9 16,13.5 18.5,21 12,16.5 5.5,21 8,13.5 2,9 9.5,9"/></svg>
+  </div>
+
+  <div class="billarda-svg">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#5c3a21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="21" x2="21" y2="3"/>
+      <line x1="5" y1="11" x2="14" y2="11"/>
+      <circle cx="3" cy="21" r="0.8" fill="#5c3a21"/>
+      <circle cx="21" cy="3" r="0.8" fill="#5c3a21"/>
+    </svg>
+  </div>
+
+  <div class="buxaina-svg">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#5c3a21" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="12" cy="8" rx="6" ry="2" fill="#fbe8b8"/>
+      <path d="M6 8 L12 20 L18 8" fill="#b8860b" fill-opacity="0.5"/>
+      <line x1="12" y1="20" x2="12" y2="23"/>
+      <path d="M10 5 Q 12 2, 14 5" stroke-dasharray="2,1"/>
+    </svg>
+  </div>
+
+  <div class="rodape">
+    ✦ Cada sesión de mates, actualizamos ✦
+  </div>
+</div>
+
+</body>
+</html>

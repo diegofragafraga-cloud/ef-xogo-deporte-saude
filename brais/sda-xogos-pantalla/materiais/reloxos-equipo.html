@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reloxos de equipo · UD9 S2 · Para recortar</title>
+<style>
+  @page { size: A4 portrait; margin: 8mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 14px 0; }
+
+  .print-hint {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: #5c3a21; color: #fbf7ef;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10; max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef; color: #5c3a21; border: none;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    margin-left: 6px; font-size: 12px; font-weight: 600;
+  }
+
+  .page {
+    width: 210mm; min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 14px auto; padding: 8mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    page-break-after: always;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%);
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 3mm; margin-bottom: 4mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .head .tit { font-size: 10pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .head .sub { font-size: 8.5pt; color: #8b5e3c; margin-top: 2px; }
+  .head .nome { font-size: 16pt; color: #5c3a21; }
+
+  .intro {
+    font-size: 9pt; color: #6b5b47; line-height: 1.4;
+    text-align: center; margin-bottom: 4mm;
+    padding: 2.5mm 6mm; background: rgba(139,94,60,0.05);
+    border-radius: 3mm; font-style: italic;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+  }
+
+  .cel {
+    border: 2px dashed #8b5e3c;
+    border-radius: 3mm;
+    padding: 3mm;
+    display: flex; flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.5);
+  }
+  .cel .eq-label {
+    font-size: 11pt;
+    color: var(--acento);
+    font-weight: 700;
+    margin-bottom: 1mm;
+  }
+
+  /* Reloxo SVG */
+  .reloxo { width: 72mm; height: 72mm; }
+  .reloxo .cara { fill: #fbf7ef; stroke: var(--acento); stroke-width: 1.8; }
+  .reloxo .marca-hora { stroke: var(--acento); stroke-width: 1.5; }
+  .reloxo .marca-min { stroke: #b89574; stroke-width: 0.7; }
+  .reloxo .num {
+    font-family: "Comic Sans MS", sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    fill: var(--acento);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .reloxo .centro { fill: var(--acento); }
+
+  /* Agullas para recortar */
+  .agullas {
+    display: flex; gap: 5mm;
+    align-items: center;
+    margin-top: 2mm;
+    padding-top: 2mm;
+    border-top: 1px dashed #c9a987;
+    width: 100%;
+    justify-content: center;
+  }
+  .agullas-label {
+    font-size: 7pt;
+    color: #8b5e3c;
+    font-style: italic;
+    text-align: center;
+    margin-top: 1mm;
+  }
+  .agulla-svg { width: 34mm; height: 10mm; }
+
+  .c1 { --acento: #5b7c2a; }
+  .c2 { --acento: #1f4e79; }
+  .c3 { --acento: #a63824; }
+  .c4 { --acento: #b8860b; }
+
+  .rodape {
+    margin-top: 4mm;
+    text-align: center;
+    font-size: 9pt;
+    color: #8b5e3c;
+    font-style: italic;
+    padding-top: 3mm;
+    border-top: 1.5px dashed #c9a987;
+    line-height: 1.4;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0; box-shadow: none;
+      min-height: auto; height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .cel, .reloxo .cara, .reloxo .centro { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P → activar <strong>"Imprimir gráficos de fondo"</strong>.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="sub">UD9 · Sesión 2 · Recortar reloxo e agullas · fixar no centro cunha chincheta</div>
+    </div>
+    <div class="nome">Reloxos de equipo</div>
+  </div>
+
+  <div class="intro">
+    Un reloxo por cada un dos <strong>4 equipos Detectives</strong>. Recórtase o círculo, recórtanse as dúas agullas (a curta é <em>horas</em>, a longa <em>minutos</em>) e xúntanse no centro cunha chincheta que atravese o cartón/goma EVA. As agullas van na cor do equipo.
+  </div>
+
+  <div class="grid">
+
+    <!-- EQUIPO 1 -->
+    <div class="cel c1">
+      <div class="eq-label">Equipo 1</div>
+      <svg class="reloxo" viewBox="0 0 100 100">
+        <circle class="cara" cx="50" cy="50" r="46"/>
+        <!-- Marcas de minutos (60) -->
+        <g class="marca-min">
+          <!-- 12 marcas menores entre as horas -->
+          <line x1="50" y1="4" x2="50" y2="7" stroke-width="0"/>
+        </g>
+        <!-- Marcas de hora -->
+        <g class="marca-hora">
+          <line x1="50" y1="5" x2="50" y2="10"/>
+          <line x1="73" y1="11.1" x2="70.5" y2="15.4"/>
+          <line x1="89" y1="27" x2="84.6" y2="29.5"/>
+          <line x1="95" y1="50" x2="90" y2="50"/>
+          <line x1="89" y1="73" x2="84.6" y2="70.5"/>
+          <line x1="73" y1="88.9" x2="70.5" y2="84.6"/>
+          <line x1="50" y1="95" x2="50" y2="90"/>
+          <line x1="27" y1="88.9" x2="29.5" y2="84.6"/>
+          <line x1="11" y1="73" x2="15.4" y2="70.5"/>
+          <line x1="5" y1="50" x2="10" y2="50"/>
+          <line x1="11" y1="27" x2="15.4" y2="29.5"/>
+          <line x1="27" y1="11.1" x2="29.5" y2="15.4"/>
+        </g>
+        <!-- Números -->
+        <text class="num" x="50" y="15">12</text>
+        <text class="num" x="67" y="20">1</text>
+        <text class="num" x="80" y="32">2</text>
+        <text class="num" x="85" y="50">3</text>
+        <text class="num" x="80" y="68">4</text>
+        <text class="num" x="67" y="80">5</text>
+        <text class="num" x="50" y="85">6</text>
+        <text class="num" x="33" y="80">7</text>
+        <text class="num" x="20" y="68">8</text>
+        <text class="num" x="15" y="50">9</text>
+        <text class="num" x="20" y="32">10</text>
+        <text class="num" x="33" y="20">11</text>
+        <!-- Centro -->
+        <circle class="centro" cx="50" cy="50" r="2"/>
+      </svg>
+      <div class="agullas">
+        <!-- Agulla curta (horas) -->
+        <svg class="agulla-svg" viewBox="0 0 100 25">
+          <polygon points="5,12.5 10,8 65,11 68,12.5 65,14 10,17" fill="var(--acento)" stroke="var(--acento)" stroke-width="0.5"/>
+          <circle cx="8" cy="12.5" r="3" fill="#fbf7ef" stroke="var(--acento)" stroke-width="1"/>
+        </svg>
+        <!-- Agulla longa (minutos) -->
+        <svg class="agulla-svg" viewBox="0 0 100 25">
+          <polygon points="5,12.5 10,9.5 92,12 95,12.5 92,13 10,15.5" fill="var(--acento)" stroke="var(--acento)" stroke-width="0.5"/>
+          <circle cx="8" cy="12.5" r="3" fill="#fbf7ef" stroke="var(--acento)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="agullas-label">← curta: horas · longa: minutos →</div>
+    </div>
+
+    <!-- EQUIPO 2 -->
+    <div class="cel c2">
+      <div class="eq-label">Equipo 2</div>
+      <svg class="reloxo" viewBox="0 0 100 100">
+        <circle class="cara" cx="50" cy="50" r="46"/>
+        <g class="marca-hora">
+          <line x1="50" y1="5" x2="50" y2="10"/>
+          <line x1="73" y1="11.1" x2="70.5" y2="15.4"/>
+          <line x1="89" y1="27" x2="84.6" y2="29.5"/>
+          <line x1="95" y1="50" x2="90" y2="50"/>
+          <line x1="89" y1="73" x2="84.6" y2="70.5"/>
+          <line x1="73" y1="88.9" x2="70.5" y2="84.6"/>
+          <line x1="50" y1="95" x2="50" y2="90"/>
+          <line x1="27" y1="88.9" x2="29.5" y2="84.6"/>
+          <line x1="11" y1="73" x2="15.4" y2="70.5"/>
+          <line x1="5" y1="50" x2="10" y2="50"/>
+          <line x1="11" y1="27" x2="15.4" y2="29.5"/>
+          <line x1="27" y1="11.1" x2="29.5" y2="15.4"/>
+        </g>
+        <text class="num" x="50" y="15">12</text>
+        <text class="num" x="67" y="20">1</text>
+        <text class="num" x="80" y="32">2</text>
+        <text class="num" x="85" y="50">3</text>
+        <text class="num" x="80" y="68">4</text>
+        <text class="num" x="67" y="80">5</text>
+        <text class="num" x="50" y="85">6</text>
+        <text class="num" x="33" y="80">7</text>
+        <text class="num" x="20" y="68">8</text>
+        <text class="num" x="15" y="50">9</text>
+        <text class="num" x="20" y="32">10</text>
+        <text class="num" x="33" y="20">11</text>
+        <circle class="centro" cx="50" cy="50" r="2"/>
+      </svg>
+      <div class="agullas">
+        <svg class="agulla-svg" viewBox="0 0 100 25">
+          <polygon points="5,12.5 10,8 65,11 68,12.5 65,14 10,17" fill="var(--acento)" stroke="var(--acento)" stroke-width="0.5"/>
+          <circle cx="8" cy="12.5" r="3" fill="#fbf7ef" stroke="var(--acento)" stroke-width="1"/>
+        </svg>
+        <svg class="agulla-svg" viewBox="0 0 100 25">
+          <polygon points="5,12.5 10,9.5 92,12 95,12.5 92,13 10,15.5" fill="var(--acento)" stroke="var(--acento)" stroke-width="0.5"/>
+          <circle cx="8" cy="12.5" r="3" fill="#fbf7ef" stroke="var(--acento)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="agullas-label">← curta: horas · longa: minutos →</div>
+    </div>
+
+    <!-- EQUIPO 3 -->
+    <div class="cel c3">
+      <div class="eq-label">Equipo 3</div>
+      <svg class="reloxo" viewBox="0 0 100 100">
+        <circle class="cara" cx="50" cy="50" r="46"/>
+        <g class="marca-hora">
+          <line x1="50" y1="5" x2="50" y2="10"/>
+          <line x1="73" y1="11.1" x2="70.5" y2="15.4"/>
+          <line x1="89" y1="27" x2="84.6" y2="29.5"/>
+          <line x1="95" y1="50" x2="90" y2="50"/>
+          <line x1="89" y1="73" x2="84.6" y2="70.5"/>
+          <line x1="73" y1="88.9" x2="70.5" y2="84.6"/>
+          <line x1="50" y1="95" x2="50" y2="90"/>
+          <line x1="27" y1="88.9" x2="29.5" y2="84.6"/>
+          <line x1="11" y1="73" x2="15.4" y2="70.5"/>
+          <line x1="5" y1="50" x2="10" y2="50"/>
+          <line x1="11" y1="27" x2="15.4" y2="29.5"/>
+          <line x1="27" y1="11.1" x2="29.5" y2="15.4"/>
+        </g>
+        <text class="num" x="50" y="15">12</text>
+        <text class="num" x="67" y="20">1</text>
+        <text class="num" x="80" y="32">2</text>
+        <text class="num" x="85" y="50">3</text>
+        <text class="num" x="80" y="68">4</text>
+        <text class="num" x="67" y="80">5</text>
+        <text class="num" x="50" y="85">6</text>
+        <text class="num" x="33" y="80">7</text>
+        <text class="num" x="20" y="68">8</text>
+        <text class="num" x="15" y="50">9</text>
+        <text class="num" x="20" y="32">10</text>
+        <text class="num" x="33" y="20">11</text>
+        <circle class="centro" cx="50" cy="50" r="2"/>
+      </svg>
+      <div class="agullas">
+        <svg class="agulla-svg" viewBox="0 0 100 25">
+          <polygon points="5,12.5 10,8 65,11 68,12.5 65,14 10,17" fill="var(--acento)" stroke="var(--acento)" stroke-width="0.5"/>
+          <circle cx="8" cy="12.5" r="3" fill="#fbf7ef" stroke="var(--acento)" stroke-width="1"/>
+        </svg>
+        <svg class="agulla-svg" viewBox="0 0 100 25">
+          <polygon points="5,12.5 10,9.5 92,12 95,12.5 92,13 10,15.5" fill="var(--acento)" stroke="var(--acento)" stroke-width="0.5"/>
+          <circle cx="8" cy="12.5" r="3" fill="#fbf7ef" stroke="var(--acento)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="agullas-label">← curta: horas · longa: minutos →</div>
+    </div>
+
+    <!-- EQUIPO 4 -->
+    <div class="cel c4">
+      <div class="eq-label">Equipo 4</div>
+      <svg class="reloxo" viewBox="0 0 100 100">
+        <circle class="cara" cx="50" cy="50" r="46"/>
+        <g class="marca-hora">
+          <line x1="50" y1="5" x2="50" y2="10"/>
+          <line x1="73" y1="11.1" x2="70.5" y2="15.4"/>
+          <line x1="89" y1="27" x2="84.6" y2="29.5"/>
+          <line x1="95" y1="50" x2="90" y2="50"/>
+          <line x1="89" y1="73" x2="84.6" y2="70.5"/>
+          <line x1="73" y1="88.9" x2="70.5" y2="84.6"/>
+          <line x1="50" y1="95" x2="50" y2="90"/>
+          <line x1="27" y1="88.9" x2="29.5" y2="84.6"/>
+          <line x1="11" y1="73" x2="15.4" y2="70.5"/>
+          <line x1="5" y1="50" x2="10" y2="50"/>
+          <line x1="11" y1="27" x2="15.4" y2="29.5"/>
+          <line x1="27" y1="11.1" x2="29.5" y2="15.4"/>
+        </g>
+        <text class="num" x="50" y="15">12</text>
+        <text class="num" x="67" y="20">1</text>
+        <text class="num" x="80" y="32">2</text>
+        <text class="num" x="85" y="50">3</text>
+        <text class="num" x="80" y="68">4</text>
+        <text class="num" x="67" y="80">5</text>
+        <text class="num" x="50" y="85">6</text>
+        <text class="num" x="33" y="80">7</text>
+        <text class="num" x="20" y="68">8</text>
+        <text class="num" x="15" y="50">9</text>
+        <text class="num" x="20" y="32">10</text>
+        <text class="num" x="33" y="20">11</text>
+        <circle class="centro" cx="50" cy="50" r="2"/>
+      </svg>
+      <div class="agullas">
+        <svg class="agulla-svg" viewBox="0 0 100 25">
+          <polygon points="5,12.5 10,8 65,11 68,12.5 65,14 10,17" fill="var(--acento)" stroke="var(--acento)" stroke-width="0.5"/>
+          <circle cx="8" cy="12.5" r="3" fill="#fbf7ef" stroke="var(--acento)" stroke-width="1"/>
+        </svg>
+        <svg class="agulla-svg" viewBox="0 0 100 25">
+          <polygon points="5,12.5 10,9.5 92,12 95,12.5 92,13 10,15.5" fill="var(--acento)" stroke="var(--acento)" stroke-width="0.5"/>
+          <circle cx="8" cy="12.5" r="3" fill="#fbf7ef" stroke="var(--acento)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="agullas-label">← curta: horas · longa: minutos →</div>
+    </div>
+
+  </div>
+
+  <div class="rodape">
+    Suxestión: pegar cada reloxo en <strong>cartón pluma ou goma EVA</strong> antes de recortar, para que dure todo o curso. A chincheta atravesa as dúas agullas + o centro do reloxo.
+  </div>
+</div>
+
+</body>
+</html>

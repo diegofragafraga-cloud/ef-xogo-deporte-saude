@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel do mural · Canto xogamos? · UD9 S9</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 14px 0; }
+
+  .print-hint {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: #5c3a21; color: #fbf7ef;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10; max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef; color: #5c3a21; border: none;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    margin-left: 6px; font-size: 12px; font-weight: 600;
+  }
+
+  .page {
+    width: 210mm; min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 14px auto; padding: 9mm 11mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    background-image:
+      radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%);
+  }
+
+  .head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 3mm; margin-bottom: 4mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .head .tit { font-size: 10pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .head .sub { font-size: 8.5pt; color: #8b5e3c; margin-top: 2px; }
+  .head .nome {
+    font-size: 16pt; color: #5c3a21;
+  }
+
+  .intro {
+    font-size: 9.5pt; color: #6b5b47; line-height: 1.4;
+    margin-bottom: 4mm;
+    padding: 2.5mm 5mm;
+    background: rgba(139,94,60,0.07);
+    border-radius: 2mm;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+  }
+
+  .carton {
+    border: 2.5px solid var(--cor, #8b5e3c);
+    border-radius: 3mm;
+    padding: 4mm 4mm;
+    background: rgba(255,255,255,0.55);
+    position: relative;
+    min-height: 115mm;
+    display: flex;
+    flex-direction: column;
+  }
+  .carton .tag {
+    position: absolute;
+    top: -3mm; left: 4mm;
+    background: var(--cor, #8b5e3c);
+    color: #fbf7ef;
+    padding: 1mm 3.5mm;
+    border-radius: 1.5mm;
+    font-size: 9pt;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .carton h3 {
+    font-size: 13pt;
+    color: var(--cor, #5c3a21);
+    margin: 3mm 0 2.5mm 0;
+    text-align: center;
+    line-height: 1.15;
+  }
+  .carton .tarefa {
+    font-size: 9.5pt;
+    color: #2a2018;
+    line-height: 1.4;
+    margin-bottom: 3mm;
+    padding-bottom: 2.5mm;
+    border-bottom: 1.5px dashed #c9a987;
+  }
+  .carton .tarefa .lbl {
+    display: block;
+    font-size: 8.5pt;
+    color: var(--cor, #8b5e3c);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1mm;
+  }
+  .carton .contido {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .liñas-escribir {
+    display: flex;
+    flex-direction: column;
+    gap: 5.5mm;
+    padding: 1mm 0;
+  }
+  .liñas-escribir .liña {
+    border-bottom: 1.5px solid var(--cor-liña, #8b5e3c);
+    height: 1px;
+  }
+
+  .datos-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+    font-size: 10pt;
+    color: #2a2018;
+  }
+  .datos-inline .item {
+    display: flex;
+    align-items: baseline;
+    gap: 2.5mm;
+  }
+  .datos-inline .item .lbl-d {
+    color: var(--cor, #5c3a21);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .datos-inline .item .liña {
+    flex: 1;
+    border-bottom: 1.5px solid var(--cor, #8b5e3c);
+    height: 5mm;
+  }
+
+  /* Equipo 1: vermello */
+  .c1 { --cor: #a63824; --cor-liña: #a63824; }
+  /* Equipo 2: azul */
+  .c2 { --cor: #1f4e79; --cor-liña: #1f4e79; }
+  /* Equipo 3: verde */
+  .c3 { --cor: #5b7c2a; --cor-liña: #5b7c2a; }
+  /* Equipo 4: dourado */
+  .c4 { --cor: #8b6508; --cor-liña: #8b6508; }
+
+  .mini-svg {
+    display: flex; justify-content: center;
+    margin: 2mm 0;
+    opacity: 0.85;
+  }
+  .mini-svg svg { width: 40px; height: 40px; }
+
+  .barras-demo {
+    display: flex; flex-direction: column; gap: 2mm;
+    margin: 2mm 0 3mm 0;
+    padding: 2mm 3mm;
+    background: rgba(255,255,255,0.5);
+    border: 1.5px dashed #c9a987;
+    border-radius: 2mm;
+  }
+  .barras-demo .b {
+    display: flex; align-items: center; gap: 2mm;
+    font-size: 8.5pt;
+    color: #2a2018;
+  }
+  .barras-demo .b .etiq { width: 15mm; font-weight: 700; color: #1f4e79; }
+  .barras-demo .b.verde .etiq { color: #5b7c2a; }
+  .barras-demo .b .bar {
+    height: 5mm;
+    border-radius: 1mm;
+  }
+  .barras-demo .b.azul .bar {
+    background: linear-gradient(90deg, #1f4e79, #4a7aa8);
+    width: 75%;
+  }
+  .barras-demo .b.verde .bar {
+    background: linear-gradient(90deg, #5b7c2a, #89a859);
+    width: 50%;
+  }
+
+  .rodape {
+    margin-top: 4mm;
+    text-align: center;
+    font-size: 9pt;
+    color: #8b5e3c;
+    font-style: italic;
+    padding-top: 2.5mm;
+    border-top: 1.5px dashed #c9a987;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0; box-shadow: none;
+      min-height: auto; height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .carton, .carton .tag, .barras-demo .b .bar {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P &rarr; activar <strong>"Imprimir gráficos de fondo"</strong> para as cores.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="sub">UD9 · Sesión 9 · Guía para construír o panel do mural SdA "Canto xogamos?"</div>
+    </div>
+    <div class="nome">Panel do mural · Canto xogamos?</div>
+  </div>
+
+  <div class="intro">
+    Cada equipo constrúe un cartón do panel. Cando estean os 4 rematados, péganse xuntos no mural para a avoa Carmela.
+  </div>
+
+  <div class="grid">
+
+    <!-- EQUIPO 1 -->
+    <div class="carton c1">
+      <div class="tag">Equipo 1</div>
+      <h3>Os datos individuais</h3>
+      <div class="tarefa">
+        <span class="lbl">Tarefa</span>
+        Pega as vosas cifras persoais (pantalla / xogo / diferenza) do Caderniño. Engade o voso nome e decoración.
+      </div>
+      <div class="contido">
+        <div class="liñas-escribir">
+          <div class="liña"></div>
+          <div class="liña"></div>
+          <div class="liña"></div>
+          <div class="liña"></div>
+          <div class="liña"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EQUIPO 2 -->
+    <div class="carton c2">
+      <div class="tag">Equipo 2</div>
+      <h3>A gran barra da clase</h3>
+      <div class="tarefa">
+        <span class="lbl">Tarefa</span>
+        Debuxade dúas grandes barras de papel de cores: unha <strong>azul</strong> coa suma TOTAL de min de pantalla da clase, outra <strong>verde</strong> co TOTAL de xogo. A máis longa gaña.
+      </div>
+      <div class="contido">
+        <div class="barras-demo">
+          <div class="b azul"><span class="etiq">Pantalla</span><div class="bar"></div></div>
+          <div class="b verde"><span class="etiq">Xogo</span><div class="bar"></div></div>
+        </div>
+        <div class="datos-inline">
+          <div class="item"><span class="lbl-d">Pantalla clase:</span><span class="liña"></span><span>min</span></div>
+          <div class="item"><span class="lbl-d">Xogo clase:</span><span class="liña"></span><span>min</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EQUIPO 3 -->
+    <div class="carton c3">
+      <div class="tag">Equipo 3</div>
+      <h3>A billarda da clase</h3>
+      <div class="tarefa">
+        <span class="lbl">Tarefa</span>
+        Lembrade a S6: xogamos <strong>60 min</strong> en total á billarda. Facede un cartel coa palabra BILLARDA en grande, os 60 min e unha foto/debuxo da actividade.
+      </div>
+      <div class="contido">
+        <div class="mini-svg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5b7c2a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="21" x2="21" y2="3"/>
+            <line x1="5" y1="11" x2="14" y2="11"/>
+            <circle cx="3" cy="21" r="0.9" fill="#5b7c2a"/>
+            <circle cx="21" cy="3" r="0.9" fill="#5b7c2a"/>
+            <circle cx="5" cy="11" r="0.9" fill="#5b7c2a"/>
+            <circle cx="14" cy="11" r="0.9" fill="#5b7c2a"/>
+          </svg>
+        </div>
+        <div class="datos-inline">
+          <div class="item"><span class="lbl-d">Billarda:</span><span class="liña"></span><span>min</span></div>
+          <div class="item"><span class="lbl-d">Por equipo:</span><span class="liña"></span><span>min</span></div>
+          <div class="item"><span class="lbl-d">Rondas:</span><span class="liña"></span><span>(3)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EQUIPO 4 -->
+    <div class="carton c4">
+      <div class="tag">Equipo 4</div>
+      <h3>As nosas conclusións</h3>
+      <div class="tarefa">
+        <span class="lbl">Tarefa</span>
+        Escribide 2 ou 3 frases sobre o que aprendemos. Pistas: a sorpresa que descubristes, a cousa máis difícil, a máis divertida.
+      </div>
+      <div class="contido">
+        <div class="liñas-escribir">
+          <div class="liña"></div>
+          <div class="liña"></div>
+          <div class="liña"></div>
+          <div class="liña"></div>
+          <div class="liña"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="rodape">
+    ✦ Panel nº 1 de 4 do mural SdA · construción do 8 maio · para a avoa Carmela ✦
+  </div>
+</div>
+
+</body>
+</html>

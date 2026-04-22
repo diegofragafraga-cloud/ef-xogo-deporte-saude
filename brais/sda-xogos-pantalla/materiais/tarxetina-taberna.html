@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarxetiña da taberna · UD9 S5 · A avoa ensina "menos cuarto"</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 14px 0; }
+
+  /* Amarelo/ouro como acento desta tarxetiña */
+  :root {
+    --acento: #b8860b;
+    --acento-fondo: rgba(251,232,184,0.55);
+  }
+
+  .print-hint {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: #5c3a21; color: #fbf7ef;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10; max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef; color: #5c3a21; border: none;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    margin-left: 6px; font-size: 12px; font-weight: 600;
+  }
+
+  .page {
+    width: 210mm; min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 14px auto; padding: 10mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    background-image:
+      radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%);
+  }
+
+  .head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 4mm; margin-bottom: 6mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .head .tit { font-size: 10pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .head .sub { font-size: 8.5pt; color: #8b5e3c; margin-top: 2px; }
+  .head .nome {
+    font-size: 17pt; color: #5c3a21;
+  }
+
+  .intro {
+    font-size: 10pt; color: #6b5b47; line-height: 1.45;
+    text-align: center; margin-bottom: 7mm;
+    padding: 4mm 8mm; background: rgba(139,94,60,0.06);
+    border-radius: 3mm; font-style: italic;
+  }
+
+  .tarxetas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6mm;
+  }
+
+  .carta {
+    border: 2.5px dashed #8b5e3c;
+    border-radius: 3mm;
+    padding: 5mm;
+    min-height: 95mm;
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.55);
+    position: relative;
+  }
+  .carta.destaque {
+    border: 3px solid var(--acento);
+    background: linear-gradient(135deg, var(--acento-fondo), rgba(255,250,240,0.9));
+  }
+
+  .carta .lumbre {
+    position: absolute; top: 3mm; right: 4mm;
+    font-size: 7.5pt; color: var(--acento); font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .carta .numero {
+    position: absolute; top: 3mm; left: 4mm;
+    font-size: 8.5pt; color: #b89574; font-weight: 700;
+  }
+  .carta .hora {
+    font-size: 24pt;
+    color: var(--acento);
+    text-align: center;
+    line-height: 1.1;
+    margin-top: 5mm;
+  }
+  .carta .icono {
+    display: flex; justify-content: center; align-items: center;
+    margin: 3mm 0 3mm 0;
+    color: var(--acento);
+  }
+  .carta .icono svg { width: 60px; height: 60px; }
+  .carta .actividade {
+    font-size: 14pt;
+    color: #2a2018;
+    text-align: center;
+    line-height: 1.3;
+    padding: 0 4mm;
+  }
+  .carta .selo {
+    margin-top: auto;
+    font-size: 8.5pt; color: #b89574;
+    font-style: italic;
+  }
+
+  .reloxo-demo {
+    margin-top: 2mm;
+  }
+  .reloxo-demo svg { width: 110px; height: 110px; }
+
+  .nota {
+    margin-top: 6mm;
+    padding: 4mm 6mm;
+    border: 2px solid var(--acento);
+    border-radius: 3mm;
+    background: var(--acento-fondo);
+    font-size: 10pt;
+    color: #5c3a21;
+    line-height: 1.55;
+  }
+  .nota strong { color: var(--acento); }
+
+  .corpo {
+    margin: 5mm 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+    align-items: center;
+  }
+  .corpo .bloque {
+    padding: 4mm 5mm;
+    border: 1.5px dashed #c9a987;
+    border-radius: 3mm;
+    background: rgba(255,255,255,0.5);
+    font-size: 10pt;
+    color: #5c3a21;
+    line-height: 1.45;
+    text-align: center;
+  }
+  .corpo .bloque .regra { font-size: 12pt; color: var(--acento); font-weight: 700; margin-bottom: 2mm; }
+
+  .rodape {
+    margin-top: 7mm;
+    text-align: center;
+    font-size: 9pt;
+    color: #8b5e3c;
+    font-style: italic;
+    padding-top: 3mm;
+    border-top: 1.5px dashed #c9a987;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0; box-shadow: none;
+      min-height: auto; height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .carta { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P → activar <strong>"Imprimir gráficos de fondo"</strong> para as cores.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="sub">UD9 · Sesión 5 · A avoa ensina algo novo: "menos cuarto"</div>
+    </div>
+    <div class="nome">Tarxetiña da taberna</div>
+  </div>
+
+  <div class="intro">
+    A avoa Carmela engade outra tarxetiña. Agora aprende algo curioso: as horas que <strong>aínda non chegaron</strong>. Dise <strong>"menos cuarto"</strong>. Ti tamén podes imprimila (esquerda) ou crear a túa propia tarxetiña de merenda especial (dereita).
+  </div>
+
+  <div class="tarxetas">
+
+    <div class="carta destaque">
+      <div class="numero">11</div>
+      <div class="lumbre">Nova!</div>
+      <div class="hora">Ás 4 menos cuarto</div>
+      <div class="icono">
+        <!-- Cunca de taberna sobre mesa -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <!-- vapor -->
+          <path d="M9 3c0 1 1 1 1 2s-1 1-1 2" opacity="0.7"/>
+          <path d="M12 3c0 1 1 1 1 2s-1 1-1 2" opacity="0.7"/>
+          <path d="M15 3c0 1 1 1 1 2s-1 1-1 2" opacity="0.7"/>
+          <!-- cunca -->
+          <path d="M5 9h13v5a4 4 0 0 1-4 4h-5a4 4 0 0 1-4-4z" fill="#f6e4b6" stroke="currentColor"/>
+          <path d="M18 10h2a2 2 0 0 1 0 4h-2" fill="#f6e4b6" stroke="currentColor"/>
+          <!-- mesa -->
+          <line x1="3" y1="20" x2="21" y2="20" stroke-width="2"/>
+          <line x1="7" y1="20" x2="6" y2="23"/>
+          <line x1="17" y1="20" x2="18" y2="23"/>
+        </svg>
+      </div>
+      <div class="actividade">Merendo cos veciños<br>na taberna</div>
+      <div class="reloxo-demo">
+        <!-- Reloxo: agulla longa no 9 (menos cuarto), curta case no 4 -->
+        <svg viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+          <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+          <text x="50" y="20" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+          <text x="82" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+          <text x="50" y="89" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+          <text x="18" y="54" text-anchor="middle" font-size="12" font-family="Comic Sans MS" fill="#b8860b" font-weight="bold" stroke="none">9</text>
+          <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+          <!-- agulla curta (horas) cara ao 4 pero aínda sen chegar -->
+          <line x1="50" y1="50" x2="66" y2="58" stroke="#5c3a21" stroke-width="3" stroke-linecap="round"/>
+          <!-- agulla longa (minutos) no 9 -->
+          <line x1="50" y1="50" x2="18" y2="50" stroke="#b8860b" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="selo">avoa Carmela</div>
+    </div>
+
+    <div class="carta">
+      <div class="numero">12</div>
+      <div class="hora">_______</div>
+      <div class="icono">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 4l2 2-2 2M18 4l-2 2 2 2M12 2v3M4 12h3M17 12h3M12 19v3" opacity="0.4"/>
+          <circle cx="12" cy="12" r="5" stroke-dasharray="2,2"/>
+        </svg>
+      </div>
+      <div class="actividade">_______________________<br>_______________________<br>(a miña merenda especial<br>+ a hora "menos cuarto")</div>
+      <div class="reloxo-demo">
+        <svg viewBox="0 0 100 100" fill="none" stroke="#8b5e3c" stroke-width="2">
+          <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#8b5e3c" stroke-width="3"/>
+          <text x="50" y="20" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#8b5e3c" stroke="none">12</text>
+          <text x="82" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#8b5e3c" stroke="none">3</text>
+          <text x="50" y="89" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#8b5e3c" stroke="none">6</text>
+          <text x="18" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#8b5e3c" stroke="none">9</text>
+          <circle cx="50" cy="50" r="2.5" fill="#8b5e3c" stroke="none"/>
+        </svg>
+      </div>
+      <div class="selo">a miña merenda especial</div>
+    </div>
+
+  </div>
+
+  <div class="nota">
+    <strong>Pista para a mestra:</strong> a tarxetiña da esquerda <em>pega</em>-se no mural na columna <em>"A vida da avoa Carmela"</em> despois do <strong>momento 3 da S5</strong>. A da dereita é opcional: úsaa como reto para quen acabe antes o Quenquicálculo, ou como misión para a casa (debuxar unha merenda especial con hora "menos cuarto").
+  </div>
+
+  <div class="corpo">
+    <div class="bloque">
+      <div class="regra">Xa sabemos…</div>
+      Agulla longa no <strong>12</strong> → en punto<br>
+      Agulla longa no <strong>6</strong> → e media<br>
+      Agulla longa no <strong>3</strong> → e cuarto
+    </div>
+    <div class="bloque" style="border-color: #b8860b; background: rgba(251,232,184,0.55);">
+      <div class="regra">Cando a agulla longa está no 9…</div>
+      aínda lle falta un <strong>cuarto</strong> para chegar á seguinte hora
+    </div>
+  </div>
+
+  <div class="rodape">
+    ✦ Tarxetiña nova da axenda da avoa Carmela · UD9 · Sesión 5 ✦
+  </div>
+</div>
+
+</body>
+</html>

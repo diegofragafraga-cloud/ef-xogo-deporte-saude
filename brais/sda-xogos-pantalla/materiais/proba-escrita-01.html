@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proba Escrita 1 · UD9 S9 · Detective dos tempos</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 14px 0; }
+
+  .print-hint {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: #5c3a21; color: #fbf7ef;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10; max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef; color: #5c3a21; border: none;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    margin-left: 6px; font-size: 12px; font-weight: 600;
+  }
+
+  .page {
+    width: 210mm; min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 14px auto; padding: 9mm 12mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    page-break-after: always;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%);
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 3mm; margin-bottom: 4mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .head .tit { font-size: 10pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .head .sub { font-size: 8.5pt; color: #8b5e3c; margin-top: 2px; }
+  .head .nome {
+    font-size: 15pt; color: #5c3a21;
+  }
+
+  .datos {
+    display: flex; gap: 4mm; margin-bottom: 4mm;
+    font-size: 9.5pt; color: #5c3a21;
+    padding: 2.5mm 4mm;
+    background: rgba(139,94,60,0.10);
+    border-radius: 2mm;
+  }
+  .datos .campo { flex: 1; display: flex; align-items: baseline; gap: 2mm; }
+  .datos .lbl { font-weight: 700; }
+  .datos .liña {
+    flex: 1; border-bottom: 1.5px solid #8b5e3c; height: 5mm;
+  }
+
+  .intro {
+    font-size: 10pt; color: #6b5b47; line-height: 1.45;
+    text-align: center; margin-bottom: 5mm;
+    padding: 3mm 6mm; background: rgba(184,216,154,0.25);
+    border: 1.5px dashed #5b7c2a;
+    border-radius: 3mm; font-style: italic;
+  }
+
+  .ex {
+    margin-bottom: 4.5mm;
+    padding: 3mm 4mm;
+    border: 2px solid #8b5e3c;
+    border-radius: 3mm;
+    background: rgba(255,255,255,0.55);
+    position: relative;
+  }
+  .ex .cabeceira {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 2mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 1.5px dashed #c9a987;
+  }
+  .ex .numero {
+    font-size: 12pt;
+    color: #5c3a21;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .ex .numero span { color: #a63824; }
+  .ex .puntos {
+    font-size: 9.5pt;
+    color: #8b6508;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .ex .enunciado {
+    font-size: 10pt;
+    color: #2a2018;
+    line-height: 1.45;
+    margin-bottom: 2.5mm;
+  }
+
+  /* EXERCICIO 1: reloxos */
+  .reloxos {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4mm;
+  }
+  .reloxos .r-item {
+    text-align: center;
+  }
+  .reloxos .r-item .lbl {
+    font-size: 10pt;
+    color: #1f4e79;
+    font-weight: 700;
+    margin-bottom: 1mm;
+  }
+  .reloxos .r-item svg {
+    width: 40mm;
+    height: 40mm;
+  }
+  .reloxos .r-item .resposta {
+    margin-top: 2mm;
+    font-size: 9pt;
+    color: #5c3a21;
+  }
+  .reloxos .r-item .resposta .liña {
+    display: inline-block;
+    width: 80%;
+    border-bottom: 1.5px solid #8b5e3c;
+    height: 5mm;
+  }
+  .reloxos .r-item .resposta .pto {
+    display: block;
+    font-size: 8.5pt;
+    color: #8b6508;
+    margin-top: 1mm;
+    font-style: italic;
+  }
+
+  /* EXERCICIO 2: dixital */
+  .dixital {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+  }
+  .dixital .d-item {
+    padding: 3mm 4mm;
+    border: 1.5px dashed #c9a987;
+    border-radius: 2mm;
+    background: rgba(255,255,255,0.5);
+    font-size: 11pt;
+    color: #2a2018;
+    text-align: center;
+  }
+  .dixital .d-item .flecha {
+    display: inline-block;
+    margin: 0 3mm;
+    color: #a63824;
+    font-weight: 700;
+  }
+  .dixital .d-item .digital-box {
+    display: inline-block;
+    padding: 1mm 3mm;
+    background: #2a2018;
+    color: #b8d99a;
+    border-radius: 1.5mm;
+    font-family: "Courier New", monospace;
+    font-size: 14pt;
+    letter-spacing: 0.1em;
+    margin-top: 1mm;
+  }
+
+  /* EXERCICIO 3: problemas */
+  .problema {
+    margin-bottom: 3mm;
+  }
+  .problema .enun {
+    font-size: 10pt;
+    color: #2a2018;
+    margin-bottom: 2mm;
+    line-height: 1.45;
+  }
+  .problema .enun .sub-pto {
+    font-size: 9pt;
+    color: #8b6508;
+    font-style: italic;
+  }
+  .problema .recadro {
+    border: 1.5px dashed #c9a987;
+    border-radius: 2mm;
+    background: rgba(255,255,255,0.6);
+    height: 22mm;
+    padding: 2mm 3mm;
+  }
+
+  /* EXERCICIO 4: unidades */
+  .unidades {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+  }
+  .unidades .u-item {
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+    padding: 3mm 4mm;
+    border: 1.5px dashed #c9a987;
+    border-radius: 2mm;
+    background: rgba(255,255,255,0.5);
+    font-size: 10.5pt;
+    color: #2a2018;
+  }
+  .unidades .u-item .liña {
+    flex: 1;
+    border-bottom: 1.5px solid #8b5e3c;
+    height: 6mm;
+  }
+  .unidades .u-item .pto {
+    font-size: 8.5pt;
+    color: #8b6508;
+    font-style: italic;
+    white-space: nowrap;
+  }
+
+  /* Como te sentiches */
+  .sentiches {
+    margin-top: 5mm;
+    padding: 4mm 5mm;
+    border: 2px solid #b8860b;
+    border-radius: 3mm;
+    background: rgba(251,232,184,0.3);
+    text-align: center;
+  }
+  .sentiches h4 {
+    font-size: 10.5pt;
+    color: #8b6508;
+    margin-bottom: 3mm;
+  }
+  .sentiches .caritas {
+    display: flex; justify-content: center; gap: 10mm;
+  }
+  .sentiches .caritas .c {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 1mm;
+  }
+  .sentiches .caritas svg {
+    width: 20mm; height: 20mm;
+  }
+  .sentiches .caritas .nome {
+    font-size: 9pt;
+    color: #5c3a21;
+  }
+
+  .rodape {
+    margin-top: 5mm;
+    text-align: center;
+    font-size: 9pt;
+    color: #8b5e3c;
+    font-style: italic;
+    padding-top: 2.5mm;
+    border-top: 1.5px dashed #c9a987;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0; box-shadow: none;
+      min-height: auto; height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .ex, .dixital .d-item, .problema .recadro, .unidades .u-item, .sentiches, .datos {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P &rarr; activar <strong>"Imprimir gráficos de fondo"</strong> para as cores.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="sub">UD9 · Sesión 9 · Proba Escrita 1 (13% da UD9)</div>
+    </div>
+    <div class="nome">Detective dos tempos · Proba final UD9</div>
+  </div>
+
+  <div class="datos">
+    <div class="campo"><span class="lbl">Detective:</span><span class="liña"></span></div>
+    <div class="campo"><span class="lbl">Data:</span><span class="liña"></span></div>
+    <div class="campo"><span class="lbl">Puntuación:</span><span class="liña"></span></div>
+  </div>
+
+  <div class="intro">
+    É unha proba curtiña para mostrar todo o que aprendiches. Ten <strong>15 minutos</strong>. Os bloques multibase están ao teu lado se os precisas.
+  </div>
+
+  <!-- EXERCICIO 1 -->
+  <div class="ex">
+    <div class="cabeceira">
+      <div class="numero">Exercicio <span>1</span> · Le e escribe a hora</div>
+      <div class="puntos">3 puntos</div>
+    </div>
+    <div class="enunciado">Mira cada reloxo e escribe embaixo a hora en palabras.</div>
+    <div class="reloxos">
+
+      <div class="r-item">
+        <div class="lbl">Reloxo A</div>
+        <svg viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+          <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+          <text x="50" y="20" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+          <text x="82" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+          <text x="50" y="89" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+          <text x="18" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+          <!-- marcas cada hora -->
+          <g stroke="#8b5e3c" stroke-width="1.2">
+            <line x1="50" y1="8" x2="50" y2="14"/>
+            <line x1="50" y1="86" x2="50" y2="92"/>
+            <line x1="8" y1="50" x2="14" y2="50"/>
+            <line x1="86" y1="50" x2="92" y2="50"/>
+          </g>
+          <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+          <!-- agulla curta no 7 -->
+          <line x1="50" y1="50" x2="29" y2="71" stroke="#5c3a21" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- agulla longa no 12 -->
+          <line x1="50" y1="50" x2="50" y2="16" stroke="#a63824" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="resposta">
+          <span class="liña"></span>
+          <span class="pto">(1 pto)</span>
+        </div>
+      </div>
+
+      <div class="r-item">
+        <div class="lbl">Reloxo B</div>
+        <svg viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+          <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+          <text x="50" y="20" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+          <text x="82" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+          <text x="50" y="89" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+          <text x="18" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+          <g stroke="#8b5e3c" stroke-width="1.2">
+            <line x1="50" y1="8" x2="50" y2="14"/>
+            <line x1="50" y1="86" x2="50" y2="92"/>
+            <line x1="8" y1="50" x2="14" y2="50"/>
+            <line x1="86" y1="50" x2="92" y2="50"/>
+          </g>
+          <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+          <!-- agulla curta entre 3 e 4 -->
+          <line x1="50" y1="50" x2="70" y2="61" stroke="#5c3a21" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- agulla longa no 6 -->
+          <line x1="50" y1="50" x2="50" y2="84" stroke="#a63824" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="resposta">
+          <span class="liña"></span>
+          <span class="pto">(1 pto)</span>
+        </div>
+      </div>
+
+      <div class="r-item">
+        <div class="lbl">Reloxo C</div>
+        <svg viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+          <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+          <text x="50" y="20" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+          <text x="82" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+          <text x="50" y="89" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+          <text x="18" y="54" text-anchor="middle" font-size="10" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+          <g stroke="#8b5e3c" stroke-width="1.2">
+            <line x1="50" y1="8" x2="50" y2="14"/>
+            <line x1="50" y1="86" x2="50" y2="92"/>
+            <line x1="8" y1="50" x2="14" y2="50"/>
+            <line x1="86" y1="50" x2="92" y2="50"/>
+          </g>
+          <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+          <!-- agulla curta case no 10 -->
+          <line x1="50" y1="50" x2="30" y2="37" stroke="#5c3a21" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- agulla longa no 9 -->
+          <line x1="50" y1="50" x2="16" y2="50" stroke="#a63824" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="resposta">
+          <span class="liña"></span>
+          <span class="pto">(1 pto)</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EXERCICIO 2 -->
+  <div class="ex">
+    <div class="cabeceira">
+      <div class="numero">Exercicio <span>2</span> · Pasa ao reloxo do móbil (dixital)</div>
+      <div class="puntos">2 puntos</div>
+    </div>
+    <div class="enunciado">Escribe a hora como aparece nun móbil. Cada unha vale 1 pto.</div>
+    <div class="dixital">
+      <div class="d-item">
+        a) 8 e cuarto <span class="flecha">&rarr;</span> <span class="digital-box">__ : __</span>
+      </div>
+      <div class="d-item">
+        b) 5 menos cuarto <span class="flecha">&rarr;</span> <span class="digital-box">__ : __</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXERCICIO 3 -->
+  <div class="ex">
+    <div class="cabeceira">
+      <div class="numero">Exercicio <span>3</span> · Problemas con tempo</div>
+      <div class="puntos">3 puntos</div>
+    </div>
+
+    <div class="problema">
+      <div class="enun">
+        <strong>a)</strong> Marta xogou á billarda <strong>37 min</strong> pola mañá e <strong>28 min</strong> pola tarde. Cantos minutos xogou en total? Escribe a suma aquí: <span class="sub-pto">(1,5 pto)</span>
+      </div>
+      <div class="recadro"></div>
+    </div>
+
+    <div class="problema">
+      <div class="enun">
+        <strong>b)</strong> Xoán viu <strong>55 min</strong> de pantalla e xogou <strong>38 min</strong>. Cantos minutos máis viu de pantalla que xogou? Escribe a resta aquí: <span class="sub-pto">(1,5 pto)</span>
+      </div>
+      <div class="recadro"></div>
+    </div>
+  </div>
+
+  <!-- EXERCICIO 4 -->
+  <div class="ex">
+    <div class="cabeceira">
+      <div class="numero">Exercicio <span>4</span> · Unidades do tempo</div>
+      <div class="puntos">2 puntos</div>
+    </div>
+    <div class="unidades">
+      <div class="u-item">
+        <span><strong>a)</strong> Cantos días ten unha semana?</span>
+        <span class="liña"></span>
+        <span class="pto">(1 pto)</span>
+      </div>
+      <div class="u-item">
+        <span><strong>b)</strong> Cantos meses ten un ano?</span>
+        <span class="liña"></span>
+        <span class="pto">(1 pto)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARITAS -->
+  <div class="sentiches">
+    <h4>Como te sentiches facendo esta proba? Rodea:</h4>
+    <div class="caritas">
+      <div class="c">
+        <svg viewBox="0 0 60 60" fill="#b8d99a" stroke="#2d4510" stroke-width="2">
+          <circle cx="30" cy="30" r="26"/>
+          <circle cx="22" cy="25" r="2.5" fill="#2d4510"/>
+          <circle cx="38" cy="25" r="2.5" fill="#2d4510"/>
+          <path d="M20 36 Q 30 46, 40 36" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="nome">Feliz</div>
+      </div>
+      <div class="c">
+        <svg viewBox="0 0 60 60" fill="#fbe8b8" stroke="#8b6508" stroke-width="2">
+          <circle cx="30" cy="30" r="26"/>
+          <circle cx="22" cy="25" r="2.5" fill="#8b6508"/>
+          <circle cx="38" cy="25" r="2.5" fill="#8b6508"/>
+          <line x1="20" y1="40" x2="40" y2="40" stroke-linecap="round"/>
+        </svg>
+        <div class="nome">Normal</div>
+      </div>
+      <div class="c">
+        <svg viewBox="0 0 60 60" fill="#f7d6c8" stroke="#a63824" stroke-width="2">
+          <circle cx="30" cy="30" r="26"/>
+          <circle cx="22" cy="25" r="2.5" fill="#a63824"/>
+          <circle cx="38" cy="25" r="2.5" fill="#a63824"/>
+          <path d="M20 44 Q 30 34, 40 44" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="nome">Triste</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rodape">
+    ✦ Detectives dos Xogos Tradicionais · UD9 · Medida do tempo · 8 maio 2026 ✦
+  </div>
+</div>
+
+</body>
+</html>

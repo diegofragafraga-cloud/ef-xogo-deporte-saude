@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escudos dos Equipos Detectives · 2º Pri</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 20px 0; }
+
+  .print-hint {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: #5c3a21;
+    color: #fbf7ef;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+    max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef;
+    color: #5c3a21;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 20px auto;
+    padding: 14mm 14mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    page-break-after: always;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%);
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* Acentos de cor por equipo */
+  .page.e1 { --acento: #5b7c2a; --acento-soft: #e8efd3; }
+  .page.e2 { --acento: #1f4e79; --acento-soft: #d9e4f0; }
+  .page.e3 { --acento: #a63824; --acento-soft: #f3d9d0; }
+  .page.e4 { --acento: #b8860b; --acento-soft: #f3e7c4; }
+
+  /* Cabeceira */
+  .ficha-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8mm;
+    padding-bottom: 4mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .ficha-head .titulo-grupo {
+    font-size: 11pt;
+    color: #5c3a21;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .ficha-head .subtitulo {
+    font-size: 9pt;
+    color: #8b5e3c;
+    margin-top: 2px;
+  }
+  .numero-equipo {
+    width: 18mm;
+    height: 18mm;
+    border: 3px solid var(--acento);
+    background: var(--acento-soft);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22pt;
+    font-weight: 700;
+    color: var(--acento);
+    line-height: 1;
+  }
+
+  /* Título grande */
+  .titulo-principal {
+    text-align: center;
+    font-size: 18pt;
+    color: var(--acento);
+    margin-bottom: 2mm;
+    letter-spacing: 0.03em;
+  }
+  .subtitulo-principal {
+    text-align: center;
+    font-size: 10pt;
+    color: #8b5e3c;
+    margin-bottom: 5mm;
+    font-style: italic;
+  }
+
+  /* Escudo central (recadro ornamentado) */
+  .escudo {
+    border: 4px double var(--acento);
+    background: rgba(255,255,255,0.4);
+    padding: 6mm 8mm;
+    border-radius: 6mm;
+    position: relative;
+    margin-bottom: 6mm;
+  }
+  .escudo::before, .escudo::after {
+    content: "✦";
+    position: absolute;
+    color: var(--acento);
+    font-size: 14pt;
+    top: -10px;
+    background: #fbf7ef;
+    padding: 0 6px;
+  }
+  .escudo::before { left: 10mm; }
+  .escudo::after { right: 10mm; }
+
+  .campo {
+    margin-bottom: 4mm;
+  }
+  .campo-label {
+    font-size: 10pt;
+    font-weight: 700;
+    color: var(--acento);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.5mm;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .campo-label svg {
+    width: 14px;
+    height: 14px;
+  }
+  .liña {
+    border-bottom: 1.5px dotted #8b5e3c;
+    height: 8mm;
+    width: 100%;
+  }
+  .liña-corta { width: 60%; }
+
+  .detectives {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 4mm 6mm;
+    align-items: center;
+  }
+  .detectives .num {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--acento);
+    text-align: center;
+  }
+  .detectives .liña { height: 7mm; margin: 0; }
+
+  /* Roles rotativos */
+  .roles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm 8mm;
+    margin-bottom: 6mm;
+  }
+  .rol {
+    display: grid;
+    grid-template-columns: 22px auto 1fr;
+    gap: 4mm;
+    align-items: center;
+  }
+  .rol .icon {
+    width: 22px;
+    height: 22px;
+    background: var(--acento-soft);
+    border: 2px solid var(--acento);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rol .icon svg {
+    width: 12px;
+    height: 12px;
+    color: var(--acento);
+  }
+  .rol .rol-nome {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #5c3a21;
+  }
+  .rol .liña {
+    height: 6mm;
+    border-bottom: 1.3px dotted #8b5e3c;
+  }
+
+  /* Lema */
+  .lema-caixa {
+    background: var(--acento-soft);
+    border-left: 4px solid var(--acento);
+    padding: 3mm 5mm;
+    border-radius: 2mm;
+    margin-bottom: 5mm;
+  }
+  .lema-quote {
+    font-size: 10pt;
+    color: var(--acento);
+    font-weight: 700;
+    margin-bottom: 2mm;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .lema-quote svg {
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+  .lema-liña {
+    border-bottom: 1.5px dotted #8b5e3c;
+    height: 10mm;
+    width: 100%;
+  }
+
+  /* Símbolo (recadro debuxo) */
+  .simbolo {
+    display: flex;
+    gap: 5mm;
+    margin-bottom: 4mm;
+  }
+  .simbolo-caixa {
+    width: 45mm;
+    height: 45mm;
+    border: 2px dashed #8b5e3c;
+    background: rgba(255,255,255,0.5);
+    border-radius: 3mm;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .simbolo-caixa::before {
+    content: "✎";
+    position: absolute;
+    top: 2mm;
+    right: 2mm;
+    color: #cbb38a;
+    font-size: 12pt;
+  }
+  .simbolo-texto {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .simbolo-titulo {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--acento);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 2mm;
+  }
+  .simbolo-desc {
+    font-size: 9pt;
+    color: #6b5b47;
+    line-height: 1.4;
+  }
+
+  /* Selo inferior */
+  .selo-rodape {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5mm;
+    border-top: 2px dashed #8b5e3c;
+  }
+  .selo-oficial {
+    display: flex;
+    align-items: center;
+    gap: 3mm;
+  }
+  .selo-circle {
+    width: 20mm;
+    height: 20mm;
+    border: 2.5px solid var(--acento);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-8deg);
+    background: rgba(255,255,255,0.4);
+    padding: 2mm;
+    text-align: center;
+  }
+  .selo-circle .selo-titulo {
+    font-size: 6.5pt;
+    color: var(--acento);
+    font-weight: 700;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .selo-circle .selo-num {
+    font-size: 13pt;
+    color: var(--acento);
+    font-weight: 700;
+    line-height: 1;
+    margin: 1mm 0;
+  }
+  .selo-circle .selo-subtitulo {
+    font-size: 5.5pt;
+    color: var(--acento);
+    line-height: 1.1;
+  }
+  .selo-fecha {
+    text-align: right;
+    font-size: 9pt;
+    color: #6b5b47;
+  }
+  .selo-fecha .label {
+    font-size: 7pt;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #8b5e3c;
+    margin-bottom: 1mm;
+  }
+  .selo-fecha .liña {
+    border-bottom: 1.3px dotted #8b5e3c;
+    height: 5mm;
+    width: 40mm;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      min-height: auto;
+      height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .numero-equipo, .escudo, .lema-caixa, .selo-circle, .rol .icon {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("./login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Para imprimir: Cmd+P → <em>Máis opcións</em> → activar <strong>"Imprimir gráficos de fondo"</strong> para que saian as cores.
+  <button onclick="window.print()">Imprimir agora</button>
+</div>
+
+<!-- EQUIPO 1 -->
+<div class="page e1">
+  <div class="ficha-head">
+    <div>
+      <div class="titulo-grupo">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="subtitulo">Escudo oficial do equipo detective</div>
+    </div>
+    <div class="numero-equipo">1</div>
+  </div>
+
+  <h1 class="titulo-principal">ESCUDO DOS DETECTIVES</h1>
+  <p class="subtitulo-principal">✦ Investigadores dos Xogos Tradicionais ✦</p>
+
+  <div class="escudo">
+    <div class="campo">
+      <div class="campo-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Nome do noso equipo
+      </div>
+      <div class="liña"></div>
+    </div>
+
+    <div class="campo">
+      <div class="campo-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Detectives do equipo
+      </div>
+      <div class="detectives">
+        <div class="num">1.</div><div class="liña"></div>
+        <div class="num">2.</div><div class="liña"></div>
+        <div class="num">3.</div><div class="liña"></div>
+        <div class="num">4.</div><div class="liña"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="campo-label" style="margin-bottom: 3mm;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/></svg>
+    Roles rotativos da semana
+  </div>
+  <div class="roles">
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zM5 20h14"/></svg></div>
+      <div class="rol-nome">Capitán:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+      <div class="rol-nome">Secretario/a:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+      <div class="rol-nome">Material:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></div>
+      <div class="rol-nome">Voceiro/a:</div>
+      <div class="liña"></div>
+    </div>
+  </div>
+
+  <div class="lema-caixa">
+    <div class="lema-quote">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+      O noso lema
+    </div>
+    <div class="lema-liña"></div>
+  </div>
+
+  <div class="simbolo">
+    <div class="simbolo-caixa"></div>
+    <div class="simbolo-texto">
+      <div class="simbolo-titulo">O noso símbolo</div>
+      <div class="simbolo-desc">Debuxade aquí o voso símbolo: un obxecto, un animal ou un xogo que vos identifique como equipo. Que sexa doado de recoñecer no mural desde lonxe!</div>
+    </div>
+  </div>
+
+  <div class="selo-rodape">
+    <div class="selo-oficial">
+      <div class="selo-circle">
+        <div class="selo-titulo">Equipo</div>
+        <div class="selo-num">01</div>
+        <div class="selo-subtitulo">Detectives · 2ºA</div>
+      </div>
+      <div style="font-size: 9pt; color: #8b5e3c; max-width: 50mm; line-height: 1.4;">
+        Asinado ante a autoridade da <strong>avoa Carmela</strong>, garda dos xogos tradicionais.
+      </div>
+    </div>
+    <div class="selo-fecha">
+      <div class="label">Data</div>
+      <div class="liña"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EQUIPO 2 -->
+<div class="page e2">
+  <div class="ficha-head">
+    <div>
+      <div class="titulo-grupo">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="subtitulo">Escudo oficial do equipo detective</div>
+    </div>
+    <div class="numero-equipo">2</div>
+  </div>
+
+  <h1 class="titulo-principal">ESCUDO DOS DETECTIVES</h1>
+  <p class="subtitulo-principal">✦ Investigadores dos Xogos Tradicionais ✦</p>
+
+  <div class="escudo">
+    <div class="campo">
+      <div class="campo-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Nome do noso equipo
+      </div>
+      <div class="liña"></div>
+    </div>
+
+    <div class="campo">
+      <div class="campo-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Detectives do equipo
+      </div>
+      <div class="detectives">
+        <div class="num">1.</div><div class="liña"></div>
+        <div class="num">2.</div><div class="liña"></div>
+        <div class="num">3.</div><div class="liña"></div>
+        <div class="num">4.</div><div class="liña"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="campo-label" style="margin-bottom: 3mm;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/></svg>
+    Roles rotativos da semana
+  </div>
+  <div class="roles">
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zM5 20h14"/></svg></div>
+      <div class="rol-nome">Capitán:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+      <div class="rol-nome">Secretario/a:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+      <div class="rol-nome">Material:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></div>
+      <div class="rol-nome">Voceiro/a:</div>
+      <div class="liña"></div>
+    </div>
+  </div>
+
+  <div class="lema-caixa">
+    <div class="lema-quote">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+      O noso lema
+    </div>
+    <div class="lema-liña"></div>
+  </div>
+
+  <div class="simbolo">
+    <div class="simbolo-caixa"></div>
+    <div class="simbolo-texto">
+      <div class="simbolo-titulo">O noso símbolo</div>
+      <div class="simbolo-desc">Debuxade aquí o voso símbolo: un obxecto, un animal ou un xogo que vos identifique como equipo. Que sexa doado de recoñecer no mural desde lonxe!</div>
+    </div>
+  </div>
+
+  <div class="selo-rodape">
+    <div class="selo-oficial">
+      <div class="selo-circle">
+        <div class="selo-titulo">Equipo</div>
+        <div class="selo-num">02</div>
+        <div class="selo-subtitulo">Detectives · 2ºA</div>
+      </div>
+      <div style="font-size: 9pt; color: #8b5e3c; max-width: 50mm; line-height: 1.4;">
+        Asinado ante a autoridade da <strong>avoa Carmela</strong>, garda dos xogos tradicionais.
+      </div>
+    </div>
+    <div class="selo-fecha">
+      <div class="label">Data</div>
+      <div class="liña"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EQUIPO 3 -->
+<div class="page e3">
+  <div class="ficha-head">
+    <div>
+      <div class="titulo-grupo">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="subtitulo">Escudo oficial do equipo detective</div>
+    </div>
+    <div class="numero-equipo">3</div>
+  </div>
+
+  <h1 class="titulo-principal">ESCUDO DOS DETECTIVES</h1>
+  <p class="subtitulo-principal">✦ Investigadores dos Xogos Tradicionais ✦</p>
+
+  <div class="escudo">
+    <div class="campo">
+      <div class="campo-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Nome do noso equipo
+      </div>
+      <div class="liña"></div>
+    </div>
+
+    <div class="campo">
+      <div class="campo-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Detectives do equipo
+      </div>
+      <div class="detectives">
+        <div class="num">1.</div><div class="liña"></div>
+        <div class="num">2.</div><div class="liña"></div>
+        <div class="num">3.</div><div class="liña"></div>
+        <div class="num">4.</div><div class="liña"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="campo-label" style="margin-bottom: 3mm;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/></svg>
+    Roles rotativos da semana
+  </div>
+  <div class="roles">
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zM5 20h14"/></svg></div>
+      <div class="rol-nome">Capitán:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+      <div class="rol-nome">Secretario/a:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+      <div class="rol-nome">Material:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></div>
+      <div class="rol-nome">Voceiro/a:</div>
+      <div class="liña"></div>
+    </div>
+  </div>
+
+  <div class="lema-caixa">
+    <div class="lema-quote">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+      O noso lema
+    </div>
+    <div class="lema-liña"></div>
+  </div>
+
+  <div class="simbolo">
+    <div class="simbolo-caixa"></div>
+    <div class="simbolo-texto">
+      <div class="simbolo-titulo">O noso símbolo</div>
+      <div class="simbolo-desc">Debuxade aquí o voso símbolo: un obxecto, un animal ou un xogo que vos identifique como equipo. Que sexa doado de recoñecer no mural desde lonxe!</div>
+    </div>
+  </div>
+
+  <div class="selo-rodape">
+    <div class="selo-oficial">
+      <div class="selo-circle">
+        <div class="selo-titulo">Equipo</div>
+        <div class="selo-num">03</div>
+        <div class="selo-subtitulo">Detectives · 2ºA</div>
+      </div>
+      <div style="font-size: 9pt; color: #8b5e3c; max-width: 50mm; line-height: 1.4;">
+        Asinado ante a autoridade da <strong>avoa Carmela</strong>, garda dos xogos tradicionais.
+      </div>
+    </div>
+    <div class="selo-fecha">
+      <div class="label">Data</div>
+      <div class="liña"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EQUIPO 4 -->
+<div class="page e4">
+  <div class="ficha-head">
+    <div>
+      <div class="titulo-grupo">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="subtitulo">Escudo oficial do equipo detective</div>
+    </div>
+    <div class="numero-equipo">4</div>
+  </div>
+
+  <h1 class="titulo-principal">ESCUDO DOS DETECTIVES</h1>
+  <p class="subtitulo-principal">✦ Investigadores dos Xogos Tradicionais ✦</p>
+
+  <div class="escudo">
+    <div class="campo">
+      <div class="campo-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Nome do noso equipo
+      </div>
+      <div class="liña"></div>
+    </div>
+
+    <div class="campo">
+      <div class="campo-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Detectives do equipo
+      </div>
+      <div class="detectives">
+        <div class="num">1.</div><div class="liña"></div>
+        <div class="num">2.</div><div class="liña"></div>
+        <div class="num">3.</div><div class="liña"></div>
+        <div class="num">4.</div><div class="liña"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="campo-label" style="margin-bottom: 3mm;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/></svg>
+    Roles rotativos da semana
+  </div>
+  <div class="roles">
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zM5 20h14"/></svg></div>
+      <div class="rol-nome">Capitán:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+      <div class="rol-nome">Secretario/a:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+      <div class="rol-nome">Material:</div>
+      <div class="liña"></div>
+    </div>
+    <div class="rol">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></div>
+      <div class="rol-nome">Voceiro/a:</div>
+      <div class="liña"></div>
+    </div>
+  </div>
+
+  <div class="lema-caixa">
+    <div class="lema-quote">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+      O noso lema
+    </div>
+    <div class="lema-liña"></div>
+  </div>
+
+  <div class="simbolo">
+    <div class="simbolo-caixa"></div>
+    <div class="simbolo-texto">
+      <div class="simbolo-titulo">O noso símbolo</div>
+      <div class="simbolo-desc">Debuxade aquí o voso símbolo: un obxecto, un animal ou un xogo que vos identifique como equipo. Que sexa doado de recoñecer no mural desde lonxe!</div>
+    </div>
+  </div>
+
+  <div class="selo-rodape">
+    <div class="selo-oficial">
+      <div class="selo-circle">
+        <div class="selo-titulo">Equipo</div>
+        <div class="selo-num">04</div>
+        <div class="selo-subtitulo">Detectives · 2ºA</div>
+      </div>
+      <div style="font-size: 9pt; color: #8b5e3c; max-width: 50mm; line-height: 1.4;">
+        Asinado ante a autoridade da <strong>avoa Carmela</strong>, garda dos xogos tradicionais.
+      </div>
+    </div>
+    <div class="selo-fecha">
+      <div class="label">Data</div>
+      <div class="liña"></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

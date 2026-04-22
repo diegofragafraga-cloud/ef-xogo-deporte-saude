@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderniño do Detective dos Xogos Tradicionais</title>
+<style>
+  @page {
+    size: A5;
+    margin: 12mm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 20px 0; }
+  .print-hint {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: #5c3a21;
+    color: #fbf7ef;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+    max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef;
+    color: #5c3a21;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .page {
+    width: 148mm;
+    min-height: 210mm;
+    background: #fbf7ef;
+    margin: 0 auto 20px auto;
+    padding: 14mm 12mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    page-break-after: always;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* Portada */
+  .cover {
+    background:
+      radial-gradient(ellipse at top, rgba(139, 94, 60, 0.12), transparent 70%),
+      #fbf7ef;
+    border: 4px double #8b5e3c;
+    text-align: center;
+    justify-content: center;
+    gap: 12mm;
+  }
+  .cover .big-seal svg {
+    width: 90px;
+    height: 90px;
+    color: #8b5e3c;
+  }
+  .cover h1 {
+    font-size: 24px;
+    color: #5c3a21;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .cover .sub {
+    font-size: 14px;
+    color: #8b5e3c;
+    font-style: italic;
+  }
+  .cover .fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10mm;
+    text-align: left;
+  }
+  .cover .field { font-size: 15px; }
+  .cover .field .label { color: #8b5e3c; display: block; margin-bottom: 4px; font-size: 12px; font-style: italic; }
+  .cover .field .blank {
+    border-bottom: 2px solid #8b5e3c;
+    min-height: 24px;
+  }
+  .cover .class {
+    margin-top: auto;
+    font-size: 12px;
+    color: #8b5e3c;
+    font-style: italic;
+  }
+
+  /* Páxinas interiores */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 6px;
+    margin-bottom: 10mm;
+    border-bottom: 2px dashed #b8966e;
+  }
+  .page-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #5c3a21;
+  }
+  .page-num {
+    font-size: 11px;
+    color: #8b5e3c;
+    font-style: italic;
+  }
+
+  .instruction {
+    background: rgba(139, 94, 60, 0.1);
+    border-left: 4px solid #8b5e3c;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    color: #5c3a21;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 8mm;
+    line-height: 1.4;
+  }
+  .instruction strong { color: #2a2018; }
+
+  /* Táboa semanal */
+  table.week {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8mm;
+  }
+  table.week th, table.week td {
+    border: 1.5px solid #8b5e3c;
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 12px;
+    vertical-align: middle;
+  }
+  table.week thead th {
+    background: #8b5e3c;
+    color: #fbf7ef;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px;
+    letter-spacing: 0.04em;
+  }
+  table.week th.day {
+    background: rgba(139, 94, 60, 0.15);
+    font-weight: 700;
+    color: #5c3a21;
+    width: 26%;
+    font-size: 12px;
+  }
+  table.week td.record { height: 46px; background: #fbf7ef; }
+  table.week td.record::after {
+    content: "___ min";
+    color: #b8966e;
+    font-size: 10px;
+    font-style: italic;
+  }
+  .week-legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    font-size: 11px;
+    color: #5c3a21;
+    margin-top: 4mm;
+    flex-wrap: wrap;
+  }
+  .week-legend .item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .week-legend .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+  .week-total {
+    margin-top: 4mm;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .total-box {
+    border: 2px dashed #8b5e3c;
+    padding: 8px 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 12px;
+    color: #5c3a21;
+  }
+  .total-box .num { display: block; margin-top: 4px; font-size: 18px; color: #2a2018; min-height: 24px; border-bottom: 1.5px solid #8b5e3c; }
+
+  /* Xogos descubertos */
+  .games-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .game-row {
+    display: grid;
+    grid-template-columns: 26px 1fr 38px;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(139, 94, 60, 0.06);
+    border: 1.5px solid rgba(139, 94, 60, 0.3);
+    border-radius: 8px;
+  }
+  .game-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #8b5e3c;
+    color: #fbf7ef;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .game-name {
+    border-bottom: 1.5px solid #8b5e3c;
+    min-height: 22px;
+  }
+  .game-like {
+    display: flex;
+    gap: 4px;
+    font-size: 14px;
+  }
+  .game-like .face {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #8b5e3c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    background: #fbf7ef;
+    color: #5c3a21;
+  }
+
+  /* Termómetro */
+  .thermo-intro {
+    background: rgba(139, 94, 60, 0.06);
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.5px dashed #8b5e3c;
+    font-size: 12px;
+    color: #5c3a21;
+    margin-bottom: 8mm;
+    line-height: 1.5;
+  }
+  table.thermo {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table.thermo th, table.thermo td {
+    border: 1.5px solid #8b5e3c;
+    padding: 5px;
+    text-align: center;
+    font-size: 11px;
+  }
+  table.thermo thead th {
+    background: #8b5e3c;
+    color: #fbf7ef;
+    font-size: 10px;
+    padding: 6px 4px;
+  }
+  table.thermo .week-label {
+    background: rgba(139, 94, 60, 0.15);
+    font-weight: 700;
+    color: #5c3a21;
+    width: 18%;
+  }
+  table.thermo .score-cell {
+    height: 32px;
+    background: #fbf7ef;
+    position: relative;
+  }
+  .thermo-scale {
+    display: flex;
+    justify-content: space-between;
+    gap: 2px;
+    padding: 2px 4px;
+  }
+  .thermo-scale .bar {
+    flex: 1;
+    height: 20px;
+    border: 1px solid #8b5e3c;
+    background: #fbf7ef;
+    border-radius: 2px;
+  }
+
+  /* Carta final */
+  .letter-area {
+    flex: 1;
+    border: 2px dashed #8b5e3c;
+    border-radius: 8px;
+    padding: 10mm 8mm;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 28px,
+        rgba(139, 94, 60, 0.25) 28px,
+        rgba(139, 94, 60, 0.25) 29px
+      );
+    min-height: 130mm;
+  }
+  .letter-header {
+    font-size: 13px;
+    color: #5c3a21;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .print-hint { display: none; }
+    .page {
+      box-shadow: none;
+      margin: 0;
+      width: 100%;
+      min-height: auto;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .cover {
+      border: 4px double #8b5e3c !important;
+      background: #fbf7ef !important;
+    }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("./login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  5 páxinas A5 · imprime a folla A4 con <strong>"2 por folla"</strong> para dúas páxinas por folio. <button onclick="window.print()">Imprimir</button>
+</div>
+
+<!-- Páxina 1: PORTADA -->
+<div class="page cover">
+  <div class="big-seal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="7"/>
+      <line x1="21" y1="21" x2="16" y2="16"/>
+      <circle cx="11" cy="11" r="2.5"/>
+    </svg>
+  </div>
+  <div>
+    <h1>Caderniño<br>do Detective</h1>
+    <div class="sub">dos Xogos Tradicionais</div>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <span class="label">Detective:</span>
+      <div class="blank"></div>
+    </div>
+    <div class="field">
+      <span class="label">Equipo:</span>
+      <div class="blank"></div>
+    </div>
+    <div class="field">
+      <span class="label">Rol nesta misión:</span>
+      <div class="blank"></div>
+    </div>
+  </div>
+  <div class="class">CEIP Coirón-Dena · 2.º A · Curso 2025/2026</div>
+</div>
+
+<!-- Páxina 2: MISIÓN SEMANAL -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">Misión da semana</div>
+    <div class="page-num">páx. 2</div>
+  </div>
+  <div class="instruction">
+    <strong>Durante unha semana</strong>, anota cada día <strong>cantos minutos</strong> pasas vendo <strong>pantallas</strong> (móbil, tele, tablet, consola) e cantos xogando <strong>na rúa ou con xogos sen pantalla</strong>. Pídelle axuda á túa familia se non estás seguro.
+  </div>
+
+  <table class="week">
+    <thead>
+      <tr>
+        <th>Día</th>
+        <th>Tempo de pantalla</th>
+        <th>Tempo de xogo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th class="day">Luns</th><td class="record"></td><td class="record"></td></tr>
+      <tr><th class="day">Martes</th><td class="record"></td><td class="record"></td></tr>
+      <tr><th class="day">Mércores</th><td class="record"></td><td class="record"></td></tr>
+      <tr><th class="day">Xoves</th><td class="record"></td><td class="record"></td></tr>
+      <tr><th class="day">Venres</th><td class="record"></td><td class="record"></td></tr>
+      <tr><th class="day">Sábado</th><td class="record"></td><td class="record"></td></tr>
+      <tr><th class="day">Domingo</th><td class="record"></td><td class="record"></td></tr>
+    </tbody>
+  </table>
+
+  <div class="week-total">
+    <div class="total-box">
+      Total <strong>pantalla</strong>
+      <span class="num"></span>
+      min
+    </div>
+    <div class="total-box">
+      Total <strong>xogo</strong>
+      <span class="num"></span>
+      min
+    </div>
+  </div>
+
+  <div class="instruction" style="margin-top: 6mm;">
+    <strong>Pregunta detective:</strong> que total é maior? Cantos minutos de diferenza? Escribe aquí a resta: _______________
+  </div>
+</div>
+
+<!-- Páxina 3: XOGOS DESCUBERTOS -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">Os xogos que descubrín</div>
+    <div class="page-num">páx. 3</div>
+  </div>
+  <div class="instruction">
+    Cada vez que aprendas un <strong>xogo tradicional novo</strong> (na clase, no cole, na casa, co avó ou coa avoa…), anótao aquí. Marca se che gustou (☺), máis ou menos (😐) ou nada (☹).
+  </div>
+
+  <div class="games-list">
+    <div class="game-row"><span class="game-num">1</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">2</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">3</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">4</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">5</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">6</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">7</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">8</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">9</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+    <div class="game-row"><span class="game-num">10</span><span class="game-name"></span><div class="game-like"><span class="face">☺</span><span class="face">—</span><span class="face">☹</span></div></div>
+  </div>
+</div>
+
+<!-- Páxina 4: TERMÓMETRO DO CÁLCULO -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">Termómetro do cálculo</div>
+    <div class="page-num">páx. 4</div>
+  </div>
+  <div class="thermo-intro">
+    Cada venres pinta <strong>cantas sumas/restas con levada</strong> acertaches de 10. O obxectivo é chegar a <strong>8/10</strong> antes do Festival.
+  </div>
+
+  <table class="thermo">
+    <thead>
+      <tr>
+        <th>Semana</th>
+        <th colspan="10">Acertos sobre 10 (pinta as casiñas acertadas)</th>
+        <th>Nota</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th class="week-label">Sem. 1</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 2</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 3</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 4</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 5</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 6</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 7</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 8</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 9</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+      <tr>
+        <th class="week-label">Sem. 10</th>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="score-cell"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="instruction" style="margin-top: 6mm;">
+    <strong>Reto do trimestre:</strong> ao final, cantas semanas chegaches a 8 ou máis? _____
+  </div>
+</div>
+
+<!-- Páxina 5: CARTA FINAL -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">Carta para a avoa Carmela</div>
+    <div class="page-num">páx. 5</div>
+  </div>
+  <div class="instruction">
+    Ao <strong>final do trimestre</strong>, escribe unha carta á avoa Carmela contándolle que aprendiches: que xogos descubriches, que che gustou máis, que lle quererías dicir a ela ou á súa neta.
+  </div>
+  <div class="letter-area">
+    <div class="letter-header">Querida avoa Carmela:</div>
+  </div>
+</div>
+
+</body>
+</html>

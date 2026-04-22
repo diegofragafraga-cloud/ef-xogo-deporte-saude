@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O reloxo analóxico e o do móbil · UD9 S5 · Ficha por equipos</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+    color: #2a2018;
+    background: #e9e2d3;
+  }
+  body { padding: 14px 0; }
+
+  .print-hint {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: #5c3a21; color: #fbf7ef;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 10; max-width: 260px;
+  }
+  .print-hint button {
+    background: #fbf7ef; color: #5c3a21; border: none;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    margin-left: 6px; font-size: 12px; font-weight: 600;
+  }
+
+  .page {
+    width: 210mm; min-height: 297mm;
+    background: #fbf7ef;
+    margin: 0 auto 14px auto; padding: 10mm 12mm;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    background-image:
+      radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%);
+  }
+
+  .head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 4mm; margin-bottom: 5mm;
+    border-bottom: 2px dashed #8b5e3c;
+  }
+  .head .tit { font-size: 10pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .head .sub { font-size: 8.5pt; color: #8b5e3c; margin-top: 2px; }
+  .head .nome { font-size: 17pt; color: #5c3a21; }
+
+  .datos {
+    display: flex; gap: 6mm; margin-bottom: 5mm;
+    font-size: 10pt; color: #5c3a21;
+  }
+  .datos .campo { flex: 1; display: flex; align-items: baseline; gap: 3mm; }
+  .datos .lbl { font-weight: 700; letter-spacing: 0.04em; }
+  .datos .liña { flex: 1; border-bottom: 1.5px solid #8b5e3c; height: 6mm; }
+
+  .intro {
+    font-size: 10pt; color: #6b5b47; line-height: 1.45;
+    text-align: center; margin-bottom: 5mm;
+    padding: 3mm 6mm; background: rgba(139,94,60,0.06);
+    border-radius: 3mm; font-style: italic;
+  }
+
+  table.equivalencias {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 5mm;
+  }
+  table.equivalencias th {
+    background: #5c3a21;
+    color: #fbf7ef;
+    font-size: 10pt;
+    padding: 2.5mm 3mm;
+    text-align: center;
+    letter-spacing: 0.04em;
+    border: 1.5px solid #5c3a21;
+  }
+  table.equivalencias th:first-child { border-top-left-radius: 2mm; }
+  table.equivalencias th:last-child { border-top-right-radius: 2mm; }
+  table.equivalencias td {
+    border: 1.5px dashed #c9a987;
+    padding: 2mm;
+    background: rgba(255,255,255,0.5);
+    vertical-align: middle;
+    text-align: center;
+  }
+  table.equivalencias tr.exemplo td {
+    background: rgba(214,230,194,0.45);
+    border-color: #5b7c2a;
+    color: #2d4510;
+  }
+  table.equivalencias .col-reloxo { width: 32mm; }
+  table.equivalencias .col-palabras { width: 60mm; font-size: 11pt; color: #5c3a21; }
+  table.equivalencias .col-dixital { width: 40mm; }
+  table.equivalencias .num-fila {
+    width: 10mm;
+    font-size: 12pt;
+    font-weight: 700;
+    color: #8b5e3c;
+  }
+
+  table.equivalencias .liña-baleira {
+    display: inline-block;
+    border-bottom: 1.5px solid #8b5e3c;
+    min-width: 38mm;
+    height: 6mm;
+    vertical-align: middle;
+  }
+  table.equivalencias .dixital-caixa {
+    display: inline-block;
+    padding: 2mm 4mm;
+    border: 1.5px dashed #8b5e3c;
+    border-radius: 2mm;
+    background: rgba(42,32,24,0.85);
+    color: #d6e6c2;
+    font-family: "Courier New", monospace;
+    font-size: 16pt;
+    font-weight: 700;
+    min-width: 28mm;
+    letter-spacing: 0.08em;
+  }
+  table.equivalencias tr.exemplo .dixital-caixa {
+    background: #2d4510;
+    color: #b8d99a;
+  }
+
+  .reloxo-svg { width: 26mm; height: 26mm; }
+
+  .nota-rodape {
+    margin-top: 4mm;
+    padding: 3mm 5mm;
+    border: 2px solid #8b5e3c;
+    border-radius: 3mm;
+    background: rgba(251,232,184,0.45);
+    font-size: 10pt;
+    color: #5c3a21;
+    line-height: 1.5;
+  }
+  .nota-rodape strong { color: #8b6508; }
+
+  .rodape {
+    margin-top: 4mm;
+    text-align: center;
+    font-size: 9pt;
+    color: #8b5e3c;
+    font-style: italic;
+    padding-top: 3mm;
+    border-top: 1.5px dashed #c9a987;
+  }
+
+  @media print {
+    body { padding: 0; background: #fbf7ef; }
+    .print-hint { display: none; }
+    .page {
+      margin: 0; box-shadow: none;
+      min-height: auto; height: auto;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    table.equivalencias th, table.equivalencias td, .nota-rodape,
+    table.equivalencias .dixital-caixa {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P → activar <strong>"Imprimir gráficos de fondo"</strong> para as cores.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+      <div class="sub">UD9 · Sesión 5 · Ficha por equipos · Detective convertedor</div>
+    </div>
+    <div class="nome">O reloxo analóxico e o do móbil</div>
+  </div>
+
+  <div class="datos">
+    <div class="campo"><span class="lbl">Equipo:</span><span class="liña"></span></div>
+    <div class="campo"><span class="lbl">Data:</span><span class="liña"></span></div>
+    <div class="campo"><span class="lbl">Detective convertedor:</span><span class="liña"></span></div>
+  </div>
+
+  <div class="intro">
+    A avoa Carmela só coñece reloxos con agullas. Pero nos móbiles vemos números. <strong>Axuda á avoa a traducir!</strong> Mira o reloxo con agullas, escribe a hora en palabras e logo en cifras como no móbil.
+  </div>
+
+  <table class="equivalencias">
+    <thead>
+      <tr>
+        <th class="num-fila">#</th>
+        <th class="col-reloxo">Reloxo con agullas</th>
+        <th class="col-palabras">En palabras (avoa)</th>
+        <th class="col-dixital">No móbil (cifras)</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- FILA 1 · EXEMPLO RESOLTO · 8 en punto -->
+      <tr class="exemplo">
+        <td class="num-fila">1</td>
+        <td>
+          <svg class="reloxo-svg" viewBox="0 0 100 100" fill="none" stroke="#2d4510" stroke-width="2">
+            <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#2d4510" stroke-width="3"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#2d4510" stroke="none">12</text>
+            <text x="82" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#2d4510" stroke="none">3</text>
+            <text x="50" y="89" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#2d4510" stroke="none">6</text>
+            <text x="18" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#2d4510" stroke="none">9</text>
+            <circle cx="50" cy="50" r="2.5" fill="#2d4510" stroke="none"/>
+            <!-- agulla curta (horas) apuntando ao 8 -->
+            <line x1="50" y1="50" x2="34" y2="64" stroke="#2d4510" stroke-width="3" stroke-linecap="round"/>
+            <!-- agulla longa (minutos) no 12 -->
+            <line x1="50" y1="50" x2="50" y2="16" stroke="#2d4510" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-palabras">8 en punto</td>
+        <td><span class="dixital-caixa">8:00</span></td>
+      </tr>
+
+      <!-- FILA 2 · 5:30 (5 e media) -->
+      <tr>
+        <td class="num-fila">2</td>
+        <td>
+          <svg class="reloxo-svg" viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+            <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+            <text x="82" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+            <text x="50" y="89" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+            <text x="18" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+            <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+            <!-- horas: 5 e media → entre o 5 e o 6, un pouco cara á esquerda -->
+            <line x1="50" y1="50" x2="58" y2="66" stroke="#5c3a21" stroke-width="3" stroke-linecap="round"/>
+            <!-- minutos: no 6 -->
+            <line x1="50" y1="50" x2="50" y2="84" stroke="#a63824" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-palabras">son as 5 e <span style="border-bottom: 1.5px solid #8b5e3c; display: inline-block; min-width: 22mm;">&nbsp;</span></td>
+        <td><span class="dixital-caixa">_:_ _</span></td>
+      </tr>
+
+      <!-- FILA 3 · 10:15 (10 e cuarto) -->
+      <tr>
+        <td class="num-fila">3</td>
+        <td>
+          <svg class="reloxo-svg" viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+            <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+            <text x="82" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+            <text x="50" y="89" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+            <text x="18" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+            <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+            <!-- horas: 10 e cuarto → un pouco pasado o 10 -->
+            <line x1="50" y1="50" x2="36" y2="38" stroke="#5c3a21" stroke-width="3" stroke-linecap="round"/>
+            <!-- minutos: no 3 -->
+            <line x1="50" y1="50" x2="82" y2="50" stroke="#1f4e79" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-palabras"><span class="liña-baleira"></span></td>
+        <td><span class="dixital-caixa">_:_ _</span></td>
+      </tr>
+
+      <!-- FILA 4 · 2 menos cuarto → 1:45 -->
+      <tr>
+        <td class="num-fila">4</td>
+        <td>
+          <svg class="reloxo-svg" viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+            <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+            <text x="82" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+            <text x="50" y="89" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+            <text x="18" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+            <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+            <!-- horas: case no 2, aínda non chegou (entre 1 e 2, máis cara o 2) -->
+            <line x1="50" y1="50" x2="64" y2="40" stroke="#5c3a21" stroke-width="3" stroke-linecap="round"/>
+            <!-- minutos: no 9 -->
+            <line x1="50" y1="50" x2="18" y2="50" stroke="#b8860b" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-palabras">son as 2 menos <span style="border-bottom: 1.5px solid #8b5e3c; display: inline-block; min-width: 20mm;">&nbsp;</span></td>
+        <td><span class="dixital-caixa">_:_ _</span></td>
+      </tr>
+
+      <!-- FILA 5 · 12:30 -->
+      <tr>
+        <td class="num-fila">5</td>
+        <td>
+          <svg class="reloxo-svg" viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+            <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+            <text x="82" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+            <text x="50" y="89" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+            <text x="18" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+            <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+            <!-- horas: 12 e media → entre 12 e 1, na metade superior-dereita -->
+            <line x1="50" y1="50" x2="54" y2="33" stroke="#5c3a21" stroke-width="3" stroke-linecap="round"/>
+            <!-- minutos: no 6 -->
+            <line x1="50" y1="50" x2="50" y2="84" stroke="#a63824" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-palabras"><span class="liña-baleira"></span></td>
+        <td><span class="dixital-caixa">_:_ _</span></td>
+      </tr>
+
+      <!-- FILA 6 · 6:00 -->
+      <tr>
+        <td class="num-fila">6</td>
+        <td>
+          <svg class="reloxo-svg" viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+            <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+            <text x="82" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+            <text x="50" y="89" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+            <text x="18" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+            <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+            <!-- horas: no 6 -->
+            <line x1="50" y1="50" x2="50" y2="68" stroke="#5c3a21" stroke-width="3" stroke-linecap="round"/>
+            <!-- minutos: no 12 -->
+            <line x1="50" y1="50" x2="50" y2="16" stroke="#5c3a21" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-palabras"><span class="liña-baleira"></span></td>
+        <td><span class="dixital-caixa">_:_ _</span></td>
+      </tr>
+
+      <!-- FILA 7 · 10 menos cuarto → 9:45 -->
+      <tr>
+        <td class="num-fila">7</td>
+        <td>
+          <svg class="reloxo-svg" viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+            <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+            <text x="82" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+            <text x="50" y="89" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+            <text x="18" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+            <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+            <!-- horas: case no 10 (aínda non chegou) -->
+            <line x1="50" y1="50" x2="37" y2="40" stroke="#5c3a21" stroke-width="3" stroke-linecap="round"/>
+            <!-- minutos: no 9 -->
+            <line x1="50" y1="50" x2="18" y2="50" stroke="#b8860b" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-palabras">son as 10 menos <span style="border-bottom: 1.5px solid #8b5e3c; display: inline-block; min-width: 20mm;">&nbsp;</span></td>
+        <td><span class="dixital-caixa">_:_ _</span></td>
+      </tr>
+
+      <!-- FILA 8 · 3:15 (3 e cuarto) -->
+      <tr>
+        <td class="num-fila">8</td>
+        <td>
+          <svg class="reloxo-svg" viewBox="0 0 100 100" fill="none" stroke="#5c3a21" stroke-width="2">
+            <circle cx="50" cy="50" r="44" fill="#fbf7ef" stroke="#5c3a21" stroke-width="3"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">12</text>
+            <text x="82" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">3</text>
+            <text x="50" y="89" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">6</text>
+            <text x="18" y="54" text-anchor="middle" font-size="11" font-family="Comic Sans MS" fill="#5c3a21" stroke="none">9</text>
+            <circle cx="50" cy="50" r="2.5" fill="#5c3a21" stroke="none"/>
+            <!-- horas: 3 e cuarto → un pouco pasado o 3 -->
+            <line x1="50" y1="50" x2="66" y2="54" stroke="#5c3a21" stroke-width="3" stroke-linecap="round"/>
+            <!-- minutos: no 3 -->
+            <line x1="50" y1="50" x2="82" y2="50" stroke="#1f4e79" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-palabras"><span class="liña-baleira"></span></td>
+        <td><span class="dixital-caixa">_:_ _</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="nota-rodape">
+    <strong>Pista:</strong> cando é <em>menos cuarto</em>, o número dixital empeza pola hora que <strong>aínda non chegamos</strong>. Exemplo: <em>8 menos cuarto</em> = <strong>7:45</strong> (non 8:45), porque a hora segue a ser a anterior ata que a agulla longa chega ao 12.
+  </div>
+
+  <div class="rodape">
+    ✦ O reloxo analóxico e o do móbil · SdA Xogos vs Pantalla · UD9 · S5 ✦
+  </div>
+</div>
+
+</body>
+</html>
