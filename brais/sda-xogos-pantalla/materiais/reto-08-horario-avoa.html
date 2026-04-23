@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reto 8 · Horario da avoa · UD9</title>
+<style>
+  @page { size: A4 portrait; margin: 8mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: "Comic Sans MS", "Chalkboard SE", sans-serif; color: #2a2018; background: #e9e2d3; }
+  body { padding: 14px 0; }
+  .print-hint { position: fixed; top: 12px; right: 12px; background: #5c3a21; color: #fbf7ef; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-family: -apple-system, sans-serif; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 10; max-width: 260px; }
+  .print-hint button { background: #fbf7ef; color: #5c3a21; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-left: 6px; font-size: 12px; font-weight: 600; }
+  .page { width: 210mm; min-height: 297mm; background: #fbf7ef; margin: 0 auto 14px auto; padding: 10mm; box-shadow: 0 4px 20px rgba(0,0,0,0.15); background-image: radial-gradient(ellipse at top left, rgba(139,94,60,0.08), transparent 60%), radial-gradient(ellipse at bottom right, rgba(139,94,60,0.08), transparent 60%); display: flex; flex-direction: column; }
+  .tarxeta { flex: 1; padding: 8mm 10mm; border: 2.5px solid #5c3a21; border-radius: 4mm; background: rgba(255, 251, 239, 0.7); display: flex; flex-direction: column; }
+  .tarxeta-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 3mm; border-bottom: 2px dashed #8b5e3c; margin-bottom: 4mm; }
+  .tarxeta-head .tit { font-size: 9pt; color: #5c3a21; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tarxeta-head .sub { font-size: 8pt; color: #8b5e3c; margin-top: 2px; }
+  .tarxeta-head .nome { font-size: 15pt; color: #5c3a21; }
+  .datos { display: flex; gap: 5mm; margin-bottom: 4mm; font-size: 9.5pt; color: #5c3a21; }
+  .datos .campo { flex: 1; display: flex; align-items: baseline; gap: 2mm; }
+  .datos .lbl { font-weight: 700; letter-spacing: 0.04em; }
+  .datos .liña { flex: 1; border-bottom: 1.3px solid #8b5e3c; height: 5mm; }
+  .enunciado { font-size: 11.5pt; color: #2a2018; line-height: 1.55; margin-bottom: 4mm; }
+  .enunciado strong { color: #5c3a21; }
+  .axenda { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin: 4mm 0; }
+  .axenda-it { padding: 3mm 4mm; border: 1.5px solid #8b5e3c; border-radius: 2mm; background: rgba(255,255,255,0.6); text-align: center; }
+  .axenda-it .act { font-size: 10pt; color: #8b5e3c; font-weight: 700; }
+  .axenda-it .t { font-size: 15pt; color: #5c3a21; font-weight: 700; margin-top: 2mm; }
+  .resolve { flex: 1; padding: 5mm 6mm; border: 1.5px dashed #c9a987; border-radius: 2.5mm; background: rgba(255,255,255,0.5); margin-bottom: 3mm; min-height: 30mm; }
+  .resolve .lbl { font-size: 9pt; color: #8b5e3c; font-weight: 700; margin-bottom: 2mm; }
+  .verifica { padding: 3mm 4mm; background: rgba(139,94,60,0.08); border-radius: 2mm; font-size: 9pt; color: #6b5b47; font-style: italic; border-left: 3px solid #8b5e3c; }
+  .verifica strong { color: #5c3a21; font-style: normal; }
+  .corte { border-top: 2px dashed #8b5e3c; margin: 5mm 0; position: relative; height: 4mm; }
+  .corte::before { content: "✂ - - - - - - cortar - - - - - -"; position: absolute; top: -9px; left: 50%; transform: translateX(-50%); background: #fbf7ef; padding: 0 10px; font-size: 8pt; color: #8b5e3c; letter-spacing: 0.1em; font-family: -apple-system, sans-serif; }
+  @media print { body { padding: 0; } .print-hint { display: none; } .page { margin: 0; box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+<script>if(sessionStorage.getItem("brais_auth")!=="true"){location.replace("../login.html")}</script></head>
+<body>
+
+<div class="print-hint">
+  Cmd+P → activar <strong>"Imprimir gráficos de fondo"</strong>. Saen 2 tarxetas.
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="page">
+
+  <div class="tarxeta">
+    <div class="tarxeta-head">
+      <div>
+        <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+        <div class="sub">UD9 · Reto rápido · para os que rematan o libro</div>
+      </div>
+      <div class="nome">Reto 8 · Horario da avoa</div>
+    </div>
+    <div class="datos">
+      <div class="campo"><span class="lbl">Detective:</span><span class="liña"></span></div>
+      <div class="campo"><span class="lbl">Data:</span><span class="liña"></span></div>
+    </div>
+    <div class="enunciado">
+      Todos os días a avoa Carmela fai 3 cousas pola tarde:
+    </div>
+    <div class="axenda">
+      <div class="axenda-it"><div class="act">Paseo</div><div class="t">45 min</div></div>
+      <div class="axenda-it"><div class="act">Cociñar</div><div class="t">30 min</div></div>
+      <div class="axenda-it"><div class="act">Sesta</div><div class="t">50 min</div></div>
+    </div>
+    <div class="enunciado" style="margin-top: 2mm;">
+      ➊ Cantos <strong>minutos</strong> en total?<br>
+      ➋ Cantas <strong>horas e minutos</strong> son?
+    </div>
+    <div class="resolve">
+      <div class="lbl">Resolve aquí:</div>
+    </div>
+    <div class="verifica">
+      <strong>Solución:</strong> 45 + 30 + 50 = <strong>125 min</strong>. Como 60 + 60 = 120, quedan 5 min de máis → <strong>2 horas e 5 minutos</strong>.
+    </div>
+  </div>
+
+  <div class="corte"></div>
+
+  <div class="tarxeta">
+    <div class="tarxeta-head">
+      <div>
+        <div class="tit">SdA · Xogos vs Pantalla · 2º Primaria</div>
+        <div class="sub">UD9 · Reto rápido · para os que rematan o libro</div>
+      </div>
+      <div class="nome">Reto 8 · Horario da avoa</div>
+    </div>
+    <div class="datos">
+      <div class="campo"><span class="lbl">Detective:</span><span class="liña"></span></div>
+      <div class="campo"><span class="lbl">Data:</span><span class="liña"></span></div>
+    </div>
+    <div class="enunciado">
+      Todos os días a avoa Carmela fai 3 cousas pola tarde:
+    </div>
+    <div class="axenda">
+      <div class="axenda-it"><div class="act">Paseo</div><div class="t">45 min</div></div>
+      <div class="axenda-it"><div class="act">Cociñar</div><div class="t">30 min</div></div>
+      <div class="axenda-it"><div class="act">Sesta</div><div class="t">50 min</div></div>
+    </div>
+    <div class="enunciado" style="margin-top: 2mm;">
+      ➊ Cantos <strong>minutos</strong> en total?<br>
+      ➋ Cantas <strong>horas e minutos</strong> son?
+    </div>
+    <div class="resolve">
+      <div class="lbl">Resolve aquí:</div>
+    </div>
+    <div class="verifica">
+      <strong>Solución:</strong> 45 + 30 + 50 = <strong>125 min</strong>. Como 60 + 60 = 120, quedan 5 min de máis → <strong>2 horas e 5 minutos</strong>.
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
