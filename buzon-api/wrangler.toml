@@ -1,0 +1,7 @@
+name = "buzon-fichas"
+main = "src/index.js"
+compatibility_date = "2025-10-01"
+
+[[kv_namespaces]]
+binding = "ENTREGAS"
+id = "30a5d5a876bc4caebd2c97450e6bb02c"

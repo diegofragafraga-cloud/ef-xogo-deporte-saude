@@ -57,6 +57,47 @@
   .tab:hover { color: var(--text); }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
+  /* Layout de colexios (sidebar vertical + contido) */
+  .col-layout { display: flex; min-height: calc(100vh - 65px); }
+  .col-sidebar {
+    width: 200px; background: var(--bg2); border-right: 1px solid var(--border);
+    padding: 18px 12px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;
+  }
+  .col-sidebar-title {
+    font-size: .65rem; font-weight: 700; color: var(--text2);
+    text-transform: uppercase; letter-spacing: 2px; padding: 4px 8px; margin-bottom: 4px;
+  }
+  .col-item {
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: 4px; padding: 14px 14px; border-radius: 12px;
+    background: var(--bg3); border: 1.5px solid var(--border); color: var(--text);
+    text-align: left; cursor: pointer; transition: all .2s; font-family: inherit;
+    position: relative; overflow: hidden;
+  }
+  .col-item::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; background: var(--accent); transform: scaleY(0); transition: transform .2s; transform-origin: center;
+  }
+  .col-item:hover { border-color: var(--accent); background: var(--bg3); }
+  .col-item.active { border-color: var(--accent); background: rgba(245,158,11,.08); }
+  .col-item.active::before { transform: scaleY(1); }
+  .col-item.active .col-name { color: var(--accent2); }
+  .col-badge {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.25);
+  }
+  .col-item.col-presaras .col-badge { background: rgba(59,130,246,.1); border-color: rgba(59,130,246,.3); }
+  .col-item.col-presaras.active { border-color: #3b82f6; background: rgba(59,130,246,.08); }
+  .col-item.col-presaras.active::before { background: #3b82f6; }
+  .col-item.col-presaras.active .col-name { color: #60a5fa; }
+  .col-name { font-weight: 700; font-size: .9rem; line-height: 1.2; }
+  .col-sub { font-size: .72rem; color: var(--text2); font-weight: 500; }
+
+  .col-content { flex: 1; min-width: 0; overflow: hidden; }
+  .col-iframe-wrap { width: 100%; height: calc(100vh - 65px); background: var(--bg); }
+  .col-iframe-wrap iframe { width: 100%; height: 100%; border: 0; display: block; background: #fff; }
+
   .content { max-width: 960px; margin: 0 auto; padding: 24px; }
 
   .section-card {
@@ -225,6 +266,11 @@
     .section-card { padding: 20px; }
     .equipos-drop-grid { grid-template-columns: 1fr 1fr; }
     .tarxetas-html-grid { grid-template-columns: 1fr; }
+    .col-layout { flex-direction: column; }
+    .col-sidebar { flex-direction: row; width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 10px; overflow-x: auto; }
+    .col-sidebar-title { display: none; }
+    .col-item { flex-direction: row; align-items: center; flex-shrink: 0; padding: 10px 14px; }
+    .col-iframe-wrap { height: calc(100vh - 180px); }
   }
   @media (max-width: 500px) {
     .equipos-drop-grid { grid-template-columns: 1fr; }
@@ -246,6 +292,29 @@
   </button>
 </div>
 
+<div class="col-layout">
+
+<aside class="col-sidebar">
+  <div class="col-sidebar-title">Colexios</div>
+  <button class="col-item active" onclick="switchColexio('coiron')">
+    <div class="col-badge">🏫</div>
+    <div>
+      <div class="col-name">CEIP Coirón Dena</div>
+      <div class="col-sub">Proxecto activo 2025-26</div>
+    </div>
+  </button>
+  <button class="col-item col-presaras" onclick="switchColexio('presaras')">
+    <div class="col-badge">🎓</div>
+    <div>
+      <div class="col-name">CEIP Présaras</div>
+      <div class="col-sub">Presentación externa</div>
+    </div>
+  </button>
+</aside>
+
+<div class="col-content">
+
+<div id="viewColCoiron">
 <div class="tabs">
   <div class="tab active" onclick="switchTab('presentacion')">Presentacion</div>
   <div class="tab" onclick="switchTab('tarxetas')">Tarxetas</div>

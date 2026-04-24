@@ -1,0 +1,10 @@
+{
+  "name": "buzon-fichas",
+  "version": "1.0.0",
+  "description": "Worker buzón de entregas das fichas interactivas",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  }
+}
