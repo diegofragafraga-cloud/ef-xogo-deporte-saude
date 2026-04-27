@@ -131,6 +131,65 @@
   .modal .record-line{font-size:.75rem;color:var(--text2);margin-top:8px}
   .modal .record-line.new{color:var(--accent2);font-weight:700}
 
+  /* Pantalla de inicio (selección de nivel) */
+  .start-screen{
+    position:fixed;inset:0;background:rgba(8,11,18,.92);backdrop-filter:blur(8px);
+    z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;
+    animation:fade-in .3s ease-out;
+  }
+  .start-screen.hidden{display:none}
+  .start-card{
+    background:var(--bg2);border:1px solid var(--border);border-radius:20px;
+    padding:32px 28px;max-width:760px;width:100%;text-align:center;
+    box-shadow:0 24px 60px rgba(0,0,0,.5);
+  }
+  .start-card h2{font-size:1.6rem;margin-bottom:6px}
+  .start-card .start-flag{font-size:2.6rem;line-height:1;margin-bottom:10px}
+  .start-card p{color:var(--text2);font-size:.92rem;margin-bottom:22px}
+  .start-section-title{
+    font-size:.7rem;font-weight:700;color:var(--text2);letter-spacing:1.6px;
+    text-transform:uppercase;margin:18px 0 10px;
+  }
+  .levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:6px}
+  .level-btn{
+    background:var(--bg3);border:2px solid var(--border);border-radius:14px;
+    padding:18px 14px;cursor:pointer;font-family:inherit;color:var(--text);
+    display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .2s;
+    text-align:center;
+  }
+  .level-btn:hover{transform:translateY(-3px);border-color:currentColor}
+  .level-btn .lvl-emoji{font-size:2.4rem;line-height:1}
+  .level-btn strong{font-size:1.05rem;font-weight:800}
+  .level-btn small{font-size:.74rem;color:var(--text2);line-height:1.35}
+  .level-btn.easy{color:#34d399}
+  .level-btn.medium{color:#fbbf24}
+  .level-btn.hard{color:#f87171}
+  .level-btn.easy:hover{background:rgba(52,211,153,.08)}
+  .level-btn.medium:hover{background:rgba(251,191,36,.08)}
+  .level-btn.hard:hover{background:rgba(248,113,113,.08)}
+
+  .mode-pills{display:inline-flex;gap:6px;background:var(--bg3);padding:5px;border-radius:12px;border:1px solid var(--border)}
+  .mode-pills .pill{
+    background:transparent;color:var(--text2);border:none;cursor:pointer;
+    padding:8px 18px;border-radius:8px;font-family:inherit;font-weight:600;font-size:.86rem;
+    transition:all .2s;
+  }
+  .mode-pills .pill.active{background:var(--accent);color:#fff}
+  .mode-pills .pill:not(.active):hover{color:var(--text)}
+
+  .length-pills{display:inline-flex;gap:6px;background:var(--bg3);padding:5px;border-radius:12px;border:1px solid var(--border);margin-top:6px}
+  .length-pills .pill{background:transparent;color:var(--text2);border:none;cursor:pointer;padding:6px 14px;border-radius:8px;font-family:inherit;font-weight:600;font-size:.78rem;transition:all .2s}
+  .length-pills .pill.active{background:var(--accent2);color:#0b0d13}
+  .length-pills .pill:not(.active):hover{color:var(--text)}
+
+  @keyframes fade-in{from{opacity:0}to{opacity:1}}
+
+  @media (max-width:640px){
+    .levels{grid-template-columns:1fr;gap:10px}
+    .level-btn{flex-direction:row;justify-content:flex-start;text-align:left;padding:14px}
+    .level-btn .lvl-emoji{font-size:1.8rem}
+  }
+
   .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center;align-items:center}
   .btn{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .15s;font-family:inherit}
   .btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -180,6 +239,45 @@
       <svg id="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
       <svg id="sun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
     </button>
+  </div>
+</div>
+
+<div class="start-screen" id="startScreen">
+  <div class="start-card">
+    <div class="start-flag">🇪🇺</div>
+    <h2>Mapa da Unión Europea</h2>
+    <p>Escolle o nivel de dificultade para comezar</p>
+
+    <div class="levels">
+      <button class="level-btn easy" data-level="easy">
+        <span class="lvl-emoji">🟢</span>
+        <strong>Fácil</strong>
+        <small>12 países principais<br>Bandeira + capital sempre visibles</small>
+      </button>
+      <button class="level-btn medium" data-level="medium">
+        <span class="lvl-emoji">🟡</span>
+        <strong>Medio</strong>
+        <small>Os 27 países UE<br>Bandeira tras o 1.º fallo</small>
+      </button>
+      <button class="level-btn hard" data-level="hard">
+        <span class="lvl-emoji">🔴</span>
+        <strong>Difícil</strong>
+        <small>Os 27 países UE<br>Sen pistas extra</small>
+      </button>
+    </div>
+
+    <div class="start-section-title">Que adiviñar?</div>
+    <div class="mode-pills" id="modePills">
+      <button type="button" class="pill active" data-mode="country">Países</button>
+      <button type="button" class="pill" data-mode="capital">Capitales</button>
+    </div>
+
+    <div class="start-section-title">Número de preguntas</div>
+    <div class="length-pills" id="lengthPills">
+      <button type="button" class="pill" data-length="10">10</button>
+      <button type="button" class="pill" data-length="20">20</button>
+      <button type="button" class="pill active" data-length="0">Todos</button>
+    </div>
   </div>
 </div>
 
@@ -456,8 +554,8 @@ async function init() {
     initConfetti();
     $('#loading').style.display = 'none';
     svg.node().style.display = 'block';
-
-    startGame();
+    // Non chamamos startGame() automaticamente: mostrar pantalla de inicio
+    // ata que o neno escolla un nivel.
   } catch (e) {
     $('#loading').textContent = 'Error cargando el mapa. Recarga la página.';
     console.error(e);
@@ -659,7 +757,7 @@ function showResults() {
       </div>
     </div>`;
   document.body.appendChild(m);
-  m.querySelector('#mAgain').onclick = () => { m.remove(); startGame(); };
+  m.querySelector('#mAgain').onclick = () => { m.remove(); openStartScreen(); };
   m.querySelector('#mClose').onclick = () => m.remove();
 }
 
@@ -701,11 +799,57 @@ function shuffle(a) {
   return arr;
 }
 
-$('#restart').onclick = startGame;
+$('#restart').onclick = openStartScreen;
 $('#skip').onclick = skipCountry;
 $('#difficulty').onchange = startGame;
 $('#mode').onchange = startGame;
 $('#length').onchange = startGame;
+
+// Pantalla de inicio: abrir/cerrar e selección
+function openStartScreen() {
+  // Sincronizar pills coa configuración actual
+  const mode = $('#mode').value;
+  document.querySelectorAll('#modePills .pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.mode === mode);
+  });
+  const len = $('#length').value;
+  document.querySelectorAll('#lengthPills .pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.length === len);
+  });
+  $('#startScreen').classList.remove('hidden');
+}
+function closeStartScreen() {
+  $('#startScreen').classList.add('hidden');
+}
+
+document.querySelectorAll('#modePills .pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('#modePills .pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+  });
+});
+document.querySelectorAll('#lengthPills .pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('#lengthPills .pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+  });
+});
+
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lvl = btn.dataset.level;
+    const mode = document.querySelector('#modePills .pill.active')?.dataset.mode || 'country';
+    const len  = document.querySelector('#lengthPills .pill.active')?.dataset.length || '0';
+    $('#difficulty').value = lvl;
+    $('#mode').value = mode;
+    $('#length').value = len;
+    closeStartScreen();
+    // Garante que AudioContext desperta cunha interacción real
+    try { ctx()?.resume(); } catch (_) {}
+    if (allFeatures.length === 0) return; // mapa aínda non listo
+    startGame();
+  });
+});
 
 $('#themeBtn').onclick = () => {
   document.body.classList.toggle('light');
