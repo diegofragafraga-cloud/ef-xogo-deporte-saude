@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa da UE · Países</title>
+<style>
+  :root {
+    --bg:#0b0d13; --bg2:#13161f; --bg3:#1c2030;
+    --text:#e8eaf0; --text2:#8b92a8;
+    --accent:#10b981; --accent2:#34d399;
+    --border:#252a3a; --radius:14px;
+    --country:#2a3347; --country-hover:#3a4565;
+    --country-out:#181c28; --country-out-stroke:#252a3a;
+    --found:rgba(16,185,129,.55); --found-stroke:#10b981;
+    --correct:#10b981; --wrong:#ef4444; --hint:#f59e0b;
+    --ocean:#0f131c;
+    --eu:#003399; /* azul UE de fondo sutil */
+  }
+  .light {
+    --bg:#f0f2f7; --bg2:#fff; --bg3:#e8eaf0;
+    --text:#13161f; --text2:#6b7280; --border:#d1d5db;
+    --country:#cbd5e1; --country-hover:#94a3b8;
+    --country-out:#e5e7eb; --country-out-stroke:#d1d5db;
+    --found:rgba(16,185,129,.45); --ocean:#dbeafe;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .hidden{display:none !important}
+
+  .header{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .back-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;flex-shrink:0}
+  .back-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .back-btn svg{width:18px;height:18px}
+  .header h1{font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:10px}
+  .header-right{margin-left:auto;display:flex;gap:8px}
+  .icon-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .icon-btn:hover{background:var(--accent);color:#fff}
+  .icon-btn svg{width:16px;height:16px}
+
+  .game-wrap{max-width:1400px;margin:0 auto;padding:10px 14px}
+
+  .hud{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 18px;margin-bottom:8px}
+  .hud-target{display:flex;align-items:baseline;gap:10px;flex:1;min-width:0}
+  .hud-target small{font-size:.65rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:1.4px;flex-shrink:0}
+  .hud-target-name{font-size:1.4rem;font-weight:800;color:var(--accent2);line-height:1}
+  .hud-stat{background:var(--bg3);padding:6px 12px;border-radius:8px;text-align:center;border:1px solid var(--border);display:flex;align-items:baseline;gap:6px}
+  .hud-stat strong{font-size:1.05rem;color:var(--text)}
+  .hud-stat .label{font-size:.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:1px}
+  .hud-stat.ok strong{color:var(--accent2)}
+  .hud-stat.bad strong{color:var(--wrong)}
+
+  .map-container{background:var(--ocean);border:1px solid var(--border);border-radius:var(--radius);padding:6px;position:relative;overflow:hidden;height:calc(100vh - 175px);min-height:480px}
+  #map{display:block;width:100%;height:100%;touch-action:manipulation}
+  .country{fill:var(--country);stroke:var(--bg2);stroke-width:.4;transition:fill .15s;cursor:pointer}
+  .light .country{stroke:#fff}
+  .country.outside{fill:var(--country-out);stroke:var(--country-out-stroke);pointer-events:none;cursor:default}
+  .country:not(.outside):hover{fill:var(--country-hover)}
+  .country.found{fill:var(--found);stroke:var(--found-stroke);stroke-width:.6;cursor:default;pointer-events:none}
+  .country.hint{fill:var(--hint) !important;animation:pulse 1s infinite}
+  .country.flash-correct{fill:var(--correct) !important}
+  .country.flash-wrong{fill:var(--wrong) !important}
+
+  .legend{position:absolute;left:18px;bottom:14px;background:rgba(15,19,28,.8);backdrop-filter:blur(6px);padding:8px 12px;border-radius:8px;font-size:.72rem;color:var(--text2);display:flex;gap:14px;align-items:center;border:1px solid var(--border)}
+  .light .legend{background:rgba(255,255,255,.85)}
+  .legend-dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:middle}
+
+  @keyframes pulse{0%,100%{opacity:.85}50%{opacity:1}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .shake{animation:shake .3s}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center;align-items:center}
+  .btn{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .15s;font-family:inherit}
+  .btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary:hover{background:var(--accent2);border-color:var(--accent2)}
+  select.btn{appearance:none;-webkit-appearance:none;padding-right:32px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%238b92a8' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;max-width:460px;width:100%;text-align:center}
+  .modal h2{font-size:1.5rem;margin-bottom:14px}
+  .modal .stats{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:20px}
+  .modal .stats strong{font-size:2.4rem;color:var(--accent2);display:block;line-height:1}
+  .modal .stats p{color:var(--text2);font-size:.85rem;margin-top:6px}
+  .modal .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+  .loading{text-align:center;padding:80px 20px;color:var(--text2);font-size:.95rem}
+  .help{font-size:.78rem;color:var(--text2);text-align:center;margin-top:10px}
+
+  @media (max-width:720px){
+    .game-wrap{padding:12px}
+    .hud{grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+    .hud-target{grid-column:1 / -1;text-align:center}
+    .hud-target-name{font-size:1.4rem}
+    .hud-stat{min-width:0;padding:8px}
+    .header h1{font-size:1rem}
+    .controls .btn{flex:1 1 calc(50% - 5px);font-size:.82rem;padding:9px 10px}
+    .legend{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="../xogos-interactivos.html" title="Volver aos xogos">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>🇪🇺 Mapa da Unión Europea · Países</h1>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn" title="Cambiar tema">
+      <svg id="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="sun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="game-wrap">
+  <div class="hud" id="hud">
+    <div class="hud-target">
+      <small>Encuentra este país de la UE</small>
+      <div class="hud-target-name" id="target">Cargando…</div>
+    </div>
+    <div class="hud-stat ok"><strong id="score">0</strong><div class="label">Aciertos</div></div>
+    <div class="hud-stat bad"><strong id="errors">0</strong><div class="label">Errores</div></div>
+    <div class="hud-stat"><strong id="round">0/0</strong><div class="label">Ronda</div></div>
+  </div>
+
+  <div class="map-container">
+    <div class="loading" id="loading">Cargando mapa de Europa…</div>
+    <svg id="map" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid meet" style="display:none"></svg>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:var(--country)"></span>27 países UE</span>
+      <span><span class="legend-dot" style="background:var(--found)"></span>Acertado</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <select class="btn" id="difficulty" title="Dificultad">
+      <option value="easy">Fácil · 12 países principales</option>
+      <option value="all" selected>Todos · 27 países UE</option>
+    </select>
+    <select class="btn" id="length" title="Número de preguntas">
+      <option value="10">10 preguntas</option>
+      <option value="20">20 preguntas</option>
+      <option value="0" selected>Todos</option>
+    </select>
+    <button class="btn" id="skip">Saltar país</button>
+    <button class="btn primary" id="restart">Nueva partida</button>
+  </div>
+  <div class="help">Pulsa en el país de la UE que aparece arriba. Tras 2 fallos, el país parpadea en naranja como pista.</div>
+</div>
+
+<script src="https://unpkg.com/d3@7"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+<script>
+// Países UE-27 (ISO 3166-1 numérico)
+const EU = new Set([
+  "040","056","100","191","196","203","208","233","246","250","276","300",
+  "348","372","380","428","440","442","470","528","616","620","642","703",
+  "705","724","752"
+]);
+
+// Subconjunto "fácil" (12 países más reconocibles para primaria)
+const EU_EASY = new Set(["724","620","250","380","276","300","372","056","528","752","616","040"]);
+
+// Nombres en español
+const NAMES = {
+  "040":"Austria","056":"Bélgica","100":"Bulgaria","191":"Croacia",
+  "196":"Chipre","203":"República Checa","208":"Dinamarca","233":"Estonia",
+  "246":"Finlandia","250":"Francia","276":"Alemania","300":"Grecia",
+  "348":"Hungría","372":"Irlanda","380":"Italia","428":"Letonia",
+  "440":"Lituania","442":"Luxemburgo","470":"Malta","528":"Países Bajos",
+  "616":"Polonia","620":"Portugal","642":"Rumanía","703":"Eslovaquia",
+  "705":"Eslovenia","724":"España","752":"Suecia",
+  // Países no UE visibles para contexto
+  "008":"Albania","020":"Andorra","070":"Bosnia y Herzegovina","112":"Bielorrusia",
+  "234":"Islas Feroe","268":"Georgia","292":"Gibraltar","304":"Groenlandia",
+  "352":"Islandia","438":"Liechtenstein","492":"Mónaco","498":"Moldavia",
+  "499":"Montenegro","504":"Marruecos","578":"Noruega","674":"San Marino",
+  "688":"Serbia","716":"Zimbabue","756":"Suiza","760":"Siria","776":"Tonga",
+  "792":"Turquía","804":"Ucrania","807":"Macedonia del Norte","826":"Reino Unido",
+  "012":"Argelia","788":"Túnez","818":"Egipto","643":"Rusia","051":"Armenia",
+  "031":"Azerbaiyán","368":"Iraq","364":"Irán","422":"Líbano","376":"Israel",
+  "275":"Palestina","400":"Jordania","682":"Arabia Saudí","-99":"Kosovo"
+};
+
+let allFeatures = [];
+let queue = [];
+let current = null;
+let score = 0, errors = 0, attempts = 0;
+let totalRound = 0;
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+
+function code(f) { return String(f.id).padStart(3, '0'); }
+function getName(f) { return NAMES[code(f)] || (f.properties && f.properties.name) || "(país)"; }
+
+async function init() {
+  try {
+    const data = await fetch('https://unpkg.com/world-atlas@2/countries-110m.json').then(r => {
+      if (!r.ok) throw new Error('No se pudo cargar el mapa');
+      return r.json();
+    });
+    const fc = topojson.feature(data, data.objects.countries);
+    // Só os 27 estados membros da UE
+    allFeatures = fc.features.filter(f => EU.has(code(f)));
+
+    // Proxección cónica conforme con escala manual — Europa máis "landscape".
+    const W = 1400, H = 900;
+    const projection = d3.geoConicConformal()
+      .center([3, 52.5])
+      .rotate([-15, 0])
+      .parallels([40, 62])
+      .scale(1500)
+      .translate([W / 2, H / 2]);
+    const path = d3.geoPath(projection);
+
+    const svg = d3.select('#map');
+    svg.selectAll('path')
+      .data(allFeatures, f => f.id)
+      .join('path')
+      .attr('class', 'country')
+      .attr('d', path)
+      .attr('data-id', f => code(f))
+      .attr('data-name', f => getName(f))
+      .on('click', (event, f) => onClick(f, event.currentTarget));
+
+    $('#loading').style.display = 'none';
+    svg.node().style.display = 'block';
+
+    startGame();
+  } catch (e) {
+    $('#loading').textContent = 'Error cargando el mapa. Recarga la página.';
+    console.error(e);
+  }
+}
+
+function startGame() {
+  const dif = $('#difficulty').value;
+  const len = parseInt($('#length').value, 10);
+
+  const pool = dif === 'easy' ? EU_EASY : EU;
+  let candidates = allFeatures.filter(f => pool.has(code(f)));
+  candidates = shuffle(candidates);
+  if (len > 0) candidates = candidates.slice(0, len);
+
+  queue = candidates;
+  totalRound = queue.length;
+  score = 0;
+  errors = 0;
+  attempts = 0;
+  current = null;
+
+  $$('.country').forEach(c => c.classList.remove('found','hint','flash-correct','flash-wrong'));
+
+  nextCountry();
+}
+
+function nextCountry() {
+  if (queue.length === 0) return showResults();
+  current = queue.shift();
+  attempts = 0;
+  $('#target').textContent = getName(current);
+  $$('.country.hint').forEach(c => c.classList.remove('hint'));
+  updateHUD();
+}
+
+function onClick(feature, el) {
+  if (!current || el.classList.contains('found')) return;
+
+  if (code(feature) === code(current)) {
+    el.classList.add('flash-correct');
+    setTimeout(() => {
+      el.classList.remove('flash-correct');
+      el.classList.add('found');
+    }, 500);
+    score++;
+    updateHUD();
+    setTimeout(nextCountry, 650);
+  } else {
+    attempts++;
+    errors++;
+    el.classList.add('flash-wrong');
+    $('#hud').classList.add('shake');
+    setTimeout(() => {
+      el.classList.remove('flash-wrong');
+      $('#hud').classList.remove('shake');
+    }, 380);
+
+    if (attempts >= 2) {
+      const correctEl = document.querySelector(`[data-id="${code(current)}"]`);
+      if (correctEl) correctEl.classList.add('hint');
+    }
+    if (attempts >= 4) return autoFail();
+    updateHUD();
+  }
+}
+
+function autoFail() {
+  const correctEl = document.querySelector(`[data-id="${code(current)}"]`);
+  if (correctEl) {
+    correctEl.classList.remove('hint');
+    correctEl.classList.add('flash-wrong');
+    setTimeout(() => {
+      correctEl.classList.remove('flash-wrong');
+      correctEl.classList.add('found');
+    }, 700);
+  }
+  setTimeout(nextCountry, 800);
+}
+
+function skipCountry() {
+  if (!current) return;
+  errors++;
+  autoFail();
+  updateHUD();
+}
+
+function updateHUD() {
+  $('#score').textContent = score;
+  $('#errors').textContent = errors;
+  const done = totalRound - queue.length - (current ? 1 : 0);
+  const idx = current ? done + 1 : done;
+  $('#round').textContent = `${idx}/${totalRound}`;
+}
+
+function showResults() {
+  current = null;
+  const pct = totalRound ? Math.round(100 * score / totalRound) : 0;
+  let msg = '¡Inténtalo otra vez!';
+  if (pct >= 90) msg = '¡Excelente! 🌟';
+  else if (pct >= 70) msg = '¡Muy bien! 👏';
+  else if (pct >= 50) msg = 'Buen intento, sigue practicando.';
+
+  const m = document.createElement('div');
+  m.className = 'modal-bg';
+  m.innerHTML = `
+    <div class="modal">
+      <h2>${msg}</h2>
+      <div class="stats">
+        <strong>${score}/${totalRound}</strong>
+        <p>${errors} errores · ${pct}% de aciertos</p>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="mAgain">Nueva partida</button>
+        <button class="btn" id="mClose">Cerrar</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+  m.querySelector('#mAgain').onclick = () => { m.remove(); startGame(); };
+  m.querySelector('#mClose').onclick = () => m.remove();
+}
+
+function shuffle(a) {
+  const arr = a.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+$('#restart').onclick = startGame;
+$('#skip').onclick = skipCountry;
+$('#difficulty').onchange = startGame;
+$('#length').onchange = startGame;
+
+$('#themeBtn').onclick = () => {
+  document.body.classList.toggle('light');
+  $('#moon').classList.toggle('hidden');
+  $('#sun').classList.toggle('hidden');
+  localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+};
+if (localStorage.getItem('ef_theme') === 'light') {
+  document.body.classList.add('light');
+  $('#moon').classList.add('hidden');
+  $('#sun').classList.remove('hidden');
+}
+
+init();
+</script>
+</body>
+</html>
