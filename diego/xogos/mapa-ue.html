@@ -69,6 +69,37 @@
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
   .shake{animation:shake .3s}
 
+  /* Pop emoji ao acertar */
+  .pop{position:fixed;font-size:3.4rem;pointer-events:none;z-index:250;
+    text-shadow:0 4px 18px rgba(0,0,0,.5);animation:pop 1.4s ease-out forwards}
+  @keyframes pop{
+    0%{transform:translate(-50%,-50%) scale(0);opacity:0}
+    20%{transform:translate(-50%,-60%) scale(1.6);opacity:1}
+    60%{transform:translate(-50%,-100%) scale(1.1);opacity:1}
+    100%{transform:translate(-50%,-160%) scale(.9);opacity:0}
+  }
+
+  /* Mares */
+  .mares{transition:opacity .3s}
+  .mares.hidden{opacity:0;pointer-events:none}
+  .mares text{
+    fill:#7eb6e2;font-style:italic;font-weight:600;text-anchor:middle;
+    paint-order:stroke;stroke:rgba(15,19,28,.9);stroke-width:4px;stroke-linejoin:round;
+    pointer-events:none;letter-spacing:.5px;
+  }
+  .mares text.big{font-size:24px}
+  .mares text.med{font-size:18px}
+  .mares text.sml{font-size:14px}
+  .light .mares text{fill:#1e4d7a;stroke:rgba(255,255,255,.95)}
+
+  /* Barra de progreso */
+  .progress{height:4px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-bottom:8px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    width:0%;transition:width .35s cubic-bezier(.22,1,.36,1);border-radius:99px}
+
+  /* Canvas confeti */
+  #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:240}
+
   .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center;align-items:center}
   .btn{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .15s;font-family:inherit}
   .btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -107,6 +138,13 @@
   </a>
   <h1>🇪🇺 Mapa da Unión Europea · Países</h1>
   <div class="header-right">
+    <button class="icon-btn" id="seaBtn" title="Mostrar/ocultar mares">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2c1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2c1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2c1.3 0 1.9.5 2.5 1"/></svg>
+    </button>
+    <button class="icon-btn" id="muteBtn" title="Silenciar son">
+      <svg id="iVol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.384 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/></svg>
+      <svg id="iMute" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.384 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+    </button>
     <button class="icon-btn" id="themeBtn" title="Cambiar tema">
       <svg id="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
       <svg id="sun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
@@ -124,6 +162,8 @@
     <div class="hud-stat bad"><strong id="errors">0</strong><div class="label">Errores</div></div>
     <div class="hud-stat"><strong id="round">0/0</strong><div class="label">Ronda</div></div>
   </div>
+
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
 
   <div class="map-container">
     <div class="loading" id="loading">Cargando mapa de Europa…</div>
@@ -150,8 +190,10 @@
   <div class="help">Pulsa en el país de la UE que aparece arriba. Tras 2 fallos, el país parpadea en naranja como pista.</div>
 </div>
 
+<canvas id="confettiCanvas"></canvas>
 <script src="https://unpkg.com/d3@7"></script>
 <script src="https://unpkg.com/topojson-client@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script>
 // Países UE-27 (ISO 3166-1 numérico)
 const EU = new Set([
@@ -196,6 +238,76 @@ const $$ = sel => document.querySelectorAll(sel);
 function code(f) { return String(f.id).padStart(3, '0'); }
 function getName(f) { return NAMES[code(f)] || (f.properties && f.properties.name) || "(país)"; }
 
+// ───── Áudio sintético (Web Audio API) ─────
+let audioCtx = null;
+let muted = localStorage.getItem('ef_audio_muted') === '1';
+function ctx() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {}
+  }
+  return audioCtx;
+}
+function tone(freq, dur, type = 'triangle', vol = 0.22, when = 0) {
+  if (muted) return;
+  const c = ctx(); if (!c) return;
+  const t0 = c.currentTime + when;
+  const osc = c.createOscillator();
+  const g = c.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  g.gain.setValueAtTime(vol, t0);
+  g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+  osc.connect(g).connect(c.destination);
+  osc.start(t0);
+  osc.stop(t0 + dur + 0.02);
+}
+function soundCorrect() { tone(523.25, 0.12); tone(783.99, 0.18, 'triangle', 0.22, 0.07); }
+function soundWrong()   { tone(196, 0.18, 'sawtooth', 0.14); tone(146.83, 0.22, 'sawtooth', 0.12, 0.08); }
+function soundFinish()  {
+  [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 0.18, 'triangle', 0.22, i * 0.10));
+}
+
+// ───── Pop de emoji sobre o país acertado ─────
+function showPop(emoji, x, y) {
+  const d = document.createElement('div');
+  d.className = 'pop';
+  d.textContent = emoji;
+  d.style.left = x + 'px';
+  d.style.top = y + 'px';
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 1450);
+}
+function popOnElement(el, emoji) {
+  const r = el.getBoundingClientRect();
+  showPop(emoji, r.left + r.width / 2, r.top + r.height / 2);
+}
+
+// ───── Confeti ─────
+let confettiFn = null;
+function initConfetti() {
+  if (typeof confetti === 'undefined') return;
+  confettiFn = confetti.create(document.getElementById('confettiCanvas'), { resize: true, useWorker: true });
+}
+function celebrate(big = false) {
+  if (!confettiFn) return;
+  const opts = {
+    spread: big ? 110 : 70,
+    particleCount: big ? 140 : 55,
+    startVelocity: big ? 55 : 35,
+    origin: { y: 0.7 },
+    colors: ['#10b981', '#34d399', '#fbbf24', '#3b82f6', '#a78bfa', '#f472b6'],
+    scalar: big ? 1.1 : .9,
+  };
+  confettiFn(opts);
+  if (big) {
+    setTimeout(() => confettiFn({ ...opts, origin: { x: .2, y: .65 } }), 200);
+    setTimeout(() => confettiFn({ ...opts, origin: { x: .8, y: .65 } }), 400);
+  }
+}
+
+// ───── Vibración móbil ─────
+function vibrate(pattern) { try { navigator.vibrate?.(pattern); } catch (_) {} }
+
 async function init() {
   try {
     const data = await fetch('https://unpkg.com/world-atlas@2/countries-110m.json').then(r => {
@@ -226,6 +338,49 @@ async function init() {
       .attr('data-name', f => getName(f))
       .on('click', (event, f) => onClick(f, event.currentTarget));
 
+    // Capa de mares (oculta por defecto)
+    const SEAS = [
+      { name: 'Océano Atlántico', coord: [-13, 47], cls: 'big' },
+      { name: 'Mar Mediterráneo', coord: [10.5, 37.5], cls: 'big' },
+      { name: 'Mar do Norte', coord: [3.5, 56], cls: 'med' },
+      { name: 'Mar Báltico', coord: [20, 58], cls: 'med' },
+      { name: 'Mar Negro', coord: [34, 43], cls: 'med' },
+      { name: 'Golfo de Biscaia', coord: [-5, 45.5], cls: 'sml' },
+      { name: 'Canal da Mancha', coord: [-1, 50], cls: 'sml' },
+      { name: 'Mar Adriático', coord: [16, 43], cls: 'sml' },
+      { name: 'Mar Exeo', coord: [25.3, 38.5], cls: 'sml' },
+      { name: 'Mar Tirreno', coord: [12, 40], cls: 'sml' },
+    ];
+    const maresG = svg.append('g').attr('class', 'mares hidden');
+    const sizes = { big: 28, med: 22, sml: 17 };
+    SEAS.forEach(s => {
+      const [x, y] = projection(s.coord);
+      maresG.append('text')
+        .attr('x', x).attr('y', y).attr('class', s.cls)
+        .style('font-size', sizes[s.cls] + 'px')
+        .style('font-style', 'italic')
+        .style('font-weight', '700')
+        .style('text-anchor', 'middle')
+        .style('paint-order', 'stroke')
+        .style('stroke-width', '4px')
+        .style('stroke-linejoin', 'round')
+        .style('letter-spacing', '.5px')
+        .style('pointer-events', 'none')
+        .style('fill', '#9ec9ec')
+        .style('stroke', 'rgba(8,12,20,.9)')
+        .text(s.name);
+    });
+    // En tema claro, axustar cores
+    const updateMaresColor = () => {
+      const isLight = document.body.classList.contains('light');
+      maresG.selectAll('text')
+        .style('fill', isLight ? '#1e4d7a' : '#9ec9ec')
+        .style('stroke', isLight ? 'rgba(255,255,255,.95)' : 'rgba(8,12,20,.9)');
+    };
+    updateMaresColor();
+    window._updateMaresColor = updateMaresColor;
+
+    initConfetti();
     $('#loading').style.display = 'none';
     svg.node().style.display = 'block';
 
@@ -271,6 +426,11 @@ function onClick(feature, el) {
 
   if (code(feature) === code(current)) {
     el.classList.add('flash-correct');
+    soundCorrect();
+    vibrate(60);
+    const emoji = attempts === 0 ? ['⭐','🎉','🌟','✨','👏','🔥'][Math.floor(Math.random()*6)] : '👍';
+    popOnElement(el, emoji);
+    if (attempts === 0) celebrate(false);
     setTimeout(() => {
       el.classList.remove('flash-correct');
       el.classList.add('found');
@@ -281,6 +441,8 @@ function onClick(feature, el) {
   } else {
     attempts++;
     errors++;
+    soundWrong();
+    vibrate([30, 50, 30]);
     el.classList.add('flash-wrong');
     $('#hud').classList.add('shake');
     setTimeout(() => {
@@ -323,6 +485,8 @@ function updateHUD() {
   const done = totalRound - queue.length - (current ? 1 : 0);
   const idx = current ? done + 1 : done;
   $('#round').textContent = `${idx}/${totalRound}`;
+  const pct = totalRound ? Math.min(100, (score / totalRound) * 100) : 0;
+  $('#progressFill').style.width = pct + '%';
 }
 
 function showResults() {
@@ -332,6 +496,8 @@ function showResults() {
   if (pct >= 90) msg = '¡Excelente! 🌟';
   else if (pct >= 70) msg = '¡Muy bien! 👏';
   else if (pct >= 50) msg = 'Buen intento, sigue practicando.';
+  soundFinish();
+  if (pct >= 70) celebrate(true);
 
   const m = document.createElement('div');
   m.className = 'modal-bg';
@@ -377,6 +543,32 @@ if (localStorage.getItem('ef_theme') === 'light') {
   $('#moon').classList.add('hidden');
   $('#sun').classList.remove('hidden');
 }
+
+// Mute / unmute
+function refreshMuteIcon() {
+  $('#iVol').classList.toggle('hidden', muted);
+  $('#iMute').classList.toggle('hidden', !muted);
+  $('#muteBtn').setAttribute('title', muted ? 'Activar son' : 'Silenciar son');
+}
+$('#muteBtn').onclick = () => {
+  muted = !muted;
+  localStorage.setItem('ef_audio_muted', muted ? '1' : '0');
+  refreshMuteIcon();
+  if (!muted) { try { ctx()?.resume(); } catch (_) {} tone(660, 0.08); }
+};
+refreshMuteIcon();
+
+// Mares toggle
+$('#seaBtn').onclick = () => {
+  const g = document.querySelector('.mares');
+  if (g) g.classList.toggle('hidden');
+  $('#seaBtn').classList.toggle('active');
+};
+
+// Despertar AudioContext na primeira interacción do usuario (bloquead@ por defecto)
+const wakeAudio = () => { try { ctx()?.resume(); } catch (_) {} document.removeEventListener('click', wakeAudio); document.removeEventListener('keydown', wakeAudio); };
+document.addEventListener('click', wakeAudio, { once: true });
+document.addEventListener('keydown', wakeAudio, { once: true });
 
 init();
 </script>
