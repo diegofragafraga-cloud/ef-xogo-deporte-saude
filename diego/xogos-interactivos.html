@@ -55,8 +55,17 @@
   .gc-tag-soon{background:rgba(139,146,168,.15);color:var(--text2)}
   .gc-area{font-size:.78rem;color:var(--text2)}
   .gc-desc{font-size:.85rem;color:var(--text2);line-height:1.5;flex:1}
-  .gc-foot{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--text2);padding-top:10px;border-top:1px solid var(--border)}
+  .gc-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.78rem;color:var(--text2);padding-top:10px;border-top:1px solid var(--border)}
   .gc-foot strong{color:var(--text);font-weight:600}
+  .btn-copiar{
+    background:var(--bg3);color:var(--text);border:1px solid var(--border);
+    padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.74rem;font-weight:600;
+    font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:all .15s;
+    white-space:nowrap;
+  }
+  .btn-copiar:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn-copiar.ok{background:#3a8a3a;color:#fff;border-color:#3a8a3a}
+  .btn-copiar svg{width:13px;height:13px}
 
   @media (max-width:640px){
     .wrap{padding:24px 16px}
@@ -98,7 +107,10 @@
       </div>
       <div class="gc-desc">O alumnado ve o nome dun país e ten que pulsar nel sobre o mapa mundial. Ten 3 niveis de dificultade (fácil, medio, difícil), pista tras 2 fallos e contador de aciertos.</div>
       <div class="gc-foot">
-        <span>3 niveis · 10–195 países</span>
+        <button class="btn-copiar" data-href="xogos/mapa-mundi.html" title="Copiar enlace para Edixgal">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          Edixgal
+        </button>
         <strong>Xogar →</strong>
       </div>
     </a>
@@ -111,9 +123,12 @@
           <div class="gc-area">Países membros da UE</div>
         </div>
       </div>
-      <div class="gc-desc">Mesmo formato pero limitado aos 27 estados membros da Unión Europea. Os países que non son da UE aparecen en gris e non se poden pulsar. Dous niveis: 12 países principais ou os 27 completos.</div>
+      <div class="gc-desc">Mesmo formato pero limitado aos 27 estados membros da Unión Europea. Dous niveis: 12 países principais ou os 27 completos.</div>
       <div class="gc-foot">
-        <span>2 niveis · 12 ou 27 países</span>
+        <button class="btn-copiar" data-href="xogos/mapa-ue.html" title="Copiar enlace para Edixgal">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          Edixgal
+        </button>
         <strong>Xogar →</strong>
       </div>
     </a>
@@ -144,6 +159,32 @@ if (localStorage.getItem('ef_theme') === 'light') {
   $('#moon').classList.add('hidden');
   $('#sun').classList.remove('hidden');
 }
+
+// Copiar enlace público para Edixgal
+document.querySelectorAll('.btn-copiar').forEach(btn => {
+  btn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const href = btn.getAttribute('data-href');
+    const url = new URL(href, location.href).href;
+    const original = btn.innerHTML;
+    const setOk = () => {
+      btn.classList.add('ok');
+      btn.innerHTML = '✓ Copiado';
+      setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = original; }, 1600);
+    };
+    try {
+      await navigator.clipboard.writeText(url);
+      setOk();
+    } catch (_) {
+      const ta = document.createElement('textarea');
+      ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); setOk(); }
+      catch (_) { alert('Copia manualmente: ' + url); }
+      ta.remove();
+    }
+  });
+});
 </script>
 </body>
 </html>
