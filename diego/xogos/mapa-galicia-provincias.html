@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provincias de Galicia</title>
+<style>
+  :root {
+    --bg:#0b0d13; --bg2:#13161f; --bg3:#1c2030;
+    --text:#e8eaf0; --text2:#8b92a8;
+    --accent:#10b981; --accent2:#34d399;
+    --border:#252a3a; --radius:14px;
+    --country:#2a3347; --country-hover:#3a4565;
+    --found:rgba(16,185,129,.55); --found-stroke:#10b981;
+    --correct:#10b981; --wrong:#ef4444; --hint:#f59e0b;
+    --ocean:#0f131c;
+  }
+  .light{--bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db;--country:#cbd5e1;--country-hover:#94a3b8;--found:rgba(16,185,129,.45);--ocean:#dbeafe}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .hidden{display:none !important}
+
+  .header{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .back-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;flex-shrink:0}
+  .back-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .back-btn svg{width:18px;height:18px}
+  .header h1{font-size:1.1rem;font-weight:700}
+  .header-right{margin-left:auto;display:flex;gap:8px}
+  .icon-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .icon-btn:hover{background:var(--accent);color:#fff}
+  .icon-btn svg{width:16px;height:16px}
+
+  .game-wrap{max-width:1200px;margin:0 auto;padding:10px 14px}
+
+  .hud{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 18px;margin-bottom:8px}
+  .hud-target{display:flex;align-items:baseline;gap:10px;flex:1;min-width:0}
+  .hud-target small{font-size:.65rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:1.4px;flex-shrink:0}
+  .hud-target-name{font-size:1.5rem;font-weight:800;color:var(--accent2)}
+  .hud-stat{background:var(--bg3);padding:6px 12px;border-radius:8px;text-align:center;border:1px solid var(--border);display:flex;align-items:baseline;gap:6px}
+  .hud-stat strong{font-size:1.05rem;color:var(--text)}
+  .hud-stat .label{font-size:.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:1px}
+  .hud-stat.ok strong{color:var(--accent2)}
+  .hud-stat.bad strong{color:var(--wrong)}
+
+  .map-container{background:var(--ocean);border:1px solid var(--border);border-radius:var(--radius);padding:6px;position:relative;overflow:hidden;height:calc(100vh - 175px);min-height:480px}
+  #map{display:block;width:100%;height:100%;touch-action:manipulation}
+  .country{stroke:var(--bg2);stroke-width:1.2;transition:fill .15s;cursor:pointer}
+  .light .country{stroke:#fff}
+  .country:hover{filter:brightness(1.2)}
+  .country.found{fill:var(--found);stroke:var(--found-stroke);stroke-width:1.5;cursor:default;pointer-events:none}
+  .country.hint{fill:var(--hint) !important;animation:pulse 1s infinite}
+  .country.flash-correct{fill:var(--correct) !important}
+  .country.flash-wrong{fill:var(--wrong) !important}
+  /* Cor distinta para cada provincia */
+  .country[data-id="15"]{fill:#1e3a5f}
+  .country[data-id="27"]{fill:#3a4d2c}
+  .country[data-id="32"]{fill:#5a3a2a}
+  .country[data-id="36"]{fill:#3d2a4d}
+  .light .country[data-id="15"]{fill:#9bb5d6}
+  .light .country[data-id="27"]{fill:#b5c69b}
+  .light .country[data-id="32"]{fill:#d6b59b}
+  .light .country[data-id="36"]{fill:#b59bd6}
+
+  @keyframes pulse{0%,100%{opacity:.85}50%{opacity:1}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .shake{animation:shake .3s}
+
+  .pop{position:fixed;font-size:3.4rem;pointer-events:none;z-index:250;text-shadow:0 4px 18px rgba(0,0,0,.5);animation:pop 1.4s ease-out forwards}
+  @keyframes pop{0%{transform:translate(-50%,-50%) scale(0);opacity:0}20%{transform:translate(-50%,-60%) scale(1.6);opacity:1}60%{transform:translate(-50%,-100%) scale(1.1);opacity:1}100%{transform:translate(-50%,-160%) scale(.9);opacity:0}}
+
+  .ficha{position:fixed;background:var(--bg2);border:2px solid var(--accent);border-radius:12px;padding:10px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 12px 32px rgba(0,0,0,.5);z-index:230;pointer-events:none;transform:translate(-50%,-50%);min-width:220px;animation:ficha-anim 1.7s ease-out forwards}
+  .ficha .ff-flag{font-size:2.4rem;line-height:1}
+  .ficha .ff-info{font-size:.82rem;line-height:1.35}
+  .ficha .ff-info strong{display:block;font-size:1rem;color:var(--accent2);margin-bottom:2px}
+  .ficha .ff-info span{color:var(--text2)}
+  @keyframes ficha-anim{0%{opacity:0;transform:translate(-50%,calc(-50% + 14px)) scale(.7)}15%,75%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,calc(-50% - 14px)) scale(.95)}}
+
+  .progress{height:4px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-bottom:8px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .35s cubic-bezier(.22,1,.36,1)}
+
+  #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:240}
+
+  .badge-big{font-size:4rem;line-height:1;margin-bottom:6px}
+  .badge-text{font-size:1.05rem;font-weight:700;color:var(--accent2);margin-bottom:6px}
+  .modal .record-line{font-size:.75rem;color:var(--text2);margin-top:8px}
+  .modal .record-line.new{color:var(--accent2);font-weight:700}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center}
+  .btn{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .15s;font-family:inherit}
+  .btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary:hover{background:var(--accent2);border-color:var(--accent2)}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;max-width:460px;width:100%;text-align:center}
+  .modal h2{font-size:1.5rem;margin-bottom:14px}
+  .modal .stats{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:20px}
+  .modal .stats strong{font-size:2.4rem;color:var(--accent2);display:block}
+  .modal .stats p{color:var(--text2);font-size:.85rem;margin-top:6px}
+  .modal .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+  .loading{text-align:center;padding:80px 20px;color:var(--text2)}
+  .help{font-size:.78rem;color:var(--text2);text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="../xogos-interactivos.html" title="Volver aos xogos">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>🏛️ Provincias de Galicia</h1>
+  <div class="header-right">
+    <button class="icon-btn" id="muteBtn" title="Silenciar son">
+      <svg id="iVol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.384 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/></svg>
+      <svg id="iMute" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.384 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+    </button>
+    <button class="icon-btn" id="themeBtn" title="Cambiar tema">
+      <svg id="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="sun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="game-wrap">
+  <div class="hud" id="hud">
+    <div class="hud-target">
+      <small>Atopa esta provincia</small>
+      <div class="hud-target-name" id="target">Cargando…</div>
+    </div>
+    <div class="hud-stat ok"><strong id="score">0</strong><div class="label">Aciertos</div></div>
+    <div class="hud-stat bad"><strong id="errors">0</strong><div class="label">Errores</div></div>
+    <div class="hud-stat"><strong id="round">0/0</strong><div class="label">Ronda</div></div>
+  </div>
+
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="map-container">
+    <div class="loading" id="loading">Cargando mapa…</div>
+    <svg id="map" viewBox="0 0 1000 900" preserveAspectRatio="xMidYMid meet" style="display:none"></svg>
+  </div>
+
+  <div class="controls">
+    <button class="btn primary" id="restart">Nova partida</button>
+  </div>
+  <div class="help">Pulsa na provincia que aparece arriba. Tras 2 fallos parpadea en naranja como pista.</div>
+</div>
+
+<canvas id="confettiCanvas"></canvas>
+<script src="https://unpkg.com/d3@7"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+const PROV_DATA = {
+  "15":{name:"A Coruña",   capital:"A Coruña / Santiago", emoji:"🌊"},
+  "27":{name:"Lugo",       capital:"Lugo",                emoji:"🏰"},
+  "32":{name:"Ourense",    capital:"Ourense",             emoji:"♨️"},
+  "36":{name:"Pontevedra", capital:"Pontevedra",          emoji:"🐚"},
+};
+const GAL_CODES = ["15","27","32","36"];
+
+let allFeatures = [];
+let queue = [];
+let current = null;
+let score = 0, errors = 0, attempts = 0;
+let totalRound = 0;
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+function code(f) { return String(f.id).padStart(2, '0'); }
+function dataOf(f) { return PROV_DATA[code(f)] || {}; }
+function getName(f) { return dataOf(f).name || (f.properties && f.properties.name) || "?"; }
+
+let audioCtx = null;
+let muted = localStorage.getItem('ef_audio_muted') === '1';
+function ctx() { if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {} } return audioCtx; }
+function tone(freq, dur, type='triangle', vol=.22, when=0) {
+  if (muted) return;
+  const c = ctx(); if (!c) return;
+  const t0 = c.currentTime + when;
+  const osc = c.createOscillator(), g = c.createGain();
+  osc.type = type; osc.frequency.value = freq;
+  g.gain.setValueAtTime(vol, t0);
+  g.gain.exponentialRampToValueAtTime(.001, t0 + dur);
+  osc.connect(g).connect(c.destination); osc.start(t0); osc.stop(t0 + dur + .02);
+}
+function soundCorrect() { tone(523.25,.12); tone(783.99,.18,'triangle',.22,.07); }
+function soundWrong()   { tone(196,.18,'sawtooth',.14); tone(146.83,.22,'sawtooth',.12,.08); }
+function soundFinish()  { [523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,.18,'triangle',.22,i*.10)); }
+
+function showPop(emoji, x, y) { const d=document.createElement('div'); d.className='pop'; d.textContent=emoji; d.style.left=x+'px'; d.style.top=y+'px'; document.body.appendChild(d); setTimeout(()=>d.remove(),1450); }
+function popOnElement(el, emoji) { const r=el.getBoundingClientRect(); showPop(emoji, r.left+r.width/2, r.top+r.height/2); }
+
+let confettiFn = null;
+function initConfetti() { if (typeof confetti==='undefined') return; confettiFn=confetti.create(document.getElementById('confettiCanvas'), {resize:true, useWorker:true}); }
+function celebrate(big=false) {
+  if (!confettiFn) return;
+  const opts = { spread: big?110:70, particleCount: big?140:55, startVelocity: big?55:35, origin:{y:.7}, colors:['#10b981','#34d399','#fbbf24','#3b82f6','#a78bfa','#f472b6'], scalar: big?1.1:.9 };
+  confettiFn(opts);
+  if (big) { setTimeout(()=>confettiFn({...opts, origin:{x:.2,y:.65}}), 200); setTimeout(()=>confettiFn({...opts, origin:{x:.8,y:.65}}), 400); }
+}
+function vibrate(p) { try { navigator.vibrate?.(p); } catch (_) {} }
+
+async function init() {
+  try {
+    const data = await fetch('https://cdn.jsdelivr.net/npm/es-atlas@0.6.0/es/provinces.json').then(r => r.ok ? r.json() : Promise.reject(new Error('load')));
+    const fc = topojson.feature(data, data.objects.provinces);
+    allFeatures = fc.features.filter(f => GAL_CODES.includes(code(f)));
+
+    const collection = { type: "FeatureCollection", features: allFeatures };
+    const projection = d3.geoMercator().fitExtent([[20, 20], [980, 880]], collection);
+    const path = d3.geoPath(projection);
+
+    const svg = d3.select('#map');
+    svg.selectAll('path')
+      .data(allFeatures, f => f.id)
+      .join('path')
+      .attr('class', 'country')
+      .attr('d', path)
+      .attr('data-id', f => code(f))
+      .attr('data-name', f => getName(f))
+      .on('click', (event, f) => onClick(f, event.currentTarget));
+
+    initConfetti();
+    $('#loading').style.display = 'none';
+    svg.node().style.display = 'block';
+    startGame();
+  } catch (e) {
+    $('#loading').textContent = 'Error cargando o mapa. Recarga a páxina.';
+    console.error(e);
+  }
+}
+
+function startGame() {
+  let candidates = allFeatures.slice();
+  candidates = shuffle(candidates);
+  queue = candidates;
+  totalRound = queue.length;
+  score = 0; errors = 0; attempts = 0; current = null;
+  $$('.country').forEach(c => c.classList.remove('found','hint','flash-correct','flash-wrong'));
+  nextCountry();
+}
+
+function nextCountry() {
+  if (queue.length === 0) return showResults();
+  current = queue.shift();
+  attempts = 0;
+  $('#target').textContent = getName(current);
+  $$('.country.hint').forEach(c => c.classList.remove('hint'));
+  updateHUD();
+}
+
+function onClick(feature, el) {
+  if (!current || el.classList.contains('found')) return;
+  if (code(feature) === code(current)) {
+    el.classList.add('flash-correct');
+    soundCorrect();
+    vibrate(60);
+    const emoji = attempts === 0 ? ['⭐','🎉','🌟','✨','👏','🔥'][Math.floor(Math.random()*6)] : '👍';
+    popOnElement(el, emoji);
+    if (attempts === 0) celebrate(false);
+    showFicha(current, el);
+    setTimeout(()=>{ el.classList.remove('flash-correct'); el.classList.add('found'); }, 500);
+    score++; updateHUD();
+    setTimeout(nextCountry, 1700);
+  } else {
+    attempts++; errors++;
+    soundWrong(); vibrate([30,50,30]);
+    el.classList.add('flash-wrong');
+    $('#hud').classList.add('shake');
+    setTimeout(()=>{ el.classList.remove('flash-wrong'); $('#hud').classList.remove('shake'); }, 380);
+    if (attempts >= 2) { const c = document.querySelector(`[data-id="${code(current)}"]`); if (c) c.classList.add('hint'); }
+    if (attempts >= 4) return autoFail();
+    updateHUD();
+  }
+}
+
+function showFicha(feature, el) {
+  const data = dataOf(feature);
+  if (!data.name) return;
+  const r = el.getBoundingClientRect();
+  const f = document.createElement('div'); f.className = 'ficha';
+  f.style.left = (r.left + r.width / 2) + 'px'; f.style.top = (r.top + r.height / 2) + 'px';
+  f.innerHTML = `<div class="ff-flag">${data.emoji||'🏛️'}</div>
+    <div class="ff-info"><strong>${data.name}</strong>
+    <div><span>Capital:</span> ${data.capital}</div></div>`;
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(), 1700);
+}
+
+function autoFail() {
+  const c = document.querySelector(`[data-id="${code(current)}"]`);
+  if (c) { c.classList.remove('hint'); c.classList.add('flash-wrong'); setTimeout(()=>{ c.classList.remove('flash-wrong'); c.classList.add('found'); }, 700); }
+  setTimeout(nextCountry, 800);
+}
+
+function updateHUD() {
+  $('#score').textContent = score;
+  $('#errors').textContent = errors;
+  const done = totalRound - queue.length - (current ? 1 : 0);
+  $('#round').textContent = `${current ? done + 1 : done}/${totalRound}`;
+  const pct = totalRound ? Math.min(100, (score/totalRound)*100) : 0;
+  $('#progressFill').style.width = pct + '%';
+}
+
+function showResults() {
+  current = null;
+  const pct = totalRound ? Math.round(100 * score / totalRound) : 0;
+  const badge = getBadge(score, totalRound, errors);
+  soundFinish();
+  if (pct >= 70) celebrate(true);
+  const isNew = saveRecord(score, totalRound, errors);
+  const r = getRecord();
+
+  const m = document.createElement('div'); m.className = 'modal-bg';
+  m.innerHTML = `<div class="modal">
+    <div class="badge-big">${badge.emoji}</div>
+    <div class="badge-text">${badge.text}</div>
+    <h2>${badge.title}</h2>
+    <div class="stats"><strong>${score}/${totalRound}</strong>
+      <p>${errors} ${errors === 1 ? 'fallo' : 'fallos'} · ${pct}% de acertos</p></div>
+    ${isNew ? `<div class="record-line new">🎉 Novo récord persoal!</div>` :
+      (r ? `<div class="record-line">Récord: <strong>${r.score}/${r.total}</strong> (${r.errors} fallos)</div>` : '')}
+    <div class="actions" style="margin-top:14px">
+      <button class="btn primary" id="mAgain">Outra partida</button>
+      <button class="btn" id="mClose">Cerrar</button></div></div>`;
+  document.body.appendChild(m);
+  m.querySelector('#mAgain').onclick = () => { m.remove(); startGame(); };
+  m.querySelector('#mClose').onclick = () => m.remove();
+}
+
+function getBadge(score, total, errors) {
+  if (total > 0 && score === total && errors === 0) return { emoji:'🏆', text:'Coñecedor/a de Galicia!', title:'Pleno sen fallos!' };
+  const pct = total ? score/total : 0;
+  if (pct >= .9) return { emoji:'🥇', text:'Medalla de ouro', title:'Excelente!' };
+  if (pct >= .75) return { emoji:'🥈', text:'Medalla de prata', title:'Moi ben!' };
+  if (pct >= .6) return { emoji:'🥉', text:'Medalla de bronce', title:'Bo traballo!' };
+  return { emoji:'👍', text:'Segue practicando', title:'Inténtao outra vez!' };
+}
+
+const REC_KEY = 'ef_mapa_galicia_prov_record';
+function getRecord() { try { return JSON.parse(localStorage.getItem(REC_KEY) || 'null'); } catch (_) { return null; } }
+function saveRecord(score, total, errors) {
+  const cur = getRecord();
+  const isBetter = !cur || score > cur.score || (score === cur.score && errors < cur.errors);
+  if (isBetter && total > 0) { try { localStorage.setItem(REC_KEY, JSON.stringify({score, total, errors, ts: Date.now()})); } catch (_) {} return true; }
+  return false;
+}
+
+function shuffle(a) { const arr = a.slice(); for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+$('#themeBtn').onclick = () => {
+  document.body.classList.toggle('light');
+  $('#moon').classList.toggle('hidden');
+  $('#sun').classList.toggle('hidden');
+  localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+};
+if (localStorage.getItem('ef_theme') === 'light') { document.body.classList.add('light'); $('#moon').classList.add('hidden'); $('#sun').classList.remove('hidden'); }
+
+function refreshMuteIcon() {
+  $('#iVol').classList.toggle('hidden', muted);
+  $('#iMute').classList.toggle('hidden', !muted);
+}
+$('#muteBtn').onclick = () => {
+  muted = !muted;
+  localStorage.setItem('ef_audio_muted', muted ? '1' : '0');
+  refreshMuteIcon();
+  if (!muted) { try { ctx()?.resume(); } catch (_) {} tone(660, .08); }
+};
+refreshMuteIcon();
+
+$('#restart').onclick = startGame;
+const wakeAudio = () => { try { ctx()?.resume(); } catch (_) {} document.removeEventListener('click', wakeAudio); document.removeEventListener('keydown', wakeAudio); };
+document.addEventListener('click', wakeAudio, { once: true });
+document.addEventListener('keydown', wakeAudio, { once: true });
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa das CCAA · España</title>
+<style>
+  :root {
+    --bg:#0b0d13; --bg2:#13161f; --bg3:#1c2030;
+    --text:#e8eaf0; --text2:#8b92a8;
+    --accent:#10b981; --accent2:#34d399;
+    --border:#252a3a; --radius:14px;
+    --country:#2a3347; --country-hover:#3a4565;
+    --found:rgba(16,185,129,.55); --found-stroke:#10b981;
+    --correct:#10b981; --wrong:#ef4444; --hint:#f59e0b;
+    --ocean:#0f131c;
+  }
+  .light {
+    --bg:#f0f2f7; --bg2:#fff; --bg3:#e8eaf0;
+    --text:#13161f; --text2:#6b7280; --border:#d1d5db;
+    --country:#cbd5e1; --country-hover:#94a3b8;
+    --found:rgba(16,185,129,.45); --ocean:#dbeafe;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .hidden{display:none !important}
+
+  .header{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .back-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;flex-shrink:0}
+  .back-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .back-btn svg{width:18px;height:18px}
+  .header h1{font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:10px}
+  .header-right{margin-left:auto;display:flex;gap:8px}
+  .icon-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .icon-btn:hover{background:var(--accent);color:#fff}
+  .icon-btn svg{width:16px;height:16px}
+
+  .game-wrap{max-width:1400px;margin:0 auto;padding:10px 14px}
+
+  .hud{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 18px;margin-bottom:8px}
+  .hud-target{display:flex;align-items:baseline;gap:10px;flex:1;min-width:0}
+  .hud-target small{font-size:.65rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:1.4px;flex-shrink:0}
+  .hud-target-name{font-size:1.4rem;font-weight:800;color:var(--accent2);line-height:1}
+  .hud-stat{background:var(--bg3);padding:6px 12px;border-radius:8px;text-align:center;border:1px solid var(--border);display:flex;align-items:baseline;gap:6px}
+  .hud-stat strong{font-size:1.05rem;color:var(--text)}
+  .hud-stat .label{font-size:.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:1px}
+  .hud-stat.ok strong{color:var(--accent2)}
+  .hud-stat.bad strong{color:var(--wrong)}
+  .hud-record{font-size:.7rem;color:var(--text2);background:var(--bg3);padding:5px 10px;border-radius:8px;border:1px solid var(--border);white-space:nowrap}
+  .hud-record strong{color:var(--accent2)}
+  .hud-hints{display:none;gap:8px;align-items:center;font-size:.82rem;color:var(--text2);margin-left:14px;flex-shrink:0}
+  .hud-hints.show{display:inline-flex}
+  .hud-hints .hint-flag{font-size:1.6rem;line-height:1}
+  .hud-hints .hint-cap{background:var(--bg3);padding:4px 9px;border-radius:8px;border:1px solid var(--border);color:var(--text)}
+
+  .map-container{background:var(--ocean);border:1px solid var(--border);border-radius:var(--radius);padding:6px;position:relative;overflow:hidden;height:calc(100vh - 175px);min-height:480px}
+  #map{display:block;width:100%;height:100%;touch-action:manipulation}
+  .country{fill:var(--country);stroke:var(--bg2);stroke-width:.6;transition:fill .15s;cursor:pointer}
+  .light .country{stroke:#fff}
+  .country:hover{fill:var(--country-hover)}
+  .country.found{fill:var(--found);stroke:var(--found-stroke);stroke-width:.8;cursor:default;pointer-events:none}
+  .country.hint{fill:var(--hint) !important;animation:pulse 1s infinite}
+  .country.flash-correct{fill:var(--correct) !important}
+  .country.flash-wrong{fill:var(--wrong) !important}
+  .country.unselectable{pointer-events:none;opacity:.5}
+
+  .border-outline{fill:none;stroke:rgba(255,255,255,.15);stroke-width:.8;pointer-events:none}
+  .light .border-outline{stroke:rgba(0,0,0,.15)}
+
+  @keyframes pulse{0%,100%{opacity:.85}50%{opacity:1}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .shake{animation:shake .3s}
+
+  .pop{position:fixed;font-size:3.4rem;pointer-events:none;z-index:250;text-shadow:0 4px 18px rgba(0,0,0,.5);animation:pop 1.4s ease-out forwards}
+  @keyframes pop{0%{transform:translate(-50%,-50%) scale(0);opacity:0}20%{transform:translate(-50%,-60%) scale(1.6);opacity:1}60%{transform:translate(-50%,-100%) scale(1.1);opacity:1}100%{transform:translate(-50%,-160%) scale(.9);opacity:0}}
+
+  .mares{transition:opacity .3s}
+  .mares.hidden{opacity:0;pointer-events:none}
+
+  .ficha{position:fixed;background:var(--bg2);border:2px solid var(--accent);border-radius:12px;padding:10px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 12px 32px rgba(0,0,0,.5);z-index:230;pointer-events:none;transform:translate(-50%,-50%);min-width:200px;max-width:300px;animation:ficha-anim 1.7s ease-out forwards}
+  .ficha .ff-flag{font-size:2.4rem;line-height:1;flex-shrink:0}
+  .ficha .ff-info{font-size:.82rem;line-height:1.35}
+  .ficha .ff-info strong{display:block;font-size:1rem;color:var(--accent2);margin-bottom:2px}
+  .ficha .ff-info span{color:var(--text2)}
+  @keyframes ficha-anim{0%{opacity:0;transform:translate(-50%,calc(-50% + 14px)) scale(.7)}15%,75%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,calc(-50% - 14px)) scale(.95)}}
+
+  .progress{height:4px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-bottom:8px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .35s cubic-bezier(.22,1,.36,1);border-radius:99px}
+
+  #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:240}
+
+  .badge-big{font-size:4rem;line-height:1;margin-bottom:6px}
+  .badge-text{font-size:1.05rem;font-weight:700;color:var(--accent2);margin-bottom:6px}
+  .modal .record-line{font-size:.75rem;color:var(--text2);margin-top:8px}
+  .modal .record-line.new{color:var(--accent2);font-weight:700}
+
+  .start-screen{position:fixed;inset:0;background:rgba(8,11,18,.92);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;animation:fade-in .3s ease-out}
+  .start-screen.hidden{display:none}
+  .start-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:32px 28px;max-width:760px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+  .start-card h2{font-size:1.6rem;margin-bottom:6px}
+  .start-card .start-flag{font-size:2.6rem;line-height:1;margin-bottom:10px}
+  .start-card p{color:var(--text2);font-size:.92rem;margin-bottom:22px}
+  .start-section-title{font-size:.7rem;font-weight:700;color:var(--text2);letter-spacing:1.6px;text-transform:uppercase;margin:18px 0 10px}
+  .levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:6px}
+  .level-btn{background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:18px 14px;cursor:pointer;font-family:inherit;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .2s;text-align:center}
+  .level-btn:hover{transform:translateY(-3px);border-color:currentColor}
+  .level-btn .lvl-emoji{font-size:2.4rem;line-height:1}
+  .level-btn strong{font-size:1.05rem;font-weight:800}
+  .level-btn small{font-size:.74rem;color:var(--text2);line-height:1.35}
+  .level-btn.easy{color:#34d399}
+  .level-btn.medium{color:#fbbf24}
+  .level-btn.hard{color:#f87171}
+  .level-btn.easy:hover{background:rgba(52,211,153,.08)}
+  .level-btn.medium:hover{background:rgba(251,191,36,.08)}
+  .level-btn.hard:hover{background:rgba(248,113,113,.08)}
+
+  .mode-pills,.length-pills{display:inline-flex;gap:6px;background:var(--bg3);padding:5px;border-radius:12px;border:1px solid var(--border)}
+  .length-pills{margin-top:6px}
+  .mode-pills .pill,.length-pills .pill{background:transparent;color:var(--text2);border:none;cursor:pointer;padding:6px 14px;border-radius:8px;font-family:inherit;font-weight:600;font-size:.82rem;transition:all .2s}
+  .mode-pills .pill.active{background:var(--accent);color:#fff}
+  .length-pills .pill.active{background:var(--accent2);color:#0b0d13}
+  .mode-pills .pill:not(.active):hover,.length-pills .pill:not(.active):hover{color:var(--text)}
+
+  @keyframes fade-in{from{opacity:0}to{opacity:1}}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center;align-items:center}
+  .btn{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .15s;font-family:inherit}
+  .btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary:hover{background:var(--accent2);border-color:var(--accent2)}
+  select.btn{appearance:none;-webkit-appearance:none;padding-right:32px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%238b92a8' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;max-width:460px;width:100%;text-align:center}
+  .modal h2{font-size:1.5rem;margin-bottom:14px}
+  .modal .stats{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:20px}
+  .modal .stats strong{font-size:2.4rem;color:var(--accent2);display:block;line-height:1}
+  .modal .stats p{color:var(--text2);font-size:.85rem;margin-top:6px}
+  .modal .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+  .loading{text-align:center;padding:80px 20px;color:var(--text2);font-size:.95rem}
+  .help{font-size:.78rem;color:var(--text2);text-align:center;margin-top:10px}
+
+  @media (max-width:640px){
+    .levels{grid-template-columns:1fr;gap:10px}
+    .level-btn{flex-direction:row;justify-content:flex-start;text-align:left;padding:14px}
+    .level-btn .lvl-emoji{font-size:1.8rem}
+    .header h1{font-size:1rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="../xogos-interactivos.html" title="Volver aos xogos">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>🇪🇸 Mapa das CCAA · España</h1>
+  <div class="header-right">
+    <button class="icon-btn" id="seaBtn" title="Mostrar/ocultar mares">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2c1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2c1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2c1.3 0 1.9.5 2.5 1"/></svg>
+    </button>
+    <button class="icon-btn" id="muteBtn" title="Silenciar son">
+      <svg id="iVol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.384 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/></svg>
+      <svg id="iMute" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.384 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+    </button>
+    <button class="icon-btn" id="themeBtn" title="Cambiar tema">
+      <svg id="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="sun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="start-screen" id="startScreen">
+  <div class="start-card">
+    <div class="start-flag">🇪🇸</div>
+    <h2>Comunidades Autónomas</h2>
+    <p>Escolle o nivel de dificultade para comezar</p>
+
+    <div class="levels">
+      <button class="level-btn easy" data-level="easy">
+        <span class="lvl-emoji">🟢</span>
+        <strong>Fácil</strong>
+        <small>5 CCAA principais<br>Bandeira + capital visibles</small>
+      </button>
+      <button class="level-btn medium" data-level="medium">
+        <span class="lvl-emoji">🟡</span>
+        <strong>Medio</strong>
+        <small>12 CCAA<br>Bandeira tras o 1.º fallo</small>
+      </button>
+      <button class="level-btn hard" data-level="hard">
+        <span class="lvl-emoji">🔴</span>
+        <strong>Difícil</strong>
+        <small>As 19 CCAA + cidades autónomas<br>Sen pistas extra</small>
+      </button>
+    </div>
+
+    <div class="start-section-title">Que adiviñar?</div>
+    <div class="mode-pills" id="modePills">
+      <button type="button" class="pill active" data-mode="ccaa">CCAA</button>
+      <button type="button" class="pill" data-mode="capital">Capitales</button>
+    </div>
+
+    <div class="start-section-title">Número de preguntas</div>
+    <div class="length-pills" id="lengthPills">
+      <button type="button" class="pill" data-length="10">10</button>
+      <button type="button" class="pill" data-length="15">15</button>
+      <button type="button" class="pill active" data-length="0">Todas</button>
+    </div>
+  </div>
+</div>
+
+<div class="game-wrap">
+  <div class="hud" id="hud">
+    <div class="hud-target">
+      <small id="targetLabel">Atopa esta CCAA</small>
+      <div class="hud-target-name" id="target">Cargando…</div>
+      <div class="hud-hints" id="hudHints">
+        <span class="hint-flag" id="hintFlag"></span>
+        <span class="hint-cap" id="hintCap"></span>
+      </div>
+    </div>
+    <div class="hud-record" id="hudRecord" style="display:none"></div>
+    <div class="hud-stat ok"><strong id="score">0</strong><div class="label">Aciertos</div></div>
+    <div class="hud-stat bad"><strong id="errors">0</strong><div class="label">Errores</div></div>
+    <div class="hud-stat"><strong id="round">0/0</strong><div class="label">Ronda</div></div>
+  </div>
+
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="map-container">
+    <div class="loading" id="loading">Cargando mapa…</div>
+    <svg id="map" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid meet" style="display:none"></svg>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="skip">Saltar</button>
+    <button class="btn primary" id="restart">Nova partida</button>
+  </div>
+  <div class="help">Pulsa na CCAA que aparece arriba. Tras 2 fallos parpadea en naranja como pista.</div>
+</div>
+
+<canvas id="confettiCanvas"></canvas>
+<script src="https://unpkg.com/d3@7"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+// CCAA por código INE: nome, capital, idiomas
+const CCAA_DATA = {
+  "01":{name:"Andalucía",        capital:"Sevilla",                  langs:"Español"},
+  "02":{name:"Aragón",           capital:"Zaragoza",                 langs:"Español"},
+  "03":{name:"Asturias",         capital:"Oviedo",                   langs:"Español, asturiano"},
+  "04":{name:"Illes Balears",    capital:"Palma",                    langs:"Catalán, español"},
+  "05":{name:"Canarias",         capital:"Las Palmas / S. C. Tenerife", langs:"Español"},
+  "06":{name:"Cantabria",        capital:"Santander",                langs:"Español"},
+  "07":{name:"Castilla y León",  capital:"Valladolid",               langs:"Español"},
+  "08":{name:"Castilla-La Mancha",capital:"Toledo",                  langs:"Español"},
+  "09":{name:"Cataluña",         capital:"Barcelona",                langs:"Catalán, español, aranés"},
+  "10":{name:"C. Valenciana",    capital:"Valencia",                 langs:"Valenciano, español"},
+  "11":{name:"Extremadura",      capital:"Mérida",                   langs:"Español"},
+  "12":{name:"Galicia",          capital:"Santiago de Compostela",   langs:"Galego, español"},
+  "13":{name:"Madrid",           capital:"Madrid",                   langs:"Español"},
+  "14":{name:"Murcia",           capital:"Murcia",                   langs:"Español"},
+  "15":{name:"Navarra",          capital:"Pamplona",                 langs:"Español, eúscaro"},
+  "16":{name:"País Vasco",       capital:"Vitoria-Gasteiz",          langs:"Eúscaro, español"},
+  "17":{name:"La Rioja",         capital:"Logroño",                  langs:"Español"},
+  "18":{name:"Ceuta",            capital:"Ceuta",                    langs:"Español"},
+  "19":{name:"Melilla",          capital:"Melilla",                  langs:"Español"},
+};
+// Niveis (códigos INE)
+const EASY = ["01","09","13","12","16"];                                              // Andalucía, Cataluña, Madrid, Galicia, País Vasco
+const MEDIUM_ADD = ["07","08","02","10","03","05","04"];                              // + C. y León, C-La Mancha, Aragón, Valenciana, Asturias, Canarias, Baleares
+const ALL_CODES = Object.keys(CCAA_DATA);
+
+let allFeatures = [];
+let queue = [];
+let current = null;
+let score = 0, errors = 0, attempts = 0;
+let totalRound = 0;
+let currentLength = 0;
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+
+function code(f) { return String(f.id).padStart(2, '0'); }
+function dataOf(f) { return CCAA_DATA[code(f)] || {}; }
+function getName(f) { return dataOf(f).name || (f.properties && f.properties.name) || "?"; }
+
+// Áudio sintético
+let audioCtx = null;
+let muted = localStorage.getItem('ef_audio_muted') === '1';
+function ctx() { if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {} } return audioCtx; }
+function tone(freq, dur, type='triangle', vol=.22, when=0) {
+  if (muted) return;
+  const c = ctx(); if (!c) return;
+  const t0 = c.currentTime + when;
+  const osc = c.createOscillator(), g = c.createGain();
+  osc.type = type; osc.frequency.value = freq;
+  g.gain.setValueAtTime(vol, t0);
+  g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+  osc.connect(g).connect(c.destination); osc.start(t0); osc.stop(t0 + dur + .02);
+}
+function soundCorrect() { tone(523.25, .12); tone(783.99, .18, 'triangle', .22, .07); }
+function soundWrong()   { tone(196, .18, 'sawtooth', .14); tone(146.83, .22, 'sawtooth', .12, .08); }
+function soundFinish()  { [523.25,659.25,783.99,1046.5].forEach((f,i) => tone(f, .18, 'triangle', .22, i*.10)); }
+
+function showPop(emoji, x, y) {
+  const d = document.createElement('div'); d.className = 'pop'; d.textContent = emoji;
+  d.style.left = x + 'px'; d.style.top = y + 'px';
+  document.body.appendChild(d); setTimeout(() => d.remove(), 1450);
+}
+function popOnElement(el, emoji) {
+  const r = el.getBoundingClientRect();
+  showPop(emoji, r.left + r.width / 2, r.top + r.height / 2);
+}
+
+let confettiFn = null;
+function initConfetti() {
+  if (typeof confetti === 'undefined') return;
+  confettiFn = confetti.create(document.getElementById('confettiCanvas'), { resize: true, useWorker: true });
+}
+function celebrate(big = false) {
+  if (!confettiFn) return;
+  const opts = { spread: big?110:70, particleCount: big?140:55, startVelocity: big?55:35, origin:{y:.7},
+    colors:['#10b981','#34d399','#fbbf24','#3b82f6','#a78bfa','#f472b6'], scalar: big?1.1:.9 };
+  confettiFn(opts);
+  if (big) { setTimeout(()=>confettiFn({...opts, origin:{x:.2,y:.65}}), 200); setTimeout(()=>confettiFn({...opts, origin:{x:.8,y:.65}}), 400); }
+}
+
+function vibrate(p) { try { navigator.vibrate?.(p); } catch (_) {} }
+
+async function init() {
+  try {
+    const data = await fetch('https://cdn.jsdelivr.net/npm/es-atlas@0.6.0/es/autonomous_regions.json').then(r => {
+      if (!r.ok) throw new Error('No se pudo cargar el mapa');
+      return r.json();
+    });
+    const fc = topojson.feature(data, data.objects.autonomous_regions);
+    // Filtrar Gibraltar (id "20") — non é España
+    allFeatures = fc.features.filter(f => code(f) !== "20");
+
+    const collection = { type: "FeatureCollection", features: allFeatures };
+    const projection = d3.geoMercator().fitExtent([[20, 20], [1380, 880]], collection);
+    const path = d3.geoPath(projection);
+
+    const svg = d3.select('#map');
+    svg.selectAll('path.country')
+      .data(allFeatures, f => f.id)
+      .join('path')
+      .attr('class', 'country')
+      .attr('d', path)
+      .attr('data-id', f => code(f))
+      .attr('data-name', f => getName(f))
+      .on('click', (event, f) => onClick(f, event.currentTarget));
+
+    // Capa de mares (oculta por defecto)
+    const SEAS = [
+      { name: 'Océano Atlántico', coord: [-12, 41], size: 22 },
+      { name: 'Mar Cantábrico',   coord: [-5, 45],  size: 18 },
+      { name: 'Mar Mediterráneo', coord: [3, 38.8], size: 18 },
+      { name: 'Mar de Alborán',   coord: [-3, 35.8],size: 13 },
+      { name: 'Estrecho de Xibraltar', coord: [-5.5, 35.8], size: 11 },
+      { name: 'Golfo de Cádiz',   coord: [-7.5, 36.5], size: 12 },
+      { name: 'Golfo de Vizcaya', coord: [-3, 45.5], size: 13 },
+    ];
+    const maresG = svg.append('g').attr('class', 'mares hidden');
+    SEAS.forEach(s => {
+      const [x, y] = projection(s.coord);
+      maresG.append('text')
+        .attr('x', x).attr('y', y)
+        .style('font-size', s.size + 'px')
+        .style('font-style', 'italic')
+        .style('font-weight', '700')
+        .style('text-anchor', 'middle')
+        .style('paint-order', 'stroke')
+        .style('stroke-width', '4px')
+        .style('stroke-linejoin', 'round')
+        .style('letter-spacing', '.5px')
+        .style('pointer-events', 'none')
+        .style('fill', '#9ec9ec')
+        .style('stroke', 'rgba(8,12,20,.9)')
+        .text(s.name);
+    });
+    const updateMaresColor = () => {
+      const isLight = document.body.classList.contains('light');
+      maresG.selectAll('text')
+        .style('fill', isLight ? '#1e4d7a' : '#9ec9ec')
+        .style('stroke', isLight ? 'rgba(255,255,255,.95)' : 'rgba(8,12,20,.9)');
+    };
+    updateMaresColor();
+    window._updateMaresColor = updateMaresColor;
+
+    initConfetti();
+    $('#loading').style.display = 'none';
+    svg.node().style.display = 'block';
+  } catch (e) {
+    $('#loading').textContent = 'Error cargando o mapa. Recarga a páxina.';
+    console.error(e);
+  }
+}
+
+function startGame() {
+  const dif = currentDifficulty;
+  const mode = currentMode;
+  const len = parseInt(currentLength, 10);
+
+  let pool;
+  if (dif === 'easy') pool = EASY;
+  else if (dif === 'medium') pool = [...EASY, ...MEDIUM_ADD];
+  else pool = ALL_CODES;
+  const poolSet = new Set(pool);
+
+  let candidates = allFeatures.filter(f => poolSet.has(code(f)));
+  candidates = shuffle(candidates);
+  if (len > 0) candidates = candidates.slice(0, len);
+
+  queue = candidates;
+  totalRound = queue.length;
+  score = 0; errors = 0; attempts = 0; current = null;
+
+  $('#targetLabel').textContent = mode === 'capital' ? 'Atopa a capital de…' : 'Atopa esta CCAA';
+
+  const r = getRecord(dif, mode);
+  const hudR = $('#hudRecord');
+  if (r) { hudR.style.display = 'inline-block'; hudR.innerHTML = `Récord: <strong>${r.score}/${r.total}</strong>`; }
+  else hudR.style.display = 'none';
+
+  $$('.country').forEach(c => c.classList.remove('found','hint','flash-correct','flash-wrong','unselectable'));
+  // Países fora do pool en gris en fácil/medio
+  if (dif !== 'hard') {
+    $$('.country').forEach(c => { if (!poolSet.has(c.dataset.id)) c.classList.add('unselectable'); });
+  }
+
+  nextCountry();
+}
+
+function nextCountry() {
+  if (queue.length === 0) return showResults();
+  current = queue.shift();
+  attempts = 0;
+  const dif = currentDifficulty;
+  const mode = currentMode;
+  const data = dataOf(current);
+
+  if (mode === 'capital') {
+    $('#target').textContent = data.capital || data.name;
+  } else {
+    $('#target').textContent = data.name || getName(current);
+  }
+
+  const hudHints = $('#hudHints');
+  if (dif === 'easy') {
+    hudHints.classList.add('show');
+    $('#hintFlag').textContent = '🇪🇸';
+    $('#hintCap').textContent = mode === 'capital'
+      ? `CCAA: ${data.name}`
+      : `Capital: ${data.capital || '?'}`;
+  } else {
+    hudHints.classList.remove('show');
+    $('#hintFlag').textContent = '';
+    $('#hintCap').textContent = '';
+  }
+
+  $$('.country.hint').forEach(c => c.classList.remove('hint'));
+  updateHUD();
+}
+
+function onClick(feature, el) {
+  if (!current || el.classList.contains('found') || el.classList.contains('unselectable')) return;
+
+  if (code(feature) === code(current)) {
+    el.classList.add('flash-correct');
+    soundCorrect();
+    vibrate(60);
+    const emoji = attempts === 0 ? ['⭐','🎉','🌟','✨','👏','🔥'][Math.floor(Math.random()*6)] : '👍';
+    popOnElement(el, emoji);
+    if (attempts === 0) celebrate(false);
+    showFicha(current, el);
+    setTimeout(() => { el.classList.remove('flash-correct'); el.classList.add('found'); }, 500);
+    score++;
+    updateHUD();
+    setTimeout(nextCountry, 1700);
+  } else {
+    attempts++;
+    errors++;
+    soundWrong();
+    vibrate([30, 50, 30]);
+    el.classList.add('flash-wrong');
+    $('#hud').classList.add('shake');
+    setTimeout(() => { el.classList.remove('flash-wrong'); $('#hud').classList.remove('shake'); }, 380);
+
+    if (currentDifficulty === 'medium' && attempts === 1) {
+      $('#hudHints').classList.add('show');
+      $('#hintFlag').textContent = '🇪🇸';
+      $('#hintCap').textContent = `Capital: ${dataOf(current).capital || '?'}`;
+    }
+
+    if (attempts >= 2) {
+      const correctEl = document.querySelector(`[data-id="${code(current)}"]`);
+      if (correctEl) correctEl.classList.add('hint');
+    }
+    if (attempts >= 4) return autoFail();
+    updateHUD();
+  }
+}
+
+function showFicha(feature, el) {
+  const data = dataOf(feature);
+  if (!data.capital) return;
+  const r = el.getBoundingClientRect();
+  const ficha = document.createElement('div');
+  ficha.className = 'ficha';
+  ficha.style.left = (r.left + r.width / 2) + 'px';
+  ficha.style.top  = (r.top + r.height / 2) + 'px';
+  ficha.innerHTML = `
+    <div class="ff-flag">🇪🇸</div>
+    <div class="ff-info">
+      <strong>${data.name}</strong>
+      <div><span>Capital:</span> ${data.capital}</div>
+      <div><span>Idiomas:</span> ${data.langs || ''}</div>
+    </div>`;
+  document.body.appendChild(ficha);
+  setTimeout(() => ficha.remove(), 1700);
+}
+
+function autoFail() {
+  const correctEl = document.querySelector(`[data-id="${code(current)}"]`);
+  if (correctEl) {
+    correctEl.classList.remove('hint');
+    correctEl.classList.add('flash-wrong');
+    setTimeout(() => { correctEl.classList.remove('flash-wrong'); correctEl.classList.add('found'); }, 700);
+  }
+  setTimeout(nextCountry, 800);
+}
+
+function skipCountry() {
+  if (!current) return;
+  errors++;
+  autoFail();
+  updateHUD();
+}
+
+function updateHUD() {
+  $('#score').textContent = score;
+  $('#errors').textContent = errors;
+  const done = totalRound - queue.length - (current ? 1 : 0);
+  const idx = current ? done + 1 : done;
+  $('#round').textContent = `${idx}/${totalRound}`;
+  const pct = totalRound ? Math.min(100, (score / totalRound) * 100) : 0;
+  $('#progressFill').style.width = pct + '%';
+}
+
+function showResults() {
+  current = null;
+  const pct = totalRound ? Math.round(100 * score / totalRound) : 0;
+  const dif = currentDifficulty;
+  const mode = currentMode;
+  const badge = getBadge(score, totalRound, errors);
+  soundFinish();
+  if (pct >= 70) celebrate(true);
+  const isNew = saveRecord(dif, mode, score, totalRound, errors);
+  const r = getRecord(dif, mode);
+
+  const m = document.createElement('div');
+  m.className = 'modal-bg';
+  m.innerHTML = `
+    <div class="modal">
+      <div class="badge-big">${badge.emoji}</div>
+      <div class="badge-text">${badge.text}</div>
+      <h2>${badge.title}</h2>
+      <div class="stats">
+        <strong>${score}/${totalRound}</strong>
+        <p>${errors} ${errors === 1 ? 'fallo' : 'fallos'} · ${pct}% de acertos</p>
+      </div>
+      ${isNew
+        ? `<div class="record-line new">🎉 Novo récord persoal!</div>`
+        : (r ? `<div class="record-line">Récord persoal: <strong>${r.score}/${r.total}</strong> (${r.errors} fallos)</div>` : '')}
+      <div class="actions" style="margin-top:14px">
+        <button class="btn primary" id="mAgain">Outra partida</button>
+        <button class="btn" id="mClose">Cerrar</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+  m.querySelector('#mAgain').onclick = () => { m.remove(); openStartScreen(); };
+  m.querySelector('#mClose').onclick = () => m.remove();
+}
+
+function getBadge(score, total, errors) {
+  if (total > 0 && score === total && errors === 0)
+    return { emoji: '🏆', text: 'Mestre/a das CCAA!', title: 'Pleno sen fallos!' };
+  const pct = total ? score / total : 0;
+  if (pct >= .9)  return { emoji: '🥇', text: 'Medalla de ouro',   title: 'Excelente!' };
+  if (pct >= .75) return { emoji: '🥈', text: 'Medalla de prata',  title: 'Moi ben!' };
+  if (pct >= .6)  return { emoji: '🥉', text: 'Medalla de bronce', title: 'Bo traballo!' };
+  return { emoji: '👍', text: 'Segue practicando', title: 'Inténtao outra vez!' };
+}
+
+const REC_KEY = 'ef_mapa_ccaa_records';
+function getRecords() { try { return JSON.parse(localStorage.getItem(REC_KEY) || '{}'); } catch (_) { return {}; } }
+function getRecord(dif, mode) { return getRecords()[dif + '_' + mode]; }
+function saveRecord(dif, mode, score, total, errors) {
+  const recs = getRecords();
+  const k = dif + '_' + mode;
+  const cur = recs[k];
+  const isBetter = !cur || score > cur.score || (score === cur.score && errors < cur.errors);
+  if (isBetter && total > 0) { recs[k] = { score, total, errors, ts: Date.now() }; try { localStorage.setItem(REC_KEY, JSON.stringify(recs)); } catch (_) {} return true; }
+  return false;
+}
+
+function shuffle(a) { const arr = a.slice(); for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+
+// UI: tema, mute, mares, pantalla inicio
+$('#themeBtn').onclick = () => {
+  document.body.classList.toggle('light');
+  $('#moon').classList.toggle('hidden');
+  $('#sun').classList.toggle('hidden');
+  localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  if (window._updateMaresColor) window._updateMaresColor();
+};
+if (localStorage.getItem('ef_theme') === 'light') {
+  document.body.classList.add('light');
+  $('#moon').classList.add('hidden');
+  $('#sun').classList.remove('hidden');
+}
+
+function refreshMuteIcon() {
+  $('#iVol').classList.toggle('hidden', muted);
+  $('#iMute').classList.toggle('hidden', !muted);
+  $('#muteBtn').setAttribute('title', muted ? 'Activar son' : 'Silenciar son');
+}
+$('#muteBtn').onclick = () => {
+  muted = !muted;
+  localStorage.setItem('ef_audio_muted', muted ? '1' : '0');
+  refreshMuteIcon();
+  if (!muted) { try { ctx()?.resume(); } catch (_) {} tone(660, .08); }
+};
+refreshMuteIcon();
+
+$('#seaBtn').onclick = () => {
+  const g = document.querySelector('.mares');
+  if (g) g.classList.toggle('hidden');
+  $('#seaBtn').classList.toggle('active');
+};
+
+$('#restart').onclick = openStartScreen;
+$('#skip').onclick = skipCountry;
+
+// Estado de selección actual
+let currentDifficulty = 'hard';
+let currentMode = 'ccaa';
+
+function openStartScreen() {
+  document.querySelectorAll('#modePills .pill').forEach(p => p.classList.toggle('active', p.dataset.mode === currentMode));
+  document.querySelectorAll('#lengthPills .pill').forEach(p => p.classList.toggle('active', p.dataset.length === String(currentLength)));
+  $('#startScreen').classList.remove('hidden');
+}
+function closeStartScreen() { $('#startScreen').classList.add('hidden'); }
+
+document.querySelectorAll('#modePills .pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('#modePills .pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+    currentMode = p.dataset.mode;
+  });
+});
+document.querySelectorAll('#lengthPills .pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('#lengthPills .pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+    currentLength = parseInt(p.dataset.length, 10);
+  });
+});
+
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentDifficulty = btn.dataset.level;
+    currentMode = document.querySelector('#modePills .pill.active')?.dataset.mode || 'ccaa';
+    currentLength = parseInt(document.querySelector('#lengthPills .pill.active')?.dataset.length || '0', 10);
+    closeStartScreen();
+    try { ctx()?.resume(); } catch (_) {}
+    if (allFeatures.length === 0) return;
+    startGame();
+  });
+});
+
+const wakeAudio = () => { try { ctx()?.resume(); } catch (_) {} document.removeEventListener('click', wakeAudio); document.removeEventListener('keydown', wakeAudio); };
+document.addEventListener('click', wakeAudio, { once: true });
+document.addEventListener('keydown', wakeAudio, { once: true });
+
+init();
+</script>
+</body>
+</html>

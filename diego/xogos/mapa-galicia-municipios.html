@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concellos de Galicia</title>
+<style>
+  :root {
+    --bg:#0b0d13; --bg2:#13161f; --bg3:#1c2030;
+    --text:#e8eaf0; --text2:#8b92a8;
+    --accent:#10b981; --accent2:#34d399;
+    --border:#252a3a; --radius:14px;
+    --country:#2a3347; --country-hover:#3a4565;
+    --found:rgba(16,185,129,.55); --found-stroke:#10b981;
+    --correct:#10b981; --wrong:#ef4444; --hint:#f59e0b;
+    --ocean:#0f131c;
+  }
+  .light{--bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db;--country:#cbd5e1;--country-hover:#94a3b8;--found:rgba(16,185,129,.45);--ocean:#dbeafe}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .hidden{display:none !important}
+
+  .header{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .back-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;flex-shrink:0}
+  .back-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .back-btn svg{width:18px;height:18px}
+  .header h1{font-size:1.1rem;font-weight:700}
+  .header-right{margin-left:auto;display:flex;gap:8px}
+  .icon-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .icon-btn:hover{background:var(--accent);color:#fff}
+  .icon-btn svg{width:16px;height:16px}
+
+  .game-wrap{max-width:1300px;margin:0 auto;padding:10px 14px}
+
+  .hud{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 18px;margin-bottom:8px}
+  .hud-target{display:flex;align-items:baseline;gap:10px;flex:1;min-width:0}
+  .hud-target small{font-size:.65rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:1.4px;flex-shrink:0}
+  .hud-target-name{font-size:1.4rem;font-weight:800;color:var(--accent2);line-height:1}
+  .hud-stat{background:var(--bg3);padding:6px 12px;border-radius:8px;text-align:center;border:1px solid var(--border);display:flex;align-items:baseline;gap:6px}
+  .hud-stat strong{font-size:1.05rem;color:var(--text)}
+  .hud-stat .label{font-size:.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:1px}
+  .hud-stat.ok strong{color:var(--accent2)}
+  .hud-stat.bad strong{color:var(--wrong)}
+  .hud-record{font-size:.7rem;color:var(--text2);background:var(--bg3);padding:5px 10px;border-radius:8px;border:1px solid var(--border);white-space:nowrap}
+  .hud-record strong{color:var(--accent2)}
+  .hud-hints{display:none;gap:8px;align-items:center;font-size:.82rem;color:var(--text2);margin-left:14px;flex-shrink:0}
+  .hud-hints.show{display:inline-flex}
+  .hud-hints .hint-prov{background:var(--bg3);padding:4px 9px;border-radius:8px;border:1px solid var(--border);color:var(--text)}
+
+  .map-container{background:var(--ocean);border:1px solid var(--border);border-radius:var(--radius);padding:6px;position:relative;overflow:hidden;height:calc(100vh - 175px);min-height:480px}
+  #map{display:block;width:100%;height:100%;touch-action:manipulation}
+  .country{fill:var(--country);stroke:var(--bg2);stroke-width:.4;transition:fill .15s;cursor:pointer}
+  .light .country{stroke:#fff}
+  .country:hover{fill:var(--country-hover)}
+  .country.found{fill:var(--found);stroke:var(--found-stroke);stroke-width:.6;cursor:default;pointer-events:none}
+  .country.hint{fill:var(--hint) !important;animation:pulse 1s infinite}
+  .country.flash-correct{fill:var(--correct) !important}
+  .country.flash-wrong{fill:var(--wrong) !important}
+  .country.unselectable{pointer-events:none;opacity:.4}
+  /* Bordo de provincia destacado */
+  .province-outline{fill:none;stroke:rgba(255,255,255,.45);stroke-width:1.5;pointer-events:none;stroke-linejoin:round}
+  .light .province-outline{stroke:rgba(0,0,0,.35)}
+
+  @keyframes pulse{0%,100%{opacity:.85}50%{opacity:1}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .shake{animation:shake .3s}
+
+  .pop{position:fixed;font-size:3rem;pointer-events:none;z-index:250;text-shadow:0 4px 18px rgba(0,0,0,.5);animation:pop 1.4s ease-out forwards}
+  @keyframes pop{0%{transform:translate(-50%,-50%) scale(0);opacity:0}20%{transform:translate(-50%,-60%) scale(1.6);opacity:1}60%{transform:translate(-50%,-100%) scale(1.1);opacity:1}100%{transform:translate(-50%,-160%) scale(.9);opacity:0}}
+
+  .progress{height:4px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-bottom:8px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .35s cubic-bezier(.22,1,.36,1)}
+
+  #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:240}
+
+  .badge-big{font-size:4rem;line-height:1;margin-bottom:6px}
+  .badge-text{font-size:1.05rem;font-weight:700;color:var(--accent2);margin-bottom:6px}
+  .modal .record-line{font-size:.75rem;color:var(--text2);margin-top:8px}
+  .modal .record-line.new{color:var(--accent2);font-weight:700}
+
+  .start-screen{position:fixed;inset:0;background:rgba(8,11,18,.92);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;animation:fade-in .3s ease-out}
+  .start-screen.hidden{display:none}
+  .start-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:32px 28px;max-width:760px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+  .start-card h2{font-size:1.6rem;margin-bottom:6px}
+  .start-card .start-flag{font-size:2.6rem;line-height:1;margin-bottom:10px}
+  .start-card p{color:var(--text2);font-size:.92rem;margin-bottom:22px}
+  .start-section-title{font-size:.7rem;font-weight:700;color:var(--text2);letter-spacing:1.6px;text-transform:uppercase;margin:18px 0 10px}
+  .levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:6px}
+  .level-btn{background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:18px 14px;cursor:pointer;font-family:inherit;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .2s;text-align:center}
+  .level-btn:hover{transform:translateY(-3px);border-color:currentColor}
+  .level-btn .lvl-emoji{font-size:2.4rem;line-height:1}
+  .level-btn strong{font-size:1.05rem;font-weight:800}
+  .level-btn small{font-size:.74rem;color:var(--text2);line-height:1.35}
+  .level-btn.easy{color:#34d399}
+  .level-btn.medium{color:#fbbf24}
+  .level-btn.hard{color:#f87171}
+  .level-btn.easy:hover{background:rgba(52,211,153,.08)}
+  .level-btn.medium:hover{background:rgba(251,191,36,.08)}
+  .level-btn.hard:hover{background:rgba(248,113,113,.08)}
+
+  .length-pills{display:inline-flex;gap:6px;background:var(--bg3);padding:5px;border-radius:12px;border:1px solid var(--border);margin-top:6px}
+  .length-pills .pill{background:transparent;color:var(--text2);border:none;cursor:pointer;padding:6px 14px;border-radius:8px;font-family:inherit;font-weight:600;font-size:.78rem;transition:all .2s}
+  .length-pills .pill.active{background:var(--accent2);color:#0b0d13}
+  .length-pills .pill:not(.active):hover{color:var(--text)}
+
+  @keyframes fade-in{from{opacity:0}to{opacity:1}}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center}
+  .btn{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .15s;font-family:inherit}
+  .btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary:hover{background:var(--accent2);border-color:var(--accent2)}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;max-width:460px;width:100%;text-align:center}
+  .modal h2{font-size:1.5rem;margin-bottom:14px}
+  .modal .stats{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:20px}
+  .modal .stats strong{font-size:2.4rem;color:var(--accent2);display:block}
+  .modal .stats p{color:var(--text2);font-size:.85rem;margin-top:6px}
+  .modal .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+  .loading{text-align:center;padding:80px 20px;color:var(--text2)}
+  .help{font-size:.78rem;color:var(--text2);text-align:center;margin-top:10px}
+
+  @media (max-width:640px){
+    .levels{grid-template-columns:1fr;gap:10px}
+    .level-btn{flex-direction:row;justify-content:flex-start;text-align:left;padding:14px}
+    .level-btn .lvl-emoji{font-size:1.8rem}
+    .header h1{font-size:1rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="../xogos-interactivos.html" title="Volver aos xogos">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>🏘️ Concellos de Galicia</h1>
+  <div class="header-right">
+    <button class="icon-btn" id="muteBtn" title="Silenciar son">
+      <svg id="iVol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.384 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/></svg>
+      <svg id="iMute" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.384 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+    </button>
+    <button class="icon-btn" id="themeBtn" title="Cambiar tema">
+      <svg id="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="sun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="start-screen" id="startScreen">
+  <div class="start-card">
+    <div class="start-flag">🏘️</div>
+    <h2>Concellos de Galicia</h2>
+    <p>Galicia ten 313 concellos. Escolle o nivel</p>
+
+    <div class="levels">
+      <button class="level-btn easy" data-level="easy">
+        <span class="lvl-emoji">🟢</span>
+        <strong>Fácil</strong>
+        <small>12 cidades e capitais<br>O resto en gris</small>
+      </button>
+      <button class="level-btn medium" data-level="medium">
+        <span class="lvl-emoji">🟡</span>
+        <strong>Medio</strong>
+        <small>~38 vilas principais<br>Con pista de provincia tras 1 fallo</small>
+      </button>
+      <button class="level-btn hard" data-level="hard">
+        <span class="lvl-emoji">🔴</span>
+        <strong>Difícil</strong>
+        <small>Os 313 concellos<br>Sen pistas extra (reto extremo!)</small>
+      </button>
+    </div>
+
+    <div class="start-section-title">Número de preguntas</div>
+    <div class="length-pills" id="lengthPills">
+      <button type="button" class="pill active" data-length="10">10</button>
+      <button type="button" class="pill" data-length="20">20</button>
+      <button type="button" class="pill" data-length="0">Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="game-wrap">
+  <div class="hud" id="hud">
+    <div class="hud-target">
+      <small>Atopa este concello</small>
+      <div class="hud-target-name" id="target">Cargando…</div>
+      <div class="hud-hints" id="hudHints">
+        <span class="hint-prov" id="hintProv"></span>
+      </div>
+    </div>
+    <div class="hud-record" id="hudRecord" style="display:none"></div>
+    <div class="hud-stat ok"><strong id="score">0</strong><div class="label">Aciertos</div></div>
+    <div class="hud-stat bad"><strong id="errors">0</strong><div class="label">Errores</div></div>
+    <div class="hud-stat"><strong id="round">0/0</strong><div class="label">Ronda</div></div>
+  </div>
+
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="map-container">
+    <div class="loading" id="loading">Cargando mapa de Galicia (~1.8 MB)…</div>
+    <svg id="map" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid meet" style="display:none"></svg>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="skip">Saltar</button>
+    <button class="btn primary" id="restart">Nova partida</button>
+  </div>
+  <div class="help">Pulsa no concello que aparece arriba. Tras 2 fallos parpadea en naranja como pista.</div>
+</div>
+
+<canvas id="confettiCanvas"></canvas>
+<script src="https://unpkg.com/d3@7"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+// Provincia segundo prefixo INE: 15 A Coruña, 27 Lugo, 32 Ourense, 36 Pontevedra
+const PROV_NAMES = { "15": "A Coruña", "27": "Lugo", "32": "Ourense", "36": "Pontevedra" };
+
+// 12 concellos principais para nivel Fácil (capitais + cidades)
+const EASY_NAMES = new Set([
+  "Santiago de Compostela", "A Coruña", "Vigo", "Pontevedra", "Ourense", "Lugo",
+  "Ferrol", "Vilagarcía de Arousa", "Carballo", "Narón", "Lalín", "Verín"
+]);
+
+// 38 vilas principais para nivel Medio (Fácil + 26 máis)
+const MEDIUM_NAMES = new Set([
+  ...EASY_NAMES,
+  "Oleiros", "Arteixo", "Cambre", "Marín", "Culleredo", "Redondela", "Ribeira",
+  "Cangas", "Sanxenxo", "Ames", "Tui", "Monforte de Lemos", "O Porriño",
+  "As Pontes de García Rodríguez", "Foz", "Burela", "Viveiro", "Boiro", "Padrón",
+  "Gondomar", "Cee", "Noia", "Betanzos", "Ponteareas", "Moaña", "A Estrada"
+]);
+
+let allFeatures = [];
+let queue = [];
+let current = null;
+let score = 0, errors = 0, attempts = 0;
+let totalRound = 0;
+let currentDifficulty = 'easy';
+let currentLength = 10;
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+function code(f) { return String(f.id); }
+function provOf(f) { return code(f).slice(0, 2); }
+function getName(f) { return (f.properties && f.properties.name) || "?"; }
+
+let audioCtx = null;
+let muted = localStorage.getItem('ef_audio_muted') === '1';
+function ctx() { if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {} } return audioCtx; }
+function tone(freq, dur, type='triangle', vol=.22, when=0) {
+  if (muted) return;
+  const c = ctx(); if (!c) return;
+  const t0 = c.currentTime + when;
+  const osc = c.createOscillator(), g = c.createGain();
+  osc.type = type; osc.frequency.value = freq;
+  g.gain.setValueAtTime(vol, t0);
+  g.gain.exponentialRampToValueAtTime(.001, t0 + dur);
+  osc.connect(g).connect(c.destination); osc.start(t0); osc.stop(t0 + dur + .02);
+}
+function soundCorrect() { tone(523.25,.12); tone(783.99,.18,'triangle',.22,.07); }
+function soundWrong()   { tone(196,.18,'sawtooth',.14); tone(146.83,.22,'sawtooth',.12,.08); }
+function soundFinish()  { [523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,.18,'triangle',.22,i*.10)); }
+
+function showPop(emoji, x, y) { const d=document.createElement('div'); d.className='pop'; d.textContent=emoji; d.style.left=x+'px'; d.style.top=y+'px'; document.body.appendChild(d); setTimeout(()=>d.remove(),1450); }
+function popOnElement(el, emoji) { const r=el.getBoundingClientRect(); showPop(emoji, r.left+r.width/2, r.top+r.height/2); }
+
+let confettiFn = null;
+function initConfetti() { if (typeof confetti==='undefined') return; confettiFn=confetti.create(document.getElementById('confettiCanvas'), {resize:true, useWorker:true}); }
+function celebrate(big=false) {
+  if (!confettiFn) return;
+  const opts = { spread: big?110:70, particleCount: big?140:55, startVelocity: big?55:35, origin:{y:.7}, colors:['#10b981','#34d399','#fbbf24','#3b82f6','#a78bfa','#f472b6'], scalar: big?1.1:.9 };
+  confettiFn(opts);
+  if (big) { setTimeout(()=>confettiFn({...opts, origin:{x:.2,y:.65}}), 200); setTimeout(()=>confettiFn({...opts, origin:{x:.8,y:.65}}), 400); }
+}
+function vibrate(p) { try { navigator.vibrate?.(p); } catch (_) {} }
+
+async function init() {
+  try {
+    const data = await fetch('https://cdn.jsdelivr.net/npm/es-atlas@0.6.0/es/municipalities.json').then(r => r.ok ? r.json() : Promise.reject(new Error('load')));
+    const fcMun = topojson.feature(data, data.objects.municipalities);
+    allFeatures = fcMun.features.filter(f => ["15","27","32","36"].includes(provOf(f)));
+
+    // Bordo de provincia (mesh entre municipios de distintas provincias)
+    const provMesh = topojson.mesh(data, data.objects.municipalities,
+      (a, b) => a !== b && provOf({id: a.id}) !== provOf({id: b.id}));
+
+    const collection = { type: "FeatureCollection", features: allFeatures };
+    const projection = d3.geoMercator().fitExtent([[20, 20], [1180, 1180]], collection);
+    const path = d3.geoPath(projection);
+
+    const svg = d3.select('#map');
+    svg.selectAll('path.country')
+      .data(allFeatures, f => f.id)
+      .join('path')
+      .attr('class', 'country')
+      .attr('d', path)
+      .attr('data-id', f => code(f))
+      .attr('data-name', f => getName(f))
+      .attr('data-prov', f => provOf(f))
+      .on('click', (event, f) => onClick(f, event.currentTarget));
+
+    // Bordo de provincias por riba
+    svg.append('path').attr('class', 'province-outline').attr('d', path(provMesh));
+
+    initConfetti();
+    $('#loading').style.display = 'none';
+    svg.node().style.display = 'block';
+  } catch (e) {
+    $('#loading').textContent = 'Error cargando o mapa. Recarga a páxina.';
+    console.error(e);
+  }
+}
+
+function startGame() {
+  const dif = currentDifficulty;
+  const len = parseInt(currentLength, 10);
+
+  let candidates;
+  if (dif === 'easy') candidates = allFeatures.filter(f => EASY_NAMES.has(getName(f)));
+  else if (dif === 'medium') candidates = allFeatures.filter(f => MEDIUM_NAMES.has(getName(f)));
+  else candidates = allFeatures.slice();
+  candidates = shuffle(candidates);
+  if (len > 0) candidates = candidates.slice(0, len);
+
+  queue = candidates;
+  totalRound = queue.length;
+  score = 0; errors = 0; attempts = 0; current = null;
+
+  const r = getRecord(dif);
+  const hudR = $('#hudRecord');
+  if (r) { hudR.style.display = 'inline-block'; hudR.innerHTML = `Récord: <strong>${r.score}/${r.total}</strong>`; }
+  else hudR.style.display = 'none';
+
+  // Reset visual
+  $$('.country').forEach(c => c.classList.remove('found','hint','flash-correct','flash-wrong','unselectable'));
+  // Concellos fora do pool quedan grises e non clicables
+  if (dif !== 'hard') {
+    const poolNames = dif === 'easy' ? EASY_NAMES : MEDIUM_NAMES;
+    $$('.country').forEach(c => { if (!poolNames.has(c.dataset.name)) c.classList.add('unselectable'); });
+  }
+
+  nextCountry();
+}
+
+function nextCountry() {
+  if (queue.length === 0) return showResults();
+  current = queue.shift();
+  attempts = 0;
+  $('#target').textContent = getName(current);
+
+  // Pistas: nivel fácil amosa provincia
+  const dif = currentDifficulty;
+  const hudHints = $('#hudHints');
+  if (dif === 'easy') {
+    hudHints.classList.add('show');
+    $('#hintProv').textContent = `Provincia: ${PROV_NAMES[provOf(current)]}`;
+  } else {
+    hudHints.classList.remove('show');
+    $('#hintProv').textContent = '';
+  }
+
+  $$('.country.hint').forEach(c => c.classList.remove('hint'));
+  updateHUD();
+}
+
+function onClick(feature, el) {
+  if (!current || el.classList.contains('found') || el.classList.contains('unselectable')) return;
+  if (code(feature) === code(current)) {
+    el.classList.add('flash-correct');
+    soundCorrect();
+    vibrate(60);
+    const emoji = attempts === 0 ? ['⭐','🎉','🌟','✨','👏','🔥'][Math.floor(Math.random()*6)] : '👍';
+    popOnElement(el, emoji);
+    if (attempts === 0) celebrate(false);
+    setTimeout(()=>{ el.classList.remove('flash-correct'); el.classList.add('found'); }, 500);
+    score++; updateHUD();
+    setTimeout(nextCountry, 650);
+  } else {
+    attempts++; errors++;
+    soundWrong(); vibrate([30,50,30]);
+    el.classList.add('flash-wrong');
+    $('#hud').classList.add('shake');
+    setTimeout(()=>{ el.classList.remove('flash-wrong'); $('#hud').classList.remove('shake'); }, 380);
+
+    // Nivel medio: pista de provincia tras 1.º fallo
+    if (currentDifficulty === 'medium' && attempts === 1) {
+      $('#hudHints').classList.add('show');
+      $('#hintProv').textContent = `Provincia: ${PROV_NAMES[provOf(current)]}`;
+    }
+
+    if (attempts >= 2) { const c = document.querySelector(`[data-id="${code(current)}"]`); if (c) c.classList.add('hint'); }
+    if (attempts >= 4) return autoFail();
+    updateHUD();
+  }
+}
+
+function autoFail() {
+  const c = document.querySelector(`[data-id="${code(current)}"]`);
+  if (c) { c.classList.remove('hint'); c.classList.add('flash-wrong'); setTimeout(()=>{ c.classList.remove('flash-wrong'); c.classList.add('found'); }, 700); }
+  setTimeout(nextCountry, 800);
+}
+
+function skipCountry() { if (!current) return; errors++; autoFail(); updateHUD(); }
+
+function updateHUD() {
+  $('#score').textContent = score;
+  $('#errors').textContent = errors;
+  const done = totalRound - queue.length - (current ? 1 : 0);
+  $('#round').textContent = `${current ? done + 1 : done}/${totalRound}`;
+  const pct = totalRound ? Math.min(100, (score/totalRound)*100) : 0;
+  $('#progressFill').style.width = pct + '%';
+}
+
+function showResults() {
+  current = null;
+  const pct = totalRound ? Math.round(100 * score / totalRound) : 0;
+  const dif = currentDifficulty;
+  const badge = getBadge(score, totalRound, errors);
+  soundFinish();
+  if (pct >= 70) celebrate(true);
+  const isNew = saveRecord(dif, score, totalRound, errors);
+  const r = getRecord(dif);
+
+  const m = document.createElement('div'); m.className = 'modal-bg';
+  m.innerHTML = `<div class="modal">
+    <div class="badge-big">${badge.emoji}</div>
+    <div class="badge-text">${badge.text}</div>
+    <h2>${badge.title}</h2>
+    <div class="stats"><strong>${score}/${totalRound}</strong>
+      <p>${errors} ${errors===1?'fallo':'fallos'} · ${pct}% de acertos</p></div>
+    ${isNew ? `<div class="record-line new">🎉 Novo récord persoal!</div>` :
+      (r ? `<div class="record-line">Récord persoal: <strong>${r.score}/${r.total}</strong> (${r.errors} fallos)</div>` : '')}
+    <div class="actions" style="margin-top:14px">
+      <button class="btn primary" id="mAgain">Outra partida</button>
+      <button class="btn" id="mClose">Cerrar</button></div></div>`;
+  document.body.appendChild(m);
+  m.querySelector('#mAgain').onclick = () => { m.remove(); openStartScreen(); };
+  m.querySelector('#mClose').onclick = () => m.remove();
+}
+
+function getBadge(score, total, errors) {
+  if (total > 0 && score === total && errors === 0) return { emoji:'🏆', text:'Mestre/a de Galicia!', title:'Pleno sen fallos!' };
+  const pct = total ? score/total : 0;
+  if (pct >= .9) return { emoji:'🥇', text:'Medalla de ouro', title:'Excelente!' };
+  if (pct >= .75) return { emoji:'🥈', text:'Medalla de prata', title:'Moi ben!' };
+  if (pct >= .6) return { emoji:'🥉', text:'Medalla de bronce', title:'Bo traballo!' };
+  return { emoji:'👍', text:'Segue practicando', title:'Inténtao outra vez!' };
+}
+
+const REC_KEY = 'ef_mapa_galicia_muni_records';
+function getRecords() { try { return JSON.parse(localStorage.getItem(REC_KEY) || '{}'); } catch (_) { return {}; } }
+function getRecord(dif) { return getRecords()[dif]; }
+function saveRecord(dif, score, total, errors) {
+  const recs = getRecords();
+  const cur = recs[dif];
+  const isBetter = !cur || score > cur.score || (score === cur.score && errors < cur.errors);
+  if (isBetter && total > 0) { recs[dif] = { score, total, errors, ts: Date.now() }; try { localStorage.setItem(REC_KEY, JSON.stringify(recs)); } catch (_) {} return true; }
+  return false;
+}
+
+function shuffle(a) { const arr = a.slice(); for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+$('#themeBtn').onclick = () => {
+  document.body.classList.toggle('light');
+  $('#moon').classList.toggle('hidden');
+  $('#sun').classList.toggle('hidden');
+  localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+};
+if (localStorage.getItem('ef_theme') === 'light') { document.body.classList.add('light'); $('#moon').classList.add('hidden'); $('#sun').classList.remove('hidden'); }
+
+function refreshMuteIcon() { $('#iVol').classList.toggle('hidden', muted); $('#iMute').classList.toggle('hidden', !muted); }
+$('#muteBtn').onclick = () => {
+  muted = !muted;
+  localStorage.setItem('ef_audio_muted', muted ? '1' : '0');
+  refreshMuteIcon();
+  if (!muted) { try { ctx()?.resume(); } catch (_) {} tone(660, .08); }
+};
+refreshMuteIcon();
+
+$('#restart').onclick = openStartScreen;
+$('#skip').onclick = skipCountry;
+
+function openStartScreen() {
+  document.querySelectorAll('#lengthPills .pill').forEach(p => p.classList.toggle('active', p.dataset.length === String(currentLength)));
+  $('#startScreen').classList.remove('hidden');
+}
+function closeStartScreen() { $('#startScreen').classList.add('hidden'); }
+
+document.querySelectorAll('#lengthPills .pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('#lengthPills .pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+    currentLength = parseInt(p.dataset.length, 10);
+  });
+});
+
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentDifficulty = btn.dataset.level;
+    currentLength = parseInt(document.querySelector('#lengthPills .pill.active')?.dataset.length || '10', 10);
+    closeStartScreen();
+    try { ctx()?.resume(); } catch (_) {}
+    if (allFeatures.length === 0) return;
+    startGame();
+  });
+});
+
+const wakeAudio = () => { try { ctx()?.resume(); } catch (_) {} document.removeEventListener('click', wakeAudio); document.removeEventListener('keydown', wakeAudio); };
+document.addEventListener('click', wakeAudio, { once: true });
+document.addEventListener('keydown', wakeAudio, { once: true });
+
+init();
+</script>
+</body>
+</html>
