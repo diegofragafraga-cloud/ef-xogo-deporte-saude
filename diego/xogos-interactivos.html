@@ -55,17 +55,29 @@
   .gc-tag-soon{background:rgba(139,146,168,.15);color:var(--text2)}
   .gc-area{font-size:.78rem;color:var(--text2)}
   .gc-desc{font-size:.85rem;color:var(--text2);line-height:1.5;flex:1}
-  .gc-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.78rem;color:var(--text2);padding-top:10px;border-top:1px solid var(--border)}
+  .gc-foot{display:flex;justify-content:flex-end;align-items:center;font-size:.78rem;color:var(--text2);padding-top:10px;border-top:1px solid var(--border)}
   .gc-foot strong{color:var(--text);font-weight:600}
-  .btn-copiar{
-    background:var(--bg3);color:var(--text);border:1px solid var(--border);
-    padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.74rem;font-weight:600;
-    font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:all .15s;
-    white-space:nowrap;
+
+  .game-card-wrap{display:flex;flex-direction:column;gap:6px}
+  .btn-edixgal{
+    background:transparent;color:var(--text2);border:none;padding:0;
+    cursor:pointer;font-size:.72rem;font-weight:500;font-family:inherit;
+    display:inline-flex;align-items:center;gap:4px;transition:color .15s;
+    align-self:flex-start;text-decoration:underline;text-decoration-color:var(--border);
+    text-underline-offset:3px;padding-left:4px;
   }
-  .btn-copiar:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .btn-copiar.ok{background:#3a8a3a;color:#fff;border-color:#3a8a3a}
-  .btn-copiar svg{width:13px;height:13px}
+  .btn-edixgal:hover{color:var(--accent2);text-decoration-color:var(--accent2)}
+  .btn-edixgal.ok{color:#3a8a3a;text-decoration-color:#3a8a3a}
+  .btn-edixgal svg{width:11px;height:11px;opacity:.7}
+
+  .toast-bg{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);
+    background:var(--bg2);border:1px solid var(--accent);border-radius:12px;
+    padding:14px 18px;box-shadow:0 12px 32px rgba(0,0,0,.4);z-index:300;
+    max-width:min(640px,90vw);font-size:.84rem;display:flex;align-items:center;gap:12px;
+    opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+  .toast-bg.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .toast-bg .toast-msg{color:var(--accent2);font-weight:700;flex-shrink:0}
+  .toast-bg .toast-url{color:var(--text);word-break:break-all;font-family:ui-monospace,Menlo,monospace;font-size:.78rem}
 
   @media (max-width:640px){
     .wrap{padding:24px 16px}
@@ -97,41 +109,41 @@
   <div class="section-title">Coñecemento do medio · Sociales</div>
 
   <div class="game-grid">
-    <a class="game-card" href="xogos/mapa-mundi.html">
-      <div class="gc-head">
-        <div class="gc-icon" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">🌍</div>
-        <div class="gc-meta">
-          <div class="gc-title">Mapa do mundo <span class="gc-tag gc-tag-sociales">Sociales</span></div>
-          <div class="gc-area">Países do mundo</div>
+    <div class="game-card-wrap">
+      <a class="game-card" href="xogos/mapa-mundi.html">
+        <div class="gc-head">
+          <div class="gc-icon" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">🌍</div>
+          <div class="gc-meta">
+            <div class="gc-title">Mapa do mundo <span class="gc-tag gc-tag-sociales">Sociales</span></div>
+            <div class="gc-area">Países do mundo</div>
+          </div>
         </div>
-      </div>
-      <div class="gc-desc">O alumnado ve o nome dun país e ten que pulsar nel sobre o mapa mundial. Ten 3 niveis de dificultade (fácil, medio, difícil), pista tras 2 fallos e contador de aciertos.</div>
-      <div class="gc-foot">
-        <button class="btn-copiar" data-href="xogos/mapa-mundi.html" title="Copiar enlace para Edixgal">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          Edixgal
-        </button>
-        <strong>Xogar →</strong>
-      </div>
-    </a>
+        <div class="gc-desc">O alumnado ve o nome dun país e ten que pulsar nel sobre o mapa mundial. Ten 3 niveis de dificultade (fácil, medio, difícil), pista tras 2 fallos e contador de aciertos.</div>
+        <div class="gc-foot"><strong>Xogar →</strong></div>
+      </a>
+      <button class="btn-edixgal" data-href="xogos/mapa-mundi.html" title="Copiar enlace para Edixgal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        Copiar enlace para Edixgal
+      </button>
+    </div>
 
-    <a class="game-card" href="xogos/mapa-ue.html">
-      <div class="gc-head">
-        <div class="gc-icon" style="background:linear-gradient(135deg,#003399,#ffcc00)">🇪🇺</div>
-        <div class="gc-meta">
-          <div class="gc-title">Mapa da Unión Europea <span class="gc-tag gc-tag-sociales">Sociales</span></div>
-          <div class="gc-area">Países membros da UE</div>
+    <div class="game-card-wrap">
+      <a class="game-card" href="xogos/mapa-ue.html">
+        <div class="gc-head">
+          <div class="gc-icon" style="background:linear-gradient(135deg,#003399,#ffcc00)">🇪🇺</div>
+          <div class="gc-meta">
+            <div class="gc-title">Mapa da Unión Europea <span class="gc-tag gc-tag-sociales">Sociales</span></div>
+            <div class="gc-area">Países membros da UE</div>
+          </div>
         </div>
-      </div>
-      <div class="gc-desc">Mesmo formato pero limitado aos 27 estados membros da Unión Europea. Dous niveis: 12 países principais ou os 27 completos.</div>
-      <div class="gc-foot">
-        <button class="btn-copiar" data-href="xogos/mapa-ue.html" title="Copiar enlace para Edixgal">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          Edixgal
-        </button>
-        <strong>Xogar →</strong>
-      </div>
-    </a>
+        <div class="gc-desc">Mesmo formato pero limitado aos 27 estados membros da Unión Europea. Dous niveis: 12 países principais ou os 27 completos.</div>
+        <div class="gc-foot"><strong>Xogar →</strong></div>
+      </a>
+      <button class="btn-edixgal" data-href="xogos/mapa-ue.html" title="Copiar enlace para Edixgal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        Copiar enlace para Edixgal
+      </button>
+    </div>
 
     <div class="game-card coming">
       <div class="gc-head">
@@ -160,8 +172,21 @@ if (localStorage.getItem('ef_theme') === 'light') {
   $('#sun').classList.remove('hidden');
 }
 
+// Toast (mensaxe transitoria con URL para verificar)
+const toast = document.createElement('div');
+toast.className = 'toast-bg';
+toast.innerHTML = '<span class="toast-msg">✓ Copiado</span><span class="toast-url"></span>';
+document.body.appendChild(toast);
+let toastTimer = null;
+function showToast(url) {
+  toast.querySelector('.toast-url').textContent = url;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4500);
+}
+
 // Copiar enlace público para Edixgal
-document.querySelectorAll('.btn-copiar').forEach(btn => {
+document.querySelectorAll('.btn-edixgal').forEach(btn => {
   btn.addEventListener('click', async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -172,6 +197,7 @@ document.querySelectorAll('.btn-copiar').forEach(btn => {
       btn.classList.add('ok');
       btn.innerHTML = '✓ Copiado';
       setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = original; }, 1600);
+      showToast(url);
     };
     try {
       await navigator.clipboard.writeText(url);
