@@ -100,6 +100,37 @@
   /* Canvas confeti */
   #confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:240}
 
+  /* Pistas no HUD (bandeira + capital cando proceda) */
+  .hud-hints{display:none;gap:8px;align-items:center;font-size:.82rem;color:var(--text2);margin-left:14px;flex-shrink:0}
+  .hud-hints.show{display:inline-flex}
+  .hud-hints .hint-flag{font-size:1.6rem;line-height:1}
+  .hud-hints .hint-cap{background:var(--bg3);padding:4px 9px;border-radius:8px;border:1px solid var(--border);color:var(--text)}
+  .hud-record{font-size:.7rem;color:var(--text2);background:var(--bg3);padding:5px 10px;border-radius:8px;border:1px solid var(--border);white-space:nowrap}
+  .hud-record strong{color:var(--accent2)}
+
+  /* Ficha educativa flotante tras acertar */
+  .ficha{position:fixed;background:var(--bg2);border:2px solid var(--accent);border-radius:12px;
+    padding:10px 14px;display:flex;gap:12px;align-items:center;
+    box-shadow:0 12px 32px rgba(0,0,0,.5);z-index:230;pointer-events:none;
+    transform:translate(-50%,-50%);min-width:200px;max-width:300px;
+    animation:ficha-anim 1.7s ease-out forwards;
+  }
+  .ficha .ff-flag{font-size:2.4rem;line-height:1;flex-shrink:0}
+  .ficha .ff-info{font-size:.82rem;line-height:1.35}
+  .ficha .ff-info strong{display:block;font-size:1rem;color:var(--accent2);margin-bottom:2px}
+  .ficha .ff-info span{color:var(--text2)}
+  @keyframes ficha-anim {
+    0%{opacity:0;transform:translate(-50%,calc(-50% + 14px)) scale(.7)}
+    15%,75%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    100%{opacity:0;transform:translate(-50%,calc(-50% - 14px)) scale(.95)}
+  }
+
+  /* Insignia no modal final */
+  .badge-big{font-size:4rem;line-height:1;margin-bottom:6px}
+  .badge-text{font-size:1.05rem;font-weight:700;color:var(--accent2);margin-bottom:6px}
+  .modal .record-line{font-size:.75rem;color:var(--text2);margin-top:8px}
+  .modal .record-line.new{color:var(--accent2);font-weight:700}
+
   .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center;align-items:center}
   .btn{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .15s;font-family:inherit}
   .btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -155,9 +186,14 @@
 <div class="game-wrap">
   <div class="hud" id="hud">
     <div class="hud-target">
-      <small>Encuentra este país de la UE</small>
+      <small id="targetLabel">Encuentra este país</small>
       <div class="hud-target-name" id="target">Cargando…</div>
+      <div class="hud-hints" id="hudHints">
+        <span class="hint-flag" id="hintFlag"></span>
+        <span class="hint-cap" id="hintCap"></span>
+      </div>
     </div>
+    <div class="hud-record" id="hudRecord" style="display:none"></div>
     <div class="hud-stat ok"><strong id="score">0</strong><div class="label">Aciertos</div></div>
     <div class="hud-stat bad"><strong id="errors">0</strong><div class="label">Errores</div></div>
     <div class="hud-stat"><strong id="round">0/0</strong><div class="label">Ronda</div></div>
@@ -175,19 +211,24 @@
   </div>
 
   <div class="controls">
-    <select class="btn" id="difficulty" title="Dificultad">
-      <option value="easy">Fácil · 12 países principales</option>
-      <option value="all" selected>Todos · 27 países UE</option>
+    <select class="btn" id="difficulty" title="Nivel">
+      <option value="easy">🟢 Fácil · 12 países + bandeira + capital</option>
+      <option value="medium">🟡 Medio · 27 países + bandeira tras 1 fallo</option>
+      <option value="hard" selected>🔴 Difícil · 27 países, sen pistas</option>
+    </select>
+    <select class="btn" id="mode" title="Que adiviñar">
+      <option value="country" selected>Adivinar país</option>
+      <option value="capital">Adivinar capital</option>
     </select>
     <select class="btn" id="length" title="Número de preguntas">
       <option value="10">10 preguntas</option>
       <option value="20">20 preguntas</option>
       <option value="0" selected>Todos</option>
     </select>
-    <button class="btn" id="skip">Saltar país</button>
+    <button class="btn" id="skip">Saltar</button>
     <button class="btn primary" id="restart">Nueva partida</button>
   </div>
-  <div class="help">Pulsa en el país de la UE que aparece arriba. Tras 2 fallos, el país parpadea en naranja como pista.</div>
+  <div class="help">Pulsa no país que aparece arriba. Tras 2 fallos parpadea en naranja como pista.</div>
 </div>
 
 <canvas id="confettiCanvas"></canvas>
@@ -204,6 +245,38 @@ const EU = new Set([
 
 // Subconjunto "fácil" (12 países más reconocibles para primaria)
 const EU_EASY = new Set(["724","620","250","380","276","300","372","056","528","752","616","040"]);
+
+// Datos educativos por país UE (capital, idioma, bandeira)
+const COUNTRY_DATA = {
+  "040":{capital:"Viena",          flag:"🇦🇹",lang:"Alemán"},
+  "056":{capital:"Bruselas",       flag:"🇧🇪",lang:"Neerlandés / Francés / Alemán"},
+  "100":{capital:"Sofía",          flag:"🇧🇬",lang:"Búlgaro"},
+  "191":{capital:"Zagreb",         flag:"🇭🇷",lang:"Croata"},
+  "196":{capital:"Nicosia",        flag:"🇨🇾",lang:"Grego / Turco"},
+  "203":{capital:"Praga",          flag:"🇨🇿",lang:"Checo"},
+  "208":{capital:"Copenhague",     flag:"🇩🇰",lang:"Danés"},
+  "233":{capital:"Tallin",         flag:"🇪🇪",lang:"Estonio"},
+  "246":{capital:"Helsinki",       flag:"🇫🇮",lang:"Finés / Sueco"},
+  "250":{capital:"París",          flag:"🇫🇷",lang:"Francés"},
+  "276":{capital:"Berlín",         flag:"🇩🇪",lang:"Alemán"},
+  "300":{capital:"Atenas",         flag:"🇬🇷",lang:"Grego"},
+  "348":{capital:"Budapest",       flag:"🇭🇺",lang:"Húngaro"},
+  "372":{capital:"Dublín",         flag:"🇮🇪",lang:"Inglés / Irlandés"},
+  "380":{capital:"Roma",           flag:"🇮🇹",lang:"Italiano"},
+  "428":{capital:"Riga",           flag:"🇱🇻",lang:"Letón"},
+  "440":{capital:"Vilna",          flag:"🇱🇹",lang:"Lituano"},
+  "442":{capital:"Luxemburgo",     flag:"🇱🇺",lang:"Luxemburgués / Francés / Alemán"},
+  "470":{capital:"La Valeta",      flag:"🇲🇹",lang:"Maltés / Inglés"},
+  "528":{capital:"Ámsterdam",      flag:"🇳🇱",lang:"Neerlandés"},
+  "616":{capital:"Varsovia",       flag:"🇵🇱",lang:"Polaco"},
+  "620":{capital:"Lisboa",         flag:"🇵🇹",lang:"Portugués"},
+  "642":{capital:"Bucarest",       flag:"🇷🇴",lang:"Rumano"},
+  "703":{capital:"Bratislava",     flag:"🇸🇰",lang:"Eslovaco"},
+  "705":{capital:"Liubliana",      flag:"🇸🇮",lang:"Esloveno"},
+  "724":{capital:"Madrid",         flag:"🇪🇸",lang:"Español"},
+  "752":{capital:"Estocolmo",      flag:"🇸🇪",lang:"Sueco"},
+};
+function dataOf(f) { return COUNTRY_DATA[code(f)] || {}; }
 
 // Nombres en español
 const NAMES = {
@@ -393,6 +466,7 @@ async function init() {
 
 function startGame() {
   const dif = $('#difficulty').value;
+  const mode = $('#mode').value;
   const len = parseInt($('#length').value, 10);
 
   const pool = dif === 'easy' ? EU_EASY : EU;
@@ -407,6 +481,19 @@ function startGame() {
   attempts = 0;
   current = null;
 
+  // Etiqueta segundo modo
+  $('#targetLabel').textContent = mode === 'capital' ? 'Atopa a capital de…' : 'Atopa este país';
+
+  // Récord previo na cabeceira
+  const r = getRecord(dif, mode);
+  const hudR = $('#hudRecord');
+  if (r) {
+    hudR.style.display = 'inline-block';
+    hudR.innerHTML = `Récord: <strong>${r.score}/${r.total}</strong>`;
+  } else {
+    hudR.style.display = 'none';
+  }
+
   $$('.country').forEach(c => c.classList.remove('found','hint','flash-correct','flash-wrong'));
 
   nextCountry();
@@ -416,7 +503,29 @@ function nextCountry() {
   if (queue.length === 0) return showResults();
   current = queue.shift();
   attempts = 0;
-  $('#target').textContent = getName(current);
+  const dif = $('#difficulty').value;
+  const mode = $('#mode').value;
+  const data = dataOf(current);
+
+  // Texto principal segundo modo
+  $('#target').textContent = mode === 'capital'
+    ? (data.capital || getName(current))
+    : getName(current);
+
+  // Pistas no nivel fácil: bandeira + dato complementario
+  const hudHints = $('#hudHints');
+  if (dif === 'easy') {
+    hudHints.classList.add('show');
+    $('#hintFlag').textContent = data.flag || '';
+    $('#hintCap').textContent = mode === 'capital'
+      ? `País: ${getName(current)}`
+      : `Capital: ${data.capital || '?'}`;
+  } else {
+    hudHints.classList.remove('show');
+    $('#hintFlag').textContent = '';
+    $('#hintCap').textContent = '';
+  }
+
   $$('.country.hint').forEach(c => c.classList.remove('hint'));
   updateHUD();
 }
@@ -431,13 +540,14 @@ function onClick(feature, el) {
     const emoji = attempts === 0 ? ['⭐','🎉','🌟','✨','👏','🔥'][Math.floor(Math.random()*6)] : '👍';
     popOnElement(el, emoji);
     if (attempts === 0) celebrate(false);
+    showFicha(current, el);
     setTimeout(() => {
       el.classList.remove('flash-correct');
       el.classList.add('found');
     }, 500);
     score++;
     updateHUD();
-    setTimeout(nextCountry, 650);
+    setTimeout(nextCountry, 1700);
   } else {
     attempts++;
     errors++;
@@ -450,6 +560,14 @@ function onClick(feature, el) {
       $('#hud').classList.remove('shake');
     }, 380);
 
+    // Nivel medio: revela bandeira tras o 1.º fallo
+    const dif = $('#difficulty').value;
+    if (dif === 'medium' && attempts === 1) {
+      $('#hudHints').classList.add('show');
+      $('#hintFlag').textContent = dataOf(current).flag || '';
+      $('#hintCap').textContent = '';
+    }
+
     if (attempts >= 2) {
       const correctEl = document.querySelector(`[data-id="${code(current)}"]`);
       if (correctEl) correctEl.classList.add('hint');
@@ -457,6 +575,26 @@ function onClick(feature, el) {
     if (attempts >= 4) return autoFail();
     updateHUD();
   }
+}
+
+// Ficha educativa flotante tras acertar
+function showFicha(feature, el) {
+  const data = dataOf(feature);
+  if (!data.capital) return;
+  const r = el.getBoundingClientRect();
+  const ficha = document.createElement('div');
+  ficha.className = 'ficha';
+  ficha.style.left = (r.left + r.width / 2) + 'px';
+  ficha.style.top  = (r.top + r.height / 2) + 'px';
+  ficha.innerHTML = `
+    <div class="ff-flag">${data.flag || ''}</div>
+    <div class="ff-info">
+      <strong>${getName(feature)}</strong>
+      <div><span>Capital:</span> ${data.capital}</div>
+      <div><span>Idioma:</span> ${data.lang || ''}</div>
+    </div>`;
+  document.body.appendChild(ficha);
+  setTimeout(() => ficha.remove(), 1700);
 }
 
 function autoFail() {
@@ -492,30 +630,66 @@ function updateHUD() {
 function showResults() {
   current = null;
   const pct = totalRound ? Math.round(100 * score / totalRound) : 0;
-  let msg = '¡Inténtalo otra vez!';
-  if (pct >= 90) msg = '¡Excelente! 🌟';
-  else if (pct >= 70) msg = '¡Muy bien! 👏';
-  else if (pct >= 50) msg = 'Buen intento, sigue practicando.';
+  const dif = $('#difficulty').value;
+  const mode = $('#mode').value;
+  const badge = getBadge(score, totalRound, errors);
   soundFinish();
   if (pct >= 70) celebrate(true);
+
+  const isNew = saveRecord(dif, mode, score, totalRound, errors);
+  const r = getRecord(dif, mode);
 
   const m = document.createElement('div');
   m.className = 'modal-bg';
   m.innerHTML = `
     <div class="modal">
-      <h2>${msg}</h2>
+      <div class="badge-big">${badge.emoji}</div>
+      <div class="badge-text">${badge.text}</div>
+      <h2>${badge.title}</h2>
       <div class="stats">
         <strong>${score}/${totalRound}</strong>
-        <p>${errors} errores · ${pct}% de aciertos</p>
+        <p>${errors} ${errors === 1 ? 'fallo' : 'fallos'} · ${pct}% de acertos</p>
       </div>
-      <div class="actions">
-        <button class="btn primary" id="mAgain">Nueva partida</button>
+      ${isNew
+        ? `<div class="record-line new">🎉 Novo récord persoal!</div>`
+        : (r ? `<div class="record-line">Récord persoal: <strong>${r.score}/${r.total}</strong> (${r.errors} fallos)</div>` : '')}
+      <div class="actions" style="margin-top:14px">
+        <button class="btn primary" id="mAgain">Outra partida</button>
         <button class="btn" id="mClose">Cerrar</button>
       </div>
     </div>`;
   document.body.appendChild(m);
   m.querySelector('#mAgain').onclick = () => { m.remove(); startGame(); };
   m.querySelector('#mClose').onclick = () => m.remove();
+}
+
+// Insignias por % de acertos
+function getBadge(score, total, errors) {
+  if (total > 0 && score === total && errors === 0)
+    return { emoji: '🏆', text: 'Mestre/a da UE!', title: 'Pleno sen fallos!' };
+  const pct = total ? score / total : 0;
+  if (pct >= .9)  return { emoji: '🥇', text: 'Medalla de ouro',   title: 'Excelente!' };
+  if (pct >= .75) return { emoji: '🥈', text: 'Medalla de prata',  title: 'Moi ben!' };
+  if (pct >= .6)  return { emoji: '🥉', text: 'Medalla de bronce', title: 'Bo traballo!' };
+  return { emoji: '👍', text: 'Segue practicando', title: 'Inténtao outra vez!' };
+}
+
+// Récord persoal por dificultade+modo en localStorage
+const REC_KEY = 'ef_mapa_ue_records';
+function getRecords() { try { return JSON.parse(localStorage.getItem(REC_KEY) || '{}'); } catch (_) { return {}; } }
+function getRecord(dif, mode) { return getRecords()[dif + '_' + mode]; }
+function saveRecord(dif, mode, score, total, errors) {
+  const recs = getRecords();
+  const k = dif + '_' + mode;
+  const cur = recs[k];
+  // Mellor = maior puntuación; en empate, menos fallos
+  const isBetter = !cur || score > cur.score || (score === cur.score && errors < cur.errors);
+  if (isBetter && total > 0) {
+    recs[k] = { score, total, errors, ts: Date.now() };
+    try { localStorage.setItem(REC_KEY, JSON.stringify(recs)); } catch (_) {}
+    return true;
+  }
+  return false;
 }
 
 function shuffle(a) {
@@ -530,6 +704,7 @@ function shuffle(a) {
 $('#restart').onclick = startGame;
 $('#skip').onclick = skipCountry;
 $('#difficulty').onchange = startGame;
+$('#mode').onchange = startGame;
 $('#length').onchange = startGame;
 
 $('#themeBtn').onclick = () => {
