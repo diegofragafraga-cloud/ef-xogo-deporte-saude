@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xogos interactivos · Primaria</title>
+<style>
+  :root {
+    --bg:#0b0d13; --bg2:#13161f; --bg3:#1c2030;
+    --text:#e8eaf0; --text2:#8b92a8;
+    --accent:#10b981; --accent2:#34d399;
+    --border:#252a3a; --radius:14px;
+  }
+  .light{--bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .hidden{display:none !important}
+
+  .header{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .back-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;flex-shrink:0}
+  .back-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .back-btn svg{width:18px;height:18px}
+  .header h1{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:10px}
+  .header-right{margin-left:auto;display:flex;gap:8px}
+  .icon-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .icon-btn:hover{background:var(--accent);color:#fff}
+  .icon-btn svg{width:16px;height:16px}
+
+  .wrap{max-width:920px;margin:0 auto;padding:36px 22px}
+  .intro{margin-bottom:28px}
+  .intro h2{font-size:1.6rem;margin-bottom:8px}
+  .intro h2 span{color:var(--accent2)}
+  .intro p{color:var(--text2);font-size:.95rem;line-height:1.55;max-width:640px}
+
+  .section-title{font-size:.72rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1.6px;margin:30px 0 14px}
+
+  .game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .game-card{
+    background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px;text-decoration:none;color:var(--text);transition:all .2s;
+    display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;
+  }
+  .game-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(16,185,129,.06));opacity:0;transition:opacity .2s;pointer-events:none}
+  .game-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .game-card:hover::before{opacity:1}
+  .game-card.coming{opacity:.55;cursor:not-allowed;pointer-events:none}
+
+  .gc-head{display:flex;align-items:center;gap:14px}
+  .gc-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+  .gc-meta{flex:1;min-width:0}
+  .gc-title{font-weight:700;font-size:1.05rem;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .gc-tag{font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:8px;text-transform:uppercase;letter-spacing:.6px}
+  .gc-tag-sociales{background:rgba(245,158,11,.15);color:#fbbf24}
+  .gc-tag-mat{background:rgba(99,102,241,.15);color:#a5b4fc}
+  .gc-tag-soon{background:rgba(139,146,168,.15);color:var(--text2)}
+  .gc-area{font-size:.78rem;color:var(--text2)}
+  .gc-desc{font-size:.85rem;color:var(--text2);line-height:1.5;flex:1}
+  .gc-foot{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--text2);padding-top:10px;border-top:1px solid var(--border)}
+  .gc-foot strong{color:var(--text);font-weight:600}
+
+  @media (max-width:640px){
+    .wrap{padding:24px 16px}
+    .game-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="index.html" title="Volver ao espazo de Diego">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>🎮 Xogos interactivos · Primaria</h1>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn" title="Cambiar tema">
+      <svg id="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="sun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="intro">
+    <h2>Xogos interactivos para <span>Primaria</span></h2>
+    <p>Actividades web para repasar contidos curriculares xogando. Funcionan en calquera dispositivo (ordenador, tablet ou móbil) e non precisan instalación.</p>
+  </div>
+
+  <div class="section-title">Coñecemento do medio · Sociales</div>
+
+  <div class="game-grid">
+    <a class="game-card" href="xogos/mapa-mundi.html">
+      <div class="gc-head">
+        <div class="gc-icon" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">🌍</div>
+        <div class="gc-meta">
+          <div class="gc-title">Mapa do mundo <span class="gc-tag gc-tag-sociales">Sociales</span></div>
+          <div class="gc-area">Países do mundo</div>
+        </div>
+      </div>
+      <div class="gc-desc">O alumnado ve o nome dun país e ten que pulsar nel sobre o mapa mundial. Ten 3 niveis de dificultade (fácil, medio, difícil), pista tras 2 fallos e contador de aciertos.</div>
+      <div class="gc-foot">
+        <span>3 niveis · 10–195 países</span>
+        <strong>Xogar →</strong>
+      </div>
+    </a>
+
+    <div class="game-card coming">
+      <div class="gc-head">
+        <div class="gc-icon" style="background:linear-gradient(135deg,#3f3f46,#71717a)">🚧</div>
+        <div class="gc-meta">
+          <div class="gc-title">Próximamente <span class="gc-tag gc-tag-soon">Pendiente</span></div>
+          <div class="gc-area">Más juegos en preparación</div>
+        </div>
+      </div>
+      <div class="gc-desc">Pídele a Diego el siguiente juego: capitales, ríos, comunidades autónomas, tabla periódica, operaciones rápidas…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+$('#themeBtn').onclick = () => {
+  document.body.classList.toggle('light');
+  $('#moon').classList.toggle('hidden');
+  $('#sun').classList.toggle('hidden');
+  localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+};
+if (localStorage.getItem('ef_theme') === 'light') {
+  document.body.classList.add('light');
+  $('#moon').classList.add('hidden');
+  $('#sun').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
