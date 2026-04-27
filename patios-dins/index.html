@@ -695,6 +695,17 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 1500);
 }
 
+// Cambio entre colexios na sidebar
+function switchColexio(col) {
+  if (col === 'presaras') {
+    window.location.href = 'presentacion-presaras.html';
+    return;
+  }
+  // 'coiron' xa é a vista por defecto
+  document.querySelectorAll('.col-item').forEach(b => b.classList.remove('active'));
+  document.querySelector('.col-item:not(.col-presaras)').classList.add('active');
+}
+
 // Init
 if (localStorage.getItem('ef_theme') === 'light') {
   document.body.classList.add('light');

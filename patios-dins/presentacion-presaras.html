@@ -300,9 +300,52 @@ blockquote{text-align:center!important}
 @media(max-height:600px){:root{--pad:clamp(.5rem,2.5vw,1.5rem);--gap:clamp(.3rem,1vw,.75rem);--h2:clamp(.9rem,2.5vw,1.5rem);--body:clamp(.65rem,1.2vw,.9rem)}}
 @media(max-width:600px){.cards-2,.cards-3,.cards-4{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr 1fr}.zona-grid{grid-template-columns:1fr}.pasos{flex-direction:column}.obj-grid{grid-template-columns:1fr}.dafo-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}}
+
+/* ═══════════ PASSWORD GATE ═══════════ */
+.pgate{position:fixed;inset:0;z-index:9999;background:#0f1e16;display:flex;align-items:center;justify-content:center;padding:24px;font-family:'DM Sans',sans-serif;background-image:radial-gradient(circle at 30% 20%,rgba(82,183,136,.10),transparent 55%),radial-gradient(circle at 75% 70%,rgba(149,213,178,.07),transparent 55%)}
+.pgate.hidden{display:none}
+.pgate-box{background:#1b2b22;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:42px 36px 32px;max-width:460px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.5);text-align:left}
+.pgate-ico{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+.pgate-ico svg{width:30px;height:30px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pgate-eyebrow{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:#52b788;margin-bottom:8px}
+.pgate h2{font-family:'Playfair Display',serif;font-size:1.7rem;line-height:1.15;color:#fff;margin-bottom:10px;font-weight:900}
+.pgate p.sub{color:rgba(255,255,255,.6);font-size:.95rem;line-height:1.6;margin-bottom:24px}
+.pgate form{display:flex;flex-direction:column;gap:14px}
+.pgate label{font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:2px}
+.pgate input[type="password"]{background:#0f1e16;border:1.5px solid rgba(255,255,255,.12);color:#fff;padding:14px 16px;border-radius:10px;font-size:1.05rem;font-family:'Space Mono',monospace;letter-spacing:4px;outline:none;transition:all .15s}
+.pgate input[type="password"]:focus{border-color:#52b788;box-shadow:0 0 0 3px rgba(82,183,136,.18)}
+.pgate button{background:#52b788;color:#0f1e16;border:none;padding:14px 20px;border-radius:10px;font-size:.95rem;font-weight:800;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;letter-spacing:.5px}
+.pgate button:hover{background:#74c69d;transform:translateY(-1px)}
+.pgate button svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pgate .err{background:rgba(231,111,81,.15);color:#ffb4a0;border:1px solid rgba(231,111,81,.4);padding:10px 14px;border-radius:8px;font-size:.85rem;font-weight:600}
+.pgate .err.hidden{display:none}
+.pgate-note{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.55}
+body.pgate-locked{overflow:hidden}
 </style>
 </head>
-<body>
+<body class="pgate-locked">
+
+<!-- Pantalla de contrasinal -->
+<div id="pgate" class="pgate">
+  <div class="pgate-box">
+    <div class="pgate-ico">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="pgate-eyebrow">Patios DINS · Présaras</div>
+    <h2>Presentación externa</h2>
+    <p class="sub">Acceso restrinxido. Introduce o contrasinal para ver a presentación dos Patios DINS no CEIP de Présaras.</p>
+    <form onsubmit="checkPgate(event)">
+      <label for="pgate-pw">Contrasinal</label>
+      <input id="pgate-pw" type="password" inputmode="numeric" autocomplete="off" autofocus placeholder="••••••">
+      <div id="pgate-err" class="err hidden">Contrasinal incorrecto. Téntao de novo.</div>
+      <button type="submit">
+        Entrar
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </form>
+    <div class="pgate-note">Espazo de uso profesional. Se necesitas o contrasinal, solicítao a Diego.</div>
+  </div>
+</div>
 
 <div class="progress-wrap">
   <div class="progress-track"><div class="progress-fill" id="bar"></div></div>
@@ -1940,6 +1983,45 @@ document.addEventListener('DOMContentLoaded', () => {
   updateUI();
   updateTimer();
 });
+
+// ═══════════ PASSWORD GATE ═══════════
+(function(){
+  const KEY = 'presaras_pres_ok';
+  const HASH = '8135003b8d1ea93f2dd32d84aec1053b9866a25b3c93a6152d76860ea2d33516';
+  async function sha256(str){
+    const buf = new TextEncoder().encode(str);
+    const h = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function unlock(){
+    document.getElementById('pgate').classList.add('hidden');
+    document.body.classList.remove('pgate-locked');
+  }
+  window.checkPgate = async function(e){
+    e.preventDefault();
+    const pw = document.getElementById('pgate-pw').value;
+    const err = document.getElementById('pgate-err');
+    if (await sha256(pw) === HASH){
+      sessionStorage.setItem(KEY, '1');
+      unlock();
+    } else {
+      err.classList.remove('hidden');
+      const inp = document.getElementById('pgate-pw');
+      inp.value = ''; inp.focus();
+    }
+  };
+  // Bloquear teclado de slides mentres o gate estea visible
+  ['keydown','keyup','keypress'].forEach(ev => {
+    window.addEventListener(ev, e => {
+      if (document.body.classList.contains('pgate-locked')){
+        const t = e.target;
+        if (t && t.id === 'pgate-pw') return; // permitir escribir o contrasinal
+        e.stopPropagation();
+      }
+    }, true);
+  });
+  if (sessionStorage.getItem(KEY) === '1') unlock();
+})();
 </script>
 </body>
 </html>
