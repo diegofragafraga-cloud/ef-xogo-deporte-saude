@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Chuvia de medidas · 5º-6º</title>
+<style>
+  :root {
+    --bg:#0b0d13; --bg2:#13161f; --bg3:#1c2030;
+    --text:#e8eaf0; --text2:#8b92a8;
+    --accent:#10b981; --accent2:#34d399;
+    --border:#252a3a; --radius:14px;
+    --correct:#10b981; --wrong:#ef4444; --warn:#f59e0b;
+    --pad-color:#34d399;
+  }
+  .light {
+    --bg:#f0f2f7; --bg2:#fff; --bg3:#e8eaf0;
+    --text:#13161f; --text2:#6b7280; --border:#d1d5db;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; overflow:hidden; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    background:var(--bg); color:var(--text);
+    user-select:none; -webkit-user-select:none;
+    overscroll-behavior:none;
+  }
+  .hidden { display:none !important; }
+
+  /* Header */
+  .header {
+    display:flex; align-items:center; gap:12px;
+    padding:10px 18px; background:var(--bg2);
+    border-bottom:1px solid var(--border); height:56px;
+  }
+  .back-btn {
+    background:var(--bg3); border:1px solid var(--border); color:var(--text);
+    width:36px; height:36px; border-radius:8px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    text-decoration:none; transition:all .2s;
+  }
+  .back-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .back-btn svg { width:18px; height:18px; }
+  .header h1 { font-size:1.05rem; font-weight:700; }
+  .header h1 span { color:var(--accent2); }
+  .header-right { margin-left:auto; display:flex; gap:8px; }
+  .icon-btn {
+    background:var(--bg3); border:1px solid var(--border); color:var(--text);
+    width:36px; height:36px; border-radius:8px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:all .2s;
+  }
+  .icon-btn:hover { background:var(--accent); color:#fff; }
+  .icon-btn svg { width:16px; height:16px; }
+
+  /* HUD */
+  .hud {
+    display:flex; align-items:center; gap:10px;
+    padding:8px 14px; background:var(--bg2);
+    border-bottom:1px solid var(--border); flex-wrap:wrap;
+    min-height:54px;
+  }
+  .hud-target {
+    flex:1; min-width:0; display:flex; align-items:baseline; gap:8px;
+    background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(52,211,153,.06));
+    border:1px solid rgba(52,211,153,.3); border-radius:10px;
+    padding:6px 14px;
+  }
+  .hud-target .lbl {
+    font-size:.65rem; color:var(--text2); font-weight:700;
+    text-transform:uppercase; letter-spacing:1.4px; flex-shrink:0;
+  }
+  .hud-target .val {
+    font-size:1.5rem; font-weight:900; color:var(--accent2);
+    line-height:1; font-variant-numeric:tabular-nums;
+  }
+  .hud-target .mag {
+    font-size:.7rem; color:var(--text2); margin-left:auto; flex-shrink:0;
+    text-transform:uppercase; letter-spacing:1px;
+  }
+  .hud-stat {
+    background:var(--bg3); padding:6px 12px; border-radius:8px;
+    border:1px solid var(--border); display:flex; align-items:baseline; gap:6px;
+  }
+  .hud-stat strong { font-size:1rem; font-variant-numeric:tabular-nums; }
+  .hud-stat .label { font-size:.6rem; color:var(--text2); text-transform:uppercase; letter-spacing:1px; }
+  .hud-stat.lives strong { color:var(--wrong); }
+  .hud-stat.score strong { color:var(--accent2); }
+
+  /* Stage */
+  .stage {
+    position:relative; width:100%;
+    height: calc(100vh - 56px - 54px);
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(52,211,153,.08), transparent 40%),
+      radial-gradient(circle at 80% 0%, rgba(16,185,129,.05), transparent 40%),
+      var(--bg);
+  }
+
+  /* Falling cards */
+  .drop {
+    position:absolute; top:0;
+    background:var(--bg2); border:2px solid var(--border);
+    border-radius:12px; padding:10px 16px;
+    font-size:1.15rem; font-weight:800;
+    font-variant-numeric:tabular-nums;
+    color:var(--text); white-space:nowrap;
+    box-shadow:0 4px 20px rgba(0,0,0,.4);
+    transform:translateX(-50%);
+    transition:transform .12s, opacity .25s, background .15s, border-color .15s;
+  }
+  .drop.catch-ok {
+    background:var(--correct); border-color:#fff; color:#fff;
+    transform:translateX(-50%) scale(1.15);
+  }
+  .drop.catch-bad {
+    background:var(--wrong); border-color:#fff; color:#fff;
+    transform:translateX(-50%) scale(1.1);
+  }
+  .drop.miss { opacity:.25; border-color:var(--warn); }
+
+  /* Paddle */
+  .paddle {
+    position:absolute; bottom:14px;
+    height:14px; border-radius:8px;
+    background:linear-gradient(180deg,var(--accent2),var(--accent));
+    box-shadow:0 0 0 2px var(--bg2), 0 -4px 16px rgba(52,211,153,.4);
+    transform:translateX(-50%);
+    transition:background .15s;
+  }
+  .paddle.hit-ok { background:linear-gradient(180deg,#fff,var(--accent2)); }
+  .paddle.hit-bad { background:linear-gradient(180deg,#fff,var(--wrong)); }
+
+  /* Floor (where missed measurements pile up) */
+  .floor {
+    position:absolute; bottom:0; left:0; right:0; height:8px;
+    background:var(--bg3); border-top:1px solid var(--border);
+  }
+
+  /* Score floater */
+  .float-score {
+    position:absolute; pointer-events:none;
+    font-weight:900; font-size:1.05rem;
+    animation:floatUp 1s ease-out forwards;
+  }
+  .float-score.ok { color:var(--accent2); }
+  .float-score.bad { color:var(--wrong); }
+  @keyframes floatUp {
+    0% { opacity:0; transform:translate(-50%,0); }
+    20% { opacity:1; }
+    100% { opacity:0; transform:translate(-50%,-60px); }
+  }
+
+  /* Modals */
+  .modal-bg {
+    position:fixed; inset:0; background:rgba(0,0,0,.65);
+    display:flex; align-items:center; justify-content:center;
+    z-index:100; padding:20px;
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  }
+  .modal {
+    background:var(--bg2); border:1px solid var(--border);
+    border-radius:16px; padding:28px; max-width:480px; width:100%;
+    box-shadow:0 30px 80px rgba(0,0,0,.5);
+  }
+  .modal h2 {
+    font-size:1.6rem; font-weight:900; margin-bottom:6px;
+    color:var(--accent2);
+  }
+  .modal h2 .sub {
+    display:block; font-size:.78rem; font-weight:600; color:var(--text2);
+    text-transform:uppercase; letter-spacing:1.5px; margin-top:4px;
+  }
+  .modal p { color:var(--text2); line-height:1.55; margin:10px 0; font-size:.92rem; }
+  .modal ul { margin:10px 0 0 18px; color:var(--text2); font-size:.88rem; line-height:1.7; }
+
+  .levels {
+    display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:16px 0;
+  }
+  .level-btn {
+    background:var(--bg3); border:1.5px solid var(--border);
+    color:var(--text); padding:12px 14px; border-radius:10px;
+    cursor:pointer; font-size:.85rem; font-weight:700; text-align:left;
+    transition:all .15s;
+  }
+  .level-btn small { display:block; font-size:.7rem; font-weight:500; color:var(--text2); margin-top:3px; }
+  .level-btn:hover { border-color:var(--accent); transform:translateY(-1px); }
+  .level-btn.active { border-color:var(--accent); background:rgba(16,185,129,.1); }
+
+  .btn {
+    background:var(--accent); color:#fff; border:none;
+    padding:14px 22px; border-radius:10px; font-size:1rem; font-weight:800;
+    cursor:pointer; width:100%; transition:all .15s;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin-top:8px; font-family:inherit;
+  }
+  .btn:hover { background:var(--accent2); transform:translateY(-1px); }
+  .btn.secondary { background:var(--bg3); color:var(--text); border:1px solid var(--border); margin-top:6px; }
+  .btn.secondary:hover { background:var(--border); }
+  .btn svg { width:18px; height:18px; }
+
+  .stats {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0;
+  }
+  .stat-box {
+    background:var(--bg3); border:1px solid var(--border);
+    border-radius:10px; padding:12px; text-align:center;
+  }
+  .stat-box .v { font-size:1.5rem; font-weight:900; color:var(--accent2); font-variant-numeric:tabular-nums; }
+  .stat-box .l { font-size:.65rem; color:var(--text2); text-transform:uppercase; letter-spacing:1.2px; margin-top:2px; }
+
+  .hint-bar {
+    position:absolute; bottom:42px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,.55); color:#fff; padding:6px 14px;
+    border-radius:20px; font-size:.7rem; font-weight:600;
+    pointer-events:none; opacity:.85;
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  }
+  .hint-bar.fade { animation:hintFade 4s ease-out forwards; }
+  @keyframes hintFade {
+    0%,60% { opacity:.85; }
+    100% { opacity:0; }
+  }
+
+  @media (max-width:560px) {
+    .hud-target .val { font-size:1.25rem; }
+    .header h1 { font-size:.95rem; }
+    .modal { padding:22px; }
+    .levels { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="../index.html" title="Volver ao Espazo de Diego">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>Chuvia de <span>medidas</span></h1>
+  <div class="header-right">
+    <button class="icon-btn" id="pauseBtn" onclick="togglePause()" title="Pausar (P)">
+      <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      <svg id="iconPlay" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+    </button>
+    <button class="icon-btn" onclick="toggleTheme()" title="Cambiar tema">
+      <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="iconSun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="hud">
+  <div class="hud-target">
+    <span class="lbl">Atrapa</span>
+    <span class="val" id="targetVal">—</span>
+    <span class="mag" id="targetMag"></span>
+  </div>
+  <div class="hud-stat score">
+    <span class="label">Puntos</span>
+    <strong id="scoreVal">0</strong>
+  </div>
+  <div class="hud-stat lives">
+    <span class="label">Vidas</span>
+    <strong id="livesVal">♥♥♥</strong>
+  </div>
+  <div class="hud-stat">
+    <span class="label">Ronda</span>
+    <strong id="roundVal">1</strong>
+  </div>
+</div>
+
+<div class="stage" id="stage">
+  <div class="floor"></div>
+  <div class="paddle" id="paddle"></div>
+  <div class="hint-bar fade" id="hint">← → ou A/D · móvil: arrastra</div>
+</div>
+
+<!-- MENU INICIAL -->
+<div class="modal-bg" id="modalMenu">
+  <div class="modal">
+    <h2>Chuvia de medidas <span class="sub">5.º · 6.º Primaria</span></h2>
+    <p>Caen medidas dende o ceo. Cada ronda mostra unha medida obxectivo. <strong>Atrapa SÓ as equivalentes</strong> coa barra. Se atrapas unha incorrecta ou se che escapa unha equivalente, perdes vida.</p>
+    <ul>
+      <li><strong>Móvil:</strong> arrastra o dedo pola pantalla</li>
+      <li><strong>PC:</strong> ← → ou A / D</li>
+      <li><strong>P</strong> para pausar</li>
+    </ul>
+    <p style="margin-top:14px;color:var(--text);font-weight:700;font-size:.88rem">Escolle magnitude:</p>
+    <div class="levels" id="levelsBox"></div>
+    <button class="btn" onclick="startGame()">
+      Comezar
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- GAME OVER / RESUMO -->
+<div class="modal-bg hidden" id="modalEnd">
+  <div class="modal">
+    <h2 id="endTitle">—</h2>
+    <p id="endText">—</p>
+    <div class="stats">
+      <div class="stat-box"><div class="v" id="endScore">0</div><div class="l">Puntos</div></div>
+      <div class="stat-box"><div class="v" id="endRounds">0</div><div class="l">Rondas</div></div>
+      <div class="stat-box"><div class="v" id="endAcc">0%</div><div class="l">Acerto</div></div>
+    </div>
+    <button class="btn" onclick="restart()">
+      Outra partida
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+    </button>
+    <button class="btn secondary" onclick="backToMenu()">Cambiar magnitude</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// DATOS DE MAGNITUDES (5º-6º LOMLOE: SMD)
+// ════════════════════════════════════════════════════════════════
+const MAGS = {
+  lonxitude: {
+    name: 'Lonxitude',
+    base: 'm',
+    units: { km: 1000, m: 1, dm: 0.1, cm: 0.01, mm: 0.001 },
+    common: ['km','m','cm','mm']
+  },
+  masa: {
+    name: 'Masa',
+    base: 'g',
+    units: { t: 1000000, kg: 1000, g: 1, mg: 0.001 },
+    common: ['t','kg','g']
+  },
+  capacidade: {
+    name: 'Capacidade',
+    base: 'l',
+    units: { kl: 1000, l: 1, cl: 0.01, ml: 0.001 },
+    common: ['l','cl','ml']
+  }
+};
+
+// Niveis: cada un define magnitude (ou 'mixto'), permite decimais e velocidade
+const LEVELS = [
+  { id:'lonxitude', label:'Lonxitude', desc:'km · m · cm · mm', mags:['lonxitude'] },
+  { id:'masa',      label:'Masa',      desc:'t · kg · g',        mags:['masa'] },
+  { id:'capacidade',label:'Capacidade',desc:'l · cl · ml',       mags:['capacidade'] },
+  { id:'mixto',     label:'Mixto',     desc:'Todas as magnitudes',mags:['lonxitude','masa','capacidade'] }
+];
+
+// ════════════════════════════════════════════════════════════════
+// ESTADO
+// ════════════════════════════════════════════════════════════════
+let state = {
+  selected: 'lonxitude',
+  score: 0,
+  lives: 3,
+  round: 1,
+  paused: false,
+  playing: false,
+  paddleX: 0.5,    // posición relativa 0..1
+  paddleW: 140,    // ancho en px
+  drops: [],       // {el, x, y, vy, value, equiv, caught, missed}
+  spawnTimer: 0,
+  spawnInterval: 1100,
+  speedMult: 1,
+  target: null,    // {magKey, valueGrams, display, mag}
+  caughtCorrect: 0,
+  caughtWrong: 0,
+  missed: 0,
+  totalSpawned: 0,
+  totalEquivInRound: 0,
+  caughtEquivInRound: 0,
+  spawnsLeft: 0,
+  lastFrameTs: 0,
+};
+
+const stage = document.getElementById('stage');
+const paddle = document.getElementById('paddle');
+
+// ════════════════════════════════════════════════════════════════
+// XERACIÓN DE OBXECTIVO E DISTRACTORS
+// ════════════════════════════════════════════════════════════════
+// Escolle un valor obxectivo razoable: número "redondo" (1-9, 10-99, decimais comúns)
+function pickTargetValue(round) {
+  // Aumenta complexidade segundo a ronda
+  const usedecimal = round >= 2 ? Math.random() < 0.55 : Math.random() < 0.25;
+  if (!usedecimal) {
+    // valor enteiro 1..99
+    const pool = round < 3
+      ? [1,2,3,4,5,6,7,8,9,10,15,20,25,50,100]
+      : [1,2,3,4,5,6,7,8,9,10,12,15,18,20,24,25,30,50,75,100,150,250,500];
+    return pool[Math.floor(Math.random()*pool.length)];
+  }
+  // valor decimal: 0,5 / 1,5 / 2,5 / 0,25 / 0,75 / 1,25 / 3,5 ...
+  const decimals = round < 4
+    ? [0.5, 1.5, 2.5, 3.5, 0.25, 0.75]
+    : [0.5, 1.5, 2.5, 3.5, 0.25, 0.75, 1.25, 1.75, 0.1, 0.05, 0.2];
+  return decimals[Math.floor(Math.random()*decimals.length)];
+}
+
+// Xera o obxectivo da ronda
+function makeTarget() {
+  const magsAllowed = LEVELS.find(l => l.id === state.selected).mags;
+  const magKey = magsAllowed[Math.floor(Math.random()*magsAllowed.length)];
+  const mag = MAGS[magKey];
+  const value = pickTargetValue(state.round);
+
+  // Escolle unidade da unidade obxectivo entre as comúns desta magnitude
+  // Evita valores absurdamente pequenos (0,25 mg) ou enormes (100 t)
+  let unitOptions = mag.common.slice();
+  // No primeiro round, simplifica: usa a unidade "intermedia"
+  if (state.round === 1) {
+    if (magKey === 'lonxitude') unitOptions = ['km','m'];
+    if (magKey === 'masa') unitOptions = ['kg','g'];
+    if (magKey === 'capacidade') unitOptions = ['l','ml'];
+  }
+  const unit = unitOptions[Math.floor(Math.random()*unitOptions.length)];
+
+  const valueInBase = value * mag.units[unit];
+  return {
+    magKey, mag,
+    valueInBase,
+    display: formatMeasure(value, unit),
+    unit, value
+  };
+}
+
+// Formata número con coma decimal e separador de miles para displays grandes
+function formatNum(n) {
+  if (Number.isInteger(n)) {
+    // separador de miles con espazo fino só >= 10000
+    if (n >= 10000) return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return n.toString();
+  }
+  // decimal: ata 5 decimais máx, sen ceros á dereita
+  let s = n.toFixed(5).replace(/0+$/,'').replace(/\.$/,'');
+  return s.replace('.', ',');
+}
+
+function formatMeasure(value, unit) {
+  return formatNum(value) + ' ' + unit;
+}
+
+// Xera unha medida candidata para caer (equivalente ou non)
+// equiv = true: debe ser equivalente ao obxectivo
+function makeDrop(target, equiv) {
+  const mag = target.mag;
+  const baseVal = target.valueInBase;
+  const units = Object.keys(mag.units);
+
+  let attempts = 0;
+  while (attempts < 30) {
+    attempts++;
+    const u = units[Math.floor(Math.random()*units.length)];
+    const factor = mag.units[u];
+
+    if (equiv) {
+      // valor que multiplica * factor == baseVal
+      const v = baseVal / factor;
+      // Evita valores fea-os: máx 6 cifras significativas e unidades comúns
+      if (!isReasonableNumber(v)) continue;
+      // Non duplicar exactamente o display do obxectivo
+      const display = formatMeasure(v, u);
+      if (display === target.display) continue;
+      return { display, valueInBase: baseVal, equiv:true };
+    } else {
+      // valor non equivalente: escolle un valor "preto" pero distinto
+      // Estratexias: cambiar valor (×10, /10, +/-1, ×2, /2) e mantemos unidade
+      const distractorVal = makeDistractorValue(target.value);
+      if (!isReasonableNumber(distractorVal)) continue;
+      const distractorBase = distractorVal * factor;
+      if (Math.abs(distractorBase - baseVal) < 1e-9) continue; // sería equiv
+      const display = formatMeasure(distractorVal, u);
+      // Verifica que NON é equivalente (con tolerancia para floats)
+      if (Math.abs(distractorBase - baseVal) / Math.max(baseVal, 1e-9) < 1e-6) continue;
+      return { display, valueInBase:distractorBase, equiv:false };
+    }
+  }
+  // Fallback: medida obviamente distinta
+  return { display: formatMeasure(target.value*7, target.unit), valueInBase: baseVal*7, equiv:false };
+}
+
+function makeDistractorValue(v) {
+  const transforms = [
+    x => x * 10, x => x / 10,
+    x => x * 100, x => x / 100,
+    x => x * 2, x => x / 2,
+    x => x + 1, x => Math.max(0.01, x - 1),
+    x => x * 5, x => x / 5,
+    x => x + 0.1, x => Math.max(0.01, x - 0.1)
+  ];
+  return transforms[Math.floor(Math.random()*transforms.length)](v);
+}
+
+function isReasonableNumber(v) {
+  if (!isFinite(v) || v <= 0) return false;
+  if (v < 0.001) return false;
+  if (v > 999999) return false;
+  // Evita números con demasiadas cifras decimais
+  const s = v.toFixed(6);
+  const decimals = (s.split('.')[1] || '').replace(/0+$/,'').length;
+  if (decimals > 4) return false;
+  return true;
+}
+
+// ════════════════════════════════════════════════════════════════
+// RONDA
+// ════════════════════════════════════════════════════════════════
+function startRound() {
+  state.target = makeTarget();
+  state.spawnTimer = 0;
+  state.caughtEquivInRound = 0;
+  state.totalEquivInRound = 0;
+
+  // Decide cantos drops nesta ronda e cantos equivalentes
+  const totalDrops = 6 + Math.min(state.round, 6); // 7..12
+  const equivCount = 3 + Math.min(Math.floor(state.round / 2), 3); // 3..6
+  state.totalEquivInRound = equivCount;
+  state.spawnsLeft = totalDrops;
+
+  // Velocidade de spawn e caída segundo a ronda
+  state.spawnInterval = Math.max(450, 1200 - state.round*70);
+  state.speedMult = 1 + (state.round - 1) * 0.18;
+
+  // Cola de drops a spawnar (mestura embarallada)
+  state.spawnQueue = [];
+  for (let i = 0; i < equivCount; i++) state.spawnQueue.push(true);
+  for (let i = 0; i < totalDrops - equivCount; i++) state.spawnQueue.push(false);
+  // Embarallar
+  for (let i = state.spawnQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [state.spawnQueue[i], state.spawnQueue[j]] = [state.spawnQueue[j], state.spawnQueue[i]];
+  }
+
+  updateHUD();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SPAWNING & ANIMATION
+// ════════════════════════════════════════════════════════════════
+function spawnDrop() {
+  if (state.spawnsLeft <= 0) return;
+  const equiv = state.spawnQueue.shift();
+  const data = makeDrop(state.target, equiv);
+
+  const el = document.createElement('div');
+  el.className = 'drop';
+  el.textContent = data.display;
+  // posición x: marxe 8% para non saír da pantalla
+  const xPct = 8 + Math.random() * 84;
+  el.style.left = xPct + '%';
+  el.style.top = '-60px';
+  stage.appendChild(el);
+
+  state.drops.push({
+    el,
+    xPct,
+    y: -60,
+    vy: 90 + Math.random() * 30, // px/s base
+    equiv: data.equiv,
+    display: data.display,
+    valueInBase: data.valueInBase,
+    caught: false,
+    flagged: false,
+  });
+  state.spawnsLeft--;
+  state.totalSpawned++;
+}
+
+function tick(ts) {
+  if (!state.playing) return;
+  if (!state.lastFrameTs) state.lastFrameTs = ts;
+  const dt = Math.min(50, ts - state.lastFrameTs); // ms, capa de salto
+  state.lastFrameTs = ts;
+
+  if (!state.paused) {
+    // Spawn
+    state.spawnTimer += dt;
+    if (state.spawnTimer >= state.spawnInterval && state.spawnsLeft > 0) {
+      state.spawnTimer = 0;
+      spawnDrop();
+    }
+
+    // Update drops
+    const stageH = stage.clientHeight;
+    const stageW = stage.clientWidth;
+    const paddleY = stageH - 14 - 14; // bottom 14 + paddle height 14
+    const paddlePxX = state.paddleX * stageW;
+    const paddleHalf = state.paddleW / 2;
+
+    for (const d of state.drops) {
+      if (d.flagged) continue;
+      d.y += d.vy * state.speedMult * (dt / 1000);
+      d.el.style.top = d.y + 'px';
+
+      // Colisión coa pala (cando o centro do drop atinxe a y da pala)
+      if (d.y >= paddleY - 28 && d.y <= paddleY + 14) {
+        const dropPxX = (d.xPct / 100) * stageW;
+        if (Math.abs(dropPxX - paddlePxX) <= paddleHalf + 6) {
+          // Atrapado
+          d.flagged = true;
+          d.caught = true;
+          if (d.equiv) {
+            d.el.classList.add('catch-ok');
+            paddle.classList.add('hit-ok');
+            setTimeout(() => paddle.classList.remove('hit-ok'), 200);
+            state.score += 10 * state.round;
+            state.caughtCorrect++;
+            state.caughtEquivInRound++;
+            floatScore('+' + (10*state.round), dropPxX, paddleY-10, true);
+          } else {
+            d.el.classList.add('catch-bad');
+            paddle.classList.add('hit-bad');
+            setTimeout(() => paddle.classList.remove('hit-bad'), 200);
+            state.lives--;
+            state.caughtWrong++;
+            floatScore('−1 vida', dropPxX, paddleY-10, false);
+          }
+          setTimeout(() => removeDrop(d), 400);
+          updateHUD();
+          if (state.lives <= 0) { endGame(false); return; }
+        }
+      }
+
+      // Tocou o chan (perdido)
+      if (!d.caught && d.y >= stageH - 8) {
+        d.flagged = true;
+        if (d.equiv) {
+          // Era equivalente e escapouse
+          state.lives--;
+          state.missed++;
+          d.el.classList.add('miss');
+          floatScore('−1 vida', (d.xPct/100)*stageW, stageH-30, false);
+          updateHUD();
+          if (state.lives <= 0) { endGame(false); setTimeout(()=>removeDrop(d), 500); return; }
+        } else {
+          d.el.classList.add('miss');
+        }
+        setTimeout(() => removeDrop(d), 500);
+      }
+    }
+
+    // Limpar drops eliminados
+    state.drops = state.drops.filter(d => d.el.parentNode);
+
+    // Fin de ronda?
+    if (state.spawnsLeft === 0 && state.drops.every(d => d.flagged)) {
+      // Esperamos un pouco por animacións pendentes
+      if (state.drops.length === 0) {
+        state.round++;
+        startRound();
+      }
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+
+function removeDrop(d) {
+  if (d.el.parentNode) d.el.parentNode.removeChild(d.el);
+}
+
+function floatScore(text, x, y, ok) {
+  const f = document.createElement('div');
+  f.className = 'float-score ' + (ok ? 'ok' : 'bad');
+  f.textContent = text;
+  f.style.left = x + 'px';
+  f.style.top = y + 'px';
+  stage.appendChild(f);
+  setTimeout(() => f.remove(), 1100);
+}
+
+// ════════════════════════════════════════════════════════════════
+// PADDLE CONTROL
+// ════════════════════════════════════════════════════════════════
+function setPaddleX(pxRatio) {
+  state.paddleX = Math.max(0, Math.min(1, pxRatio));
+  paddle.style.left = (state.paddleX * 100) + '%';
+}
+
+function resizePaddle() {
+  const w = stage.clientWidth;
+  state.paddleW = Math.max(110, Math.min(200, w * 0.18));
+  paddle.style.width = state.paddleW + 'px';
+}
+
+// Teclado
+let keyL = false, keyR = false;
+document.addEventListener('keydown', e => {
+  if (e.repeat) return;
+  if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keyL = true;
+  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keyR = true;
+  if (e.key === 'p' || e.key === 'P') togglePause();
+});
+document.addEventListener('keyup', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keyL = false;
+  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keyR = false;
+});
+function keyboardLoop() {
+  if (state.playing && !state.paused) {
+    if (keyL) setPaddleX(state.paddleX - 0.018);
+    if (keyR) setPaddleX(state.paddleX + 0.018);
+  }
+  requestAnimationFrame(keyboardLoop);
+}
+
+// Punteiro/touch
+function pointerHandler(e) {
+  if (!state.playing || state.paused) return;
+  const rect = stage.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const x = (clientX - rect.left) / rect.width;
+  setPaddleX(x);
+}
+stage.addEventListener('mousemove', pointerHandler);
+stage.addEventListener('touchstart', e => { pointerHandler(e); e.preventDefault(); }, { passive:false });
+stage.addEventListener('touchmove', e => { pointerHandler(e); e.preventDefault(); }, { passive:false });
+
+// ════════════════════════════════════════════════════════════════
+// HUD
+// ════════════════════════════════════════════════════════════════
+function updateHUD() {
+  document.getElementById('targetVal').textContent = state.target ? state.target.display : '—';
+  document.getElementById('targetMag').textContent = state.target ? state.target.mag.name : '';
+  document.getElementById('scoreVal').textContent = state.score;
+  document.getElementById('livesVal').textContent = '♥'.repeat(Math.max(0,state.lives)) || '×';
+  document.getElementById('roundVal').textContent = state.round;
+}
+
+// ════════════════════════════════════════════════════════════════
+// FLUXO
+// ════════════════════════════════════════════════════════════════
+function buildLevelPicker() {
+  const box = document.getElementById('levelsBox');
+  box.innerHTML = LEVELS.map(l => `
+    <button class="level-btn${l.id===state.selected?' active':''}" data-id="${l.id}">
+      ${l.label}
+      <small>${l.desc}</small>
+    </button>
+  `).join('');
+  box.querySelectorAll('.level-btn').forEach(b => {
+    b.onclick = () => {
+      state.selected = b.dataset.id;
+      box.querySelectorAll('.level-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    };
+  });
+}
+
+function startGame() {
+  document.getElementById('modalMenu').classList.add('hidden');
+  state.score = 0; state.lives = 3; state.round = 1;
+  state.caughtCorrect = 0; state.caughtWrong = 0; state.missed = 0; state.totalSpawned = 0;
+  state.drops.forEach(d => removeDrop(d));
+  state.drops = [];
+  state.playing = true; state.paused = false;
+  state.lastFrameTs = 0;
+  resizePaddle();
+  setPaddleX(0.5);
+  startRound();
+  updateHUD();
+  requestAnimationFrame(tick);
+  // mostrar hint inicial outra vez
+  const hint = document.getElementById('hint');
+  hint.classList.remove('fade');
+  void hint.offsetWidth;
+  hint.classList.add('fade');
+}
+
+function endGame(victory) {
+  state.playing = false;
+  // limpar drops pendentes
+  state.drops.forEach(d => removeDrop(d));
+  state.drops = [];
+
+  document.getElementById('endTitle').textContent = victory ? '¡Ben feito!' : 'Fin da partida';
+  const totalCaught = state.caughtCorrect + state.caughtWrong;
+  const acc = state.totalSpawned > 0
+    ? Math.round((state.caughtCorrect / Math.max(1, state.totalSpawned - state.caughtWrong - 0)) * 100)
+    : 0;
+  // Acerto = correctas / (correctas + erros)
+  const accClean = (state.caughtCorrect + state.caughtWrong + state.missed) > 0
+    ? Math.round((state.caughtCorrect / (state.caughtCorrect + state.caughtWrong + state.missed)) * 100)
+    : 0;
+  document.getElementById('endScore').textContent = state.score;
+  document.getElementById('endRounds').textContent = state.round;
+  document.getElementById('endAcc').textContent = accClean + '%';
+  document.getElementById('endText').textContent = victory
+    ? `Chegaches á ronda ${state.round} con ${state.lives} vida(s)`
+    : `${state.caughtCorrect} medidas correctas atrapadas. ${state.caughtWrong} erros, ${state.missed} escapes.`;
+  document.getElementById('modalEnd').classList.remove('hidden');
+}
+
+function restart() {
+  document.getElementById('modalEnd').classList.add('hidden');
+  startGame();
+}
+
+function backToMenu() {
+  document.getElementById('modalEnd').classList.add('hidden');
+  document.getElementById('modalMenu').classList.remove('hidden');
+  state.playing = false;
+  state.drops.forEach(d => removeDrop(d));
+  state.drops = [];
+}
+
+function togglePause() {
+  if (!state.playing) return;
+  state.paused = !state.paused;
+  document.getElementById('iconPause').classList.toggle('hidden', state.paused);
+  document.getElementById('iconPlay').classList.toggle('hidden', !state.paused);
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  document.getElementById('iconMoon').classList.toggle('hidden');
+  document.getElementById('iconSun').classList.toggle('hidden');
+  localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+// Init
+if (localStorage.getItem('ef_theme') === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('iconMoon').classList.add('hidden');
+  document.getElementById('iconSun').classList.remove('hidden');
+}
+
+window.addEventListener('resize', () => { resizePaddle(); });
+buildLevelPicker();
+resizePaddle();
+setPaddleX(0.5);
+keyboardLoop();
+</script>
+</body>
+</html>
