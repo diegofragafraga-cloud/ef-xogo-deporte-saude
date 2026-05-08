@@ -143,6 +143,12 @@
     content:''; position:absolute; bottom:-80px; left:30%;
     width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.06);
   }
+  .hp-deco {
+    position: absolute; top: 50%; right: 24px; transform: translateY(-50%);
+    width: 150px; height: 150px; opacity: .55; pointer-events: none;
+  }
+  @media (min-width: 981px) { .hp-info { padding-right: 160px; } }
+  @media (max-width: 980px) { .hp-deco { display: none; } }
   .hp-avatar {
     width: 100px; height: 100px; border-radius: 50%;
     background: rgba(255,255,255,.18); backdrop-filter: blur(8px);
@@ -314,6 +320,49 @@
     <!-- Hero persoal -->
     <div class="hero-personal reveal">
       <div class="hp-avatar">D</div>
+      <!-- Decoración SVG flat -->
+      <svg class="hp-deco" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Cronómetro -->
+        <g transform="translate(40,30)">
+          <circle cx="0" cy="0" r="22" fill="rgba(255,255,255,.18)" stroke="#fff" stroke-width="2"/>
+          <rect x="-6" y="-30" width="12" height="6" rx="2" fill="#fff" opacity=".9"/>
+          <line x1="0" y1="0" x2="0" y2="-14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <line x1="0" y1="0" x2="10" y2="6" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="0" cy="0" r="2" fill="#fff"/>
+        </g>
+        <!-- Balón -->
+        <g transform="translate(140,55)">
+          <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,.18)" stroke="#fff" stroke-width="2"/>
+          <path d="M-20 0 Q0 -10 20 0 Q0 10 -20 0" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7"/>
+          <path d="M0 -20 Q-8 0 0 20 Q8 0 0 -20" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7"/>
+        </g>
+        <!-- Regla -->
+        <g transform="translate(30,120) rotate(-25)">
+          <rect x="0" y="0" width="80" height="14" rx="2" fill="rgba(255,255,255,.22)" stroke="#fff" stroke-width="1.5"/>
+          <line x1="10" y1="0" x2="10" y2="6" stroke="#fff" stroke-width="1.2"/>
+          <line x1="20" y1="0" x2="20" y2="6" stroke="#fff" stroke-width="1.2"/>
+          <line x1="30" y1="0" x2="30" y2="8" stroke="#fff" stroke-width="1.2"/>
+          <line x1="40" y1="0" x2="40" y2="6" stroke="#fff" stroke-width="1.2"/>
+          <line x1="50" y1="0" x2="50" y2="6" stroke="#fff" stroke-width="1.2"/>
+          <line x1="60" y1="0" x2="60" y2="8" stroke="#fff" stroke-width="1.2"/>
+          <line x1="70" y1="0" x2="70" y2="6" stroke="#fff" stroke-width="1.2"/>
+        </g>
+        <!-- Libro aberto -->
+        <g transform="translate(125,135)">
+          <path d="M-20 -10 L-2 -8 L-2 12 L-20 10 Z" fill="rgba(255,255,255,.2)" stroke="#fff" stroke-width="1.5"/>
+          <path d="M2 -8 L20 -10 L20 10 L2 12 Z" fill="rgba(255,255,255,.2)" stroke="#fff" stroke-width="1.5"/>
+          <line x1="-15" y1="-4" x2="-7" y2="-3" stroke="#fff" stroke-width="1" opacity=".7"/>
+          <line x1="-15" y1="0" x2="-7" y2="1" stroke="#fff" stroke-width="1" opacity=".7"/>
+          <line x1="-15" y1="4" x2="-7" y2="5" stroke="#fff" stroke-width="1" opacity=".7"/>
+          <line x1="7" y1="-3" x2="15" y2="-4" stroke="#fff" stroke-width="1" opacity=".7"/>
+          <line x1="7" y1="1" x2="15" y2="0" stroke="#fff" stroke-width="1" opacity=".7"/>
+          <line x1="7" y1="5" x2="15" y2="4" stroke="#fff" stroke-width="1" opacity=".7"/>
+        </g>
+        <!-- Dots -->
+        <circle cx="90" cy="20" r="3" fill="#fff" opacity=".4"/>
+        <circle cx="170" cy="100" r="2.5" fill="#fff" opacity=".4"/>
+        <circle cx="80" cy="170" r="2" fill="#fff" opacity=".35"/>
+      </svg>
       <div class="hp-info">
         <div class="hp-eyebrow">Espazo persoal · CEIP Coirón Dena</div>
         <div class="hp-name">Diego Fraga</div>

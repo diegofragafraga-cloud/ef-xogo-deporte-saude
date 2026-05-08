@@ -74,6 +74,13 @@
     background: rgba(255,255,255,.14); padding: 5px 12px; border-radius: 8px;
     backdrop-filter: blur(4px); font-weight: 500;
   }
+  .rh-illu {
+    display: block; margin: 22px auto 8px; max-width: 360px; width: 100%;
+    height: auto; position: relative;
+  }
+  @media (max-width: 480px) {
+    .rh-illu { max-width: 280px; }
+  }
 
   /* Animaciones de entrada */
   .reveal {
@@ -234,6 +241,54 @@
     <div class="rh-badge">Situación de Aprendizaje · DENA 2026</div>
     <h2>Mochilas saudables</h2>
     <p>ABP de matemáticas integradas en Educación Física: medir, calcular porcentajes y concienciar sobre la salud postural. Producto final: decálogo de mochila saludable.</p>
+
+    <!-- Ilustración SVG flat -->
+    <svg class="rh-illu" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Figura ergonómica izquierda -->
+      <g transform="translate(60,55)">
+        <circle cx="0" cy="0" r="13" fill="#fff" opacity=".92"/>
+        <line x1="0" y1="13" x2="0" y2="78" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".92"/>
+        <line x1="0" y1="28" x2="-16" y2="50" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".92"/>
+        <line x1="0" y1="28" x2="16" y2="50" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".92"/>
+        <line x1="0" y1="78" x2="-9" y2="110" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".92"/>
+        <line x1="0" y1="78" x2="9" y2="110" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".92"/>
+        <!-- columna -->
+        <circle cx="0" cy="22" r="2" fill="#34d399"/>
+        <circle cx="0" cy="36" r="2" fill="#34d399"/>
+        <circle cx="0" cy="50" r="2" fill="#34d399"/>
+        <circle cx="0" cy="64" r="2" fill="#34d399"/>
+      </g>
+      <!-- Mochila central -->
+      <g transform="translate(170,30)">
+        <path d="M18 8 Q18 -4 30 -4 Q42 -4 42 14" stroke="#fff" stroke-width="4" fill="none" opacity=".95"/>
+        <path d="M62 8 Q62 -4 50 -4 Q38 -4 38 14" stroke="#fff" stroke-width="4" fill="none" opacity=".95"/>
+        <rect x="6" y="14" width="74" height="110" rx="14" fill="#fff" opacity=".95"/>
+        <rect x="18" y="50" width="50" height="44" rx="8" fill="#10b981"/>
+        <line x1="43" y1="50" x2="43" y2="94" stroke="#065f46" stroke-width="2"/>
+        <circle cx="43" cy="50" r="3.5" fill="#065f46"/>
+        <rect x="20" y="105" width="46" height="6" rx="3" fill="#10b981" opacity=".5"/>
+      </g>
+      <!-- Báscula derecha -->
+      <g transform="translate(300,90)">
+        <rect x="0" y="38" width="86" height="42" rx="9" fill="#fff" opacity=".95"/>
+        <rect x="22" y="48" width="42" height="22" rx="5" fill="#065f46"/>
+        <text x="43" y="64" fill="#34d399" font-family="ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="middle">3.2 kg</text>
+        <rect x="6" y="78" width="6" height="4" fill="#fff" opacity=".95"/>
+        <rect x="74" y="78" width="6" height="4" fill="#fff" opacity=".95"/>
+      </g>
+      <!-- Burbuja % -->
+      <g transform="translate(370,38)">
+        <circle cx="0" cy="0" r="24" fill="#fff" opacity=".96"/>
+        <text x="0" y="-1" fill="#065f46" font-weight="800" font-size="10" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif">10-15</text>
+        <text x="0" y="11" fill="#10b981" font-weight="800" font-size="9" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif">%</text>
+      </g>
+      <!-- dots decorativos -->
+      <circle cx="20" cy="30" r="3" fill="#fff" opacity=".35"/>
+      <circle cx="22" cy="170" r="3" fill="#fff" opacity=".35"/>
+      <circle cx="400" cy="160" r="4" fill="#fff" opacity=".4"/>
+      <circle cx="240" cy="180" r="2" fill="#fff" opacity=".35"/>
+    </svg>
+
     <div class="rh-meta">
       <span>5.º Primaria</span>
       <span>EF + Matemáticas</span>
