@@ -123,7 +123,73 @@
     .sidebar.open { left:0; box-shadow:4px 0 20px rgba(0,0,0,.5); }
     .sidebar-hamburger { display:flex; }
     .main { padding:20px 16px; }
+    .hero-personal { padding:28px 22px !important; }
+    .hp-name { font-size:1.4rem !important; }
+    .hp-avatar { width:80px !important; height:80px !important; font-size:2rem !important; }
   }
+
+  /* Hero personal */
+  .hero-personal {
+    background: linear-gradient(135deg, #065f46 0%, #10b981 60%, #34d399 100%);
+    border-radius: var(--radius); padding: 36px 32px; margin-bottom: 28px;
+    display: flex; gap: 24px; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-personal::before {
+    content:''; position:absolute; top:-60px; right:-60px;
+    width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,.08);
+  }
+  .hero-personal::after {
+    content:''; position:absolute; bottom:-80px; left:30%;
+    width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.06);
+  }
+  .hp-avatar {
+    width: 100px; height: 100px; border-radius: 50%;
+    background: rgba(255,255,255,.18); backdrop-filter: blur(8px);
+    border: 3px solid rgba(255,255,255,.3);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: #fff; font-size: 2.6rem;
+    flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .hp-info { position: relative; z-index: 1; flex: 1; }
+  .hp-eyebrow {
+    font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.85);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;
+  }
+  .hp-name { font-size: 1.7rem; font-weight: 800; color: #fff; margin-bottom: 4px; line-height: 1.15; }
+  .hp-role { font-size: .92rem; color: rgba(255,255,255,.85); margin-bottom: 14px; line-height: 1.5; }
+  .hp-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .hp-tags span {
+    background: rgba(255,255,255,.14); color: #fff; padding: 4px 10px;
+    border-radius: 8px; font-size: .72rem; font-weight: 500;
+    backdrop-filter: blur(4px);
+  }
+  .hp-cta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hp-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 10px;
+    font-size: .82rem; font-weight: 600; text-decoration: none;
+    transition: transform .15s, filter .15s;
+  }
+  .hp-btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+  .hp-btn-primary { background: #fff; color: #065f46; }
+  .hp-btn-secondary { background: rgba(255,255,255,.18); color: #fff; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,.25); }
+  .hp-btn svg { width: 14px; height: 14px; }
+
+  @media (max-width:680px) {
+    .hero-personal { flex-direction: column; text-align: center; padding: 32px 22px; }
+    .hp-tags { justify-content: center; }
+    .hp-cta { justify-content: center; }
+  }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .res-card { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+  .res-card:hover { transform: translateX(4px) translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.16); }
+
+  /* Sub-header */
+  .main-section { margin-top: 8px; margin-bottom: 14px; font-size: .72rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 1.5px; }
 </style>
 </head>
 <body>
@@ -180,7 +246,7 @@
     <div class="sidebar-items open">
       <a class="sidebar-item" href="sda-mochilas.html">
         <span class="si-dot" style="background:#10b981"></span>
-        Mochilas Pesadas
+        Mochilas saudables
       </a>
     </div>
 
@@ -244,9 +310,37 @@
   </nav>
 
   <main class="main">
-    <h2>Recursos de <span>Diego</span></h2>
+
+    <!-- Hero persoal -->
+    <div class="hero-personal reveal">
+      <div class="hp-avatar">D</div>
+      <div class="hp-info">
+        <div class="hp-eyebrow">Espazo persoal · CEIP Coirón Dena</div>
+        <div class="hp-name">Diego Fraga</div>
+        <div class="hp-role">Mestre de Educación Física en Infantil e Primaria. Programación competencial, integración de matemáticas en EF e patios dinámicos.</div>
+        <div class="hp-tags">
+          <span>Educación Física</span>
+          <span>5.º Primaria</span>
+          <span>LOMLOE</span>
+          <span>Patios DINS</span>
+          <span>Mat integrada</span>
+        </div>
+        <div class="hp-cta">
+          <a class="hp-btn hp-btn-primary" href="mailto:pradosfraga@gmail.com">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Escríbeme
+          </a>
+          <a class="hp-btn hp-btn-secondary" href="programacion-dena-2026.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Programación 2026
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-section">Recursos</div>
     <div class="resource-list">
-      <a class="res-card" href="programacion-dena-2026.html">
+      <a class="res-card reveal" href="programacion-dena-2026.html">
         <div class="res-icon" style="background:linear-gradient(135deg,#78350f,#f59e0b)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
@@ -257,7 +351,7 @@
         <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
       </a>
 
-      <a class="res-card" href="../patios-dins/presentacion-presaras.html">
+      <a class="res-card reveal" href="../patios-dins/presentacion-presaras.html">
         <div class="res-icon" style="background:linear-gradient(135deg,#2d6a4f,#52b788)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
         </div>
@@ -268,18 +362,18 @@
         <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
       </a>
 
-      <a class="res-card" href="sda-mochilas.html">
+      <a class="res-card reveal" href="sda-mochilas.html">
         <div class="res-icon" style="background:linear-gradient(135deg,#065f46,#10b981)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
         </div>
         <div class="res-info">
-          <div class="res-title">Mochilas Pesadas <span class="res-badge res-badge-sda">SdA</span></div>
-          <div class="res-desc">ABP para 5.º Primaria — 12 sesiones — Salud postural</div>
+          <div class="res-title">Mochilas saudables <span class="res-badge res-badge-sda">SdA</span></div>
+          <div class="res-desc">ABP de matemáticas integradas en EF · 5.º Primaria · 8 sesións · UD1 Decimais · ODS 3</div>
         </div>
         <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
       </a>
 
-      <a class="res-card" href="ud-bijbol.html">
+      <a class="res-card reveal" href="ud-bijbol.html">
         <div class="res-icon" style="background:linear-gradient(135deg,#312e81,#6c63ff)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         </div>
@@ -290,7 +384,7 @@
         <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
       </a>
 
-      <a class="res-card" href="xogos-interactivos.html">
+      <a class="res-card reveal" href="xogos-interactivos.html">
         <div class="res-icon" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="16" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg>
         </div>
@@ -306,6 +400,13 @@
 
 <script>
 if(localStorage.getItem('ef_theme')==='light'){document.body.classList.add('light');document.getElementById('m').classList.add('hidden');document.getElementById('s').classList.remove('hidden')}
+
+const __io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); __io.unobserve(e.target); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => __io.observe(el));
 </script>
 </body>
 </html>
