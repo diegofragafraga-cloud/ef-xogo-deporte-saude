@@ -37,6 +37,29 @@
     padding:4px 10px; border-radius:8px; font-size:.7rem; font-weight:700;
     text-transform:uppercase; letter-spacing:1px;
   }
+  .btn-interactivo {
+    display:inline-flex; align-items:center; gap:8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+    color: #fff; text-decoration:none; font-weight:700;
+    padding: 8px 14px; border-radius: 10px; font-size: .82rem;
+    margin-left: 6px; transition: transform .15s, filter .15s;
+    box-shadow: 0 4px 12px rgba(59,130,246,.25);
+    border: 1px solid rgba(255,255,255,.18);
+  }
+  .btn-interactivo:hover { transform: translateY(-1px); filter: brightness(1.08); }
+  .btn-interactivo svg { width: 14px; height: 14px; }
+  .btn-interactivo .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #fff;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .55; transform: scale(.75); }
+  }
+  @media (max-width:680px) {
+    .btn-interactivo span.bi-label { display:none; }
+    .btn-interactivo { padding: 8px 10px; }
+  }
   .header-right { margin-left:auto; display:flex; gap:8px; }
   .icon-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text); width:36px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
   .icon-btn:hover { background:var(--accent); color:#fff; }
@@ -217,6 +240,11 @@
   <h1>
     <span class="header-tag">17 maio · Letras Galegas</span>
     Xogos populares no patio
+    <a class="btn-interactivo" href="letras-galegas-2026-interactivo.html" title="Modo interactivo · ~3 min">
+      <span class="dot"></span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      <span class="bi-label">Ver modo interactivo · 3 min</span>
+    </a>
   </h1>
   <div class="header-right">
     <button class="icon-btn" onclick="window.print()" title="Imprimir">

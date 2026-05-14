@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letras Galegas 2026 · Modo interactivo</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --c1: #1e3a8a; --c2: #3b82f6; --c3: #60a5fa;
+    --warm: #f59e0b; --warm2: #fbbf24;
+    --bg: #0b0d13;
+    --text: #fff;
+  }
+  html, body {
+    height: 100%; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden; user-select: none;
+  }
+
+  /* Top bar: barra de progreso + nº slide */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    padding: 14px 18px 0;
+  }
+  .progress-segments {
+    display: flex; gap: 4px;
+  }
+  .seg {
+    flex: 1; height: 3px; background: rgba(255,255,255,.18);
+    border-radius: 2px; overflow: hidden;
+  }
+  .seg .fill {
+    display: block; height: 100%; width: 0;
+    background: #fff; transition: width .1s linear;
+  }
+  .seg.done .fill { width: 100% !important; }
+
+  /* Header info */
+  .header-info {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 14px; padding: 0 4px;
+  }
+  .header-left { display:flex; align-items:center; gap:10px; }
+  .header-tag {
+    background: rgba(255,255,255,.18); color: #fff;
+    padding: 4px 10px; border-radius: 8px; font-size: .68rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
+    backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.22);
+  }
+  .header-counter { font-size: .72rem; color: rgba(255,255,255,.6); font-weight: 600; }
+  .header-right { display:flex; gap:6px; }
+  .ctrl-btn {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
+    color: #fff; width: 32px; height: 32px; border-radius: 8px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+  }
+  .ctrl-btn:hover { background: rgba(255,255,255,.22); }
+  .ctrl-btn svg { width: 14px; height: 14px; }
+  .ctrl-btn.close { background: rgba(0,0,0,.4); }
+
+  /* Stage */
+  .stage {
+    position: relative; width: 100%; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 80px 32px 90px; text-align: center;
+    opacity: 0; transition: opacity .45s ease;
+    pointer-events: none;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+
+  /* Slide types */
+  .slide-intro { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 60%, #f59e0b 130%); }
+  .slide-info { background: linear-gradient(160deg, #0b0d13 0%, #13161f 50%, #1e3a8a 130%); }
+  .slide-game { background: linear-gradient(170deg, #0b0d13 0%, #13161f 65%); }
+  .slide-end { background: linear-gradient(135deg, #f59e0b 0%, #3b82f6 60%, #1e3a8a 130%); }
+
+  .slide-intro::before, .slide-end::before {
+    content:''; position:absolute; top:-100px; right:-100px;
+    width:340px; height:340px; border-radius:50%;
+    background: rgba(255,255,255,.08);
+  }
+  .slide-intro::after, .slide-end::after {
+    content:''; position:absolute; bottom:-130px; left:-80px;
+    width:280px; height:280px; border-radius:50%;
+    background: rgba(255,255,255,.06);
+  }
+
+  /* Tipografía slides */
+  .badge-up {
+    background: rgba(255,255,255,.18); color: #fff;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: .72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 22px;
+    backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.22);
+    position: relative; z-index: 1;
+  }
+  .title-xl { font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 800; line-height: 1.05; margin-bottom: 16px; position: relative; z-index: 1; }
+  .title-xl span { color: var(--warm2); }
+  .subtitle { font-size: clamp(1rem, 2.2vw, 1.3rem); color: rgba(255,255,255,.9); max-width: 720px; line-height: 1.5; position: relative; z-index: 1; }
+
+  .info-illust { width: 140px; height: 140px; margin-bottom: 28px; position: relative; z-index: 1; }
+  .info-illust svg { width: 100%; height: 100%; }
+  .info-title { font-size: clamp(1.6rem, 4.5vw, 2.4rem); font-weight: 800; margin-bottom: 14px; position: relative; z-index: 1; }
+  .info-title span { color: var(--warm2); }
+  .info-text { font-size: clamp(1rem, 2vw, 1.2rem); color: rgba(255,255,255,.88); max-width: 680px; line-height: 1.55; position: relative; z-index: 1; }
+
+  /* Game slide layout */
+  .game-num-big {
+    font-size: 5rem; font-weight: 900; line-height: 1;
+    background: linear-gradient(135deg, var(--c2), var(--warm));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px; position: relative; z-index: 1;
+  }
+  .game-illust {
+    width: clamp(180px, 28vw, 280px);
+    height: clamp(180px, 28vw, 280px);
+    margin-bottom: 18px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 22px; position: relative; z-index: 1;
+  }
+  .game-illust svg { width: 100%; height: 100%; }
+  .game-name { font-size: clamp(1.6rem, 4.5vw, 2.4rem); font-weight: 800; margin-bottom: 10px; position: relative; z-index: 1; }
+  .game-name span { color: var(--warm2); }
+  .game-desc { font-size: clamp(.95rem, 1.9vw, 1.1rem); color: rgba(255,255,255,.85); max-width: 600px; line-height: 1.5; margin-bottom: 14px; position: relative; z-index: 1; }
+  .game-mat-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(245,158,11,.18); border: 1px solid rgba(245,158,11,.35);
+    padding: 8px 16px; border-radius: 12px;
+    font-size: .85rem; font-weight: 600; color: var(--warm2);
+    position: relative; z-index: 1;
+  }
+  .game-mat-tag svg { width: 14px; height: 14px; }
+
+  /* End slide CTA */
+  .end-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #fff; color: #1e3a8a;
+    padding: 14px 24px; border-radius: 14px;
+    font-weight: 700; font-size: 1rem; text-decoration: none;
+    margin-top: 24px; transition: transform .15s;
+    position: relative; z-index: 1;
+  }
+  .end-cta:hover { transform: translateY(-2px); }
+  .end-cta svg { width: 16px; height: 16px; }
+
+  /* Touch zones for prev/next + click anywhere */
+  .nav-zones {
+    position: fixed; inset: 0; z-index: 30;
+    display: flex; pointer-events: none;
+  }
+  .nav-zone { flex: 1; pointer-events: auto; cursor: pointer; }
+  .nav-zone-left { flex: 0 0 30%; }
+  .nav-zone-right { flex: 0 0 30%; }
+  .nav-zone-center { flex: 1; }
+
+  /* Hint at bottom */
+  .hint {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    z-index: 40; font-size: .72rem; color: rgba(255,255,255,.55);
+    background: rgba(0,0,0,.35); padding: 8px 14px; border-radius: 20px;
+    backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.1);
+    display: flex; align-items: center; gap: 8px;
+    pointer-events: none;
+    animation: fadeOut 5s ease forwards;
+    animation-delay: 4s;
+  }
+  @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+  /* Animated entry per slide */
+  .slide.active .anim-in {
+    animation: slideUp .55s ease both;
+  }
+  .slide.active .anim-in.delay-1 { animation-delay: .12s; }
+  .slide.active .anim-in.delay-2 { animation-delay: .24s; }
+  .slide.active .anim-in.delay-3 { animation-delay: .36s; }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .anim-in { opacity: 0; }
+
+  /* Mobile tweaks */
+  @media (max-width: 680px) {
+    .slide { padding: 100px 22px 90px; }
+    .topbar { padding: 12px 14px 0; }
+    .header-tag { font-size: .62rem; padding: 3px 8px; }
+    .game-num-big { font-size: 3.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="progress-segments" id="progress"></div>
+  <div class="header-info">
+    <div class="header-left">
+      <span class="header-tag">Letras Galegas 2026</span>
+      <span class="header-counter" id="counter">1 / 1</span>
+    </div>
+    <div class="header-right">
+      <button class="ctrl-btn" id="btnPrev" title="Anterior (←)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="ctrl-btn" id="btnPause" title="Pausa (espazo)">
+        <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <svg id="iconPlay" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      </button>
+      <button class="ctrl-btn" id="btnNext" title="Seguinte (→)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <a class="ctrl-btn close" href="letras-galegas-2026.html" title="Saír (Esc)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="stage" id="stage"></div>
+
+<div class="nav-zones">
+  <div class="nav-zone nav-zone-left" id="zonePrev"></div>
+  <div class="nav-zone nav-zone-center" id="zoneCenter"></div>
+  <div class="nav-zone nav-zone-right" id="zoneNext"></div>
+</div>
+
+<div class="hint">Toca os lados para navegar · espazo para pausa</div>
+
+<script>
+// ====== Datos ======
+const SLIDES = [
+  // Intro
+  {
+    type: 'intro', duration: 4500,
+    badge: 'Semana do 17 de maio',
+    title: ['Día das Letras Galegas', 'nos patios'],
+    subtitle: 'Sacamos os xogos populares da nosa terra ao patio do cole.'
+  },
+  // Bloque "como"
+  {
+    type: 'info', duration: 6500, icon: 'who',
+    title: ['Quen participa?'],
+    text: 'Tres clases lideran a xornada: 5ºB, 4ºA e 2º. E mestúranse con todos os grupos de Infantil.'
+  },
+  {
+    type: 'info', duration: 6500, icon: 'hand',
+    title: ['Número', 'na man'],
+    text: 'A cada alumno e alumna escríbeselle un número do 1 ao 16. Mesmo número = mesmo equipo.'
+  },
+  {
+    type: 'info', duration: 6500, icon: 'grid',
+    title: ['16 equipos', '· 16 estacións'],
+    text: 'Equipos mesturados de Infantil, 2º, 4º e 5º que rotan por 16 estacións de xogos populares.'
+  },
+  {
+    type: 'info', duration: 7500, icon: 'guide',
+    title: ['O alumnado de 5º', 'é o guía'],
+    text: 'Son eles os que explican as regras de cada estación, organizan as quendas e median nos pequenos conflitos. Autonomía total.'
+  },
+  {
+    type: 'info', duration: 6500, icon: 'teacher',
+    title: ['Profesorado:', 'axente externo'],
+    text: 'O profesorado observa, marca a sinal de rotación e só intervén se é necesario. Non dirixe os xogos.'
+  },
+  // 16 xogos
+  game(1, 'Mariola', 'Saltar a un só pé polas casas debuxadas, empuxando unha pedra.', 'Xiz · pedra plana', 'mariola'),
+  game(2, 'Zancos', 'Camiñar subido a dous paus longos sen perder o equilibrio.', 'Zancos de madeira', 'zancos'),
+  game(3, 'Cadeiras con aros', 'Versión do xogo das cadeiras pero con aros no chan.', 'Aros · música', 'aros'),
+  game(4, 'Sogatira', 'Dous equipos tiran dunha corda intentando arrastrar ao contrario.', 'Corda grosa', 'sogatira'),
+  game(5, 'Varapao', 'Dous equipos tiran dun pau para levalo cara ao seu lado.', 'Pau resistente', 'varapao'),
+  game(6, 'Circuíto polas liñas', 'Percorrer o patio seguindo as liñas coloreadas sen saír delas.', 'Liñas do patio', 'circuito'),
+  game(7, 'Tres en raia humano', 'Taboleiro 3×3 no chan. Cada alumno é unha ficha humana.', 'Xiz · petos de cor', 'tresenraia'),
+  game(8, 'A porca', 'Lanzar moedas ou chapas para tumbar a pedra do centro.', 'Pedra · chapas', 'porca'),
+  game(9, 'Tirafungueiro', 'Disparar pelotiñas de papel cun aparello caseiro de goma.', 'Tirafungueiros · diana', 'tirafungueiro'),
+  game(10, 'O pano', 'Dous equipos en filas opostas. Saen ao chamado a coller o pano.', 'Pano · liñas', 'pano'),
+  game(11, 'Trompos', 'Lanzar o trompo cunha corda enrolada para que xire o máis posible.', 'Trompos con corda', 'trompos'),
+  game(12, 'A chave', 'Lanzar pesas contra unha peza metálica para tumbala.', 'Chave · pesas', 'chave'),
+  game(13, 'Buscalume', 'Catro esquinas. Os xogadores cambian de esquina sen perdela.', '4 marcas no chan', 'esquinas'),
+  game(14, 'Pita cega', 'Un xogador cos ollos vendados intenta pillar aos demais.', 'Pano para vendar', 'pitacega'),
+  game(15, 'A cadea', 'Cada vez que se pilla a alguén, agárranse e seguen xuntos.', 'Espazo amplo', 'cadea'),
+  game(16, 'Pase misi', 'Dous forman unha porta. O resto pasa por debaixo cantando.', 'Espazo amplo', 'pasemisi'),
+  // Final
+  {
+    type: 'end', duration: 8000,
+    badge: 'Semana 17–21 maio',
+    title: ['Bo xogo a todas e a todos!'],
+    subtitle: 'Recuperar os xogos da nosa terra é tamén celebrar a lingua. Vémonos no patio.'
+  }
+];
+
+function game(n, name, desc, mat, illust) {
+  return { type: 'game', duration: 6000, num: n, name, desc, mat, illust };
+}
+
+// ====== Ilustracións SVG ======
+// Cores
+const C = { line: '#fff', accent: '#fbbf24', accent2: '#60a5fa', skin: '#fcd5b4', shirt: '#3b82f6', shirt2: '#f59e0b' };
+
+const ILLUST = {
+  who: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="30" cy="42" r="11"/><path d="M30 53v22M22 60l-7 18M38 60l7 18M22 78l-3 8M38 78l3 8"/>
+    <circle cx="60" cy="38" r="13"/><path d="M60 51v25M50 60l-9 22M70 60l9 22M50 82l-4 10M70 82l4 10"/>
+    <circle cx="90" cy="42" r="11"/><path d="M90 53v22M82 60l-7 18M98 60l7 18M82 78l-3 8M98 78l3 8"/>
+  </svg>`,
+
+  hand: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 90V52c0-4 3-7 7-7s7 3 7 7v15" stroke="${C.line}"/>
+    <path d="M54 50V42c0-4 3-7 7-7s7 3 7 7v25"/>
+    <path d="M68 46V38c0-4 3-7 7-7s7 3 7 7v29"/>
+    <path d="M82 56v-4c0-4 3-7 7-7s7 3 7 7v18c0 14-10 24-24 24H56c-9 0-16-5-19-13l-7-18c-2-5 1-10 6-10 3 0 5 2 7 5l4 8" fill="rgba(252,213,180,.18)"/>
+    <text x="64" y="80" font-family="system-ui" font-weight="900" font-size="20" fill="${C.accent}" stroke="${C.accent}" stroke-width="1" text-anchor="middle">7</text>
+  </svg>`,
+
+  grid: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5">
+    ${[0,1,2,3].flatMap(r => [0,1,2,3].map(c => `<rect x="${10+c*26}" y="${10+r*26}" width="22" height="22" rx="3" fill="rgba(96,165,250,${0.05+(r+c)*0.025})"/>`)).join('')}
+    ${[0,1,2,3].flatMap(r => [0,1,2,3].map(c => `<text x="${21+c*26}" y="${28+r*26}" font-family="system-ui" font-weight="800" font-size="11" fill="${C.accent}" stroke="none" text-anchor="middle">${r*4+c+1}</text>`)).join('')}
+  </svg>`,
+
+  guide: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="35" cy="40" r="11" fill="rgba(251,191,36,.25)"/><path d="M35 51v22M27 58l-6 16M43 58l6 16"/>
+    <path d="M48 36l18-4M52 42l16 4" stroke="${C.accent}"/>
+    <circle cx="80" cy="48" r="8"/><path d="M80 56v15M74 62l-5 12M86 62l5 12"/>
+    <circle cx="100" cy="52" r="7"/><path d="M100 59v12M95 64l-4 10M105 64l4 10"/>
+    <path d="M30 22h12l-4 6 4 6H30z" fill="${C.accent}" stroke="${C.accent}"/>
+  </svg>`,
+
+  teacher: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="38" r="13"/>
+    <path d="M60 51v28M48 58l-10 25M72 58l10 25M48 82l-5 12M72 82l5 12"/>
+    <circle cx="60" cy="38" r="22" stroke-dasharray="3 4" opacity=".5"/>
+    <circle cx="60" cy="38" r="34" stroke-dasharray="2 5" opacity=".3"/>
+  </svg>`,
+
+  // Xogos
+  mariola: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="40" y="10" width="32" height="22" rx="2" fill="rgba(96,165,250,.1)"/><text x="56" y="26" font-family="system-ui" font-weight="700" font-size="11" fill="${C.line}" stroke="none" text-anchor="middle">1</text>
+    <rect x="40" y="34" width="32" height="22" rx="2" fill="rgba(96,165,250,.15)"/><text x="56" y="50" font-family="system-ui" font-weight="700" font-size="11" fill="${C.line}" stroke="none" text-anchor="middle">2</text>
+    <rect x="40" y="58" width="14" height="22" rx="2" fill="rgba(96,165,250,.2)"/><text x="47" y="74" font-family="system-ui" font-weight="700" font-size="11" fill="${C.line}" stroke="none" text-anchor="middle">3</text>
+    <rect x="58" y="58" width="14" height="22" rx="2" fill="rgba(96,165,250,.2)"/><text x="65" y="74" font-family="system-ui" font-weight="700" font-size="11" fill="${C.line}" stroke="none" text-anchor="middle">4</text>
+    <rect x="40" y="82" width="32" height="22" rx="2" fill="rgba(96,165,250,.25)"/><text x="56" y="98" font-family="system-ui" font-weight="700" font-size="11" fill="${C.line}" stroke="none" text-anchor="middle">5</text>
+    <ellipse cx="95" cy="78" rx="9" ry="5" fill="${C.accent}" stroke="${C.accent}"/>
+    <path d="M95 78 Q88 50 65 26" stroke="${C.accent}" stroke-dasharray="3 3"/>
+  </svg>`,
+
+  zancos: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="55" cy="28" r="8"/>
+    <path d="M55 36v22M48 42l-6 14M62 42l6 14M48 56l-4 10M62 56l4 10"/>
+    <line x1="40" y1="50" x2="40" y2="110" stroke="${C.accent}" stroke-width="4"/>
+    <line x1="70" y1="50" x2="70" y2="110" stroke="${C.accent}" stroke-width="4"/>
+    <rect x="36" y="64" width="14" height="4" rx="1" fill="${C.accent}" stroke="${C.accent}"/>
+    <rect x="66" y="64" width="14" height="4" rx="1" fill="${C.accent}" stroke="${C.accent}"/>
+    <line x1="20" y1="110" x2="100" y2="110" stroke-dasharray="3 3" opacity=".4"/>
+  </svg>`,
+
+  aros: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="30" cy="90" rx="18" ry="6" stroke="${C.accent}" stroke-width="3"/>
+    <ellipse cx="60" cy="92" rx="18" ry="6" stroke="${C.accent2}" stroke-width="3"/>
+    <ellipse cx="90" cy="90" rx="18" ry="6" stroke="${C.accent}" stroke-width="3"/>
+    <circle cx="42" cy="58" r="7"/><path d="M42 65v15M36 70l-5 10M48 70l5 10"/>
+    <circle cx="78" cy="55" r="7"/><path d="M78 62v18M72 67l-5 11M84 67l5 11"/>
+    <path d="M14 22 Q18 18 22 22 Q22 28 18 32 Q14 28 14 22 Z" fill="${C.accent}" stroke="${C.accent}"/>
+    <path d="M22 22 L26 26 M22 22 L30 18 M22 22 L28 14" stroke="${C.accent}"/>
+  </svg>`,
+
+  sogatira: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="22" cy="44" r="7"/><path d="M22 51v16M16 54l-6 12M28 54l6 12"/>
+    <circle cx="98" cy="44" r="7"/><path d="M98 51v16M92 54l-6 12M104 54l6 12"/>
+    <path d="M22 60 Q60 50 98 60" stroke="${C.accent}" stroke-width="4"/>
+    <circle cx="60" cy="54" r="3" fill="${C.accent}" stroke="${C.accent}"/>
+    <line x1="60" y1="74" x2="60" y2="100" stroke-dasharray="3 3" stroke="${C.accent}"/>
+    <text x="60" y="115" font-family="system-ui" font-weight="700" font-size="10" fill="${C.accent}" stroke="none" text-anchor="middle">centro</text>
+  </svg>`,
+
+  varapao: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="30" cy="40" r="8"/><path d="M30 48v22M22 54l-8 14M38 54l8 14"/>
+    <circle cx="90" cy="40" r="8"/><path d="M90 48v22M82 54l-8 14M98 54l8 14"/>
+    <line x1="38" y1="62" x2="82" y2="62" stroke="${C.accent}" stroke-width="6" stroke-linecap="round"/>
+    <line x1="60" y1="80" x2="60" y2="100" stroke="${C.line}" stroke-dasharray="3 3" opacity=".5"/>
+  </svg>`,
+
+  circuito: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 100 Q30 80 50 90 Q70 100 80 80 Q90 60 70 50 Q50 40 60 20" stroke="${C.accent}"/>
+    <path d="M20 90 Q40 70 60 80 Q80 90 90 70 Q100 50 80 40 Q60 30 70 10" stroke="${C.accent2}"/>
+    <path d="M30 80 Q50 60 70 70 Q90 80 100 60" stroke="#22c55e"/>
+    <circle cx="14" cy="100" r="4" fill="${C.accent}" stroke="${C.accent}"/>
+  </svg>`,
+
+  tresenraia: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="40" y1="15" x2="40" y2="105"/><line x1="80" y1="15" x2="80" y2="105"/>
+    <line x1="15" y1="45" x2="105" y2="45"/><line x1="15" y1="75" x2="105" y2="75"/>
+    <text x="28" y="38" font-family="system-ui" font-weight="900" font-size="22" fill="${C.accent}" stroke="${C.accent}" stroke-width=".5" text-anchor="middle">X</text>
+    <text x="60" y="68" font-family="system-ui" font-weight="900" font-size="22" fill="${C.accent2}" stroke="${C.accent2}" stroke-width=".5" text-anchor="middle">O</text>
+    <text x="92" y="98" font-family="system-ui" font-weight="900" font-size="22" fill="${C.accent}" stroke="${C.accent}" stroke-width=".5" text-anchor="middle">X</text>
+    <text x="60" y="38" font-family="system-ui" font-weight="900" font-size="22" fill="${C.accent2}" stroke="${C.accent2}" stroke-width=".5" text-anchor="middle">O</text>
+    <text x="92" y="68" font-family="system-ui" font-weight="900" font-size="22" fill="${C.accent}" stroke="${C.accent}" stroke-width=".5" text-anchor="middle">X</text>
+  </svg>`,
+
+  porca: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="65" r="34" stroke-dasharray="4 4" opacity=".5"/>
+    <ellipse cx="60" cy="65" rx="10" ry="14" fill="rgba(255,255,255,.15)"/>
+    <circle cx="32" cy="48" r="6" fill="${C.accent}" stroke="${C.accent}"/>
+    <circle cx="90" cy="42" r="6" fill="${C.accent2}" stroke="${C.accent2}"/>
+    <circle cx="36" cy="86" r="6" fill="${C.accent}" stroke="${C.accent}"/>
+    <circle cx="92" cy="92" r="6" fill="${C.accent2}" stroke="${C.accent2}"/>
+    <path d="M22 32 L30 44" stroke="${C.accent}" stroke-dasharray="2 2"/>
+  </svg>`,
+
+  tirafungueiro: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 90 L40 50 M30 90 L20 50" stroke-width="3"/>
+    <path d="M40 50 Q30 30 20 50" stroke="${C.accent}" stroke-width="2.5"/>
+    <circle cx="30" cy="38" r="3" fill="${C.accent2}" stroke="${C.accent2}"/>
+    <path d="M30 38 L92 22" stroke="${C.accent2}" stroke-dasharray="3 2"/>
+    <circle cx="92" cy="22" r="12" fill="rgba(245,158,11,.15)" stroke="${C.accent}"/>
+    <circle cx="92" cy="22" r="7" fill="rgba(245,158,11,.25)" stroke="${C.accent}"/>
+    <circle cx="92" cy="22" r="3" fill="${C.accent}" stroke="${C.accent}"/>
+  </svg>`,
+
+  pano: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="60" y1="20" x2="60" y2="40" stroke-width="2"/>
+    <path d="M50 40 L60 28 L70 40 L60 56 Z" fill="${C.accent}" stroke="${C.accent}"/>
+    <circle cx="22" cy="78" r="6"/><path d="M22 84v12M16 88l-4 8M28 88l4 8"/>
+    <circle cx="38" cy="82" r="6"/><path d="M38 88v10M32 92l-4 6M44 92l4 6"/>
+    <circle cx="82" cy="82" r="6"/><path d="M82 88v10M76 92l-4 6M88 92l4 6"/>
+    <circle cx="98" cy="78" r="6"/><path d="M98 84v12M92 88l-4 8M104 88l4 8"/>
+    <text x="22" y="68" font-family="system-ui" font-weight="800" font-size="9" fill="${C.accent2}" stroke="none" text-anchor="middle">3</text>
+    <text x="98" y="68" font-family="system-ui" font-weight="800" font-size="9" fill="${C.accent2}" stroke="none" text-anchor="middle">3</text>
+  </svg>`,
+
+  trompos: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="60" cy="40" rx="22" ry="6" fill="rgba(245,158,11,.2)"/>
+    <path d="M38 40 L60 90 L82 40" fill="rgba(245,158,11,.25)" stroke="${C.accent}"/>
+    <ellipse cx="60" cy="40" rx="22" ry="6" stroke="${C.accent}"/>
+    <line x1="60" y1="90" x2="60" y2="100" stroke="${C.accent}" stroke-width="3"/>
+    <path d="M60 30 Q56 26 60 22 Q64 26 60 30" fill="${C.accent2}" stroke="${C.accent2}"/>
+    <path d="M82 40 Q102 35 105 18" stroke="${C.line}" stroke-dasharray="3 2" opacity=".6"/>
+    <path d="M40 60 Q20 70 12 50" stroke="${C.accent}" stroke-width="2" stroke-dasharray="2 3" opacity=".5"/>
+    <path d="M82 60 Q102 70 110 50" stroke="${C.accent}" stroke-width="2" stroke-dasharray="2 3" opacity=".5"/>
+  </svg>`,
+
+  chave: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="60" y1="30" x2="60" y2="95" stroke-width="5"/>
+    <rect x="50" y="25" width="20" height="12" rx="2" fill="${C.accent}" stroke="${C.accent}"/>
+    <line x1="20" y1="100" x2="100" y2="100"/>
+    <circle cx="26" cy="78" r="6" fill="rgba(96,165,250,.3)" stroke="${C.accent2}"/>
+    <circle cx="40" cy="92" r="6" fill="rgba(96,165,250,.3)" stroke="${C.accent2}"/>
+    <path d="M14 60 L52 70" stroke="${C.accent2}" stroke-dasharray="3 2"/>
+  </svg>`,
+
+  esquinas: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="20" y="20" width="80" height="80" stroke-dasharray="4 4" opacity=".5"/>
+    <circle cx="20" cy="20" r="9" fill="rgba(245,158,11,.25)" stroke="${C.accent}"/>
+    <circle cx="100" cy="20" r="9" fill="rgba(245,158,11,.25)" stroke="${C.accent}"/>
+    <circle cx="20" cy="100" r="9" fill="rgba(245,158,11,.25)" stroke="${C.accent}"/>
+    <circle cx="100" cy="100" r="9" fill="rgba(245,158,11,.25)" stroke="${C.accent}"/>
+    <circle cx="60" cy="60" r="11" fill="rgba(96,165,250,.3)" stroke="${C.accent2}" stroke-width="3"/>
+    <path d="M27 27 L52 52 M93 27 L68 52 M27 93 L52 68 M93 93 L68 68" stroke-dasharray="2 3" opacity=".5"/>
+  </svg>`,
+
+  pitacega: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="50" r="20"/>
+    <rect x="35" y="42" width="50" height="12" rx="2" fill="${C.accent}" stroke="${C.accent}"/>
+    <path d="M60 70v25M48 78l-12 18M72 78l12 18M48 95l-6 10M72 95l6 10"/>
+    <path d="M35 48 L25 38" stroke="${C.accent}"/>
+    <path d="M85 48 L95 38" stroke="${C.accent}"/>
+    <circle cx="20" cy="88" r="5" fill="rgba(96,165,250,.3)" stroke="${C.accent2}"/>
+    <circle cx="100" cy="88" r="5" fill="rgba(96,165,250,.3)" stroke="${C.accent2}"/>
+  </svg>`,
+
+  cadea: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="22" cy="44" r="7"/><path d="M22 51v18M16 56l-4 12M28 56l4 12"/>
+    <circle cx="48" cy="44" r="7"/><path d="M48 51v18M42 56l-4 12M54 56l4 12"/>
+    <circle cx="74" cy="44" r="7"/><path d="M74 51v18M68 56l-4 12M80 56l4 12"/>
+    <circle cx="100" cy="44" r="7"/><path d="M100 51v18M94 56l-4 12M106 56l4 12"/>
+    <path d="M28 60 L42 60 M54 60 L68 60 M80 60 L94 60" stroke="${C.accent}" stroke-width="3"/>
+    <path d="M16 100 Q60 90 100 100" stroke-dasharray="3 3" opacity=".5"/>
+  </svg>`,
+
+  pasemisi: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="30" cy="34" r="8"/><path d="M30 42v30M22 50l-8 18M38 50l16 -4"/>
+    <circle cx="90" cy="34" r="8"/><path d="M90 42v30M98 50l8 18M82 50l-16 -4"/>
+    <path d="M38 46 Q60 30 82 46" stroke="${C.accent}" stroke-width="3"/>
+    <circle cx="60" cy="80" r="6"/><path d="M60 86v14M54 90l-6 10M66 90l6 10"/>
+    <text x="60" y="115" font-family="system-ui" font-weight="700" font-size="9" fill="${C.accent}" stroke="none" text-anchor="middle" font-style="italic">pase misi...</text>
+  </svg>`
+};
+
+// ====== Render ======
+const stage = document.getElementById('stage');
+const progress = document.getElementById('progress');
+const counter = document.getElementById('counter');
+const btnPrev = document.getElementById('btnPrev');
+const btnNext = document.getElementById('btnNext');
+const btnPause = document.getElementById('btnPause');
+const iconPause = document.getElementById('iconPause');
+const iconPlay = document.getElementById('iconPlay');
+
+function buildProgress() {
+  progress.innerHTML = SLIDES.map(() => `<span class="seg"><span class="fill"></span></span>`).join('');
+}
+
+function buildSlides() {
+  stage.innerHTML = SLIDES.map((s, i) => {
+    if (s.type === 'intro') {
+      return `<div class="slide slide-intro" data-i="${i}">
+        <div class="badge-up anim-in">${s.badge}</div>
+        <div class="title-xl anim-in delay-1">${s.title[0]}<br><span>${s.title[1]}</span></div>
+        <div class="subtitle anim-in delay-2">${s.subtitle}</div>
+      </div>`;
+    }
+    if (s.type === 'end') {
+      return `<div class="slide slide-end" data-i="${i}">
+        <div class="badge-up anim-in">${s.badge}</div>
+        <div class="title-xl anim-in delay-1">${s.title[0]}</div>
+        <div class="subtitle anim-in delay-2">${s.subtitle}</div>
+        <a class="end-cta anim-in delay-3" href="letras-galegas-2026.html">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          Ver detalle e cronograma
+        </a>
+      </div>`;
+    }
+    if (s.type === 'info') {
+      const titleHTML = s.title.length === 1
+        ? s.title[0].replace(/(\d+\s\w+|guía|axente externo|na man)/i, m => `<span>${m}</span>`)
+        : `${s.title[0]}<br><span>${s.title[1]}</span>`;
+      return `<div class="slide slide-info" data-i="${i}">
+        <div class="info-illust anim-in">${ILLUST[s.icon] || ''}</div>
+        <div class="info-title anim-in delay-1">${titleHTML}</div>
+        <div class="info-text anim-in delay-2">${s.text}</div>
+      </div>`;
+    }
+    if (s.type === 'game') {
+      return `<div class="slide slide-game" data-i="${i}">
+        <div class="game-num-big anim-in">${String(s.num).padStart(2,'0')}</div>
+        <div class="game-illust anim-in delay-1">${ILLUST[s.illust] || ''}</div>
+        <div class="game-name anim-in delay-2">${s.name}</div>
+        <div class="game-desc anim-in delay-2">${s.desc}</div>
+        <div class="game-mat-tag anim-in delay-3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          ${s.mat}
+        </div>
+      </div>`;
+    }
+  }).join('');
+}
+
+// ====== State machine ======
+let currentIdx = 0;
+let paused = false;
+let elapsed = 0;
+let lastTick = 0;
+let rafId = null;
+const segments = () => progress.querySelectorAll('.seg');
+const slides = () => stage.querySelectorAll('.slide');
+
+function show(i) {
+  if (i < 0) i = 0;
+  if (i >= SLIDES.length) { i = SLIDES.length - 1; }
+  currentIdx = i;
+  elapsed = 0;
+  slides().forEach(el => el.classList.toggle('active', Number(el.dataset.i) === i));
+  segments().forEach((seg, idx) => {
+    seg.classList.toggle('done', idx < i);
+    if (idx > i) seg.querySelector('.fill').style.width = '0%';
+    if (idx === i) seg.querySelector('.fill').style.width = '0%';
+  });
+  counter.textContent = `${i + 1} / ${SLIDES.length}`;
+}
+
+function tick(t) {
+  if (!paused) {
+    if (!lastTick) lastTick = t;
+    const dt = t - lastTick;
+    lastTick = t;
+    elapsed += dt;
+    const dur = SLIDES[currentIdx].duration;
+    const fill = segments()[currentIdx].querySelector('.fill');
+    fill.style.width = Math.min(100, (elapsed / dur) * 100) + '%';
+    if (elapsed >= dur) {
+      if (currentIdx < SLIDES.length - 1) {
+        show(currentIdx + 1);
+      } else {
+        // Fin: pausamos no último
+        paused = true;
+        iconPause.style.display = 'none';
+        iconPlay.style.display = 'block';
+      }
+    }
+  } else {
+    lastTick = t;
+  }
+  rafId = requestAnimationFrame(tick);
+}
+
+function togglePause() {
+  paused = !paused;
+  iconPause.style.display = paused ? 'none' : 'block';
+  iconPlay.style.display = paused ? 'block' : 'none';
+  lastTick = 0;
+}
+
+function next() {
+  if (currentIdx < SLIDES.length - 1) show(currentIdx + 1);
+}
+function prev() {
+  if (currentIdx > 0) show(currentIdx - 1);
+}
+
+// ====== Controles ======
+btnPrev.addEventListener('click', prev);
+btnNext.addEventListener('click', next);
+btnPause.addEventListener('click', togglePause);
+document.getElementById('zonePrev').addEventListener('click', prev);
+document.getElementById('zoneNext').addEventListener('click', next);
+document.getElementById('zoneCenter').addEventListener('click', togglePause);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') prev();
+  else if (e.key === 'ArrowRight') next();
+  else if (e.key === ' ') { e.preventDefault(); togglePause(); }
+  else if (e.key === 'Escape') location.href = 'letras-galegas-2026.html';
+});
+
+// Inicio
+buildProgress();
+buildSlides();
+show(0);
+rafId = requestAnimationFrame(tick);
+</script>
+</body>
+</html>
