@@ -483,23 +483,31 @@ const ILLUST = {
   </svg>`,
 
   billarda: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Xogador -->
-    <circle cx="28" cy="36" r="8"/>
-    <path d="M28 44v22M22 50l-6 14"/>
-    <!-- brazos suxeitando o pau longo (extendido) -->
-    <path d="M34 50 L78 36" stroke="${C.line}"/>
-    <path d="M30 60 L20 78"/>
-    <!-- Pau longo (instrumento de golpeo) -->
-    <line x1="40" y1="48" x2="92" y2="30" stroke="${C.warm}" stroke-width="4"/>
     <!-- Liña do chan -->
-    <line x1="14" y1="98" x2="106" y2="98" stroke-dasharray="3 3" opacity=".4"/>
-    <!-- Billarda no chan (pequeno paliño afiado polos extremos) -->
-    <g transform="translate(72,92) rotate(-15)">
-      <path d="M-12 0 L-9 -3 L9 -3 L12 0 L9 3 L-9 3 Z" fill="${C.accent2}" stroke="${C.accent2}"/>
+    <line x1="6" y1="96" x2="114" y2="96" stroke-dasharray="3 3" opacity=".45"/>
+    <!-- Xogador (compacto, esquerda) -->
+    <circle cx="22" cy="28" r="7"/>
+    <!-- Tronco -->
+    <path d="M22 35v22"/>
+    <!-- Pernas -->
+    <path d="M22 57l-6 22M22 57l6 22"/>
+    <!-- Brazos suxeitando o pau (xuntos arriba) -->
+    <path d="M22 42 L34 36"/>
+    <path d="M22 46 L34 40"/>
+    <!-- Pau longo en posición de remate (diagonal cara abaixo-dereita) -->
+    <line x1="30" y1="34" x2="74" y2="86" stroke="${C.warm}" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- Empuñadura -->
+    <circle cx="31" cy="35" r="2.5" fill="${C.warm}" stroke="${C.warm}"/>
+    <!-- Billarda voando: arco cara arriba-dereita -->
+    <path d="M76 88 Q92 36 110 50" stroke="${C.warm2}" stroke-width="2" stroke-dasharray="3 3" opacity=".75"/>
+    <!-- Billarda saltando (no aire) -->
+    <g transform="translate(102,52) rotate(35)">
+      <path d="M-10 0 L-7 -3 L7 -3 L10 0 L7 3 L-7 3 Z" fill="${C.accent2}" stroke="${C.accent2}"/>
     </g>
-    <!-- Traxectoria do salto da billarda -->
-    <path d="M72 92 Q86 60 100 72" stroke="${C.warm2}" stroke-dasharray="3 2"/>
-    <circle cx="100" cy="72" r="3" fill="${C.warm2}" stroke="${C.warm2}"/>
+    <!-- Punto de impacto no chan (marca) -->
+    <ellipse cx="78" cy="92" rx="9" ry="2.5" fill="rgba(212,165,116,.3)" stroke="${C.warm2}" stroke-width="1.5" opacity=".7"/>
+    <!-- Etiqueta sutil -->
+    <text x="60" y="116" font-family="system-ui" font-style="italic" font-weight="700" font-size="8" fill="${C.warm2}" stroke="none" text-anchor="middle">golpe e voo</text>
   </svg>`,
 
   cadea: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
