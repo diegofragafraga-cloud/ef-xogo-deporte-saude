@@ -6,13 +6,13 @@
 <title>Letras Galegas 2026 · Xogos populares · CEIP Coirón Dena</title>
 <style>
   :root {
-    --bg: #0b0d13; --bg2: #13161f; --bg3: #1c2030;
-    --text: #e8eaf0; --text2: #8b92a8;
-    --accent: #3b82f6; --accent2: #60a5fa;
-    --accent-warm: #f59e0b; --accent-warm2: #fbbf24;
-    --border: #252a3a; --radius: 14px;
+    --bg: #0d130f; --bg2: #131c17; --bg3: #1c2620;
+    --text: #e8efe9; --text2: #8ba093;
+    --accent: #2d6a4f; --accent2: #52b788;
+    --accent-warm: #9d2933; --accent-warm2: #d4a574;
+    --border: #253026; --radius: 14px;
   }
-  .light { --bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db; }
+  .light { --bg:#faf3e0;--bg2:#fff;--bg3:#f0e8d0;--text:#1b2620;--text2:#6b7563;--border:#d9cdb0; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; line-height:1.5; }
   .hidden { display:none !important; }
@@ -33,7 +33,7 @@
   .header h1 { font-size:1.05rem; font-weight:700; display:flex; align-items:center; gap:10px; }
   .header-tag {
     display:inline-flex; align-items:center; gap:6px;
-    background:rgba(59,130,246,.15); color:var(--accent2);
+    background:rgba(82,183,136,.18); color:var(--accent2);
     padding:4px 10px; border-radius:8px; font-size:.7rem; font-weight:700;
     text-transform:uppercase; letter-spacing:1px;
   }
@@ -43,7 +43,7 @@
     color: #fff; text-decoration:none; font-weight:700;
     padding: 8px 14px; border-radius: 10px; font-size: .82rem;
     margin-left: 6px; transition: transform .15s, filter .15s;
-    box-shadow: 0 4px 12px rgba(59,130,246,.25);
+    box-shadow: 0 4px 12px rgba(45,106,79,.35);
     border: 1px solid rgba(255,255,255,.18);
   }
   .btn-interactivo:hover { transform: translateY(-1px); filter: brightness(1.08); }
@@ -69,7 +69,10 @@
 
   /* Hero */
   .hero {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 55%, #60a5fa 100%);
+    background:
+      radial-gradient(circle at 12% 88%, rgba(157,41,51,.32) 0%, transparent 42%),
+      radial-gradient(circle at 88% 18%, rgba(212,165,116,.22) 0%, transparent 48%),
+      linear-gradient(135deg, #1b4332 0%, #2d6a4f 50%, #40916c 100%);
     border-radius: var(--radius); padding: 44px 36px; margin-bottom: 28px;
     position: relative; overflow: hidden; color:#fff;
   }
@@ -145,11 +148,11 @@
     border-radius:12px; padding:16px 18px;
   }
   .role-card .role-tag {
-    display:inline-block; background:rgba(59,130,246,.15); color:var(--accent2);
+    display:inline-block; background:rgba(82,183,136,.18); color:var(--accent2);
     padding:3px 10px; border-radius:8px; font-size:.68rem; font-weight:700;
     text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;
   }
-  .role-card.warm .role-tag { background:rgba(245,158,11,.15); color:var(--accent-warm2); }
+  .role-card.warm .role-tag { background:rgba(157,41,51,.2); color:var(--accent-warm2); }
   .role-card h4 { font-size:.95rem; margin-bottom:6px; }
   .role-card p { font-size:.85rem; color:var(--text2); margin:0; }
 
@@ -206,8 +209,8 @@
 
   /* Tips */
   .tip {
-    background:linear-gradient(135deg, rgba(59,130,246,.12), rgba(245,158,11,.08));
-    border:1px solid rgba(59,130,246,.3);
+    background:linear-gradient(135deg, rgba(45,106,79,.18), rgba(212,165,116,.12));
+    border:1px solid rgba(82,183,136,.32);
     border-radius:10px; padding:14px 18px; margin-top:12px;
     display:flex; gap:12px; align-items:flex-start;
   }
@@ -226,7 +229,7 @@
     .header, .header-right, .back-btn, .icon-btn { display:none; }
     body { background:#fff; color:#000; }
     .block, .game-card, .role-card, .sch-row { background:#fff !important; border-color:#ccc !important; color:#000 !important; }
-    .hero { background:#1e3a8a !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .hero { background:#1b4332 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     .game-card { break-inside:avoid; }
   }
 </style>
@@ -262,29 +265,37 @@
   <!-- Hero -->
   <section class="hero">
     <svg class="hero-deco" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Cruceiro galego -->
+      <g transform="translate(38,30)" fill="none" stroke="#fff" stroke-width="2" opacity=".75">
+        <rect x="-3" y="40" width="6" height="58" rx="1" fill="rgba(255,255,255,.16)"/>
+        <rect x="-12" y="20" width="24" height="6" rx="1" fill="rgba(255,255,255,.18)"/>
+        <line x1="0" y1="0" x2="0" y2="40" stroke-width="2.5"/>
+        <line x1="-12" y1="14" x2="12" y2="14" stroke-width="2.5"/>
+        <circle cx="0" cy="14" r="6" stroke-width="1.5"/>
+      </g>
+      <!-- Trompo (xogo galego) -->
+      <g transform="translate(125,40)" fill="none" stroke="#fff" stroke-width="2" opacity=".75">
+        <ellipse cx="0" cy="-8" rx="14" ry="4" fill="rgba(255,255,255,.18)"/>
+        <path d="M-14 -8 L0 18 L14 -8" fill="rgba(255,255,255,.14)"/>
+        <line x1="0" y1="18" x2="0" y2="28"/>
+        <path d="M14 -8 Q24 -12 26 -22" stroke-dasharray="2 2"/>
+      </g>
       <!-- Mariola -->
-      <g transform="translate(30,30)" fill="none" stroke="#fff" stroke-width="2" opacity=".7">
-        <rect x="0" y="0" width="30" height="30" rx="2"/>
-        <rect x="0" y="32" width="30" height="30" rx="2"/>
-        <rect x="0" y="64" width="14" height="30" rx="2"/>
-        <rect x="16" y="64" width="14" height="30" rx="2"/>
+      <g transform="translate(28,110)" fill="none" stroke="#fff" stroke-width="1.8" opacity=".65">
+        <rect x="0" y="0" width="22" height="20" rx="1.5" fill="rgba(255,255,255,.08)"/>
+        <rect x="0" y="22" width="22" height="20" rx="1.5" fill="rgba(255,255,255,.1)"/>
+        <rect x="0" y="44" width="10" height="20" rx="1.5" fill="rgba(255,255,255,.12)"/>
+        <rect x="12" y="44" width="10" height="20" rx="1.5" fill="rgba(255,255,255,.12)"/>
       </g>
-      <!-- Trompo -->
-      <g transform="translate(120,40)" fill="none" stroke="#fff" stroke-width="2" opacity=".7">
-        <path d="M-15 -10 L15 -10 L0 20 Z"/>
-        <line x1="0" y1="20" x2="0" y2="30"/>
-        <circle cx="0" cy="-15" r="3" fill="#fff"/>
+      <!-- Espiral celta -->
+      <g transform="translate(140,135)" fill="none" stroke="#fff" stroke-width="1.8" opacity=".7">
+        <path d="M0 0 Q-10 -8 0 -14 Q12 -14 12 0 Q12 14 -6 14 Q-22 14 -22 -4 Q-22 -24 0 -24"/>
+        <circle cx="0" cy="0" r="2" fill="#fff"/>
       </g>
-      <!-- Sogatira -->
-      <g transform="translate(40,140)" fill="none" stroke="#fff" stroke-width="2" opacity=".7">
-        <path d="M0 0 Q40 -10 80 0 Q90 4 100 0"/>
-        <circle cx="-2" cy="0" r="3" fill="#fff"/>
-        <circle cx="102" cy="0" r="3" fill="#fff"/>
-      </g>
-      <!-- Pano -->
-      <g transform="translate(140,130)" fill="none" stroke="#fff" stroke-width="2" opacity=".7">
-        <path d="M-12 0 L0 -8 L12 0 L0 14 Z" fill="rgba(255,255,255,.15)"/>
-      </g>
+      <!-- Estrelitas (puntos decorativos) -->
+      <circle cx="90" cy="20" r="2.5" fill="#fff" opacity=".45"/>
+      <circle cx="100" cy="100" r="1.8" fill="#fff" opacity=".35"/>
+      <circle cx="75" cy="170" r="2" fill="#fff" opacity=".4"/>
     </svg>
     <div class="hero-content">
       <div class="hero-badge">Semana 17–21 maio · CEIP Coirón Dena</div>
@@ -396,9 +407,9 @@
 
       <article class="game-card">
         <div class="game-num">6</div>
-        <h3>Circuíto polas liñas</h3>
-        <p>Percorrer o patio seguindo as liñas coloreadas xa pintadas, sen saír delas. Pódese facer por relevos.</p>
-        <div class="game-mat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg> Liñas do patio</div>
+        <h3>Os birlos</h3>
+        <p>Lanzar unha bola dende a liña de tiro para derrubar o maior número de paus de madeira (birlos) colocados en formación triangular.</p>
+        <div class="game-mat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg> 6–10 birlos · bola de madeira · liña de tiro</div>
       </article>
 
       <article class="game-card">
@@ -452,9 +463,9 @@
 
       <article class="game-card">
         <div class="game-num">14</div>
-        <h3>Pita cega</h3>
-        <p>Un alumno cos ollos vendados ten que pillar e identificar a outro alumno do equipo, que se moven ao seu redor.</p>
-        <div class="game-mat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg> Pano para vendar</div>
+        <h3>Billarda (estornela)</h3>
+        <p>Xogo tradicional galego: golpear a billarda (paliño pequeno e afiado polos extremos) cun pau máis longo, primeiro para que salte do chan e despois para lanzala canto máis lonxe mellor.</p>
+        <div class="game-mat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg> Billarda · pau longo · marca de tiro</div>
       </article>
 
       <article class="game-card">
@@ -466,9 +477,9 @@
 
       <article class="game-card">
         <div class="game-num">16</div>
-        <h3>Pase misi</h3>
-        <p>Dous alumnos forman unha porta agarrándose das mans. O resto pasa por debaixo cantando <i>"Pase misi, pase misá..."</i>. Cando remata a canción, péchanse e pillan ao que pasa.</p>
-        <div class="game-mat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg> Só espazo amplo · canción</div>
+        <h3>Petanca</h3>
+        <p>Lánzase o boliche (pequena bóla) a varios metros. Os xogadores tiran por quendas as súas bólas tentando deixalas o máis cerca posible. Gaña a equipa coa bóla máis próxima.</p>
+        <div class="game-mat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg> Bólas de petanca · boliche · zona de area/terra</div>
       </article>
 
     </div>
@@ -492,7 +503,9 @@
       <li>Pano para o pano</li>
       <li>Trompos con corda</li>
       <li>Chave metálica + pesas/discos</li>
-      <li>Pano para vendar (pita cega)</li>
+      <li>6–10 birlos de madeira + bola</li>
+      <li>Billarda (paliño afiado) + pau longo</li>
+      <li>Xogo de bólas de petanca + boliche</li>
     </ul>
     <div class="tip">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
