@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<title>EF 6º · B1 · Etiquetas, OMS e o teu día activo</title>
+<link rel="stylesheet" href="proba_engine.css">
+<style>
+  @page { size: A4; margin: 12mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; color: #2D2A26; font-size: 10pt; line-height: 1.5; }
+  .header { border-bottom: 3px solid #2e86ab; padding-bottom: 3mm; margin-bottom: 5mm; display: flex; justify-content: space-between; align-items: flex-end; }
+  h1 { font-size: 17pt; }
+  .sub { font-size: 9.5pt; color: #475569; text-transform: uppercase; letter-spacing: 1px; }
+  .right { text-align: right; font-size: 8.5pt; color: #475569; }
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 12px; font-size: 7.5pt; color: white; font-weight: 600; background: #2e86ab; }
+  .hero { background: linear-gradient(135deg, #1e4650, #2e86ab); color: white; padding: 5mm; border-radius: 10px; margin-bottom: 4mm; display: grid; grid-template-columns: 1fr auto; gap: 5mm; align-items: center; }
+  .hero h3 { font-size: 12pt; margin-bottom: 2mm; letter-spacing: 1px; }
+  .hero .lead { font-size: 9.5pt; opacity: .95; }
+  .hero .big { font-family: 'Courier New', monospace; font-size: 28pt; font-weight: 800; line-height: 1; }
+  .hero .small { font-size: 8pt; opacity: .85; letter-spacing: 1px; }
+  h2 { color: #2e86ab; font-size: 12pt; margin: 5mm 0 2mm; display: flex; align-items: center; gap: 3mm; border-bottom: 1px dashed #aac8d8; padding-bottom: 1mm; }
+  .badge { font-size: 8pt; padding: 1px 6px; border-radius: 10px; color: white; letter-spacing: 1px; background: #2e86ab; }
+  .reto { border: 1.5px solid #aac8d8; border-radius: 8px; padding: 4mm; margin-bottom: 3mm; background: #f7fbfd; }
+  .reto .titulo { font-weight: 700; color: #1e4650; margin-bottom: 2mm; }
+  table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  th { background: #2e86ab; color: white; padding: 2mm; text-align: left; }
+  td { padding: 2mm; border: 1px solid #aac8d8; vertical-align: top; }
+  td.first { background: #e4f1f7; font-weight: 600; }
+  .footer { margin-top: 4mm; padding-top: 2mm; border-top: 1px dashed #bfb6a6; font-size: 8.5pt; color: #475569; text-align: right; }
+  input[data-ok] { width: 80px; font-family: inherit; font-size: inherit; padding: 1px 4px; border: 0; border-bottom: 1px solid #aac8d8; background: transparent; }
+  td input[data-ok] { width: 90%; }
+  .dos-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .etiqueta { background: white; border: 2px solid #1e4650; border-radius: 6px; padding: 3mm; font-family: 'Courier New', monospace; font-size: 8.5pt; }
+  .etiqueta .marca { background: #d62828; color: white; text-align: center; padding: 1.5mm; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 2mm; border-radius: 3px; }
+  .etiqueta table { font-size: 8pt; }
+  .etiqueta th, .etiqueta td { padding: 1mm 2mm; border: 1px solid #aac8d8; }
+  .etiqueta .destaque { background: #ffe6e6; font-weight: 700; }
+  .etiqueta .ing { font-size: 7.5pt; line-height: 1.35; margin-top: 2mm; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>ETIQUETAS, OMS E O TEU DÍA ACTIVO</h1>
+      <div class="sub">Tarefa 1 · B1 Vida activa e saudable · CA1.1, CA1.4</div>
+    </div>
+    <div class="right">
+      <span class="tag">EF · 6º · COMPETENCIAL</span><br>
+      Nome: __________ · Data: ___/___/______
+    </div>
+  </div>
+
+  <div class="hero">
+    <div>
+      <h3>A REGRA DA OMS</h3>
+      <div class="lead">Os nenos e nenas de 5 a 17 anos precisan <b>polo menos 60 min/día</b> de actividade física <b>moderada ou vigorosa</b>. Tres días á semana deberían incluír reforzo muscular e óseo (saltos, carreira, escalada).</div>
+    </div>
+    <div style="text-align:center">
+      <div class="big">60'</div>
+      <div class="small">por día</div>
+    </div>
+  </div>
+
+  <h2>RETO 1 <span class="badge">LECTURA CRÍTICA DE ETIQUETA</span></h2>
+  <div class="reto">
+    <div class="titulo">Le con atención esta etiqueta dun produto ultraprocesado e responde</div>
+
+    <div class="dos-cols">
+      <div class="etiqueta">
+        <div class="marca">GALLETAS CRUNCHY®</div>
+        <div style="text-align:center; font-size:8pt; margin-bottom:2mm;">Galletas con recheo de crema de chocolate · 300 g</div>
+        <table>
+          <tr><th colspan="2">Información nutricional · por 100 g</th></tr>
+          <tr><td>Enerxía</td><td>492 kcal</td></tr>
+          <tr><td>Graxas</td><td>22 g</td></tr>
+          <tr><td>&nbsp;&nbsp;&nbsp;das cales saturadas</td><td>12 g</td></tr>
+          <tr><td>Hidratos de carbono</td><td>67 g</td></tr>
+          <tr class="destaque"><td>&nbsp;&nbsp;&nbsp;dos cales azucres</td><td>36 g</td></tr>
+          <tr><td>Proteínas</td><td>5 g</td></tr>
+          <tr><td>Sal</td><td>0,55 g</td></tr>
+        </table>
+        <div class="ing"><b>Ingredientes:</b> fariña de trigo, <b>azucre</b>, aceite de palma, <b>xarope de glicosa-frutosa</b>, cacao en po, soro de leite en po, sal, gasificantes (E-503, E-500), emulxente (lecitina de soia), aromas.</div>
+      </div>
+      <div>
+        <p><b>a)</b> Cantos gramos de azucre ten unha ración de <b>50 g</b> (4 galletas)?
+          <input data-ok="18"> g.</p>
+        <p style="margin-top:2mm"><b>b)</b> A OMS recomenda como máximo <b>25 g</b> de azucres engadidos ao día. Esa ración cobre o
+          <input data-ok="72"> % do límite diario.</p>
+        <p style="margin-top:2mm"><b>c)</b> Por que esta galleta é un <b>ultraprocesado</b>? Marca os <u>tres</u> motivos correctos (escribe v ou f):</p>
+        <p style="margin-left:4mm">
+          ▢ Ten ingredientes industriais (xarope de glicosa, emulxentes). <input data-ok="v"></p>
+        <p style="margin-left:4mm">
+          ▢ Está feita só con ingredientes frescos. <input data-ok="f"></p>
+        <p style="margin-left:4mm">
+          ▢ É moi enerxética e rica en azucres engadidos. <input data-ok="v"></p>
+        <p style="margin-left:4mm">
+          ▢ Leva graxas saturadas en alta proporción. <input data-ok="v"></p>
+        <p style="margin-top:2mm"><b>d)</b> Que alimento <u>fresco</u> propoñerías para almorzar no canto destas galletas? Escribe <b>un</b>:
+          <input data-ok="froita|pan integral|iogur natural|froitos secos|avena|copos de avea|noces|amorodos|plátano|mazá" style="width:180px"></p>
+      </div>
+    </div>
+  </div>
+
+  <h2>RETO 2 <span class="badge">CONTA OS TEUS MINUTOS ACTIVOS</span></h2>
+  <div class="reto">
+    <div class="titulo">Suma os minutos de actividade <b>moderada-vigorosa</b> dun día tipo de Sara, alumna de 6º</div>
+    <table>
+      <tr><th>Momento do día</th><th>Actividade</th><th>Intensidade</th><th>Minutos</th><th>Conta para a OMS?</th></tr>
+      <tr><td class="first">8:30</td><td>Ir ao cole andando rápido</td><td>Moderada</td><td>15</td><td><input data-ok="si|sí" style="width:60px"></td></tr>
+      <tr><td class="first">11:00</td><td>Recreo: corre, salta á comba e xoga á pilla</td><td>Vigorosa</td><td>20</td><td><input data-ok="si|sí" style="width:60px"></td></tr>
+      <tr><td class="first">14:00</td><td>Comer e ver a tele sentada</td><td>Sedentario</td><td>40</td><td><input data-ok="non|no" style="width:60px"></td></tr>
+      <tr><td class="first">17:00</td><td>Adestramento de baloncesto</td><td>Vigorosa</td><td>45</td><td><input data-ok="si|sí" style="width:60px"></td></tr>
+      <tr><td class="first">19:00</td><td>Volve á casa andando devagar</td><td>Lixeira</td><td>10</td><td><input data-ok="non|no" style="width:60px"></td></tr>
+      <tr><td class="first">20:30</td><td>Móbil/videoxogos no sofá</td><td>Sedentario</td><td>60</td><td><input data-ok="non|no" style="width:60px"></td></tr>
+    </table>
+    <p style="margin-top:2mm"><b>a)</b> Suma só os minutos das filas que contan para a OMS:
+      <input data-ok="80"> min.</p>
+    <p><b>b)</b> Sara cumpriu a recomendación dos 60 min?
+      <input data-ok="si|sí" style="width:60px">. Superouna en <input data-ok="20"> min.</p>
+    <p><b>c)</b> Indica unha actividade da táboa que <u>non</u> conta e por que (intensidade demasiado baixa ou ser sedentaria):
+      <input data-ok="comer|ver a tele|movil|videoxogos|sofa|volver andando devagar|andar devagar" style="width:280px"></p>
+  </div>
+
+  <h2>RETO 3 <span class="badge">DESEÑA O TEU PLAN SEMANAL ACTIVO</span></h2>
+  <div class="reto">
+    <div class="titulo">Anota, para cada día, unha actividade <b>moderada-vigorosa</b> e os seus minutos. O obxectivo: chegar ou pasar dos <b>420 min/semana</b> (7 × 60)</div>
+    <table>
+      <tr><th>Día</th><th>Actividade (ex: bici, fútbol, baile, andar rápido…)</th><th>Min</th><th>OMS ✓</th></tr>
+      <tr><td class="first">Luns</td><td></td><td></td><td></td></tr>
+      <tr><td class="first">Martes</td><td></td><td></td><td></td></tr>
+      <tr><td class="first">Mércores</td><td></td><td></td><td></td></tr>
+      <tr><td class="first">Xoves</td><td></td><td></td><td></td></tr>
+      <tr><td class="first">Venres</td><td></td><td></td><td></td></tr>
+      <tr><td class="first">Sábado</td><td></td><td></td><td></td></tr>
+      <tr><td class="first">Domingo</td><td></td><td></td><td></td></tr>
+      <tr><td class="first" colspan="2" style="text-align:right">TOTAL semana</td><td></td><td>/420</td></tr>
+    </table>
+    <p style="margin-top:2mm; font-size:9pt; color:#475569;"><b>Pista:</b> tres días deben incluír actividades de <b>reforzo muscular/óseo</b> (saltos, escalada, carreira intensa, deporte con cambios de ritmo).</p>
+  </div>
+
+  <div class="footer">Conecta con: SdA Mochilas saudables · UD nutrición e hábitos · Matemáticas (porcentaxes, sumas, comparación)</div>
+
+<script src="proba_config.js" defer></script>
+<script src="proba_engine.js" defer></script>
+<script>if(location.search.indexOf("pdf")!==-1)addEventListener("load",function(){setTimeout(function(){window.print()},400)});</script>
+</body>
+</html>

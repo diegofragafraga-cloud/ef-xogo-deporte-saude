@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<title>EF 6º · B6 · Do cole en bici: mobilidade activa e segura</title>
+<link rel="stylesheet" href="proba_engine.css">
+<style>
+  @page { size: A4; margin: 12mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; color: #2D2A26; font-size: 10pt; line-height: 1.5; }
+  .header { border-bottom: 3px solid #16a34a; padding-bottom: 3mm; margin-bottom: 5mm; display: flex; justify-content: space-between; align-items: flex-end; }
+  h1 { font-size: 17pt; }
+  .sub { font-size: 9.5pt; color: #475569; text-transform: uppercase; letter-spacing: 1px; }
+  .right { text-align: right; font-size: 8.5pt; color: #475569; }
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 12px; font-size: 7.5pt; color: white; font-weight: 600; background: #16a34a; }
+  .hero { background: linear-gradient(135deg, #14532d, #16a34a); color: white; padding: 5mm; border-radius: 10px; margin-bottom: 4mm; display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; align-items: center; }
+  .hero h3 { font-size: 12pt; margin-bottom: 2mm; letter-spacing: 1px; }
+  .hero .lead { font-size: 9.5pt; opacity: .95; }
+  .hero .vs { background: rgba(255,255,255,.12); border-radius: 8px; padding: 3mm; font-size: 9pt; display: flex; align-items: center; justify-content: space-around; gap: 2mm; }
+  .hero .vs .col { text-align: center; }
+  .hero .vs .col svg { width: 36px; height: 36px; }
+  .hero .vs .col .num { font-family: 'Courier New', monospace; font-size: 14pt; font-weight: 800; }
+  .hero .vs .col .lab { font-size: 7.5pt; opacity: .85; letter-spacing: 1px; }
+  h2 { color: #16a34a; font-size: 12pt; margin: 5mm 0 2mm; display: flex; align-items: center; gap: 3mm; border-bottom: 1px dashed #a7d3b8; padding-bottom: 1mm; }
+  .badge { font-size: 8pt; padding: 1px 6px; border-radius: 10px; color: white; letter-spacing: 1px; background: #16a34a; }
+  .reto { border: 1.5px solid #a7d3b8; border-radius: 8px; padding: 4mm; margin-bottom: 3mm; background: #f5fbf7; }
+  .reto .titulo { font-weight: 700; color: #14532d; margin-bottom: 2mm; }
+  table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  th { background: #16a34a; color: white; padding: 2mm; text-align: left; }
+  td { padding: 2mm; border: 1px solid #a7d3b8; vertical-align: top; }
+  td.first { background: #e0f1e6; font-weight: 600; }
+  .footer { margin-top: 4mm; padding-top: 2mm; border-top: 1px dashed #bfb6a6; font-size: 8.5pt; color: #475569; text-align: right; }
+  input[data-ok] { width: 80px; font-family: inherit; font-size: inherit; padding: 1px 4px; border: 0; border-bottom: 1px solid #a7d3b8; background: transparent; }
+  td input[data-ok] { width: 90%; }
+  .sinais { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3mm; margin-top: 2mm; }
+  .sinal { background: white; border: 1.5px solid #a7d3b8; border-radius: 6px; padding: 2.5mm; text-align: center; }
+  .sinal svg { width: 100%; height: 50px; }
+  .sinal .letra { font-weight: 800; color: #14532d; font-size: 14pt; line-height: 1; font-family: 'Georgia', serif; }
+  .sinal .nome { font-size: 7pt; color: #475569; text-transform: uppercase; letter-spacing: .5px; margin-top: 1mm; }
+  .mapa { background: white; border: 1.5px solid #a7d3b8; border-radius: 6px; padding: 2mm; margin-top: 2mm; }
+  .mapa svg { width: 100%; height: 80mm; display: block; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>DO COLE EN BICI · MOBILIDADE ACTIVA E SEGURA</h1>
+      <div class="sub">Tarefa 3 · B6 Interacción coa contorna · CA6.1, CA6.3</div>
+    </div>
+    <div class="right">
+      <span class="tag">EF · 6º · COMPETENCIAL</span><br>
+      Nome: __________ · Data: ___/___/______
+    </div>
+  </div>
+
+  <div class="hero">
+    <div>
+      <h3>POR QUE IR EN BICI OU ANDANDO?</h3>
+      <div class="lead">Cada quilómetro en coche emite uns <b>120 g de CO₂</b>. En bici ou andando, <b>0 g</b>. Ademais, sumas minutos para a recomendación da OMS e chegas máis acordado/a á clase. A contorna gaña, ti tamén.</div>
+    </div>
+    <div class="vs">
+      <div class="col">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="28" width="48" height="18" rx="4" fill="#f5b450" stroke="white" stroke-width="1.5"/>
+          <rect x="14" y="20" width="30" height="14" rx="3" fill="#f5b450" stroke="white" stroke-width="1.5"/>
+          <rect x="18" y="23" width="10" height="8" fill="#1e4650" opacity=".5"/>
+          <rect x="30" y="23" width="10" height="8" fill="#1e4650" opacity=".5"/>
+          <circle cx="18" cy="48" r="6" fill="#1a1a1a" stroke="white" stroke-width="1.5"/>
+          <circle cx="42" cy="48" r="6" fill="#1a1a1a" stroke="white" stroke-width="1.5"/>
+          <circle cx="18" cy="48" r="2" fill="white"/>
+          <circle cx="42" cy="48" r="2" fill="white"/>
+        </svg>
+        <div class="num">120</div>
+        <div class="lab">g CO₂/km</div>
+      </div>
+      <div style="font-size:14pt; opacity:.6">vs</div>
+      <div class="col">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="14" cy="46" r="9" fill="none" stroke="white" stroke-width="2"/>
+          <circle cx="46" cy="46" r="9" fill="none" stroke="white" stroke-width="2"/>
+          <line x1="14" y1="46" x2="30" y2="28" stroke="white" stroke-width="2"/>
+          <line x1="30" y1="28" x2="46" y2="46" stroke="white" stroke-width="2"/>
+          <line x1="22" y1="28" x2="38" y2="28" stroke="white" stroke-width="2"/>
+          <line x1="46" y1="46" x2="42" y2="24" stroke="white" stroke-width="2"/>
+          <circle cx="42" cy="22" r="3.5" fill="white"/>
+          <line x1="42" y1="25" x2="42" y2="38" stroke="white" stroke-width="2"/>
+        </svg>
+        <div class="num">0</div>
+        <div class="lab">g CO₂/km</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>RETO 1 <span class="badge">SINAIS DE TRÁFICO PARA CICLISTAS</span></h2>
+  <div class="reto">
+    <div class="titulo">Identifica cada sinal e escribe o seu significado</div>
+
+    <div class="sinais">
+      <!-- A · STOP -->
+      <div class="sinal">
+        <div class="letra">A</div>
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="20,8 40,8 52,20 52,40 40,52 20,52 8,40 8,20" fill="#d62828" stroke="white" stroke-width="2"/>
+          <text x="30" y="35" font-family="Arial Black" font-size="11" fill="white" text-anchor="middle" font-weight="900">STOP</text>
+        </svg>
+      </div>
+      <!-- B · Carril bici -->
+      <div class="sinal">
+        <div class="letra">B</div>
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="22" fill="#1e63b3" stroke="white" stroke-width="2"/>
+          <circle cx="22" cy="38" r="6" fill="none" stroke="white" stroke-width="2"/>
+          <circle cx="40" cy="38" r="6" fill="none" stroke="white" stroke-width="2"/>
+          <line x1="22" y1="38" x2="30" y2="24" stroke="white" stroke-width="2"/>
+          <line x1="30" y1="24" x2="40" y2="38" stroke="white" stroke-width="2"/>
+          <line x1="26" y1="24" x2="34" y2="24" stroke="white" stroke-width="2"/>
+        </svg>
+      </div>
+      <!-- C · Prohibido bici -->
+      <div class="sinal">
+        <div class="letra">C</div>
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="22" fill="white" stroke="#d62828" stroke-width="4"/>
+          <circle cx="22" cy="38" r="5" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+          <circle cx="40" cy="38" r="5" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+          <line x1="22" y1="38" x2="30" y2="26" stroke="#1a1a1a" stroke-width="1.5"/>
+          <line x1="30" y1="26" x2="40" y2="38" stroke="#1a1a1a" stroke-width="1.5"/>
+          <line x1="10" y1="48" x2="50" y2="12" stroke="#d62828" stroke-width="4"/>
+        </svg>
+      </div>
+      <!-- D · Paso peóns -->
+      <div class="sinal">
+        <div class="letra">D</div>
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="8" width="44" height="44" fill="#1e63b3" stroke="white" stroke-width="2"/>
+          <circle cx="30" cy="20" r="4" fill="white"/>
+          <path d="M 24 26 L 30 30 L 36 26 L 33 38 L 38 50 L 34 50 L 30 40 L 26 50 L 22 50 L 27 38 Z" fill="white"/>
+          <rect x="14" y="44" width="32" height="3" fill="white"/>
+          <rect x="14" y="40" width="32" height="1.5" fill="white"/>
+        </svg>
+      </div>
+      <!-- E · Casco obrigatorio -->
+      <div class="sinal">
+        <div class="letra">E</div>
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="22" fill="#1e63b3" stroke="white" stroke-width="2"/>
+          <path d="M 18 34 Q 18 20 30 20 Q 42 20 42 34 L 42 38 L 18 38 Z" fill="white"/>
+          <rect x="18" y="36" width="24" height="3" fill="white"/>
+          <circle cx="26" cy="28" r="1.5" fill="#1e63b3"/>
+          <circle cx="34" cy="28" r="1.5" fill="#1e63b3"/>
+          <path d="M 28 40 Q 30 44 32 40" fill="none" stroke="white" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <table style="margin-top:3mm">
+      <tr><th>Sinal</th><th>Significado (escribe: stop · vía só para bicis · prohibido pasar en bici · paso de peóns · casco obrigatorio)</th></tr>
+      <tr><td class="first">A</td><td><input data-ok="stop|stop: deter por completo|stop e ceder o paso" style="width:340px"></td></tr>
+      <tr><td class="first">B</td><td><input data-ok="via so para bicis|vía só para bicis|carril bici|carril-bici|via bici" style="width:340px"></td></tr>
+      <tr><td class="first">C</td><td><input data-ok="prohibido pasar en bici|prohibido bicicletas|prohibida a bici|prohibido en bici" style="width:340px"></td></tr>
+      <tr><td class="first">D</td><td><input data-ok="paso de peons|paso de peóns|paso peatonal|paso de peons: bicis abaixo" style="width:340px"></td></tr>
+      <tr><td class="first">E</td><td><input data-ok="casco obrigatorio|obrigatorio levar casco|uso obrigatorio do casco|casco" style="width:340px"></td></tr>
+    </table>
+  </div>
+
+  <h2>RETO 2 <span class="badge">CO₂ AFORRADO NUNHA SEMANA</span></h2>
+  <div class="reto">
+    <div class="titulo">A familia de Brais ía sempre ao cole en coche: <b>2 km</b> de ida + <b>2 km</b> de volta, <b>5 días</b> á semana. Este curso decidiron facelo en bici. Calcula.</div>
+    <p><b>a)</b> Km totais en coche cada semana: <input data-ok="20"> km.</p>
+    <p><b>b)</b> Se cada km en coche emite 120 g de CO₂, cantos g aforra cada semana? <input data-ok="2400"> g.</p>
+    <p><b>c)</b> Convérteo a quilogramos: <input data-ok="2.4|2,4"> kg.</p>
+    <p><b>d)</b> Nun curso escolar de <b>35 semanas</b>, cantos kg de CO₂ deixan de emitir? <input data-ok="84"> kg.</p>
+    <p><b>e)</b> Cada km en bici en lugar de coche súmalle <b>5 minutos</b> de actividade. Cantos minutos á semana suma Brais para a OMS? <input data-ok="100"> min.</p>
+  </div>
+
+  <h2>RETO 3 <span class="badge">PLANIFICA UNHA RUTA SEGURA</span></h2>
+  <div class="reto">
+    <div class="titulo">No mapa do barrio, escolle a mellor ruta da CASA ao COLE evitando os tramos sinalados como perigosos</div>
+    <div class="mapa">
+      <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="200" fill="#eef5e8"/>
+        <!-- bloques -->
+        <g fill="#d4d4d4" stroke="#a8a8a8" stroke-width="1">
+          <rect x="40" y="40" width="80" height="40"/>
+          <rect x="170" y="40" width="80" height="40"/>
+          <rect x="300" y="40" width="60" height="40"/>
+          <rect x="40" y="120" width="80" height="40"/>
+          <rect x="170" y="120" width="80" height="40"/>
+          <rect x="300" y="120" width="60" height="40"/>
+        </g>
+        <!-- rúas -->
+        <g stroke="#fff" stroke-width="14">
+          <line x1="0" y1="100" x2="400" y2="100"/>
+          <line x1="145" y1="0" x2="145" y2="200"/>
+          <line x1="275" y1="0" x2="275" y2="200"/>
+        </g>
+        <g stroke="#cfcfcf" stroke-width="14">
+          <line x1="0" y1="20" x2="400" y2="20"/>
+          <line x1="0" y1="180" x2="400" y2="180"/>
+        </g>
+        <!-- carril bici A: horizontal central -->
+        <line x1="0" y1="100" x2="400" y2="100" stroke="#16a34a" stroke-width="3" stroke-dasharray="6,4"/>
+        <text x="200" y="92" font-family="system-ui" font-size="9" fill="#14532d" text-anchor="middle" font-weight="700">Rúa A · Carril bici protexido</text>
+        <!-- Rúa B vertical 145 (perigosa: tráfico denso) -->
+        <text x="155" y="60" font-family="system-ui" font-size="9" fill="#d62828" font-weight="700">Rúa B</text>
+        <text x="155" y="72" font-family="system-ui" font-size="7.5" fill="#d62828">tráfico denso</text>
+        <!-- Rúa C vertical 275: pacífica -->
+        <text x="285" y="60" font-family="system-ui" font-size="9" fill="#14532d" font-weight="700">Rúa C</text>
+        <text x="285" y="72" font-family="system-ui" font-size="7.5" fill="#14532d">zona 30 km/h</text>
+        <!-- Sentido único na rúa D? engadimos D arriba -->
+        <text x="200" y="14" font-family="system-ui" font-size="8.5" fill="#6b5d48">Rúa D (sentido único cara á dereita)</text>
+        <text x="200" y="196" font-family="system-ui" font-size="8.5" fill="#6b5d48">Rúa E (con beirarrúa estreita)</text>
+        <!-- Casa -->
+        <g transform="translate(70,140)">
+          <polygon points="0,8 12,-4 24,8" fill="#d62828"/>
+          <rect x="2" y="8" width="20" height="14" fill="#fcd5b4" stroke="#5e3a1a" stroke-width="1"/>
+          <rect x="10" y="14" width="6" height="8" fill="#5e3a1a"/>
+          <text x="12" y="40" font-family="system-ui" font-size="9" fill="#1a1a1a" text-anchor="middle" font-weight="700">CASA</text>
+        </g>
+        <!-- Cole -->
+        <g transform="translate(310,40)">
+          <rect x="0" y="0" width="40" height="22" fill="#2e86ab" stroke="#1e4650" stroke-width="1"/>
+          <polygon points="-2,0 20,-10 42,0" fill="#1e4650"/>
+          <rect x="6" y="6" width="6" height="6" fill="white"/>
+          <rect x="18" y="6" width="6" height="6" fill="white"/>
+          <rect x="30" y="6" width="6" height="6" fill="white"/>
+          <text x="20" y="-14" font-family="system-ui" font-size="9" fill="#1a1a1a" text-anchor="middle" font-weight="700">COLE</text>
+        </g>
+        <!-- Punto perigoso na rúa B -->
+        <circle cx="145" cy="140" r="10" fill="none" stroke="#d62828" stroke-width="2.5"/>
+        <line x1="138" y1="133" x2="152" y2="147" stroke="#d62828" stroke-width="2.5"/>
+        <text x="120" y="156" font-family="system-ui" font-size="8" fill="#d62828" font-weight="700">⚠ obra</text>
+      </svg>
+    </div>
+    <p style="margin-top:2mm"><b>a)</b> Por que rúa principal deberías ir do barrio ao cole (a máis segura para a bici)?
+      <input data-ok="rua a|rúa a|a|rua a (carril bici)" style="width:180px"></p>
+    <p><b>b)</b> Cal das verticais é mellor para subir despois ata o cole?
+      <input data-ok="rua c|rúa c|c|zona 30|rua c (zona 30)" style="width:180px"></p>
+    <p><b>c)</b> Que rúa <u>evitarías</u> e por que?
+      <input data-ok="rua b|rúa b|b" style="width:80px"> · motivo:
+      <input data-ok="trafico denso|tráfico denso|obra|trafico denso e obra|trafico|tráfico" style="width:220px"></p>
+    <p><b>d)</b> Antes de saír, que <b>tres</b> elementos de seguridade <u>obrigatorios ou recomendados</u> levarías? (escribe en orde, separados por comas)
+      <input data-ok="casco luz chaleco|casco, luz, chaleco|casco luces chaleco|casco, luces, chaleco|casco timbre luz|casco, timbre, luz" style="width:300px"></p>
+  </div>
+
+  <div class="footer">Conecta con: educación viaria · ciencias sociais (medio ambiente) · matemáticas (cálculo, conversións) · SdA Xogamos na rúa</div>
+
+<script src="proba_config.js" defer></script>
+<script src="proba_engine.js" defer></script>
+<script>if(location.search.indexOf("pdf")!==-1)addEventListener("load",function(){setTimeout(function(){window.print()},400)});</script>
+</body>
+</html>

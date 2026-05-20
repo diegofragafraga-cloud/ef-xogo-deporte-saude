@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<title>EF 6º · B5 · Xogos tradicionais galegos</title>
+<link rel="stylesheet" href="proba_engine.css">
+<style>
+  @page { size: A4; margin: 12mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; color: #2D2A26; font-size: 10pt; line-height: 1.5; }
+  .header { border-bottom: 3px solid #8b5a2b; padding-bottom: 3mm; margin-bottom: 5mm; display: flex; justify-content: space-between; align-items: flex-end; }
+  h1 { font-size: 17pt; }
+  .sub { font-size: 9.5pt; color: #6b5d48; text-transform: uppercase; letter-spacing: 1px; }
+  .right { text-align: right; font-size: 8.5pt; color: #6b5d48; }
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 12px; font-size: 7.5pt; color: white; font-weight: 600; background: #8b5a2b; }
+  .hero { background: linear-gradient(135deg, #5e3a1a, #8b5a2b); color: white; padding: 5mm; border-radius: 10px; margin-bottom: 4mm; }
+  .hero h3 { font-size: 12pt; margin-bottom: 2mm; letter-spacing: 1px; }
+  .hero .lead { font-size: 9.5pt; opacity: .95; }
+  h2 { color: #8b5a2b; font-size: 12pt; margin: 5mm 0 2mm; display: flex; align-items: center; gap: 3mm; border-bottom: 1px dashed #d4b896; padding-bottom: 1mm; }
+  .badge { font-size: 8pt; padding: 1px 6px; border-radius: 10px; color: white; letter-spacing: 1px; background: #8b5a2b; }
+  .reto { border: 1.5px solid #d4b896; border-radius: 8px; padding: 4mm; margin-bottom: 3mm; background: #fcf9f3; }
+  .reto .titulo { font-weight: 700; color: #5e3a1a; margin-bottom: 2mm; }
+  table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  th { background: #8b5a2b; color: white; padding: 2mm; text-align: left; }
+  td { padding: 2mm; border: 1px solid #d4b896; vertical-align: top; }
+  td.first { background: #f0e3cf; font-weight: 600; }
+  .footer { margin-top: 4mm; padding-top: 2mm; border-top: 1px dashed #bfb6a6; font-size: 8.5pt; color: #6b5d48; text-align: right; }
+  input[data-ok] { width: 80px; font-family: inherit; font-size: inherit; padding: 1px 4px; border: 0; border-bottom: 1px solid #d4b896; background: transparent; }
+  td input[data-ok] { width: 90%; }
+  .galeria { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin-top: 2mm; }
+  .xogo {
+    background: white; border: 1.5px solid #d4b896; border-radius: 8px; padding: 2.5mm; text-align: center;
+  }
+  .xogo svg { width: 100%; height: 60px; }
+  .xogo .letra { font-weight: 800; color: #5e3a1a; font-size: 18pt; line-height: 1; margin-bottom: 1mm; font-family: 'Georgia', serif; }
+  .xogo .nome { font-size: 7pt; color: #6b5d48; text-transform: uppercase; letter-spacing: 1px; margin-top: 1mm; }
+  .normas { background: white; border: 1.5px dashed #8b5a2b; border-radius: 6px; padding: 3mm; margin-top: 2mm; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>XOGOS TRADICIONAIS GALEGOS</h1>
+      <div class="sub">Tarefa 2 · B5 Cultura motriz · CA5.5, CA5.6</div>
+    </div>
+    <div class="right">
+      <span class="tag">EF · 6º · COMPETENCIAL</span><br>
+      Nome: __________ · Data: ___/___/______
+    </div>
+  </div>
+
+  <div class="hero">
+    <h3>O NOSO PATRIMONIO MOTRIZ</h3>
+    <div class="lead">Os xogos tradicionais galegos forman parte da nosa identidade cultural. Practicalos é coñecer a contorna, respectar o pasado e conservar un xeito propio de relacionarnos co movemento. Hoxe imos identificalos, clasificalos pola súa lóxica interna e revisar as súas normas.</div>
+  </div>
+
+  <h2>RETO 1 <span class="badge">IDENTIFICA OS 4 XOGOS</span></h2>
+  <div class="reto">
+    <div class="titulo">Observa as ilustracións e empareixa cada letra co nome do xogo</div>
+
+    <div class="galeria">
+      <!-- A · BILLARDA -->
+      <div class="xogo">
+        <div class="letra">A</div>
+        <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="60" width="120" height="20" fill="#a0826a"/>
+          <line x1="0" y1="60" x2="120" y2="60" stroke="#6b4a2e" stroke-width="1"/>
+          <!-- pao longo -->
+          <line x1="15" y1="55" x2="65" y2="20" stroke="#6b4a2e" stroke-width="4" stroke-linecap="round"/>
+          <!-- billarda pequena bipuntada no chan -->
+          <polygon points="78,62 92,57 106,62 92,67" fill="#8b5a2b" stroke="#5e3a1a" stroke-width="1"/>
+          <line x1="92" y1="57" x2="92" y2="67" stroke="#5e3a1a" stroke-width="0.5"/>
+          <!-- traxectoria -->
+          <path d="M 70 25 Q 85 5 100 30" fill="none" stroke="#d62828" stroke-width="1" stroke-dasharray="2,2"/>
+          <polygon points="100,30 96,26 100,32" fill="#d62828"/>
+        </svg>
+        <div class="nome">Xogo nº A</div>
+      </div>
+
+      <!-- B · CHAVE -->
+      <div class="xogo">
+        <div class="letra">B</div>
+        <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="60" width="120" height="20" fill="#a0826a"/>
+          <line x1="0" y1="60" x2="120" y2="60" stroke="#6b4a2e" stroke-width="1"/>
+          <!-- pello/chave galega: ferro vertical con base e cabeza horizontal -->
+          <rect x="78" y="25" width="6" height="35" fill="#4a4a4a" stroke="#1a1a1a" stroke-width="1"/>
+          <rect x="68" y="22" width="26" height="6" fill="#4a4a4a" stroke="#1a1a1a" stroke-width="1"/>
+          <ellipse cx="81" cy="60" rx="14" ry="3" fill="#5a3920"/>
+          <!-- pello de ferro voando -->
+          <circle cx="25" cy="35" r="7" fill="#3a3a3a" stroke="#1a1a1a" stroke-width="1"/>
+          <!-- traxectoria -->
+          <path d="M 30 35 Q 55 15 75 25" fill="none" stroke="#d62828" stroke-width="1" stroke-dasharray="2,2"/>
+          <polygon points="75,25 70,22 76,28" fill="#d62828"/>
+        </svg>
+        <div class="nome">Xogo nº B</div>
+      </div>
+
+      <!-- C · BÓLOS CELTAS -->
+      <div class="xogo">
+        <div class="letra">C</div>
+        <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="60" width="120" height="20" fill="#a0826a"/>
+          <line x1="0" y1="60" x2="120" y2="60" stroke="#6b4a2e" stroke-width="1"/>
+          <!-- bólos en triángulo -->
+          <g fill="#d4a373" stroke="#5e3a1a" stroke-width="1">
+            <polygon points="78,60 76,48 80,48"/>
+            <polygon points="86,60 84,48 88,48"/>
+            <polygon points="94,60 92,48 96,48"/>
+            <polygon points="82,48 80,38 84,38"/>
+            <polygon points="90,48 88,38 92,38"/>
+            <polygon points="86,38 84,28 88,28"/>
+          </g>
+          <!-- bóla de madeira -->
+          <circle cx="20" cy="55" r="9" fill="#6b4a2e" stroke="#3a2510" stroke-width="1"/>
+          <ellipse cx="20" cy="62" rx="9" ry="2" fill="#3a2510" opacity=".4"/>
+          <!-- traxectoria -->
+          <path d="M 28 53 Q 50 38 72 50" fill="none" stroke="#d62828" stroke-width="1" stroke-dasharray="2,2"/>
+          <polygon points="72,50 67,47 73,53" fill="#d62828"/>
+        </svg>
+        <div class="nome">Xogo nº C</div>
+      </div>
+
+      <!-- D · TIRA-SOGA -->
+      <div class="xogo">
+        <div class="letra">D</div>
+        <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="60" width="120" height="20" fill="#a0826a"/>
+          <line x1="0" y1="60" x2="120" y2="60" stroke="#6b4a2e" stroke-width="1"/>
+          <!-- corda longa -->
+          <line x1="10" y1="48" x2="110" y2="48" stroke="#8b5a2b" stroke-width="3"/>
+          <!-- fita no medio -->
+          <rect x="58" y="44" width="4" height="10" fill="#d62828"/>
+          <!-- equipo esquerdo -->
+          <circle cx="20" cy="38" r="5" fill="#fcd5b4" stroke="#5e3a1a" stroke-width="1"/>
+          <rect x="16" y="42" width="8" height="14" fill="#2e86ab"/>
+          <circle cx="35" cy="38" r="5" fill="#fcd5b4" stroke="#5e3a1a" stroke-width="1"/>
+          <rect x="31" y="42" width="8" height="14" fill="#2e86ab"/>
+          <!-- equipo dereito -->
+          <circle cx="85" cy="38" r="5" fill="#fcd5b4" stroke="#5e3a1a" stroke-width="1"/>
+          <rect x="81" y="42" width="8" height="14" fill="#d62828"/>
+          <circle cx="100" cy="38" r="5" fill="#fcd5b4" stroke="#5e3a1a" stroke-width="1"/>
+          <rect x="96" y="42" width="8" height="14" fill="#d62828"/>
+          <!-- frechas de tracción -->
+          <path d="M 8 65 L 2 65" stroke="#d62828" stroke-width="1"/>
+          <polygon points="2,65 6,63 6,67" fill="#d62828"/>
+          <path d="M 112 65 L 118 65" stroke="#d62828" stroke-width="1"/>
+          <polygon points="118,65 114,63 114,67" fill="#d62828"/>
+        </svg>
+        <div class="nome">Xogo nº D</div>
+      </div>
+    </div>
+
+    <table style="margin-top:3mm">
+      <tr><th>Letra</th><th>Nome do xogo (escribe billarda · chave · bólos celtas · tira-soga)</th></tr>
+      <tr><td class="first">A</td><td><input data-ok="billarda" style="width:200px"></td></tr>
+      <tr><td class="first">B</td><td><input data-ok="chave|chave galega" style="width:200px"></td></tr>
+      <tr><td class="first">C</td><td><input data-ok="bolos celtas|bólos celtas|bolos|bólos" style="width:200px"></td></tr>
+      <tr><td class="first">D</td><td><input data-ok="tira-soga|tira soga|tirasoga" style="width:200px"></td></tr>
+    </table>
+  </div>
+
+  <h2>RETO 2 <span class="badge">CLASIFICA POLA LÓXICA INTERNA</span></h2>
+  <div class="reto">
+    <div class="titulo">Indica para cada xogo se é <b>I</b> individual, <b>O</b> de oposición ou <b>C</b> de cooperación-oposición (equipos)</div>
+    <table>
+      <tr><th>Xogo</th><th>Tipo (I / O / C)</th><th>Por que? (selecciona o motivo: precisión / forza colectiva / puntería con mira)</th></tr>
+      <tr><td class="first">Billarda</td>
+        <td><input data-ok="i" style="width:30px"></td>
+        <td><input data-ok="precision|precisión" style="width:180px"></td></tr>
+      <tr><td class="first">Chave galega</td>
+        <td><input data-ok="i" style="width:30px"></td>
+        <td><input data-ok="punteria con mira|puntería con mira|punteria|puntería" style="width:180px"></td></tr>
+      <tr><td class="first">Bólos celtas</td>
+        <td><input data-ok="i" style="width:30px"></td>
+        <td><input data-ok="precision|precisión" style="width:180px"></td></tr>
+      <tr><td class="first">Tira-soga</td>
+        <td><input data-ok="c" style="width:30px"></td>
+        <td><input data-ok="forza colectiva|forza" style="width:180px"></td></tr>
+    </table>
+    <p style="font-size:8.5pt; color:#6b5d48; margin-top:2mm;"><b>Ollo:</b> a billarda, a chave e os bólos xóganse por quendas comparando puntuacións — o adversario non interfire na túa acción → son <i>individuais con marcador comparado</i>. O tira-soga é o único de <i>oposición directa por equipos</i>.</p>
+  </div>
+
+  <h2>RETO 3 <span class="badge">NORMAS DA CHAVE GALEGA</span></h2>
+  <div class="reto">
+    <div class="titulo">Completa as normas básicas (axuda no recadro)</div>
+    <div class="normas">
+      <p><b>a)</b> Distancia regulamentaria desde a raia de tiro ata o pello: <input data-ok="10" style="width:40px"> m.</p>
+      <p><b>b)</b> Cada xogador/a lanza <input data-ok="3" style="width:30px"> pelos por quenda.</p>
+      <p><b>c)</b> Punto se o pello dá na <input data-ok="cabeza|chave|peza horizontal" style="width:160px"> da chave (parte horizontal de arriba).</p>
+      <p><b>d)</b> O pello pesa aproximadamente entre 250 g e <input data-ok="350"> g, segundo a modalidade.</p>
+      <p><b>e)</b> Se non se dá no pello pero queda preto, conta como <input data-ok="cero|0|nada" style="width:80px"> puntos.</p>
+    </div>
+  </div>
+
+  <h2>RETO 4 <span class="badge">RAÍCES DA TÚA CONTORNA</span></h2>
+  <div class="reto">
+    <div class="titulo">Pregunta na casa ou aos avós: que xogo tradicional galego coñecen ou xogaron? Anota nome, lugar onde se xogaba e dúas regras básicas.</div>
+    <div class="op" style="min-height: 18mm;"></div>
+  </div>
+
+  <div class="footer">Conecta con: cultura galega · Letras Galegas · xogos populares dos recreos · educación intercultural</div>
+
+<script src="proba_config.js" defer></script>
+<script src="proba_engine.js" defer></script>
+<script>if(location.search.indexOf("pdf")!==-1)addEventListener("load",function(){setTimeout(function(){window.print()},400)});</script>
+</body>
+</html>

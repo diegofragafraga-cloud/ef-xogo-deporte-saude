@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarefas competenciais · 6º EF · Diego</title>
+<style>
+  :root {
+    --bg:#0b0d13; --bg2:#13161f; --bg3:#1c2030;
+    --text:#e8eaf0; --text2:#8b92a8; --accent:#10b981;
+    --accent2:#34d399; --border:#252a3a; --radius:14px;
+  }
+  .light { --bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .hidden { display:none !important; }
+
+  .header {
+    display:flex; align-items:center; gap:12px;
+    padding:16px 24px; background:var(--bg2);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+  }
+  .back-btn {
+    background:var(--bg3); border:1px solid var(--border); color:var(--text);
+    width:36px; height:36px; border-radius:8px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    text-decoration:none; transition:all .2s; flex-shrink:0;
+  }
+  .back-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .back-btn svg { width:18px; height:18px; }
+  .header h1 { font-size:1.1rem; font-weight:700; display:flex; align-items:center; gap:10px; }
+  .avatar { width:32px; height:32px; border-radius:8px; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:.85rem; }
+  .header-right { margin-left:auto; display:flex; gap:8px; }
+  .icon-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text); width:36px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+  .icon-btn:hover { background:var(--accent); color:#fff; }
+  .icon-btn svg { width:16px; height:16px; }
+
+  .main { max-width:1100px; margin:0 auto; padding:28px 24px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #065f46 0%, #10b981 60%, #34d399 100%);
+    border-radius: var(--radius); padding: 32px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; top:-50px; right:-50px;
+    width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,.08);
+  }
+  .hero::after {
+    content:''; position:absolute; bottom:-70px; left:30%;
+    width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,.06);
+  }
+  .hero .eyebrow { font-size:.7rem; font-weight:700; color:rgba(255,255,255,.85); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px; position:relative; z-index:1; }
+  .hero h2 { color:#fff; font-size:1.8rem; font-weight:800; margin-bottom:10px; position:relative; z-index:1; }
+  .hero p { color:rgba(255,255,255,.92); font-size:.95rem; line-height:1.55; max-width:680px; position:relative; z-index:1; }
+  .hero .tags { display:flex; gap:6px; margin-top:14px; flex-wrap:wrap; position:relative; z-index:1; }
+  .hero .tags span { background:rgba(255,255,255,.18); color:#fff; padding:4px 10px; border-radius:8px; font-size:.72rem; font-weight:600; backdrop-filter:blur(4px); }
+
+  .section-title { font-size:.72rem; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:1.5px; margin:8px 0 14px; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); gap:16px; }
+
+  .card {
+    background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; transition:transform .2s, border-color .2s, box-shadow .2s;
+    display:flex; flex-direction:column;
+  }
+  .card:hover { transform:translateY(-3px); border-color:var(--accent); box-shadow:0 10px 28px rgba(0,0,0,.18); }
+  .card .banner { height:90px; position:relative; display:flex; align-items:center; justify-content:center; }
+  .card .banner svg { width:60px; height:60px; }
+  .card .banner.b1 { background:linear-gradient(135deg, #1e4650, #2e86ab); }
+  .card .banner.b5 { background:linear-gradient(135deg, #5e3a1a, #8b5a2b); }
+  .card .banner.b6 { background:linear-gradient(135deg, #14532d, #16a34a); }
+  .card .body { padding:18px 20px; flex:1; display:flex; flex-direction:column; }
+  .card .bloque { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--text2); margin-bottom:6px; }
+  .card .titulo { font-size:1.05rem; font-weight:700; margin-bottom:6px; line-height:1.25; }
+  .card .desc { font-size:.83rem; color:var(--text2); margin-bottom:14px; flex:1; }
+  .card .ca { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:14px; }
+  .card .ca span { background:var(--bg3); color:var(--text2); font-size:.68rem; padding:2px 8px; border-radius:8px; font-weight:600; }
+  .card .acts { display:flex; gap:6px; flex-wrap:wrap; }
+  .btn {
+    display:inline-flex; align-items:center; gap:5px;
+    padding:8px 12px; border-radius:8px; font-size:.78rem; font-weight:600;
+    text-decoration:none; transition:transform .12s, filter .12s, background .12s;
+    border:1px solid var(--border);
+  }
+  .btn:hover { transform:translateY(-1px); filter:brightness(1.08); }
+  .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn-secondary { background:var(--bg3); color:var(--text); }
+  .btn-tertiary { background:transparent; color:var(--text2); }
+  .btn svg { width:13px; height:13px; }
+
+  .info {
+    margin-top:32px; padding:18px 22px; background:var(--bg2);
+    border:1px solid var(--border); border-radius:var(--radius);
+    display:flex; gap:14px; align-items:flex-start;
+  }
+  .info svg { width:22px; height:22px; color:var(--accent); flex-shrink:0; margin-top:2px; }
+  .info p { font-size:.85rem; color:var(--text2); line-height:1.55; }
+  .info p b { color:var(--text); }
+  .info code { background:var(--bg3); padding:1px 6px; border-radius:4px; font-size:.78rem; color:var(--accent2); }
+
+  @media (max-width:680px) {
+    .main { padding:18px 14px 40px; }
+    .hero { padding:24px 20px; }
+    .hero h2 { font-size:1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="index.html" title="Volver ao espazo de Diego">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1><div class="avatar">6º</div> Tarefas competenciais · EF</h1>
+  <div class="header-right">
+    <button class="icon-btn" onclick="document.body.classList.toggle('light');document.getElementById('m').classList.toggle('hidden');document.getElementById('s').classList.toggle('hidden');localStorage.setItem('ef_theme', document.body.classList.contains('light')?'light':'dark')">
+      <svg id="m" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="s" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<main class="main">
+
+  <section class="hero">
+    <div class="eyebrow">6º Primaria · Educación Física · LOMLOE</div>
+    <h2>Tarefas competenciais de EF</h2>
+    <p>Fichas A4 imprimibles, autocorrixibles, pensadas para traballar un criterio de avaliación concreto en sesión ou como tarefa para casa. Cubren bloques distintos do currículo de 6º. Cada ficha pódese abrir en <b>modo proba</b> (autocorrección + envío) ou descargar en PDF.</p>
+    <div class="tags">
+      <span>3 tarefas</span>
+      <span>A4 imprimible</span>
+      <span>Autocorrección</span>
+      <span>SVG inline</span>
+      <span>file:// compatible</span>
+    </div>
+  </section>
+
+  <div class="section-title">Fichas dispoñibles</div>
+
+  <div class="grid">
+
+    <!-- Tarefa 1 -->
+    <article class="card">
+      <div class="banner b1">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="30" cy="30" r="22"/>
+          <path d="M30 16 L30 30 L40 36"/>
+          <circle cx="30" cy="30" r="2.5" fill="white"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="bloque">Bloque 1 · Vida activa e saudable</div>
+        <div class="titulo">Etiquetas, OMS e o teu día activo</div>
+        <div class="desc">Lectura crítica dunha etiqueta dun ultraprocesado, cálculo de minutos OMS dun día tipo e deseño dun plan semanal activo.</div>
+        <div class="ca">
+          <span>CA1.1</span>
+          <span>CA1.4</span>
+          <span>OBX1</span>
+        </div>
+        <div class="acts">
+          <a class="btn btn-primary" href="tarefas-6/tarefa-1-saude-oms.html">Abrir ficha</a>
+          <a class="btn btn-secondary" href="tarefas-6/tarefa-1-saude-oms.html?modo=proba">Modo proba</a>
+          <a class="btn btn-tertiary" href="tarefas-6/tarefa-1-saude-oms.html?modo=correccion">Corrección</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Tarefa 2 -->
+    <article class="card">
+      <div class="banner b5">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="8" y="40" width="44" height="14" rx="2"/>
+          <polygon points="12,40 22,12 32,40"/>
+          <line x1="22" y1="12" x2="22" y2="22"/>
+          <circle cx="42" cy="32" r="6"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="bloque">Bloque 5 · Cultura motriz</div>
+        <div class="titulo">Xogos tradicionais galegos</div>
+        <div class="desc">Identifica billarda, chave, bólos celtas e tira-soga; clasifícaos pola súa lóxica interna e revisa as normas básicas da chave galega.</div>
+        <div class="ca">
+          <span>CA5.5</span>
+          <span>CA5.6</span>
+          <span>OBX4</span>
+        </div>
+        <div class="acts">
+          <a class="btn btn-primary" href="tarefas-6/tarefa-2-xogos-tradicionais.html">Abrir ficha</a>
+          <a class="btn btn-secondary" href="tarefas-6/tarefa-2-xogos-tradicionais.html?modo=proba">Modo proba</a>
+          <a class="btn btn-tertiary" href="tarefas-6/tarefa-2-xogos-tradicionais.html?modo=correccion">Corrección</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Tarefa 3 -->
+    <article class="card">
+      <div class="banner b6">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="16" cy="42" r="10"/>
+          <circle cx="44" cy="42" r="10"/>
+          <line x1="16" y1="42" x2="30" y2="22"/>
+          <line x1="30" y1="22" x2="44" y2="42"/>
+          <line x1="22" y1="22" x2="38" y2="22"/>
+          <circle cx="40" cy="16" r="4" fill="white" stroke="white"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="bloque">Bloque 6 · Contorna sustentable</div>
+        <div class="titulo">Do cole en bici: mobilidade activa e segura</div>
+        <div class="desc">Identifica sinais de tráfico, calcula o CO₂ aforrado fronte ao coche nun curso e planifica unha ruta segura no mapa do barrio.</div>
+        <div class="ca">
+          <span>CA6.1</span>
+          <span>CA6.3</span>
+          <span>OBX5</span>
+        </div>
+        <div class="acts">
+          <a class="btn btn-primary" href="tarefas-6/tarefa-3-mobilidade-activa.html">Abrir ficha</a>
+          <a class="btn btn-secondary" href="tarefas-6/tarefa-3-mobilidade-activa.html?modo=proba">Modo proba</a>
+          <a class="btn btn-tertiary" href="tarefas-6/tarefa-3-mobilidade-activa.html?modo=correccion">Corrección</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="info">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <p>
+      <b>Como usar.</b> <code>Abrir ficha</code> mostra a ficha lista para imprimir en A4 ou repartir.
+      <code>?modo=proba</code> activa autocorrección + envío ao buzón do profesor.
+      <code>?modo=correccion</code> revela as respostas correctas para proxectar na aula.
+      As fichas son autocontidas e funcionan tamén con <code>file://</code>.
+    </p>
+  </div>
+
+</main>
+
+<script>
+if (localStorage.getItem('ef_theme') === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('m').classList.add('hidden');
+  document.getElementById('s').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
