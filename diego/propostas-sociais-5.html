@@ -162,13 +162,46 @@
 
   /* Niveis */
   .niveis { display: flex; flex-direction: column; gap: 14px; }
-  .nivel {
-    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
-    overflow: hidden;
+
+  /* Selector de nivel (chips) */
+  .nivel-tabs {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;
   }
+  .nivel-tab {
+    flex: 1; min-width: 130px;
+    background: var(--panel); border: 1px solid var(--border);
+    color: var(--text); cursor: pointer; font-family: inherit;
+    padding: 12px 14px; border-radius: 10px;
+    display: flex; align-items: center; gap: 10px;
+    transition: all .15s; text-align: left;
+  }
+  .nivel-tab:hover { border-color: var(--accent); background: var(--panel-2); }
+  .nivel-tab .niv-demo { flex-shrink: 0; width: 26px; height: 26px; font-size: 12px; }
+  .nivel-tab .nt-info { flex: 1; min-width: 0; }
+  .nivel-tab .nt-nome { font-weight: 700; font-size: .88rem; line-height: 1.2; }
+  .nivel-tab .nt-meta { font-size: .72rem; color: var(--text-dim); margin-top: 2px; }
+  .nivel-tab.active.n1 { border-color: var(--n1); box-shadow: 0 0 0 2px var(--n1-bg); }
+  .nivel-tab.active.n2 { border-color: var(--n2); box-shadow: 0 0 0 2px var(--n2-bg); }
+  .nivel-tab.active.n3 { border-color: var(--n3); box-shadow: 0 0 0 2px var(--n3-bg); }
+  .nivel-tab .nt-check {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--panel-2); color: var(--text-faint);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; flex-shrink: 0;
+  }
+  .nivel-tab .nt-check.done { background: var(--n1); color: #fff; }
+
+  .nivel { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .nivel.show { display: block; }
   .nivel.n1 { border-left: 4px solid var(--n1); }
   .nivel.n2 { border-left: 4px solid var(--n2); }
   .nivel.n3 { border-left: 4px solid var(--n3); }
+
+  .nivel-empty {
+    text-align: center; padding: 22px 16px; color: var(--text-dim);
+    background: var(--panel); border: 1px dashed var(--border); border-radius: var(--radius);
+    font-size: .85rem;
+  }
   .nivel-head {
     padding: 14px 18px; display: flex; align-items: center; gap: 12px;
     background: var(--panel-2);
@@ -907,9 +940,43 @@ function renderContido() {
     cont.appendChild(section);
 
     const nivesEl = section.querySelector(`#niveis-${s.id}`);
+
+    // Tabs de selección de nivel
+    const tabs = document.createElement('div');
+    tabs.className = 'nivel-tabs';
+    s.niveis.forEach(niv => {
+      const total = niv.actividades.length;
+      let feitas = 0;
+      niv.actividades.forEach((_, i) => { if (isFeita(s.id, niv.nivel, i)) feitas++; });
+      const tag = niv.nivel === 1 ? 'Básico' : (niv.nivel === 2 ? 'Medio' : 'Avanzado');
+      const tab = document.createElement('button');
+      tab.className = `nivel-tab n${niv.nivel}`;
+      tab.dataset.nivel = niv.nivel;
+      tab.dataset.sentido = s.id;
+      tab.onclick = () => mostrarNivel(s.id, niv.nivel);
+      tab.innerHTML = `
+        <span class="niv-demo n${niv.nivel}">${niv.nivel}</span>
+        <div class="nt-info">
+          <div class="nt-nome">${niv.nome}</div>
+          <div class="nt-meta">Nivel ${niv.nivel} · ${tag} · ${niv.tag}</div>
+        </div>
+        <span class="nt-check ${feitas === total ? 'done' : ''}" id="check-${s.id}-${niv.nivel}">${feitas}/${total}</span>
+      `;
+      tabs.appendChild(tab);
+    });
+    nivesEl.appendChild(tabs);
+
+    // Placeholder cando non hai nivel seleccionado
+    const placeholder = document.createElement('div');
+    placeholder.className = 'nivel-empty';
+    placeholder.id = `placeholder-${s.id}`;
+    placeholder.innerHTML = `↑ Escolle un dos tres niveis para ver as actividades.`;
+    nivesEl.appendChild(placeholder);
+
     s.niveis.forEach(niv => {
       const nivEl = document.createElement('div');
       nivEl.className = `nivel n${niv.nivel}`;
+      nivEl.id = `nivel-${s.id}-${niv.nivel}`;
       const total = niv.actividades.length;
       let feitas = 0;
       niv.actividades.forEach((_, i) => { if (isFeita(s.id, niv.nivel, i)) feitas++; });
@@ -1017,6 +1084,7 @@ function toggleFeita(sentidoId, nivel, idx, btn) {
   const total = nivEl.querySelectorAll('.act').length;
   const f = nivEl.querySelectorAll('.act.feita').length;
   nivEl.querySelector('.niv-count').textContent = `${f} / ${total} feitas`;
+  actualizarChip(sentidoId, nivel);
   actualizarProgreso();
 
   if (novoEstado) {
@@ -1034,6 +1102,34 @@ function toggleFeita(sentidoId, nivel, idx, btn) {
 function toggleSol(btn) {
   const sol = btn.closest('.act').querySelector('.sol');
   sol.classList.toggle('show');
+}
+
+function mostrarNivel(sentidoId, nivel) {
+  // Ocultar todos os niveis e desmarcar todos os tabs deste bloque
+  SENTIDOS.find(s => s.id === sentidoId)?.niveis.forEach(n => {
+    document.getElementById(`nivel-${sentidoId}-${n.nivel}`)?.classList.remove('show');
+  });
+  document.querySelectorAll(`.nivel-tab[data-sentido="${sentidoId}"]`).forEach(t => t.classList.remove('active'));
+  // Mostrar o nivel escollido
+  document.getElementById(`nivel-${sentidoId}-${nivel}`)?.classList.add('show');
+  document.querySelector(`.nivel-tab[data-sentido="${sentidoId}"][data-nivel="${nivel}"]`)?.classList.add('active');
+  // Ocultar placeholder
+  const ph = document.getElementById(`placeholder-${sentidoId}`);
+  if (ph) ph.style.display = 'none';
+}
+
+function actualizarChip(sentidoId, nivel) {
+  const sen = SENTIDOS.find(s => s.id === sentidoId);
+  const niv = sen?.niveis.find(n => n.nivel === nivel);
+  if (!niv) return;
+  const total = niv.actividades.length;
+  let feitas = 0;
+  niv.actividades.forEach((_, i) => { if (isFeita(sentidoId, nivel, i)) feitas++; });
+  const chip = document.getElementById(`check-${sentidoId}-${nivel}`);
+  if (chip) {
+    chip.textContent = `${feitas}/${total}`;
+    chip.classList.toggle('done', feitas === total);
+  }
 }
 
 function seleccionarAlumno() {
