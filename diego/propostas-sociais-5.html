@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propostas competenciais · 5º · Ciencias Sociais</title>
+<style>
+  :root {
+    --bg: #0b0d13;
+    --panel: #13161f;
+    --panel-2: #1c2030;
+    --border: #252a3a;
+    --text: #e8eaf0;
+    --text-dim: #8b92a8;
+    --text-faint: #6b7280;
+    --accent: #10b981;
+    --accent-2: #34d399;
+    --accent-bg: rgba(16,185,129,0.12);
+    --n1: #16a34a;
+    --n2: #eab308;
+    --n3: #dc2626;
+    --n1-bg: rgba(22,163,74,0.10);
+    --n2-bg: rgba(234,179,8,0.10);
+    --n3-bg: rgba(220,38,38,0.10);
+    --radius: 14px;
+    --shadow: 0 4px 16px rgba(0,0,0,.25);
+  }
+  :root.light {
+    --bg: #f5f7fa;
+    --panel: #ffffff;
+    --panel-2: #f1f5f9;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-dim: #475569;
+    --text-faint: #94a3b8;
+    --shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.5; font-size: 15px;
+    transition: background .25s, color .25s;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* Header */
+  header.top {
+    display: flex; gap: 14px; align-items: center;
+    padding: 16px 0 18px; border-bottom: 1px solid var(--border);
+    margin-bottom: 22px;
+  }
+  .back-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    width: 38px; height: 38px; border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: all .15s; flex-shrink: 0;
+  }
+  .back-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .back-btn svg { width: 18px; height: 18px; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: #fff; flex-shrink: 0;
+  }
+  .title-block { flex: 1; min-width: 0; }
+  .title-block h1 {
+    font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em;
+  }
+  .title-block .sub {
+    font-size: .78rem; color: var(--text-dim); margin-top: 2px;
+  }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .icon-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    width: 38px; height: 38px; border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .icon-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .icon-sun { display: none; }
+  :root.light .icon-moon { display: none; }
+  :root.light .icon-sun { display: block; }
+
+  /* Quen es */
+  .quen-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 22px; margin-bottom: 22px; box-shadow: var(--shadow);
+  }
+  .quen-card h2 {
+    font-size: 1rem; font-weight: 700; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .quen-card h2 svg { width: 18px; height: 18px; color: var(--accent); }
+  .quen-card p { font-size: .85rem; color: var(--text-dim); margin-bottom: 12px; }
+  .quen-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  select.quen-select {
+    background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 14px; border-radius: 10px; font-size: .95rem;
+    font-family: inherit; min-width: 240px; cursor: pointer;
+  }
+  select.quen-select:focus { outline: none; border-color: var(--accent); }
+  .quen-badge {
+    background: var(--accent-bg); color: var(--accent-2);
+    border: 1px solid transparent; padding: 8px 14px; border-radius: 10px;
+    font-size: .85rem; font-weight: 600;
+  }
+  .quen-badge.empty { color: var(--text-faint); background: var(--panel-2); }
+  .progress-mini {
+    margin-left: auto; display: flex; align-items: center; gap: 8px;
+    font-size: .8rem; color: var(--text-dim);
+  }
+  .progress-bar {
+    width: 140px; height: 8px; background: var(--panel-2);
+    border-radius: 999px; overflow: hidden;
+  }
+  .progress-bar > span {
+    display: block; height: 100%; background: var(--accent);
+    width: 0%; transition: width .3s ease;
+  }
+
+  /* Escala leyenda */
+  .escala {
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 16px; margin-bottom: 22px; font-size: .82rem;
+  }
+  .escala .title { font-weight: 600; color: var(--text-dim); }
+  .escala .item { display: inline-flex; align-items: center; gap: 6px; }
+  .niv-demo {
+    width: 22px; height: 22px; border-radius: 6px; color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+  }
+  .niv-demo.n1 { background: var(--n1); }
+  .niv-demo.n2 { background: var(--n2); color: #1a1a1a; }
+  .niv-demo.n3 { background: var(--n3); }
+  .escala .hint { color: var(--text-faint); margin-left: auto; font-size: .78rem; }
+
+  /* Sección por bloque */
+  section.sentido { margin-bottom: 32px; }
+  section.sentido > .sec-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 12px;
+  }
+  .sec-head .sec-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-bg); color: var(--accent-2);
+  }
+  .sec-head .sec-icon svg { width: 20px; height: 20px; }
+  .sec-head h2 { font-size: 1.1rem; font-weight: 700; }
+  .sec-head .sec-sub { font-size: .78rem; color: var(--text-dim); }
+  .sec-head .sec-progress {
+    margin-left: auto; font-size: .78rem; color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sec-head .sec-progress .pct { font-weight: 700; color: var(--accent-2); }
+
+  /* Niveis */
+  .niveis { display: flex; flex-direction: column; gap: 14px; }
+  .nivel {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .nivel.n1 { border-left: 4px solid var(--n1); }
+  .nivel.n2 { border-left: 4px solid var(--n2); }
+  .nivel.n3 { border-left: 4px solid var(--n3); }
+  .nivel-head {
+    padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+    background: var(--panel-2);
+  }
+  .nivel-head .niv-demo { flex-shrink: 0; width: 28px; height: 28px; font-size: 13px; }
+  .nivel-head h3 { font-size: .98rem; font-weight: 700; }
+  .nivel-head .niv-tag {
+    font-size: .72rem; color: var(--text-dim); text-transform: uppercase;
+    letter-spacing: .04em; margin-top: 1px;
+  }
+  .nivel-head .niv-count {
+    margin-left: auto; font-size: .78rem; color: var(--text-dim);
+    background: var(--panel); border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 999px;
+  }
+  .nivel-body { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* Actividade card */
+  .act {
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; background: var(--bg);
+    transition: border-color .15s;
+  }
+  .act:hover { border-color: var(--accent); }
+  .act.feita {
+    background: var(--n1-bg);
+    border-color: var(--n1);
+  }
+  .act-head {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 8px;
+  }
+  .act-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px;
+    background: var(--panel-2); color: var(--text-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .82rem;
+  }
+  .act.feita .act-num { background: var(--n1); color: #fff; }
+  .act-title { flex: 1; font-weight: 600; font-size: .95rem; }
+  .act-cas {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    margin-top: 2px;
+  }
+  .ca-chip {
+    font-size: .7rem; padding: 2px 7px; border-radius: 5px;
+    background: var(--accent-bg); color: var(--accent-2);
+    font-weight: 600;
+  }
+  .act-body {
+    font-size: .9rem; color: var(--text); line-height: 1.55;
+    margin-left: 36px;
+  }
+  .act-body p { margin-bottom: 6px; }
+  .act-body ul, .act-body ol { margin: 6px 0 6px 18px; }
+  .act-body li { margin-bottom: 3px; }
+  .act-body code {
+    background: var(--panel-2); padding: 1px 6px; border-radius: 4px;
+    font-size: .85em; font-family: 'Courier New', monospace;
+  }
+  .act-body .ascii-art {
+    font-family: 'Courier New', monospace; background: var(--panel-2);
+    padding: 10px 12px; border-radius: 6px; font-size: .82rem;
+    white-space: pre; overflow-x: auto; margin: 8px 0;
+    color: var(--text-dim);
+  }
+  .act-actions {
+    margin-top: 12px; margin-left: 36px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .btn {
+    padding: 7px 14px; border-radius: 8px; font-size: .82rem;
+    border: 1px solid var(--border); background: var(--panel-2);
+    color: var(--text); cursor: pointer; font-family: inherit; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px; transition: all .15s;
+  }
+  .btn:hover { background: var(--panel); border-color: var(--accent); }
+  .btn svg { width: 14px; height: 14px; }
+  .btn-feito {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .btn-feito:hover { background: var(--accent-2); border-color: var(--accent-2); }
+  .act.feita .btn-feito { background: var(--n1); border-color: var(--n1); }
+
+  .sol {
+    display: none; margin-top: 10px; margin-left: 36px;
+    padding: 12px 14px; border-radius: 8px;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    font-size: .88rem; line-height: 1.55;
+  }
+  .sol.show { display: block; }
+  .sol strong { color: var(--accent-2); }
+
+  /* Empty state */
+  .empty {
+    text-align: center; padding: 50px 20px; color: var(--text-dim);
+    background: var(--panel); border: 1px dashed var(--border); border-radius: var(--radius);
+  }
+  .empty svg { width: 40px; height: 40px; color: var(--text-faint); margin-bottom: 10px; }
+  .empty h3 { font-size: 1rem; margin-bottom: 4px; color: var(--text); }
+  .empty p { font-size: .85rem; }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 20px; font-size: .9rem; font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0,0,0,.3);
+    opacity: 0; transition: opacity .25s, transform .25s;
+    z-index: 999; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.ok { border-color: var(--n1); }
+  .toast.err { border-color: var(--n2); background: var(--n2-bg); }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .container { padding: 12px 10px 40px; }
+    header.top { gap: 10px; }
+    .title-block h1 { font-size: 1rem; }
+    .quen-row { flex-direction: column; align-items: stretch; }
+    .progress-mini { margin-left: 0; justify-content: space-between; }
+    .progress-bar { flex: 1; }
+    select.quen-select { min-width: 0; width: 100%; }
+    .act-body, .act-actions, .sol { margin-left: 0; }
+    .escala .hint { display: none; }
+  }
+
+  /* Print */
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    body { background: #fff !important; color: #000 !important; font-size: 11px; }
+    .header-actions, .icon-btn, .btn, .quen-row { display: none !important; }
+    .container { padding: 0; max-width: 100%; }
+    .nivel, .sec-head, .quen-card, .escala { page-break-inside: avoid; }
+    section.sentido + section.sentido { page-break-before: always; }
+    .sol { display: block !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="top">
+    <a class="back-btn" href="index.html" title="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </a>
+    <div class="avatar">D</div>
+    <div class="title-block">
+      <h1>Propostas competenciais · Ciencias Sociais</h1>
+      <div class="sub">5º Primaria · 3º trimestre · Sistemas de goberno · Mapa de Europa · Comunidades de España</div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="window.print()" title="Imprimir">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </button>
+      <button class="icon-btn" onclick="resetAlumno()" title="Reiniciar o meu progreso">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/></svg>
+      </button>
+      <button class="icon-btn" onclick="toggleTheme()" title="Cambiar tema">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="quen-card">
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg>
+      Quen es?
+    </h2>
+    <p>Escolle o teu nome para gardar o teu progreso neste dispositivo.</p>
+    <div class="quen-row">
+      <select id="quen" class="quen-select" onchange="seleccionarAlumno()">
+        <option value="">— escolle o teu nome —</option>
+      </select>
+      <span id="quenBadge" class="quen-badge empty">Sen seleccionar</span>
+      <div class="progress-mini">
+        <span id="progressLabel">0 / 18</span>
+        <div class="progress-bar"><span id="progressFill"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="escala">
+    <span class="title">Niveis:</span>
+    <span class="item"><span class="niv-demo n1">1</span> Básico</span>
+    <span class="item"><span class="niv-demo n2">2</span> Medio</span>
+    <span class="item"><span class="niv-demo n3">3</span> Avanzado</span>
+    <span class="hint">Pulsa "Feita" cando remates (avísase ao profe) · "Solución" para autocorrixir</span>
+  </div>
+
+  <div id="contido"></div>
+
+</div>
+
+<script>
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+const BUZON_ENDPOINT = 'https://buzon-fichas.diegofragafraga.workers.dev/enviar';
+const CURSO = '5º B · Propostas Sociais';
+
+const ALUMNADO = [
+  "Abal Dorado, Iker",
+  "Búa Pardo, Adrián",
+  "Castro Cernadas, Paula",
+  "Costa Castro, Ingrid",
+  "Fernándes Leonor, Eloá",
+  "Ferro Pita, Alex",
+  "Pazos Sineiro, Xurxo",
+  "Pedreira González, Anxo",
+  "Pereira Fariña, Antía",
+  "Radío Prieto, Unai",
+  "Suárez Khoule, Aisha",
+  "Varela Porto, David",
+  "Veiga García, Mateo"
+];
+
+const KEY = 'propostas_sociais5_2026';
+const KEY_THEME = 'ef_theme';
+
+// ============================================================
+// CONTIDO: 3 bloques × 3 niveis × 2 actividades = 18 tarefas
+// ============================================================
+const SENTIDOS = [
+  {
+    id: 'goberno',
+    nome: 'Sistemas de goberno',
+    sub: 'Democracia, división de poderes e a tenda sostible como exemplo de cidadanía',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h18"/><path d="M5 22V11l7-7 7 7v11"/><path d="M9 22v-7h6v7"/></svg>',
+    niveis: [
+      {
+        nivel: 1, nome: 'Identificar sistemas e poderes', tag: 'Recoñecer · definir',
+        actividades: [
+          {
+            t: 'Que sistema de goberno é?',
+            cas: ['CA1.1', 'CA4.2'],
+            body: `<p>Le estas tres situacións e di que sistema de goberno describe cada unha. Escolle entre: <strong>democracia</strong>, <strong>monarquía absoluta</strong>, <strong>ditadura</strong>.</p>
+              <ol>
+                <li><em>"No país A só pode falar nos xornais quen apoia ao líder. Non hai eleccións desde fai 30 anos. Quen critica ao goberno vai ao cárcere."</em></li>
+                <li><em>"No país B cada 4 anos hai eleccións. Calquera persoa pode votar e presentarse. As leis fainas un Parlamento elixido polo pobo."</em></li>
+                <li><em>"No país C manda o rei desde que naceu. Decide as leis, nomea aos xuíces e dirixe o exército. Non hai Parlamento."</em></li>
+              </ol>
+              <p><strong>Reto extra:</strong> a cal destes tres se parece máis a España hoxe?</p>`,
+            sol: `<strong>Solucións:</strong><br>
+              1. <strong>Ditadura</strong> (sen liberdade de expresión, sen eleccións, persecución).<br>
+              2. <strong>Democracia</strong> (eleccións periódicas, sufraxio universal, Parlamento elixido).<br>
+              3. <strong>Monarquía absoluta</strong> (todos os poderes nun rei polo seu nacemento).<br>
+              <strong>Reto:</strong> España é unha <em>monarquía parlamentaria</em>, é dicir, unha democracia con rei como símbolo. Parécese máis á situación <strong>2</strong>.`
+          },
+          {
+            t: 'Os tres poderes do Estado',
+            cas: ['CA1.2', 'CA4.3'],
+            body: `<p>A Constitución divide o goberno en <strong>tres poderes</strong>. Asigna a cada función o poder correcto: <strong>lexislativo</strong>, <strong>executivo</strong> ou <strong>xudicial</strong>.</p>
+              <ol>
+                <li>Aproba unha nova lei contra o desperdicio de alimentos.</li>
+                <li>Decide se unha persoa cometeu un delito e debe ir ao cárcere.</li>
+                <li>Decide o presuposto que se dedicará a sanidade este ano.</li>
+                <li>Nomea aos ministros e ministras.</li>
+                <li>Cambia o código de circulación.</li>
+                <li>Resolve unha denuncia entre dúas empresas.</li>
+              </ol>`,
+            sol: `<strong>Solucións:</strong><br>
+              1. <strong>Lexislativo</strong> · 2. <strong>Xudicial</strong> · 3. <strong>Executivo</strong> · 4. <strong>Executivo</strong> (a Presidencia) · 5. <strong>Lexislativo</strong> · 6. <strong>Xudicial</strong>.<br>
+              <em>Lembra: lexislativo = fai leis (Parlamento); executivo = aplícaas (Goberno); xudicial = xulga (xuíces).</em>`
+          }
+        ]
+      },
+      {
+        nivel: 2, nome: 'Aplicar á tenda sostible', tag: 'Comparar · transferir',
+        actividades: [
+          {
+            t: 'Quen decide na tenda sostible?',
+            cas: ['CA2.1', 'CA4.4'],
+            body: `<p>Imos comparar a <strong>tenda sostible</strong> da clase cun sistema democrático real. Para cada decisión, di que <strong>poder</strong> tería que tomala (lexislativo, executivo ou xudicial) e quen sería na tenda:</p>
+              <ol>
+                <li>Decidir que produtos están permitidos vender e cales non (por exemplo, prohibir bebidas con azucre engadido).</li>
+                <li>Cobrar e dar o cambio durante o recreo.</li>
+                <li>Sancionar a un equipo que vendeu produtos prohibidos.</li>
+                <li>Cambiar o regulamento para que a venda dure dúas semanas máis.</li>
+                <li>Resolver unha discusión entre dous clientes sobre quen chegou antes á cola.</li>
+              </ol>
+              <p><strong>Pista:</strong> pensa en cal sería a "Asemblea de clase", o "Equipo encargado da tenda" e os "Mediadores ou árbitros".</p>`,
+            sol: `<strong>Solucións:</strong><br>
+              1. <strong>Lexislativo</strong> → Asemblea de clase (igual ca un Parlamento).<br>
+              2. <strong>Executivo</strong> → Equipo encargado da tenda (aplica as normas no día a día).<br>
+              3. <strong>Xudicial</strong> → Comisión de mediación / mestre como árbitro.<br>
+              4. <strong>Lexislativo</strong> → Asemblea de clase (modifica o regulamento, igual ca o Parlamento aproba leis).<br>
+              5. <strong>Xudicial</strong> → Comisión de mediación.<br>
+              <em>É o mesmo modelo que España: as Cortes fan leis, o Goberno aplícaas e os xuíces resólvenas.</em>`
+          },
+          {
+            t: 'Niveis de goberno e a tenda',
+            cas: ['CA2.2', 'CA5.5'],
+            body: `<p>En España o poder repártese en <strong>catro niveis</strong>: concello, comunidade autónoma, Estado e Unión Europea. Para cada decisión, di que nivel se ocuparía dela. <em>(Algunhas afectan á tenda sostible da escola)</em>:</p>
+              <ol>
+                <li>Regular cantos gramos de azucre poden levar os alimentos vendidos en escolas.</li>
+                <li>Aprobar a moeda que utilizamos para mercar (euro).</li>
+                <li>Permitir que a tenda sostible utilice a praza do pobo para unha venda especial.</li>
+                <li>Decidir o número de horas de Ciencias Sociais en 5º de Primaria.</li>
+                <li>Recoller o lixo xerado pola tenda durante o recreo.</li>
+                <li>Asinar tratados con outros países sobre comercio xusto.</li>
+              </ol>`,
+            sol: `<strong>Solucións:</strong><br>
+              1. <strong>Estado</strong> (sanidade e seguridade alimentaria son estatais; tamén con normas da UE).<br>
+              2. <strong>Unión Europea</strong> (o euro é unha moeda común).<br>
+              3. <strong>Concello</strong> (o uso de prazas e rúas é municipal).<br>
+              4. <strong>Comunidade Autónoma</strong> (a educación é competencia da Xunta).<br>
+              5. <strong>Concello</strong> (limpeza viaria e lixo).<br>
+              6. <strong>Estado</strong> (relacións internacionais; tamén UE para comercio).`
+          }
+        ]
+      },
+      {
+        nivel: 3, nome: 'Razoar e crear', tag: 'Argumentar · deseñar',
+        actividades: [
+          {
+            t: 'Estatuto da tenda sostible',
+            cas: ['CA3.1', 'CA6.4'],
+            body: `<p>A nosa Constitución recoñece <strong>dereitos e deberes</strong>. Imos crear o noso pequeno "estatuto" para a tenda sostible.</p>
+              <ol>
+                <li>Escribe <strong>3 dereitos</strong> da clientela (quen mercar) na tenda sostible.</li>
+                <li>Escribe <strong>3 deberes</strong> da clientela.</li>
+                <li>Escribe <strong>2 dereitos</strong> e <strong>2 deberes</strong> do equipo que xestiona a tenda.</li>
+                <li>Engade <strong>unha sanción</strong> proporcional (xusta) para quen incumpra unha das normas.</li>
+              </ol>
+              <p><em>Entrega: folio cunha portada "Estatuto da tenda sostible" e os puntos numerados.</em></p>`,
+            sol: `<strong>Comprobación (exemplos válidos):</strong><br>
+              · Dereitos clientela: información clara dos prezos · reclamar se algo está estragado · trato respectuoso.<br>
+              · Deberes clientela: gardar quenda · pagar antes de marchar · respectar o equipo.<br>
+              · Dereitos equipo: descansos · respecto · revisar caixa antes/despois.<br>
+              · Deberes equipo: ser honestos co cambio · non favoritismos · limpar o posto.<br>
+              · Sancións: amoestación → retirar da tenda 1 día → falar coas familias (escala proporcional).`
+          },
+          {
+            t: 'A Constitución da nosa escola',
+            cas: ['CA3.2', 'CA6.5'],
+            body: `<p>A Constitución española define España como un <strong>"Estado social e democrático de dereito"</strong>. Cada parte significa algo:</p>
+              <ul>
+                <li><b>Social</b> · coida das persoas (sanidade, educación, axudas).</li>
+                <li><b>Democrático</b> · o poder vén do pobo, que vota.</li>
+                <li><b>De dereito</b> · todo o mundo, incluído o goberno, está sometido á lei.</li>
+              </ul>
+              <p>Escribe <strong>3 parágrafos curtos</strong> (60–80 palabras cada un) explicando como sería a nosa escola se fose:</p>
+              <ol>
+                <li><strong>Social</strong>: que faría a escola por quen máis o necesita?</li>
+                <li><strong>Democrática</strong>: como tomaría as decisións importantes?</li>
+                <li><strong>De dereito</strong>: que pasa cando alguén (incluído un mestre) incumpre o regulamento?</li>
+              </ol>`,
+            sol: `<strong>Pautas para a corrección:</strong><br>
+              1. Social → fala de inclusión, reforzo, almorzo escolar, libros gratuítos, etc.<br>
+              2. Democrática → asembleas, votacións, delegado/a elixido/a, comisión de convivencia.<br>
+              3. De dereito → todos cumprimos as normas, mestre/a tamén ten límites e procedementos claros.<br>
+              <em>Comproba que cada parágrafo dá un exemplo concreto e non só teoría.</em>`
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'europa',
+    nome: 'Mapa de Europa',
+    sub: 'Países, capitais, ríos, mares e Unión Europea',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    niveis: [
+      {
+        nivel: 1, nome: 'Países, capitais e mares', tag: 'Localizar · nomear',
+        actividades: [
+          {
+            t: 'Empareja país e capital',
+            cas: ['CA5.1', 'CA5.2'],
+            body: `<p>Empareja cada país coa súa capital. Ten coidado: hai dúas trampas (Suíza non é Zúric, Países Baixos non é Roterdam).</p>
+              <div class="ascii-art">  PAÍSES               CAPITAIS
+  1. España            a) Roma
+  2. Francia           b) Berlín
+  3. Portugal          c) Madrid
+  4. Italia            d) Lisboa
+  5. Alemaña           e) Londres
+  6. Reino Unido       f) París
+  7. Suíza             g) Ámsterdam
+  8. Países Baixos     h) Berna</div>
+              <p>Anota as parellas (ex: 1-c, 2-...).</p>`,
+            sol: `<strong>Solucións:</strong><br>
+              1-c (Madrid) · 2-f (París) · 3-d (Lisboa) · 4-a (Roma) · 5-b (Berlín) · 6-e (Londres) · 7-h (Berna) · 8-g (Ámsterdam).<br>
+              <em>Atención: Zúric é a cidade máis grande de Suíza pero a capital é Berna. En Países Baixos a capital oficial é Ámsterdam, aínda que o goberno se reúne na Haia.</em>`
+          },
+          {
+            t: 'Mares e océanos de Europa',
+            cas: ['CA5.1', 'CA5.3'],
+            body: `<p>Europa está rodeada de auga por case todos os lados. Asocia cada mar/océano coa zona correcta:</p>
+              <div class="ascii-art">  AUGAS                ZONA
+  1. Océano Atlántico  a) entre España e Marrocos (sur)
+  2. Mar Mediterráneo  b) costa galega e portuguesa (oeste)
+  3. Mar Cantábrico    c) entre Suecia e Letonia (norte de Polonia)
+  4. Mar do Norte      d) costa norte de España (Asturias, País Vasco)
+  5. Mar Báltico       e) entre o Reino Unido e Noruega
+  6. Mar Negro         f) entre Romanía, Bulgaria e Turquía</div>
+              <p>Anota as parellas e indica que mar baña a costa de <strong>Pontevedra</strong>.</p>`,
+            sol: `<strong>Solucións:</strong><br>
+              1-b (Atlántico, oeste) · 2-a (Mediterráneo) · 3-d (Cantábrico) · 4-e (Mar do Norte) · 5-c (Báltico) · 6-f (Mar Negro).<br>
+              <em>A costa de Pontevedra está bañada polo <strong>océano Atlántico</strong> (rías baixas).</em>`
+          }
+        ]
+      },
+      {
+        nivel: 2, nome: 'Unión Europea e ríos', tag: 'Clasificar · diferenciar',
+        actividades: [
+          {
+            t: 'Está na UE ou non?',
+            cas: ['CA5.4', 'CA5.5'],
+            body: `<p>A Unión Europea ten <strong>27 países</strong> (en 2026). Non todos os países de Europa están dentro. Clasifica estes 12 países en <strong>UE</strong> ou <strong>fóra da UE</strong>:</p>
+              <ol>
+                <li>España</li><li>Portugal</li><li>Reino Unido</li><li>Francia</li>
+                <li>Suíza</li><li>Italia</li><li>Noruega</li><li>Alemaña</li>
+                <li>Polonia</li><li>Ucraína</li><li>Grecia</li><li>Países Baixos</li>
+              </ol>
+              <p><strong>Reto:</strong> di unha cousa que comparten os países da UE.</p>`,
+            sol: `<strong>Solucións:</strong><br>
+              <strong>UE</strong> (8): España, Portugal, Francia, Italia, Alemaña, Polonia, Grecia, Países Baixos.<br>
+              <strong>Fóra da UE</strong> (4): Reino Unido (saíu en 2020, "Brexit"), Suíza (nunca quixo entrar), Noruega (votou non), Ucraína (en proceso de pedir entrada).<br>
+              <strong>Reto:</strong> moitos comparten moeda (euro), leis comúns, libre circulación (podes viaxar sen pasaporte entre eles), Parlamento Europeo.`
+          },
+          {
+            t: 'Ríos importantes de Europa',
+            cas: ['CA5.2', 'CA5.6'],
+            body: `<p>Os ríos foron sempre vías de comunicación e comercio. Para cada río, di por que <strong>país principal</strong> pasa:</p>
+              <div class="ascii-art">  RÍO          PAÍS PRINCIPAL
+  1. Tajo       a) Alemaña (e desemboca en Países Baixos)
+  2. Sena       b) España + Portugal (desemboca en Lisboa)
+  3. Rin        c) Reino Unido (pasa por Londres)
+  4. Danubio    d) Francia (pasa por París)
+  5. Volga      e) Rusia (o máis longo de Europa)
+  6. Támese     f) atravesa 10 países; pasa por Viena, Budapest</div>
+              <p><strong>Reto:</strong> que río pasa polo país onde se elabora a maior parte do champagne francés?</p>`,
+            sol: `<strong>Solucións:</strong><br>
+              1-b (Tajo, España–Portugal) · 2-d (Sena, Francia) · 3-a (Rin, Alemaña–Países Baixos) · 4-f (Danubio, 10 países) · 5-e (Volga, Rusia) · 6-c (Támese, Reino Unido).<br>
+              <strong>Reto:</strong> o <strong>Sena</strong>, en Francia (a rexión de Champagne está ao leste de París).`
+          }
+        ]
+      },
+      {
+        nivel: 3, nome: 'Planificar e investigar', tag: 'Razoar · proxectar',
+        actividades: [
+          {
+            t: 'Ruta Vigo → Atenas',
+            cas: ['CA5.7', 'CA6.6'],
+            body: `<p>Imaxina unha viaxe en coche desde <strong>Vigo</strong> ata <strong>Atenas</strong> (capital de Grecia). Tes que pasar por como mínimo <strong>4 capitais europeas</strong> ademais de Vigo e Atenas. Non vale ir en barco.</p>
+              <ol>
+                <li>Planifica a ruta máis lóxica (xeograficamente conectada).</li>
+                <li>Anota os <strong>países atravesados</strong> en orde.</li>
+                <li>Anota as <strong>capitais</strong> en orde.</li>
+                <li>Di por que <strong>2 mares ou océanos</strong> pasas perto.</li>
+              </ol>
+              <p><em>Podes consultar un atlas ou mapa dixital.</em></p>`,
+            sol: `<strong>Exemplo de ruta válida (sur):</strong><br>
+              · Países: <strong>España → Francia → Italia → Eslovenia → Croacia → Bosnia → Serbia → Macedonia do Norte → Grecia</strong> (ou variación).<br>
+              · Capitais (mín. 4): París (opc.), <strong>Roma</strong>, <strong>Liubliana</strong>, <strong>Sarajevo</strong>, <strong>Belgrado</strong>, <strong>Skopje</strong>, Atenas.<br>
+              · Mares: <strong>Mediterráneo</strong> (oeste de Italia) e <strong>Adriático</strong> (entre Italia e Croacia). Tamén pode tocar <strong>Atlántico</strong> ao saír de Vigo.<br>
+              <em>Outras rutas válidas pasan polo norte (París → Múnic → Viena → Budapest → Belgrado → Atenas).</em>`
+          },
+          {
+            t: 'Por que non están na UE?',
+            cas: ['CA5.8', 'CA6.4'],
+            body: `<p>Hai países europeos ricos e desenvolvidos que <strong>non están na Unión Europea</strong>. Investiga (atlas, libros, internet con axuda) e xustifica <strong>nunha frase</strong> por que estes tres países non son membros:</p>
+              <ol>
+                <li><strong>Reino Unido</strong></li>
+                <li><strong>Suíza</strong></li>
+                <li><strong>Noruega</strong></li>
+              </ol>
+              <p>Despois responde: ¿que <strong>vantaxe</strong> ou <strong>desvantaxe</strong> ten estar na UE? Pon un exemplo concreto.</p>`,
+            sol: `<strong>Pautas válidas:</strong><br>
+              1. <strong>Reino Unido</strong>: estaba na UE pero saíu en 2020 tras o referendo do "Brexit" (2016).<br>
+              2. <strong>Suíza</strong>: nunca quixo entrar; mantén a neutralidade política tradicional.<br>
+              3. <strong>Noruega</strong>: o seu pobo votou que non en 1972 e 1994; é rica en petróleo e prefire manter o control da súa pesca.<br>
+              <strong>Vantaxes UE</strong>: moeda común, viaxar sen pasaporte, libre comercio, axudas (PAC para gandeiros). <strong>Desvantaxes</strong>: hai que cumprir leis comúns, ceder parte da soberanía.`
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'ccaa',
+    nome: 'Comunidades de España',
+    sub: '17 CCAA + 2 cidades autónomas: capitais, linguas e identidade',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M9 6V3"/><path d="M15 6V3"/></svg>',
+    niveis: [
+      {
+        nivel: 1, nome: 'Capitais e Galicia', tag: 'Recoñecer · localizar',
+        actividades: [
+          {
+            t: 'Empareja CCAA e capital',
+            cas: ['CA5.2', 'CA5.4'],
+            body: `<p>Empareja cada comunidade autónoma coa súa capital. <em>Atención: a capital non sempre coincide co nome da comunidade.</em></p>
+              <div class="ascii-art">  COMUNIDADE          CAPITAL
+  1. Galicia          a) Toledo
+  2. Asturias         b) Sevilla
+  3. Cataluña         c) Mérida
+  4. Andalucía        d) Santiago de Compostela
+  5. Castela-A Mancha e) Vitoria
+  6. Estremadura      f) Oviedo
+  7. País Vasco       g) Logroño
+  8. A Rioxa          h) Barcelona
+  9. Aragón           i) Murcia
+ 10. Murcia           j) Zaragoza</div>`,
+            sol: `<strong>Solucións:</strong><br>
+              1-d (Santiago) · 2-f (Oviedo) · 3-h (Barcelona) · 4-b (Sevilla) · 5-a (Toledo) · 6-c (Mérida) · 7-e (Vitoria) · 8-g (Logroño) · 9-j (Zaragoza) · 10-i (Murcia).<br>
+              <em>Truco: Galicia, Cataluña, A Rioxa e Murcia non comparten nome coa súa capital; o resto si ten un nome relacionado.</em>`
+          },
+          {
+            t: 'Galicia: a nosa comunidade',
+            cas: ['CA5.5', 'CA1.4'],
+            body: `<p>Sobre <strong>Galicia</strong>, responde:</p>
+              <ol>
+                <li>Cantas provincias ten Galicia? Énuncíaas en orde alfabética.</li>
+                <li>Cal é a capital de Galicia?</li>
+                <li>En que ano se aprobou o noso Estatuto de Autonomía?</li>
+                <li>Como se chama o Parlamento de Galicia? E o goberno?</li>
+                <li>Cando é o Día de Galicia? E o Día das Letras Galegas?</li>
+              </ol>`,
+            sol: `<strong>Solucións:</strong><br>
+              1. <strong>4 provincias</strong>: A Coruña, Lugo, Ourense, Pontevedra.<br>
+              2. Capital: <strong>Santiago de Compostela</strong>.<br>
+              3. Estatuto aprobado en <strong>1981</strong>.<br>
+              4. Parlamento: <strong>Parlamento de Galicia</strong> (no Pazo do Hórreo, Santiago). Goberno: <strong>Xunta de Galicia</strong>.<br>
+              5. Día de Galicia: <strong>25 de xullo</strong>. Día das Letras Galegas: <strong>17 de maio</strong>.`
+          }
+        ]
+      },
+      {
+        nivel: 2, nome: 'Clasificar comunidades', tag: 'Agrupar · razoar',
+        actividades: [
+          {
+            t: 'Comunidades con lingua propia',
+            cas: ['CA5.5', 'CA4.6'],
+            body: `<p>España ten varias linguas oficiais ademais do castelán. Asocia cada lingua coas comunidades onde é oficial:</p>
+              <ul>
+                <li><strong>Galego</strong> → ___</li>
+                <li><strong>Catalán</strong> → ___ , ___ , ___ (tres comunidades, en dúas chámase tamén "valenciano" ou "catalán")</li>
+                <li><strong>Éuscaro / Vasco</strong> → ___ e parte de ___</li>
+                <li><strong>Aranés (variedade do occitano)</strong> → o val de Arán, dentro de ___</li>
+              </ul>
+              <p><strong>Reto:</strong> Que ten de especial Galicia respecto da súa lingua segundo o Estatuto?</p>`,
+            sol: `<strong>Solucións:</strong><br>
+              · <strong>Galego</strong>: Galicia.<br>
+              · <strong>Catalán/Valenciano</strong>: Cataluña, Comunidade Valenciana, Illas Baleares.<br>
+              · <strong>Éuscaro</strong>: País Vasco e parte de Navarra.<br>
+              · <strong>Aranés</strong>: dentro de Cataluña (val de Arán).<br>
+              <strong>Reto:</strong> O galego é a <strong>lingua propia</strong> de Galicia, é dicir, a única que naceu aquí; o castelán tamén é oficial pero non é a propia.`
+          },
+          {
+            t: 'Uniprovinciais e arquipélagos',
+            cas: ['CA5.5', 'CA5.6'],
+            body: `<p>Algunhas comunidades teñen <strong>unha soa provincia</strong> (uniprovinciais) e outras teñen <strong>varias</strong>. Tamén hai comunidades insulares (illas). Clasifica:</p>
+              <ol>
+                <li>Asturias</li><li>Galicia</li><li>Cantabria</li><li>Aragón</li>
+                <li>Madrid</li><li>Andalucía</li><li>A Rioxa</li><li>Castela-A Mancha</li>
+                <li>Navarra</li><li>Illas Baleares</li><li>Cataluña</li><li>Canarias</li>
+                <li>Murcia</li>
+              </ol>
+              <p>Crea tres grupos: <strong>Uniprovinciais</strong>, <strong>Pluriprovinciais</strong>, <strong>Insulares</strong> (estas últimas tamén poden estar nos dous grupos anteriores).</p>`,
+            sol: `<strong>Solucións:</strong><br>
+              · <strong>Uniprovinciais (7)</strong>: Asturias, Cantabria, Madrid, A Rioxa, Navarra, Illas Baleares, Murcia.<br>
+              · <strong>Pluriprovinciais</strong>: Galicia (4), Aragón (3), Andalucía (8), Castela-A Mancha (5), Cataluña (4), Canarias (2).<br>
+              · <strong>Insulares</strong>: Baleares e Canarias (Baleares é tamén uniprovincial; Canarias ten 2 provincias).<br>
+              <em>Dato curioso: España ten 17 CCAA + as cidades autónomas de Ceuta e Melilla.</em>`
+          }
+        ]
+      },
+      {
+        nivel: 3, nome: 'Crear e investigar', tag: 'Proxectar · argumentar',
+        actividades: [
+          {
+            t: 'Itinerario Cádiz → A Coruña',
+            cas: ['CA5.7', 'CA6.6'],
+            body: `<p>Imaxina unha viaxe desde <strong>Cádiz</strong> (Andalucía) ata <strong>A Coruña</strong> pasando polo <strong>oeste peninsular</strong> (non polo centro).</p>
+              <ol>
+                <li>Que <strong>comunidades autónomas</strong> atravesas, en orde?</li>
+                <li>Por que <strong>capitais autonómicas</strong> pasas?</li>
+                <li>Cantos km hai aproximadamente Cádiz → A Coruña por estrada? (busca ou estima)</li>
+                <li>Que <strong>lingua oficial</strong> distinta do castelán escoitarías nalgunha desas comunidades?</li>
+              </ol>`,
+            sol: `<strong>Solucións:</strong><br>
+              1. <strong>Andalucía → Estremadura → Castela e León → Galicia</strong> (variación: pasar tamén por Asturias polo norte).<br>
+              2. Capitais que se poden tocar: <strong>Sevilla</strong> (Andalucía non é a capital, é Sevilla), <strong>Mérida</strong> (Estremadura), <strong>Valladolid</strong> (Castela e León), <strong>Santiago de Compostela</strong> (Galicia).<br>
+              3. Aprox. <strong>1.150–1.250 km</strong> por estrada.<br>
+              4. <strong>Galego</strong>, en Galicia.`
+          },
+          {
+            t: 'Compara CCAA e países',
+            cas: ['CA6.4', 'CA6.5'],
+            body: `<p>Unha comunidade autónoma como <strong>Galicia</strong> ten goberno propio (Xunta), Parlamento, lingua e bandeira. Pero <strong>non é un país independente</strong>. Investiga e responde:</p>
+              <ol>
+                <li>Pon <strong>tres cousas</strong> que pode decidir a Xunta de Galicia (ex: educación).</li>
+                <li>Pon <strong>tres cousas</strong> que NON pode decidir a Xunta (decídeas o Estado).</li>
+                <li>Compara: en que se parece Galicia a un país? En que se diferencia?</li>
+                <li>Que cres que sería mellor: ter máis autonomía ou menos? Xustifica a túa opinión (sen "porque si").</li>
+              </ol>
+              <p><em>Resposta aberta e razoada. Mínimo 6 liñas.</em></p>`,
+            sol: `<strong>Pautas válidas:</strong><br>
+              1. Decide Galicia: <strong>educación, sanidade, medio ambiente, cultura, agricultura, lingua propia, transporte interno</strong>.<br>
+              2. NON decide Galicia (decide o Estado): <strong>defensa/exército, moeda, política exterior, xustiza estatal, fronteiras, leis penais, DNI</strong>.<br>
+              3. <strong>Parécense</strong>: ter Parlamento, goberno, bandeira, himno, lingua oficial. <strong>Diferéncianse</strong>: Galicia non ten exército nin moeda; non asina tratados internacionais.<br>
+              4. Resposta aberta. Acéptanse posturas a favor ou en contra, pero deben aparecer <strong>argumentos</strong> (proximidade na decisión, evitar diferenzas entre CCAA, eficiencia, identidade…).`
+          }
+        ]
+      }
+    ]
+  }
+];
+
+// ============================================================
+// ESTADO E PERSISTENCIA
+// ============================================================
+function cargarEstado() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { alumno: '', feitas: {} };
+}
+
+function gardar() {
+  try { localStorage.setItem(KEY, JSON.stringify(estado)); } catch(e) {}
+}
+
+let estado = cargarEstado();
+
+// ============================================================
+// RENDER
+// ============================================================
+function popularAlumnos() {
+  const sel = document.getElementById('quen');
+  ALUMNADO.forEach(nome => {
+    const opt = document.createElement('option');
+    opt.value = nome;
+    opt.textContent = nome;
+    sel.appendChild(opt);
+  });
+  sel.value = estado.alumno || '';
+  atualizarBadge();
+}
+
+function atualizarBadge() {
+  const badge = document.getElementById('quenBadge');
+  if (estado.alumno) {
+    const primeiro = estado.alumno.split(',')[1]?.trim() || estado.alumno.split(' ')[0];
+    badge.textContent = '👋 Ola, ' + primeiro;
+    badge.classList.remove('empty');
+  } else {
+    badge.textContent = 'Sen seleccionar';
+    badge.classList.add('empty');
+  }
+}
+
+function actKey(sentidoId, nivel, idx) {
+  return `${sentidoId}.${nivel}.${idx}`;
+}
+
+function isFeita(sentidoId, nivel, idx) {
+  if (!estado.alumno) return false;
+  const f = estado.feitas[estado.alumno] || {};
+  return !!f[actKey(sentidoId, nivel, idx)];
+}
+
+function setFeita(sentidoId, nivel, idx, valor) {
+  if (!estado.alumno) return;
+  if (!estado.feitas[estado.alumno]) estado.feitas[estado.alumno] = {};
+  const k = actKey(sentidoId, nivel, idx);
+  if (valor) estado.feitas[estado.alumno][k] = true;
+  else delete estado.feitas[estado.alumno][k];
+  gardar();
+}
+
+function totalActividades() {
+  let n = 0;
+  SENTIDOS.forEach(s => s.niveis.forEach(niv => n += niv.actividades.length));
+  return n;
+}
+
+function totalFeitas() {
+  if (!estado.alumno) return 0;
+  const f = estado.feitas[estado.alumno] || {};
+  return Object.keys(f).length;
+}
+
+function actualizarProgreso() {
+  const total = totalActividades();
+  const feitas = totalFeitas();
+  document.getElementById('progressLabel').textContent = `${feitas} / ${total}`;
+  document.getElementById('progressFill').style.width = (total ? (feitas/total*100) : 0) + '%';
+  SENTIDOS.forEach(s => {
+    let totSec = 0, feiSec = 0;
+    s.niveis.forEach(niv => {
+      niv.actividades.forEach((_, i) => {
+        totSec++;
+        if (isFeita(s.id, niv.nivel, i)) feiSec++;
+      });
+    });
+    const pctEl = document.getElementById(`pct-${s.id}`);
+    if (pctEl) pctEl.textContent = `${feiSec}/${totSec}`;
+  });
+}
+
+function renderContido() {
+  const cont = document.getElementById('contido');
+  cont.innerHTML = '';
+
+  if (!estado.alumno) {
+    cont.innerHTML = `
+      <div class="empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+        <h3>Escolle o teu nome para empezar</h3>
+        <p>Cando elixas o teu nome, aparecerán as 18 actividades.</p>
+      </div>`;
+    return;
+  }
+
+  SENTIDOS.forEach(s => {
+    const section = document.createElement('section');
+    section.className = 'sentido';
+    section.innerHTML = `
+      <div class="sec-head">
+        <div class="sec-icon">${s.icon}</div>
+        <div>
+          <h2>${s.nome}</h2>
+          <div class="sec-sub">${s.sub}</div>
+        </div>
+        <div class="sec-progress">Avance: <span class="pct" id="pct-${s.id}">0/0</span></div>
+      </div>
+      <div class="niveis" id="niveis-${s.id}"></div>
+    `;
+    cont.appendChild(section);
+
+    const nivesEl = section.querySelector(`#niveis-${s.id}`);
+    s.niveis.forEach(niv => {
+      const nivEl = document.createElement('div');
+      nivEl.className = `nivel n${niv.nivel}`;
+      const total = niv.actividades.length;
+      let feitas = 0;
+      niv.actividades.forEach((_, i) => { if (isFeita(s.id, niv.nivel, i)) feitas++; });
+
+      nivEl.innerHTML = `
+        <div class="nivel-head">
+          <span class="niv-demo n${niv.nivel}">${niv.nivel}</span>
+          <div>
+            <h3>${niv.nome}</h3>
+            <div class="niv-tag">Nivel ${niv.nivel} · ${niv.tag}</div>
+          </div>
+          <span class="niv-count">${feitas} / ${total} feitas</span>
+        </div>
+        <div class="nivel-body"></div>
+      `;
+      const body = nivEl.querySelector('.nivel-body');
+      niv.actividades.forEach((act, i) => {
+        const id = actKey(s.id, niv.nivel, i);
+        const feita = isFeita(s.id, niv.nivel, i);
+        const actEl = document.createElement('div');
+        actEl.className = 'act' + (feita ? ' feita' : '');
+        actEl.dataset.id = id;
+        actEl.innerHTML = `
+          <div class="act-head">
+            <span class="act-num">${i+1}</span>
+            <div style="flex:1">
+              <div class="act-title">${act.t}</div>
+              ${act.cas?.length ? `<div class="act-cas">${act.cas.map(c=>`<span class="ca-chip">${c}</span>`).join('')}</div>` : ''}
+            </div>
+          </div>
+          <div class="act-body">${act.body}</div>
+          <div class="act-actions">
+            <button class="btn btn-feito" onclick="toggleFeita('${s.id}', ${niv.nivel}, ${i}, this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              ${feita ? 'Feita ✓' : 'Marcar feita'}
+            </button>
+            <button class="btn" onclick="toggleSol(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547Z"/></svg>
+              Solución
+            </button>
+          </div>
+          <div class="sol">${act.sol || '<em>(sen solución dispoñible)</em>'}</div>
+        `;
+        body.appendChild(actEl);
+      });
+      nivesEl.appendChild(nivEl);
+    });
+  });
+  actualizarProgreso();
+}
+
+function nomeSentido(id) {
+  const map = { goberno: 'Sistemas de goberno', europa: 'Mapa de Europa', ccaa: 'Comunidades de España' };
+  return map[id] || id;
+}
+
+function tituloFicha(sentidoId, nivel, idx, act) {
+  return `Propostas 5º Sociais · ${nomeSentido(sentidoId)} · N${nivel} · ${act.t}`;
+}
+
+async function enviarAoBuzon(sentidoId, nivel, idx, act) {
+  if (!estado.alumno) return;
+  const ficha = tituloFicha(sentidoId, nivel, idx, act);
+  const detalle = `Marcouna como FEITA (${nomeSentido(sentidoId)} · Nivel ${nivel} · A${idx+1}).
+CA traballados: ${(act.cas || []).join(', ')}.
+Modo: autoavaliación na páxina de propostas competenciais Sociais 5º.`;
+  try {
+    const r = await fetch(BUZON_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome: estado.alumno,
+        curso: CURSO,
+        ficha: ficha,
+        nota: null,
+        correctas: null,
+        total: null,
+        detalle: detalle
+      })
+    });
+    const json = await r.json();
+    return json && json.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+function mostrarToast(texto, ok) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + (ok ? 'ok' : 'err');
+  t.textContent = texto;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2400);
+}
+
+function toggleFeita(sentidoId, nivel, idx, btn) {
+  if (!estado.alumno) return;
+  const novoEstado = !isFeita(sentidoId, nivel, idx);
+  setFeita(sentidoId, nivel, idx, novoEstado);
+  const actEl = btn.closest('.act');
+  actEl.classList.toggle('feita', novoEstado);
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ${novoEstado ? 'Feita ✓' : 'Marcar feita'}`;
+  const nivEl = btn.closest('.nivel');
+  const total = nivEl.querySelectorAll('.act').length;
+  const f = nivEl.querySelectorAll('.act.feita').length;
+  nivEl.querySelector('.niv-count').textContent = `${f} / ${total} feitas`;
+  actualizarProgreso();
+
+  if (novoEstado) {
+    const sen = SENTIDOS.find(s => s.id === sentidoId);
+    const niv = sen?.niveis.find(n => n.nivel === nivel);
+    const act = niv?.actividades[idx];
+    if (act) {
+      enviarAoBuzon(sentidoId, nivel, idx, act).then(ok => {
+        mostrarToast(ok ? '📩 Enviada ao profe ✓' : '⚠ Gardada en local, pero non chegou ao profe', ok);
+      });
+    }
+  }
+}
+
+function toggleSol(btn) {
+  const sol = btn.closest('.act').querySelector('.sol');
+  sol.classList.toggle('show');
+}
+
+function seleccionarAlumno() {
+  estado.alumno = document.getElementById('quen').value;
+  gardar();
+  atualizarBadge();
+  renderContido();
+}
+
+function resetAlumno() {
+  if (!estado.alumno) { alert('Escolle primeiro un alumno.'); return; }
+  if (!confirm(`Borrar todo o progreso de ${estado.alumno}?`)) return;
+  delete estado.feitas[estado.alumno];
+  gardar();
+  renderContido();
+}
+
+function toggleTheme() {
+  const light = document.documentElement.classList.toggle('light');
+  localStorage.setItem(KEY_THEME, light ? 'light' : 'dark');
+}
+
+if (localStorage.getItem(KEY_THEME) === 'light') document.documentElement.classList.add('light');
+popularAlumnos();
+renderContido();
+</script>
+</body>
+</html>
