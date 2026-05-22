@@ -22,6 +22,10 @@
     --n1-bg: rgba(22,163,74,0.10);
     --n2-bg: rgba(234,179,8,0.10);
     --n3-bg: rgba(220,38,38,0.10);
+    --ok: #16a34a;
+    --ok-bg: rgba(22,163,74,0.15);
+    --ko: #dc2626;
+    --ko-bg: rgba(220,38,38,0.12);
     --radius: 14px;
     --shadow: 0 4px 16px rgba(0,0,0,.25);
   }
@@ -45,7 +49,6 @@
   }
   .container { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
 
-  /* Header */
   header.top {
     display: flex; gap: 14px; align-items: center;
     padding: 16px 0 18px; border-bottom: 1px solid var(--border);
@@ -65,12 +68,8 @@
     font-weight: 800; color: #fff; flex-shrink: 0;
   }
   .title-block { flex: 1; min-width: 0; }
-  .title-block h1 {
-    font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em;
-  }
-  .title-block .sub {
-    font-size: .78rem; color: var(--text-dim); margin-top: 2px;
-  }
+  .title-block h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; }
+  .title-block .sub { font-size: .78rem; color: var(--text-dim); margin-top: 2px; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
   .icon-btn {
     background: var(--panel); border: 1px solid var(--border); color: var(--text);
@@ -84,7 +83,6 @@
   :root.light .icon-moon { display: none; }
   :root.light .icon-sun { display: block; }
 
-  /* Quen es */
   .quen-card {
     background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 20px 22px; margin-bottom: 22px; box-shadow: var(--shadow);
@@ -121,7 +119,6 @@
     width: 0%; transition: width .3s ease;
   }
 
-  /* Escala leyenda */
   .escala {
     display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
     background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
@@ -139,7 +136,6 @@
   .niv-demo.n3 { background: var(--n3); }
   .escala .hint { color: var(--text-faint); margin-left: auto; font-size: .78rem; }
 
-  /* Sección por bloque */
   section.sentido { margin-bottom: 32px; }
   section.sentido > .sec-head {
     display: flex; align-items: center; gap: 12px;
@@ -160,13 +156,8 @@
   }
   .sec-head .sec-progress .pct { font-weight: 700; color: var(--accent-2); }
 
-  /* Niveis */
   .niveis { display: flex; flex-direction: column; gap: 14px; }
-
-  /* Selector de nivel (chips) */
-  .nivel-tabs {
-    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;
-  }
+  .nivel-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
   .nivel-tab {
     flex: 1; min-width: 130px;
     background: var(--panel); border: 1px solid var(--border);
@@ -184,7 +175,7 @@
   .nivel-tab.active.n2 { border-color: var(--n2); box-shadow: 0 0 0 2px var(--n2-bg); }
   .nivel-tab.active.n3 { border-color: var(--n3); box-shadow: 0 0 0 2px var(--n3-bg); }
   .nivel-tab .nt-check {
-    width: 18px; height: 18px; border-radius: 50%;
+    width: 32px; height: 22px; border-radius: 999px;
     background: var(--panel-2); color: var(--text-faint);
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: 800; flex-shrink: 0;
@@ -196,7 +187,6 @@
   .nivel.n1 { border-left: 4px solid var(--n1); }
   .nivel.n2 { border-left: 4px solid var(--n2); }
   .nivel.n3 { border-left: 4px solid var(--n3); }
-
   .nivel-empty {
     text-align: center; padding: 22px 16px; color: var(--text-dim);
     background: var(--panel); border: 1px dashed var(--border); border-radius: var(--radius);
@@ -217,19 +207,13 @@
     background: var(--panel); border: 1px solid var(--border);
     padding: 4px 10px; border-radius: 999px;
   }
-  .nivel-body { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+  .nivel-body { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 14px; }
 
-  /* Actividade card */
   .act {
     border: 1px solid var(--border); border-radius: 10px;
     padding: 14px 16px; background: var(--bg);
-    transition: border-color .15s;
   }
-  .act:hover { border-color: var(--accent); }
-  .act.feita {
-    background: var(--n1-bg);
-    border-color: var(--n1);
-  }
+  .act.feita { background: var(--n1-bg); border-color: var(--n1); }
   .act-head {
     display: flex; align-items: flex-start; gap: 10px;
     margin-bottom: 8px;
@@ -242,35 +226,33 @@
   }
   .act.feita .act-num { background: var(--n1); color: #fff; }
   .act-title { flex: 1; font-weight: 600; font-size: .95rem; }
-  .act-cas {
-    display: flex; gap: 4px; flex-wrap: wrap;
-    margin-top: 2px;
-  }
+  .act-cas { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; }
   .ca-chip {
     font-size: .7rem; padding: 2px 7px; border-radius: 5px;
     background: var(--accent-bg); color: var(--accent-2);
     font-weight: 600;
   }
-  .act-body {
-    font-size: .9rem; color: var(--text); line-height: 1.55;
-    margin-left: 36px;
+  .act-tipo {
+    font-size: .68rem; padding: 2px 8px; border-radius: 5px;
+    background: var(--panel-2); color: var(--text-dim);
+    font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
   }
-  .act-body p { margin-bottom: 6px; }
-  .act-body ul, .act-body ol { margin: 6px 0 6px 18px; }
-  .act-body li { margin-bottom: 3px; }
-  .act-body code {
+  .act-intro {
+    font-size: .9rem; color: var(--text); line-height: 1.55;
+  }
+  .act-intro p { margin-bottom: 6px; }
+  .act-intro ul, .act-intro ol { margin: 6px 0 6px 18px; }
+  .act-intro li { margin-bottom: 3px; }
+  .act-intro strong { color: var(--text); }
+  .act-intro em { color: var(--text-dim); }
+  .act-intro code {
     background: var(--panel-2); padding: 1px 6px; border-radius: 4px;
     font-size: .85em; font-family: 'Courier New', monospace;
   }
-  .act-body .ascii-art {
-    font-family: 'Courier New', monospace; background: var(--panel-2);
-    padding: 10px 12px; border-radius: 6px; font-size: .82rem;
-    white-space: pre; overflow-x: auto; margin: 8px 0;
-    color: var(--text-dim);
-  }
+
   .act-actions {
-    margin-top: 12px; margin-left: 36px;
-    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-top: 14px;
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
   }
   .btn {
     padding: 7px 14px; border-radius: 8px; font-size: .82rem;
@@ -280,14 +262,23 @@
   }
   .btn:hover { background: var(--panel); border-color: var(--accent); }
   .btn svg { width: 14px; height: 14px; }
-  .btn-feito {
-    background: var(--accent); color: #fff; border-color: var(--accent);
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+  .btn-feito { background: var(--n1); color: #fff; border-color: var(--n1); }
+  .btn-feito:hover { background: var(--ok); border-color: var(--ok); }
+
+  .resultado {
+    margin-top: 12px; padding: 10px 14px; border-radius: 8px;
+    background: var(--panel-2); border-left: 3px solid var(--text-faint);
+    font-size: .88rem; line-height: 1.5;
   }
-  .btn-feito:hover { background: var(--accent-2); border-color: var(--accent-2); }
-  .act.feita .btn-feito { background: var(--n1); border-color: var(--n1); }
+  .resultado.ok { background: var(--ok-bg); border-left-color: var(--ok); color: var(--text); }
+  .resultado.ko { background: var(--ko-bg); border-left-color: var(--ko); color: var(--text); }
+  .resultado strong { color: var(--accent-2); }
+  .resultado .pct { font-size: 1.4em; font-weight: 800; }
 
   .sol {
-    display: none; margin-top: 10px; margin-left: 36px;
+    display: none; margin-top: 10px;
     padding: 12px 14px; border-radius: 8px;
     background: var(--accent-bg);
     border-left: 3px solid var(--accent);
@@ -295,6 +286,145 @@
   }
   .sol.show { display: block; }
   .sol strong { color: var(--accent-2); }
+
+  /* ========== Widget: MATCH (emparexar unindo) ========== */
+  .match {
+    position: relative;
+    background: var(--panel-2); border-radius: 10px;
+    padding: 14px; margin-top: 10px;
+  }
+  .match-cols {
+    display: grid; grid-template-columns: 1fr 60px 1fr;
+    gap: 6px; align-items: stretch;
+    position: relative;
+  }
+  .match-col { display: flex; flex-direction: column; gap: 8px; }
+  .match-mid { display: flex; flex-direction: column; }
+  .match-item {
+    background: var(--panel); border: 2px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+    cursor: pointer; font-size: .9rem; font-weight: 600;
+    color: var(--text); transition: all .15s;
+    user-select: none; position: relative; z-index: 2;
+    min-height: 44px; display: flex; align-items: center;
+  }
+  .match-item:hover { border-color: var(--accent); }
+  .match-item.selected { border-color: var(--accent); background: var(--accent-bg); }
+  .match-item.paired { border-style: solid; }
+  .match-item.ok { background: var(--ok-bg); border-color: var(--ok); }
+  .match-item.ko { background: var(--ko-bg); border-color: var(--ko); }
+  .match-svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 1;
+  }
+  .match-controls {
+    display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+    font-size: .8rem; color: var(--text-dim);
+  }
+
+  /* ========== Widget: CLASSIFICATION ========== */
+  .class-w { margin-top: 10px; }
+  .class-pool {
+    background: var(--panel-2); border-radius: 10px;
+    padding: 12px; margin-bottom: 12px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+    min-height: 50px;
+  }
+  .class-pool.empty::before {
+    content: 'Tódolos elementos están clasificados';
+    color: var(--text-faint); font-size: .85rem; font-style: italic;
+    align-self: center; margin: 0 auto;
+  }
+  .class-cats {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .class-cat {
+    background: var(--panel-2); border-radius: 10px;
+    padding: 12px; min-height: 90px;
+    border: 1px dashed var(--border);
+  }
+  .class-cat h4 {
+    font-size: .82rem; font-weight: 700; color: var(--accent-2);
+    text-transform: uppercase; letter-spacing: .05em;
+    margin-bottom: 8px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+  .class-cat-items { display: flex; flex-wrap: wrap; gap: 6px; }
+  .class-chip {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 12px; font-size: .82rem;
+    cursor: pointer; color: var(--text); transition: all .15s;
+    user-select: none; line-height: 1.3;
+  }
+  .class-chip:hover { border-color: var(--accent); background: var(--accent-bg); }
+  .class-chip.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .class-chip.ok { background: var(--ok); color: #fff; border-color: var(--ok); }
+  .class-chip.ko { background: var(--ko); color: #fff; border-color: var(--ko); }
+
+  /* ========== Widget: MULTIOPCIÓN ========== */
+  .multi { margin-top: 10px; display: flex; flex-direction: column; gap: 12px; }
+  .multi-q {
+    background: var(--panel-2); border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .multi-q .multi-q-text {
+    font-size: .9rem; font-weight: 600; margin-bottom: 8px;
+  }
+  .multi-q .multi-opts {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .multi-opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--panel);
+    cursor: pointer; font-size: .85rem; transition: all .15s;
+  }
+  .multi-opt:hover { border-color: var(--accent); }
+  .multi-opt.selected { background: var(--accent-bg); border-color: var(--accent); }
+  .multi-opt.ok { background: var(--ok-bg); border-color: var(--ok); }
+  .multi-opt.ko { background: var(--ko-bg); border-color: var(--ko); }
+  .multi-opt input { accent-color: var(--accent); }
+
+  /* ========== Widget: CURTA (input) ========== */
+  .curta { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+  .curta-q {
+    background: var(--panel-2); border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .curta-q-text {
+    font-size: .88rem; font-weight: 600; margin-bottom: 6px;
+  }
+  .curta-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .curta-input {
+    flex: 1; min-width: 180px;
+    background: var(--panel); border: 1px solid var(--border);
+    color: var(--text); padding: 8px 12px; border-radius: 8px;
+    font-family: inherit; font-size: .9rem;
+  }
+  .curta-input:focus { outline: none; border-color: var(--accent); }
+  .curta-input.ok { border-color: var(--ok); background: var(--ok-bg); }
+  .curta-input.ko { border-color: var(--ko); background: var(--ko-bg); }
+  .curta-feedback { font-size: .78rem; color: var(--text-dim); }
+  .curta-feedback.ok { color: var(--ok); }
+  .curta-feedback.ko { color: var(--ko); }
+
+  /* ========== Widget: LONGA (textarea) ========== */
+  .longa { margin-top: 10px; }
+  .longa-textarea {
+    width: 100%; min-height: 140px;
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 12px 14px; border-radius: 10px;
+    font-family: inherit; font-size: .92rem; line-height: 1.5;
+    resize: vertical;
+  }
+  .longa-textarea:focus { outline: none; border-color: var(--accent); }
+  .longa-meta {
+    font-size: .76rem; color: var(--text-dim);
+    margin-top: 4px; display: flex; justify-content: space-between;
+  }
+  .longa-meta .saved { color: var(--accent-2); }
 
   /* Empty state */
   .empty {
@@ -305,7 +435,6 @@
   .empty h3 { font-size: 1rem; margin-bottom: 4px; color: var(--text); }
   .empty p { font-size: .85rem; }
 
-  /* Toast */
   .toast {
     position: fixed; bottom: 24px; left: 50%;
     transform: translateX(-50%) translateY(20px);
@@ -320,7 +449,6 @@
   .toast.ok { border-color: var(--n1); }
   .toast.err { border-color: var(--n2); background: var(--n2-bg); }
 
-  /* Responsive */
   @media (max-width: 700px) {
     .container { padding: 12px 10px 40px; }
     header.top { gap: 10px; }
@@ -329,18 +457,19 @@
     .progress-mini { margin-left: 0; justify-content: space-between; }
     .progress-bar { flex: 1; }
     select.quen-select { min-width: 0; width: 100%; }
-    .act-body, .act-actions, .sol { margin-left: 0; }
     .escala .hint { display: none; }
+    .match-cols { grid-template-columns: 1fr 30px 1fr; gap: 4px; }
+    .match-item { padding: 8px 10px; font-size: .82rem; }
+    .class-cats { grid-template-columns: 1fr; }
   }
 
-  /* Print */
   @media print {
     @page { size: A4; margin: 12mm; }
     body { background: #fff !important; color: #000 !important; font-size: 11px; }
-    .header-actions, .icon-btn, .btn, .quen-row { display: none !important; }
+    .header-actions, .icon-btn, .btn, .quen-row, .nivel-tabs { display: none !important; }
+    .nivel { display: block !important; }
     .container { padding: 0; max-width: 100%; }
     .nivel, .sec-head, .quen-card, .escala { page-break-inside: avoid; }
-    section.sentido + section.sentido { page-break-before: always; }
     .sol { display: block !important; }
   }
 </style>
@@ -358,9 +487,6 @@
       <div class="sub">5º Primaria · 3º trimestre · Sistemas de goberno · Mapa de Europa · Comunidades de España</div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" onclick="window.print()" title="Imprimir">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-      </button>
       <button class="icon-btn" onclick="resetAlumno()" title="Reiniciar o meu progreso">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/></svg>
       </button>
@@ -376,7 +502,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg>
       Quen es?
     </h2>
-    <p>Escolle o teu nome para gardar o teu progreso neste dispositivo.</p>
+    <p>Escolle o teu nome para gardar o teu progreso e enviar os resultados ao profe.</p>
     <div class="quen-row">
       <select id="quen" class="quen-select" onchange="seleccionarAlumno()">
         <option value="">— escolle o teu nome —</option>
@@ -394,7 +520,7 @@
     <span class="item"><span class="niv-demo n1">1</span> Básico</span>
     <span class="item"><span class="niv-demo n2">2</span> Medio</span>
     <span class="item"><span class="niv-demo n3">3</span> Avanzado</span>
-    <span class="hint">Pulsa "Feita" cando remates (avísase ao profe) · "Solución" para autocorrixir</span>
+    <span class="hint">Resolve no ordenador · "Corrixir" autoavalía · "Marcar feita" envía ao profe</span>
   </div>
 
   <div id="contido"></div>
@@ -429,12 +555,13 @@ const KEY_THEME = 'ef_theme';
 
 // ============================================================
 // CONTIDO: 3 bloques × 3 niveis × 2 actividades = 18 tarefas
+// Tipos: match · class · multi · curta · longa
 // ============================================================
 const SENTIDOS = [
   {
     id: 'goberno',
     nome: 'Sistemas de goberno',
-    sub: 'Democracia, división de poderes e a tenda sostible como exemplo de cidadanía',
+    sub: 'Democracia, división de poderes e a tenda sostible como exemplo',
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h18"/><path d="M5 22V11l7-7 7 7v11"/><path d="M9 22v-7h6v7"/></svg>',
     niveis: [
       {
@@ -442,35 +569,32 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Que sistema de goberno é?',
-            cas: ['CA1.1', 'CA4.2'],
-            body: `<p>Le estas tres situacións e di que sistema de goberno describe cada unha. Escolle entre: <strong>democracia</strong>, <strong>monarquía absoluta</strong>, <strong>ditadura</strong>.</p>
-              <ol>
-                <li><em>"No país A só pode falar nos xornais quen apoia ao líder. Non hai eleccións desde fai 30 anos. Quen critica ao goberno vai ao cárcere."</em></li>
-                <li><em>"No país B cada 4 anos hai eleccións. Calquera persoa pode votar e presentarse. As leis fainas un Parlamento elixido polo pobo."</em></li>
-                <li><em>"No país C manda o rei desde que naceu. Decide as leis, nomea aos xuíces e dirixe o exército. Non hai Parlamento."</em></li>
-              </ol>
-              <p><strong>Reto extra:</strong> a cal destes tres se parece máis a España hoxe?</p>`,
-            sol: `<strong>Solucións:</strong><br>
-              1. <strong>Ditadura</strong> (sen liberdade de expresión, sen eleccións, persecución).<br>
-              2. <strong>Democracia</strong> (eleccións periódicas, sufraxio universal, Parlamento elixido).<br>
-              3. <strong>Monarquía absoluta</strong> (todos os poderes nun rei polo seu nacemento).<br>
-              <strong>Reto:</strong> España é unha <em>monarquía parlamentaria</em>, é dicir, unha democracia con rei como símbolo. Parécese máis á situación <strong>2</strong>.`
+            cas: ['CA1.1','CA4.2'], tipo: 'multi',
+            intro: '<p>Le cada situación e di que <strong>sistema de goberno</strong> describe.</p>',
+            preguntas: [
+              { q: '"No país A só pode falar nos xornais quen apoia ao líder. Non hai eleccións desde fai 30 anos. Quen critica ao goberno vai ao cárcere."',
+                opts: ['Democracia','Monarquía absoluta','Ditadura'], correcta: 2 },
+              { q: '"No país B cada 4 anos hai eleccións. Calquera persoa pode votar e presentarse. As leis fainas un Parlamento elixido polo pobo."',
+                opts: ['Democracia','Monarquía absoluta','Ditadura'], correcta: 0 },
+              { q: '"No país C manda o rei desde que naceu. Decide as leis, nomea aos xuíces e dirixe o exército. Non hai Parlamento."',
+                opts: ['Democracia','Monarquía absoluta','Ditadura'], correcta: 1 }
+            ],
+            sol: 'España hoxe é unha <strong>monarquía parlamentaria</strong>, é dicir, unha democracia (situación 2) con rei como símbolo.'
           },
           {
             t: 'Os tres poderes do Estado',
-            cas: ['CA1.2', 'CA4.3'],
-            body: `<p>A Constitución divide o goberno en <strong>tres poderes</strong>. Asigna a cada función o poder correcto: <strong>lexislativo</strong>, <strong>executivo</strong> ou <strong>xudicial</strong>.</p>
-              <ol>
-                <li>Aproba unha nova lei contra o desperdicio de alimentos.</li>
-                <li>Decide se unha persoa cometeu un delito e debe ir ao cárcere.</li>
-                <li>Decide o presuposto que se dedicará a sanidade este ano.</li>
-                <li>Nomea aos ministros e ministras.</li>
-                <li>Cambia o código de circulación.</li>
-                <li>Resolve unha denuncia entre dúas empresas.</li>
-              </ol>`,
-            sol: `<strong>Solucións:</strong><br>
-              1. <strong>Lexislativo</strong> · 2. <strong>Xudicial</strong> · 3. <strong>Executivo</strong> · 4. <strong>Executivo</strong> (a Presidencia) · 5. <strong>Lexislativo</strong> · 6. <strong>Xudicial</strong>.<br>
-              <em>Lembra: lexislativo = fai leis (Parlamento); executivo = aplícaas (Goberno); xudicial = xulga (xuíces).</em>`
+            cas: ['CA1.2','CA4.3'], tipo: 'class',
+            intro: '<p>Clasifica cada función no poder que lle corresponde. Clic na función e despois na categoría.</p>',
+            cats: ['Lexislativo','Executivo','Xudicial'],
+            items: [
+              { txt: 'Aprobar unha nova lei contra o desperdicio de alimentos', cat: 0 },
+              { txt: 'Decidir se unha persoa cometeu un delito', cat: 2 },
+              { txt: 'Decidir o presuposto de sanidade', cat: 1 },
+              { txt: 'Nomear aos ministros e ministras', cat: 1 },
+              { txt: 'Cambiar o código de circulación', cat: 0 },
+              { txt: 'Resolver unha denuncia entre dúas empresas', cat: 2 }
+            ],
+            sol: '<strong>Lexislativo</strong> = fai leis (Parlamento) · <strong>Executivo</strong> = aplícaas (Goberno) · <strong>Xudicial</strong> = xulga (xuíces).'
           }
         ]
       },
@@ -479,43 +603,32 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Quen decide na tenda sostible?',
-            cas: ['CA2.1', 'CA4.4'],
-            body: `<p>Imos comparar a <strong>tenda sostible</strong> da clase cun sistema democrático real. Para cada decisión, di que <strong>poder</strong> tería que tomala (lexislativo, executivo ou xudicial) e quen sería na tenda:</p>
-              <ol>
-                <li>Decidir que produtos están permitidos vender e cales non (por exemplo, prohibir bebidas con azucre engadido).</li>
-                <li>Cobrar e dar o cambio durante o recreo.</li>
-                <li>Sancionar a un equipo que vendeu produtos prohibidos.</li>
-                <li>Cambiar o regulamento para que a venda dure dúas semanas máis.</li>
-                <li>Resolver unha discusión entre dous clientes sobre quen chegou antes á cola.</li>
-              </ol>
-              <p><strong>Pista:</strong> pensa en cal sería a "Asemblea de clase", o "Equipo encargado da tenda" e os "Mediadores ou árbitros".</p>`,
-            sol: `<strong>Solucións:</strong><br>
-              1. <strong>Lexislativo</strong> → Asemblea de clase (igual ca un Parlamento).<br>
-              2. <strong>Executivo</strong> → Equipo encargado da tenda (aplica as normas no día a día).<br>
-              3. <strong>Xudicial</strong> → Comisión de mediación / mestre como árbitro.<br>
-              4. <strong>Lexislativo</strong> → Asemblea de clase (modifica o regulamento, igual ca o Parlamento aproba leis).<br>
-              5. <strong>Xudicial</strong> → Comisión de mediación.<br>
-              <em>É o mesmo modelo que España: as Cortes fan leis, o Goberno aplícaas e os xuíces resólvenas.</em>`
+            cas: ['CA2.1','CA4.4'], tipo: 'class',
+            intro: '<p>Pensa na <strong>tenda sostible</strong> da clase coma se fose un país. Clasifica cada decisión segundo o <strong>poder</strong> que a tomaría.</p>',
+            cats: ['Lexislativo (Asemblea)','Executivo (Equipo tenda)','Xudicial (Mediación)'],
+            items: [
+              { txt: 'Prohibir bebidas con azucre engadido', cat: 0 },
+              { txt: 'Cobrar e dar o cambio no recreo', cat: 1 },
+              { txt: 'Sancionar a un equipo que vendeu un produto prohibido', cat: 2 },
+              { txt: 'Cambiar o regulamento para que a venda dure 2 semanas máis', cat: 0 },
+              { txt: 'Resolver unha discusión entre dous clientes na cola', cat: 2 }
+            ],
+            sol: 'É o mesmo modelo que España: as <strong>Cortes</strong> fan leis, o <strong>Goberno</strong> aplícaas e os <strong>xuíces</strong> resólvenas.'
           },
           {
             t: 'Niveis de goberno e a tenda',
-            cas: ['CA2.2', 'CA5.5'],
-            body: `<p>En España o poder repártese en <strong>catro niveis</strong>: concello, comunidade autónoma, Estado e Unión Europea. Para cada decisión, di que nivel se ocuparía dela. <em>(Algunhas afectan á tenda sostible da escola)</em>:</p>
-              <ol>
-                <li>Regular cantos gramos de azucre poden levar os alimentos vendidos en escolas.</li>
-                <li>Aprobar a moeda que utilizamos para mercar (euro).</li>
-                <li>Permitir que a tenda sostible utilice a praza do pobo para unha venda especial.</li>
-                <li>Decidir o número de horas de Ciencias Sociais en 5º de Primaria.</li>
-                <li>Recoller o lixo xerado pola tenda durante o recreo.</li>
-                <li>Asinar tratados con outros países sobre comercio xusto.</li>
-              </ol>`,
-            sol: `<strong>Solucións:</strong><br>
-              1. <strong>Estado</strong> (sanidade e seguridade alimentaria son estatais; tamén con normas da UE).<br>
-              2. <strong>Unión Europea</strong> (o euro é unha moeda común).<br>
-              3. <strong>Concello</strong> (o uso de prazas e rúas é municipal).<br>
-              4. <strong>Comunidade Autónoma</strong> (a educación é competencia da Xunta).<br>
-              5. <strong>Concello</strong> (limpeza viaria e lixo).<br>
-              6. <strong>Estado</strong> (relacións internacionais; tamén UE para comercio).`
+            cas: ['CA2.2','CA5.5'], tipo: 'class',
+            intro: '<p>Clasifica cada decisión segundo o <strong>nivel de goberno</strong> que se ocuparía dela.</p>',
+            cats: ['Concello','Xunta (CCAA)','Estado','Unión Europea'],
+            items: [
+              { txt: 'Regular cantos gramos de azucre poden levar os alimentos en escolas', cat: 2 },
+              { txt: 'Aprobar a moeda que utilizamos (euro)', cat: 3 },
+              { txt: 'Permitir usar a praza do pobo para unha venda especial', cat: 0 },
+              { txt: 'Decidir as horas de Ciencias Sociais en 5º Primaria', cat: 1 },
+              { txt: 'Recoller o lixo xerado pola tenda no recreo', cat: 0 },
+              { txt: 'Asinar tratados de comercio xusto con outros países', cat: 2 }
+            ],
+            sol: 'Cada nivel ten as súas competencias: o <strong>concello</strong> resolve o local (lixo, prazas), a <strong>Xunta</strong> a educación e sanidade, o <strong>Estado</strong> as fronteiras e a defensa, e a <strong>UE</strong> a moeda e o comercio común.'
           }
         ]
       },
@@ -524,42 +637,28 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Estatuto da tenda sostible',
-            cas: ['CA3.1', 'CA6.4'],
-            body: `<p>A nosa Constitución recoñece <strong>dereitos e deberes</strong>. Imos crear o noso pequeno "estatuto" para a tenda sostible.</p>
+            cas: ['CA3.1','CA6.4'], tipo: 'longa',
+            intro: `<p>Imos crear o noso pequeno "estatuto" para a tenda sostible. Escribe (no recadro de abaixo):</p>
               <ol>
-                <li>Escribe <strong>3 dereitos</strong> da clientela (quen mercar) na tenda sostible.</li>
-                <li>Escribe <strong>3 deberes</strong> da clientela.</li>
-                <li>Escribe <strong>2 dereitos</strong> e <strong>2 deberes</strong> do equipo que xestiona a tenda.</li>
-                <li>Engade <strong>unha sanción</strong> proporcional (xusta) para quen incumpra unha das normas.</li>
-              </ol>
-              <p><em>Entrega: folio cunha portada "Estatuto da tenda sostible" e os puntos numerados.</em></p>`,
-            sol: `<strong>Comprobación (exemplos válidos):</strong><br>
-              · Dereitos clientela: información clara dos prezos · reclamar se algo está estragado · trato respectuoso.<br>
-              · Deberes clientela: gardar quenda · pagar antes de marchar · respectar o equipo.<br>
-              · Dereitos equipo: descansos · respecto · revisar caixa antes/despois.<br>
-              · Deberes equipo: ser honestos co cambio · non favoritismos · limpar o posto.<br>
-              · Sancións: amoestación → retirar da tenda 1 día → falar coas familias (escala proporcional).`
+                <li><strong>3 dereitos</strong> da clientela na tenda sostible.</li>
+                <li><strong>3 deberes</strong> da clientela.</li>
+                <li><strong>2 dereitos</strong> e <strong>2 deberes</strong> do equipo que xestiona a tenda.</li>
+                <li><strong>Unha sanción</strong> proporcional para quen incumpra unha das normas.</li>
+              </ol>`,
+            placeholder: 'Dereitos da clientela:\n1. ...\n2. ...\n3. ...\n\nDeberes da clientela:\n1. ...\n2. ...\n3. ...\n\nEquipo (dereitos e deberes):\n...\n\nSanción proporcional:\n...',
+            sol: 'Exemplos válidos · <strong>Dereitos clientela</strong>: información clara dos prezos · reclamar se algo está estragado · trato respectuoso · <strong>Deberes</strong>: gardar quenda · pagar antes de marchar · respectar o equipo · <strong>Sancións</strong>: amoestación → 1 día sen tenda → falar coas familias.'
           },
           {
             t: 'A Constitución da nosa escola',
-            cas: ['CA3.2', 'CA6.5'],
-            body: `<p>A Constitución española define España como un <strong>"Estado social e democrático de dereito"</strong>. Cada parte significa algo:</p>
-              <ul>
-                <li><b>Social</b> · coida das persoas (sanidade, educación, axudas).</li>
-                <li><b>Democrático</b> · o poder vén do pobo, que vota.</li>
-                <li><b>De dereito</b> · todo o mundo, incluído o goberno, está sometido á lei.</li>
-              </ul>
-              <p>Escribe <strong>3 parágrafos curtos</strong> (60–80 palabras cada un) explicando como sería a nosa escola se fose:</p>
+            cas: ['CA3.2','CA6.5'], tipo: 'longa',
+            intro: `<p>España é un <strong>"Estado social e democrático de dereito"</strong>. Escribe 3 parágrafos curtos explicando como sería a nosa escola se fose:</p>
               <ol>
-                <li><strong>Social</strong>: que faría a escola por quen máis o necesita?</li>
+                <li><strong>Social</strong>: que faría por quen máis o necesita?</li>
                 <li><strong>Democrática</strong>: como tomaría as decisións importantes?</li>
-                <li><strong>De dereito</strong>: que pasa cando alguén (incluído un mestre) incumpre o regulamento?</li>
+                <li><strong>De dereito</strong>: que pasa se alguén (incluído un mestre) incumpre o regulamento?</li>
               </ol>`,
-            sol: `<strong>Pautas para a corrección:</strong><br>
-              1. Social → fala de inclusión, reforzo, almorzo escolar, libros gratuítos, etc.<br>
-              2. Democrática → asembleas, votacións, delegado/a elixido/a, comisión de convivencia.<br>
-              3. De dereito → todos cumprimos as normas, mestre/a tamén ten límites e procedementos claros.<br>
-              <em>Comproba que cada parágrafo dá un exemplo concreto e non só teoría.</em>`
+            placeholder: '1. Social: ...\n\n2. Democrática: ...\n\n3. De dereito: ...',
+            sol: '<strong>Social</strong> → inclusión, reforzo, almorzo escolar, libros gratuítos. <strong>Democrática</strong> → asembleas, votacións, delegado/a elixido/a. <strong>De dereito</strong> → todos cumprimos normas, mestre/a tamén, con procedementos claros.'
           }
         ]
       }
@@ -576,37 +675,21 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Empareja país e capital',
-            cas: ['CA5.1', 'CA5.2'],
-            body: `<p>Empareja cada país coa súa capital. Ten coidado: hai dúas trampas (Suíza non é Zúric, Países Baixos non é Roterdam).</p>
-              <div class="ascii-art">  PAÍSES               CAPITAIS
-  1. España            a) Roma
-  2. Francia           b) Berlín
-  3. Portugal          c) Madrid
-  4. Italia            d) Lisboa
-  5. Alemaña           e) Londres
-  6. Reino Unido       f) París
-  7. Suíza             g) Ámsterdam
-  8. Países Baixos     h) Berna</div>
-              <p>Anota as parellas (ex: 1-c, 2-...).</p>`,
-            sol: `<strong>Solucións:</strong><br>
-              1-c (Madrid) · 2-f (París) · 3-d (Lisboa) · 4-a (Roma) · 5-b (Berlín) · 6-e (Londres) · 7-h (Berna) · 8-g (Ámsterdam).<br>
-              <em>Atención: Zúric é a cidade máis grande de Suíza pero a capital é Berna. En Países Baixos a capital oficial é Ámsterdam, aínda que o goberno se reúne na Haia.</em>`
+            cas: ['CA5.1','CA5.2'], tipo: 'match',
+            intro: '<p>Une cada país coa súa capital. Clic no país, despois clic na capital. <em>Atención: Suíza non é Zúric e Países Baixos non é Roterdam.</em></p>',
+            esq: ['España','Francia','Portugal','Italia','Alemaña','Reino Unido','Suíza','Países Baixos'],
+            dir: ['París','Madrid','Berlín','Lisboa','Londres','Berna','Ámsterdam','Roma'],
+            pares: [[0,1],[1,0],[2,3],[3,7],[4,2],[5,4],[6,5],[7,6]],
+            sol: 'Atención: <strong>Berna</strong> é a capital de Suíza (non Zúric) e <strong>Ámsterdam</strong> é a oficial dos Países Baixos.'
           },
           {
             t: 'Mares e océanos de Europa',
-            cas: ['CA5.1', 'CA5.3'],
-            body: `<p>Europa está rodeada de auga por case todos os lados. Asocia cada mar/océano coa zona correcta:</p>
-              <div class="ascii-art">  AUGAS                ZONA
-  1. Océano Atlántico  a) entre España e Marrocos (sur)
-  2. Mar Mediterráneo  b) costa galega e portuguesa (oeste)
-  3. Mar Cantábrico    c) entre Suecia e Letonia (norte de Polonia)
-  4. Mar do Norte      d) costa norte de España (Asturias, País Vasco)
-  5. Mar Báltico       e) entre o Reino Unido e Noruega
-  6. Mar Negro         f) entre Romanía, Bulgaria e Turquía</div>
-              <p>Anota as parellas e indica que mar baña a costa de <strong>Pontevedra</strong>.</p>`,
-            sol: `<strong>Solucións:</strong><br>
-              1-b (Atlántico, oeste) · 2-a (Mediterráneo) · 3-d (Cantábrico) · 4-e (Mar do Norte) · 5-c (Báltico) · 6-f (Mar Negro).<br>
-              <em>A costa de Pontevedra está bañada polo <strong>océano Atlántico</strong> (rías baixas).</em>`
+            cas: ['CA5.1','CA5.3'], tipo: 'match',
+            intro: '<p>Une cada mar/océano coa zona correspondente.</p>',
+            esq: ['Océano Atlántico','Mar Mediterráneo','Mar Cantábrico','Mar do Norte','Mar Báltico','Mar Negro'],
+            dir: ['Entre Suecia e Letonia','Costa galega e portuguesa','Costa norte de España','Entre España e Marrocos (sur)','Entre Romanía, Bulgaria e Turquía','Entre o Reino Unido e Noruega'],
+            pares: [[0,1],[1,3],[2,2],[3,5],[4,0],[5,4]],
+            sol: 'A costa de Pontevedra está bañada polo <strong>Atlántico</strong> (rías baixas).'
           }
         ]
       },
@@ -615,34 +698,33 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Está na UE ou non?',
-            cas: ['CA5.4', 'CA5.5'],
-            body: `<p>A Unión Europea ten <strong>27 países</strong> (en 2026). Non todos os países de Europa están dentro. Clasifica estes 12 países en <strong>UE</strong> ou <strong>fóra da UE</strong>:</p>
-              <ol>
-                <li>España</li><li>Portugal</li><li>Reino Unido</li><li>Francia</li>
-                <li>Suíza</li><li>Italia</li><li>Noruega</li><li>Alemaña</li>
-                <li>Polonia</li><li>Ucraína</li><li>Grecia</li><li>Países Baixos</li>
-              </ol>
-              <p><strong>Reto:</strong> di unha cousa que comparten os países da UE.</p>`,
-            sol: `<strong>Solucións:</strong><br>
-              <strong>UE</strong> (8): España, Portugal, Francia, Italia, Alemaña, Polonia, Grecia, Países Baixos.<br>
-              <strong>Fóra da UE</strong> (4): Reino Unido (saíu en 2020, "Brexit"), Suíza (nunca quixo entrar), Noruega (votou non), Ucraína (en proceso de pedir entrada).<br>
-              <strong>Reto:</strong> moitos comparten moeda (euro), leis comúns, libre circulación (podes viaxar sen pasaporte entre eles), Parlamento Europeo.`
+            cas: ['CA5.4','CA5.5'], tipo: 'class',
+            intro: '<p>A UE ten 27 países (2026). Clasifica cada país segundo se está <strong>dentro</strong> ou <strong>fóra</strong> da UE.</p>',
+            cats: ['Dentro da UE','Fóra da UE'],
+            items: [
+              { txt: 'España', cat: 0 },
+              { txt: 'Portugal', cat: 0 },
+              { txt: 'Reino Unido', cat: 1 },
+              { txt: 'Francia', cat: 0 },
+              { txt: 'Suíza', cat: 1 },
+              { txt: 'Italia', cat: 0 },
+              { txt: 'Noruega', cat: 1 },
+              { txt: 'Alemaña', cat: 0 },
+              { txt: 'Polonia', cat: 0 },
+              { txt: 'Ucraína', cat: 1 },
+              { txt: 'Grecia', cat: 0 },
+              { txt: 'Países Baixos', cat: 0 }
+            ],
+            sol: '<strong>Fóra</strong>: Reino Unido (Brexit 2020), Suíza (neutralidade), Noruega (votou non), Ucraína (en proceso).'
           },
           {
             t: 'Ríos importantes de Europa',
-            cas: ['CA5.2', 'CA5.6'],
-            body: `<p>Os ríos foron sempre vías de comunicación e comercio. Para cada río, di por que <strong>país principal</strong> pasa:</p>
-              <div class="ascii-art">  RÍO          PAÍS PRINCIPAL
-  1. Tajo       a) Alemaña (e desemboca en Países Baixos)
-  2. Sena       b) España + Portugal (desemboca en Lisboa)
-  3. Rin        c) Reino Unido (pasa por Londres)
-  4. Danubio    d) Francia (pasa por París)
-  5. Volga      e) Rusia (o máis longo de Europa)
-  6. Támese     f) atravesa 10 países; pasa por Viena, Budapest</div>
-              <p><strong>Reto:</strong> que río pasa polo país onde se elabora a maior parte do champagne francés?</p>`,
-            sol: `<strong>Solucións:</strong><br>
-              1-b (Tajo, España–Portugal) · 2-d (Sena, Francia) · 3-a (Rin, Alemaña–Países Baixos) · 4-f (Danubio, 10 países) · 5-e (Volga, Rusia) · 6-c (Támese, Reino Unido).<br>
-              <strong>Reto:</strong> o <strong>Sena</strong>, en Francia (a rexión de Champagne está ao leste de París).`
+            cas: ['CA5.2','CA5.6'], tipo: 'match',
+            intro: '<p>Une cada río co país por onde principalmente pasa.</p>',
+            esq: ['Tajo','Sena','Rin','Danubio','Volga','Támese'],
+            dir: ['Francia (París)','España–Portugal','Rusia (o máis longo)','Reino Unido (Londres)','10 países (Viena, Budapest)','Alemaña–Países Baixos'],
+            pares: [[0,1],[1,0],[2,5],[3,4],[4,2],[5,3]],
+            sol: 'O <strong>Sena</strong> pasa pola rexión de Champagne, no leste de París.'
           }
         ]
       },
@@ -651,36 +733,28 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Ruta Vigo → Atenas',
-            cas: ['CA5.7', 'CA6.6'],
-            body: `<p>Imaxina unha viaxe en coche desde <strong>Vigo</strong> ata <strong>Atenas</strong> (capital de Grecia). Tes que pasar por como mínimo <strong>4 capitais europeas</strong> ademais de Vigo e Atenas. Non vale ir en barco.</p>
+            cas: ['CA5.7','CA6.6'], tipo: 'longa',
+            intro: `<p>Planifica unha viaxe en coche desde <strong>Vigo</strong> ata <strong>Atenas</strong> tocando como mínimo <strong>4 capitais europeas</strong> (sen barco). Escribe:</p>
               <ol>
-                <li>Planifica a ruta máis lóxica (xeograficamente conectada).</li>
-                <li>Anota os <strong>países atravesados</strong> en orde.</li>
-                <li>Anota as <strong>capitais</strong> en orde.</li>
-                <li>Di por que <strong>2 mares ou océanos</strong> pasas perto.</li>
-              </ol>
-              <p><em>Podes consultar un atlas ou mapa dixital.</em></p>`,
-            sol: `<strong>Exemplo de ruta válida (sur):</strong><br>
-              · Países: <strong>España → Francia → Italia → Eslovenia → Croacia → Bosnia → Serbia → Macedonia do Norte → Grecia</strong> (ou variación).<br>
-              · Capitais (mín. 4): París (opc.), <strong>Roma</strong>, <strong>Liubliana</strong>, <strong>Sarajevo</strong>, <strong>Belgrado</strong>, <strong>Skopje</strong>, Atenas.<br>
-              · Mares: <strong>Mediterráneo</strong> (oeste de Italia) e <strong>Adriático</strong> (entre Italia e Croacia). Tamén pode tocar <strong>Atlántico</strong> ao saír de Vigo.<br>
-              <em>Outras rutas válidas pasan polo norte (París → Múnic → Viena → Budapest → Belgrado → Atenas).</em>`
+                <li>Países atravesados, en orde.</li>
+                <li>Capitais polas que pasas, en orde.</li>
+                <li>2 mares ou océanos que tes preto.</li>
+              </ol>`,
+            placeholder: 'Países en orde:\n1. España → 2. ... → ... → Grecia\n\nCapitais en orde:\n1. ... → 2. ... → ... → Atenas\n\nMares próximos:\n- ...\n- ...',
+            sol: 'Exemplo ruta sur: España → Francia → Italia → Eslovenia → Croacia → Serbia → Macedonia do Norte → Grecia. Capitais: París, Roma, Liubliana, Belgrado, Skopje, Atenas. Mares: Mediterráneo + Adriático.'
           },
           {
             t: 'Por que non están na UE?',
-            cas: ['CA5.8', 'CA6.4'],
-            body: `<p>Hai países europeos ricos e desenvolvidos que <strong>non están na Unión Europea</strong>. Investiga (atlas, libros, internet con axuda) e xustifica <strong>nunha frase</strong> por que estes tres países non son membros:</p>
+            cas: ['CA5.8','CA6.4'], tipo: 'longa',
+            intro: `<p>Investiga e xustifica nunha frase por que estes países <strong>non son membros</strong> da UE:</p>
               <ol>
-                <li><strong>Reino Unido</strong></li>
-                <li><strong>Suíza</strong></li>
-                <li><strong>Noruega</strong></li>
+                <li>Reino Unido</li>
+                <li>Suíza</li>
+                <li>Noruega</li>
               </ol>
-              <p>Despois responde: ¿que <strong>vantaxe</strong> ou <strong>desvantaxe</strong> ten estar na UE? Pon un exemplo concreto.</p>`,
-            sol: `<strong>Pautas válidas:</strong><br>
-              1. <strong>Reino Unido</strong>: estaba na UE pero saíu en 2020 tras o referendo do "Brexit" (2016).<br>
-              2. <strong>Suíza</strong>: nunca quixo entrar; mantén a neutralidade política tradicional.<br>
-              3. <strong>Noruega</strong>: o seu pobo votou que non en 1972 e 1994; é rica en petróleo e prefire manter o control da súa pesca.<br>
-              <strong>Vantaxes UE</strong>: moeda común, viaxar sen pasaporte, libre comercio, axudas (PAC para gandeiros). <strong>Desvantaxes</strong>: hai que cumprir leis comúns, ceder parte da soberanía.`
+              <p>Despois di unha <strong>vantaxe</strong> e unha <strong>desvantaxe</strong> de estar na UE.</p>`,
+            placeholder: '1. Reino Unido: ...\n2. Suíza: ...\n3. Noruega: ...\n\nVantaxe UE: ...\nDesvantaxe UE: ...',
+            sol: 'Reino Unido saíu (Brexit 2020) · Suíza mantén neutralidade · Noruega votou non (1972 e 1994). <strong>Vantaxes</strong>: euro, libre comercio, viaxes sen pasaporte. <strong>Desvantaxe</strong>: ceder soberanía.'
           }
         ]
       }
@@ -697,40 +771,25 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Empareja CCAA e capital',
-            cas: ['CA5.2', 'CA5.4'],
-            body: `<p>Empareja cada comunidade autónoma coa súa capital. <em>Atención: a capital non sempre coincide co nome da comunidade.</em></p>
-              <div class="ascii-art">  COMUNIDADE          CAPITAL
-  1. Galicia          a) Toledo
-  2. Asturias         b) Sevilla
-  3. Cataluña         c) Mérida
-  4. Andalucía        d) Santiago de Compostela
-  5. Castela-A Mancha e) Vitoria
-  6. Estremadura      f) Oviedo
-  7. País Vasco       g) Logroño
-  8. A Rioxa          h) Barcelona
-  9. Aragón           i) Murcia
- 10. Murcia           j) Zaragoza</div>`,
-            sol: `<strong>Solucións:</strong><br>
-              1-d (Santiago) · 2-f (Oviedo) · 3-h (Barcelona) · 4-b (Sevilla) · 5-a (Toledo) · 6-c (Mérida) · 7-e (Vitoria) · 8-g (Logroño) · 9-j (Zaragoza) · 10-i (Murcia).<br>
-              <em>Truco: Galicia, Cataluña, A Rioxa e Murcia non comparten nome coa súa capital; o resto si ten un nome relacionado.</em>`
+            cas: ['CA5.2','CA5.4'], tipo: 'match',
+            intro: '<p>Une cada comunidade autónoma coa súa capital.</p>',
+            esq: ['Galicia','Asturias','Cataluña','Andalucía','Castela-A Mancha','Estremadura','País Vasco','A Rioxa','Aragón','Murcia'],
+            dir: ['Toledo','Sevilla','Oviedo','Santiago de Compostela','Vitoria','Mérida','Logroño','Barcelona','Murcia','Zaragoza'],
+            pares: [[0,3],[1,2],[2,7],[3,1],[4,0],[5,5],[6,4],[7,6],[8,9],[9,8]],
+            sol: 'Galicia, Cataluña, A Rioxa e Murcia non comparten nome coa súa capital.'
           },
           {
             t: 'Galicia: a nosa comunidade',
-            cas: ['CA5.5', 'CA1.4'],
-            body: `<p>Sobre <strong>Galicia</strong>, responde:</p>
-              <ol>
-                <li>Cantas provincias ten Galicia? Énuncíaas en orde alfabética.</li>
-                <li>Cal é a capital de Galicia?</li>
-                <li>En que ano se aprobou o noso Estatuto de Autonomía?</li>
-                <li>Como se chama o Parlamento de Galicia? E o goberno?</li>
-                <li>Cando é o Día de Galicia? E o Día das Letras Galegas?</li>
-              </ol>`,
-            sol: `<strong>Solucións:</strong><br>
-              1. <strong>4 provincias</strong>: A Coruña, Lugo, Ourense, Pontevedra.<br>
-              2. Capital: <strong>Santiago de Compostela</strong>.<br>
-              3. Estatuto aprobado en <strong>1981</strong>.<br>
-              4. Parlamento: <strong>Parlamento de Galicia</strong> (no Pazo do Hórreo, Santiago). Goberno: <strong>Xunta de Galicia</strong>.<br>
-              5. Día de Galicia: <strong>25 de xullo</strong>. Día das Letras Galegas: <strong>17 de maio</strong>.`
+            cas: ['CA5.5','CA1.4'], tipo: 'curta',
+            intro: '<p>Responde con palabras curtas sobre <strong>Galicia</strong>.</p>',
+            preguntas: [
+              { q: 'Cantas provincias ten Galicia? (Escribe o número en cifra)', resp: ['4'] },
+              { q: 'Capital de Galicia (cidade)', resp: ['santiago de compostela','santiago'] },
+              { q: 'Ano en que se aprobou o Estatuto de Autonomía de Galicia', resp: ['1981'] },
+              { q: 'Nome do goberno autonómico galego (2 palabras: ____ de Galicia)', resp: ['xunta de galicia','xunta'] },
+              { q: 'En que día e mes é o Día das Letras Galegas? (formato: 17 de maio)', resp: ['17 de maio','17/05','17-5','17/5'] }
+            ],
+            sol: '4 provincias (A Coruña, Lugo, Ourense, Pontevedra) · capital Santiago · Estatuto 1981 · Xunta de Galicia · 17 de maio.'
           }
         ]
       },
@@ -739,38 +798,43 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Comunidades con lingua propia',
-            cas: ['CA5.5', 'CA4.6'],
-            body: `<p>España ten varias linguas oficiais ademais do castelán. Asocia cada lingua coas comunidades onde é oficial:</p>
-              <ul>
-                <li><strong>Galego</strong> → ___</li>
-                <li><strong>Catalán</strong> → ___ , ___ , ___ (tres comunidades, en dúas chámase tamén "valenciano" ou "catalán")</li>
-                <li><strong>Éuscaro / Vasco</strong> → ___ e parte de ___</li>
-                <li><strong>Aranés (variedade do occitano)</strong> → o val de Arán, dentro de ___</li>
-              </ul>
-              <p><strong>Reto:</strong> Que ten de especial Galicia respecto da súa lingua segundo o Estatuto?</p>`,
-            sol: `<strong>Solucións:</strong><br>
-              · <strong>Galego</strong>: Galicia.<br>
-              · <strong>Catalán/Valenciano</strong>: Cataluña, Comunidade Valenciana, Illas Baleares.<br>
-              · <strong>Éuscaro</strong>: País Vasco e parte de Navarra.<br>
-              · <strong>Aranés</strong>: dentro de Cataluña (val de Arán).<br>
-              <strong>Reto:</strong> O galego é a <strong>lingua propia</strong> de Galicia, é dicir, a única que naceu aquí; o castelán tamén é oficial pero non é a propia.`
+            cas: ['CA5.5','CA4.6'], tipo: 'class',
+            intro: '<p>Clasifica cada comunidade autónoma segundo a súa <strong>lingua propia oficial</strong> (ademais do castelán).</p>',
+            cats: ['Galego','Catalán/Valenciano','Éuscaro','Só castelán'],
+            items: [
+              { txt: 'Galicia', cat: 0 },
+              { txt: 'Cataluña', cat: 1 },
+              { txt: 'Comunidade Valenciana', cat: 1 },
+              { txt: 'Illas Baleares', cat: 1 },
+              { txt: 'País Vasco', cat: 2 },
+              { txt: 'Navarra', cat: 2 },
+              { txt: 'Madrid', cat: 3 },
+              { txt: 'Andalucía', cat: 3 },
+              { txt: 'Castela e León', cat: 3 }
+            ],
+            sol: 'O galego é a <strong>lingua propia</strong> de Galicia (a que naceu aquí). En Navarra o éuscaro é oficial só nunha parte do territorio.'
           },
           {
             t: 'Uniprovinciais e arquipélagos',
-            cas: ['CA5.5', 'CA5.6'],
-            body: `<p>Algunhas comunidades teñen <strong>unha soa provincia</strong> (uniprovinciais) e outras teñen <strong>varias</strong>. Tamén hai comunidades insulares (illas). Clasifica:</p>
-              <ol>
-                <li>Asturias</li><li>Galicia</li><li>Cantabria</li><li>Aragón</li>
-                <li>Madrid</li><li>Andalucía</li><li>A Rioxa</li><li>Castela-A Mancha</li>
-                <li>Navarra</li><li>Illas Baleares</li><li>Cataluña</li><li>Canarias</li>
-                <li>Murcia</li>
-              </ol>
-              <p>Crea tres grupos: <strong>Uniprovinciais</strong>, <strong>Pluriprovinciais</strong>, <strong>Insulares</strong> (estas últimas tamén poden estar nos dous grupos anteriores).</p>`,
-            sol: `<strong>Solucións:</strong><br>
-              · <strong>Uniprovinciais (7)</strong>: Asturias, Cantabria, Madrid, A Rioxa, Navarra, Illas Baleares, Murcia.<br>
-              · <strong>Pluriprovinciais</strong>: Galicia (4), Aragón (3), Andalucía (8), Castela-A Mancha (5), Cataluña (4), Canarias (2).<br>
-              · <strong>Insulares</strong>: Baleares e Canarias (Baleares é tamén uniprovincial; Canarias ten 2 provincias).<br>
-              <em>Dato curioso: España ten 17 CCAA + as cidades autónomas de Ceuta e Melilla.</em>`
+            cas: ['CA5.5','CA5.6'], tipo: 'class',
+            intro: '<p>Clasifica cada comunidade segundo as súas provincias.</p>',
+            cats: ['Uniprovincial','Pluriprovincial','Arquipélago (insular)'],
+            items: [
+              { txt: 'Asturias', cat: 0 },
+              { txt: 'Cantabria', cat: 0 },
+              { txt: 'Madrid', cat: 0 },
+              { txt: 'A Rioxa', cat: 0 },
+              { txt: 'Navarra', cat: 0 },
+              { txt: 'Murcia', cat: 0 },
+              { txt: 'Galicia', cat: 1 },
+              { txt: 'Andalucía', cat: 1 },
+              { txt: 'Cataluña', cat: 1 },
+              { txt: 'Castela-A Mancha', cat: 1 },
+              { txt: 'Aragón', cat: 1 },
+              { txt: 'Illas Baleares', cat: 2 },
+              { txt: 'Canarias', cat: 2 }
+            ],
+            sol: 'Baleares e Canarias son arquipélagos. Baleares é tamén uniprovincial; Canarias ten 2 provincias.'
           }
         ]
       },
@@ -779,36 +843,29 @@ const SENTIDOS = [
         actividades: [
           {
             t: 'Itinerario Cádiz → A Coruña',
-            cas: ['CA5.7', 'CA6.6'],
-            body: `<p>Imaxina unha viaxe desde <strong>Cádiz</strong> (Andalucía) ata <strong>A Coruña</strong> pasando polo <strong>oeste peninsular</strong> (non polo centro).</p>
+            cas: ['CA5.7','CA6.6'], tipo: 'longa',
+            intro: `<p>Imaxina unha viaxe desde <strong>Cádiz</strong> (Andalucía) ata <strong>A Coruña</strong> polo <strong>oeste peninsular</strong>. Anota:</p>
               <ol>
-                <li>Que <strong>comunidades autónomas</strong> atravesas, en orde?</li>
-                <li>Por que <strong>capitais autonómicas</strong> pasas?</li>
-                <li>Cantos km hai aproximadamente Cádiz → A Coruña por estrada? (busca ou estima)</li>
-                <li>Que <strong>lingua oficial</strong> distinta do castelán escoitarías nalgunha desas comunidades?</li>
+                <li>As comunidades autónomas atravesadas, en orde.</li>
+                <li>As capitais autonómicas polas que pasas.</li>
+                <li>Distancia aproximada (en km, podes estimar).</li>
+                <li>Algunha lingua oficial distinta do castelán que escoitarías.</li>
               </ol>`,
-            sol: `<strong>Solucións:</strong><br>
-              1. <strong>Andalucía → Estremadura → Castela e León → Galicia</strong> (variación: pasar tamén por Asturias polo norte).<br>
-              2. Capitais que se poden tocar: <strong>Sevilla</strong> (Andalucía non é a capital, é Sevilla), <strong>Mérida</strong> (Estremadura), <strong>Valladolid</strong> (Castela e León), <strong>Santiago de Compostela</strong> (Galicia).<br>
-              3. Aprox. <strong>1.150–1.250 km</strong> por estrada.<br>
-              4. <strong>Galego</strong>, en Galicia.`
+            placeholder: 'CCAA en orde: ...\nCapitais: ...\nDistancia aprox: ... km\nLingua oficial: ...',
+            sol: 'Andalucía → Estremadura → Castela e León → Galicia. Capitais: Sevilla, Mérida, Valladolid, Santiago. Distancia ≈ 1.150–1.250 km. Lingua: galego.'
           },
           {
             t: 'Compara CCAA e países',
-            cas: ['CA6.4', 'CA6.5'],
-            body: `<p>Unha comunidade autónoma como <strong>Galicia</strong> ten goberno propio (Xunta), Parlamento, lingua e bandeira. Pero <strong>non é un país independente</strong>. Investiga e responde:</p>
+            cas: ['CA6.4','CA6.5'], tipo: 'longa',
+            intro: `<p>Unha comunidade como <strong>Galicia</strong> ten Xunta, Parlamento, lingua e bandeira, pero NON é un país independente. Responde:</p>
               <ol>
-                <li>Pon <strong>tres cousas</strong> que pode decidir a Xunta de Galicia (ex: educación).</li>
-                <li>Pon <strong>tres cousas</strong> que NON pode decidir a Xunta (decídeas o Estado).</li>
-                <li>Compara: en que se parece Galicia a un país? En que se diferencia?</li>
-                <li>Que cres que sería mellor: ter máis autonomía ou menos? Xustifica a túa opinión (sen "porque si").</li>
-              </ol>
-              <p><em>Resposta aberta e razoada. Mínimo 6 liñas.</em></p>`,
-            sol: `<strong>Pautas válidas:</strong><br>
-              1. Decide Galicia: <strong>educación, sanidade, medio ambiente, cultura, agricultura, lingua propia, transporte interno</strong>.<br>
-              2. NON decide Galicia (decide o Estado): <strong>defensa/exército, moeda, política exterior, xustiza estatal, fronteiras, leis penais, DNI</strong>.<br>
-              3. <strong>Parécense</strong>: ter Parlamento, goberno, bandeira, himno, lingua oficial. <strong>Diferéncianse</strong>: Galicia non ten exército nin moeda; non asina tratados internacionais.<br>
-              4. Resposta aberta. Acéptanse posturas a favor ou en contra, pero deben aparecer <strong>argumentos</strong> (proximidade na decisión, evitar diferenzas entre CCAA, eficiencia, identidade…).`
+                <li>3 cousas que pode decidir a Xunta.</li>
+                <li>3 cousas que NON pode decidir (decide o Estado).</li>
+                <li>En que se parece e en que se diferencia Galicia dun país?</li>
+                <li>Cres que sería mellor máis ou menos autonomía? Por que?</li>
+              </ol>`,
+            placeholder: '1. A Xunta decide:\n- ...\n- ...\n- ...\n\n2. NON pode decidir (Estado):\n- ...\n\n3. Parécese a un país en... Diferénciase en...\n\n4. Eu creo que... porque...',
+            sol: '<strong>Xunta decide</strong>: educación, sanidade, medio ambiente, cultura, lingua. <strong>Non decide</strong>: defensa, moeda, política exterior, leis penais. Diferenza: Galicia non ten exército nin moeda nin tratados internacionais.'
           }
         ]
       }
@@ -824,30 +881,82 @@ function cargarEstado() {
     const raw = localStorage.getItem(KEY);
     if (raw) return JSON.parse(raw);
   } catch(e) {}
-  return { alumno: '', feitas: {} };
+  return { alumno: '', feitas: {}, respostas: {} };
 }
-
-function gardar() {
-  try { localStorage.setItem(KEY, JSON.stringify(estado)); } catch(e) {}
-}
+function gardar() { try { localStorage.setItem(KEY, JSON.stringify(estado)); } catch(e) {} }
 
 let estado = cargarEstado();
+if (!estado.respostas) estado.respostas = {};
+if (!estado.feitas) estado.feitas = {};
+
+function actKey(sentidoId, nivel, idx) { return `${sentidoId}.${nivel}.${idx}`; }
+
+function getRespostas(s, n, i) {
+  if (!estado.alumno) return null;
+  const r = estado.respostas[estado.alumno] || {};
+  return r[actKey(s,n,i)] || null;
+}
+function setRespostas(s, n, i, datos) {
+  if (!estado.alumno) return;
+  if (!estado.respostas[estado.alumno]) estado.respostas[estado.alumno] = {};
+  estado.respostas[estado.alumno][actKey(s,n,i)] = datos;
+  gardar();
+}
+
+function isFeita(s, n, i) {
+  if (!estado.alumno) return false;
+  const f = estado.feitas[estado.alumno] || {};
+  return !!f[actKey(s,n,i)];
+}
+function setFeita(s, n, i, valor) {
+  if (!estado.alumno) return;
+  if (!estado.feitas[estado.alumno]) estado.feitas[estado.alumno] = {};
+  const k = actKey(s,n,i);
+  if (valor) estado.feitas[estado.alumno][k] = true;
+  else delete estado.feitas[estado.alumno][k];
+  gardar();
+}
 
 // ============================================================
-// RENDER
+// HELPERS
+// ============================================================
+function totalActividades() {
+  let n = 0; SENTIDOS.forEach(s => s.niveis.forEach(niv => n += niv.actividades.length)); return n;
+}
+function totalFeitas() {
+  if (!estado.alumno) return 0;
+  return Object.keys(estado.feitas[estado.alumno] || {}).length;
+}
+function nomeSentido(id) {
+  return { goberno: 'Sistemas de goberno', europa: 'Mapa de Europa', ccaa: 'Comunidades de España' }[id] || id;
+}
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function normaliza(s) {
+  return (s || '').toString().toLowerCase().trim()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+// ============================================================
+// UI: ALUMNO + PROGRESO
 // ============================================================
 function popularAlumnos() {
   const sel = document.getElementById('quen');
   ALUMNADO.forEach(nome => {
     const opt = document.createElement('option');
-    opt.value = nome;
-    opt.textContent = nome;
+    opt.value = nome; opt.textContent = nome;
     sel.appendChild(opt);
   });
   sel.value = estado.alumno || '';
   atualizarBadge();
 }
-
 function atualizarBadge() {
   const badge = document.getElementById('quenBadge');
   if (estado.alumno) {
@@ -859,38 +968,6 @@ function atualizarBadge() {
     badge.classList.add('empty');
   }
 }
-
-function actKey(sentidoId, nivel, idx) {
-  return `${sentidoId}.${nivel}.${idx}`;
-}
-
-function isFeita(sentidoId, nivel, idx) {
-  if (!estado.alumno) return false;
-  const f = estado.feitas[estado.alumno] || {};
-  return !!f[actKey(sentidoId, nivel, idx)];
-}
-
-function setFeita(sentidoId, nivel, idx, valor) {
-  if (!estado.alumno) return;
-  if (!estado.feitas[estado.alumno]) estado.feitas[estado.alumno] = {};
-  const k = actKey(sentidoId, nivel, idx);
-  if (valor) estado.feitas[estado.alumno][k] = true;
-  else delete estado.feitas[estado.alumno][k];
-  gardar();
-}
-
-function totalActividades() {
-  let n = 0;
-  SENTIDOS.forEach(s => s.niveis.forEach(niv => n += niv.actividades.length));
-  return n;
-}
-
-function totalFeitas() {
-  if (!estado.alumno) return 0;
-  const f = estado.feitas[estado.alumno] || {};
-  return Object.keys(f).length;
-}
-
 function actualizarProgreso() {
   const total = totalActividades();
   const feitas = totalFeitas();
@@ -898,17 +975,31 @@ function actualizarProgreso() {
   document.getElementById('progressFill').style.width = (total ? (feitas/total*100) : 0) + '%';
   SENTIDOS.forEach(s => {
     let totSec = 0, feiSec = 0;
-    s.niveis.forEach(niv => {
-      niv.actividades.forEach((_, i) => {
-        totSec++;
-        if (isFeita(s.id, niv.nivel, i)) feiSec++;
-      });
-    });
+    s.niveis.forEach(niv => niv.actividades.forEach((_, i) => {
+      totSec++;
+      if (isFeita(s.id, niv.nivel, i)) feiSec++;
+    }));
     const pctEl = document.getElementById(`pct-${s.id}`);
     if (pctEl) pctEl.textContent = `${feiSec}/${totSec}`;
   });
 }
+function actualizarChip(sentidoId, nivel) {
+  const sen = SENTIDOS.find(s => s.id === sentidoId);
+  const niv = sen?.niveis.find(n => n.nivel === nivel);
+  if (!niv) return;
+  const total = niv.actividades.length;
+  let feitas = 0;
+  niv.actividades.forEach((_, i) => { if (isFeita(sentidoId, nivel, i)) feitas++; });
+  const chip = document.getElementById(`check-${sentidoId}-${nivel}`);
+  if (chip) {
+    chip.textContent = `${feitas}/${total}`;
+    chip.classList.toggle('done', feitas === total);
+  }
+}
 
+// ============================================================
+// RENDER PRINCIPAL
+// ============================================================
 function renderContido() {
   const cont = document.getElementById('contido');
   cont.innerHTML = '';
@@ -941,9 +1032,8 @@ function renderContido() {
 
     const nivesEl = section.querySelector(`#niveis-${s.id}`);
 
-    // Tabs de selección de nivel
-    const tabs = document.createElement('div');
-    tabs.className = 'nivel-tabs';
+    // Tabs por nivel
+    const tabs = document.createElement('div'); tabs.className = 'nivel-tabs';
     s.niveis.forEach(niv => {
       const total = niv.actividades.length;
       let feitas = 0;
@@ -951,8 +1041,7 @@ function renderContido() {
       const tag = niv.nivel === 1 ? 'Básico' : (niv.nivel === 2 ? 'Medio' : 'Avanzado');
       const tab = document.createElement('button');
       tab.className = `nivel-tab n${niv.nivel}`;
-      tab.dataset.nivel = niv.nivel;
-      tab.dataset.sentido = s.id;
+      tab.dataset.nivel = niv.nivel; tab.dataset.sentido = s.id;
       tab.onclick = () => mostrarNivel(s.id, niv.nivel);
       tab.innerHTML = `
         <span class="niv-demo n${niv.nivel}">${niv.nivel}</span>
@@ -966,11 +1055,10 @@ function renderContido() {
     });
     nivesEl.appendChild(tabs);
 
-    // Placeholder cando non hai nivel seleccionado
     const placeholder = document.createElement('div');
     placeholder.className = 'nivel-empty';
     placeholder.id = `placeholder-${s.id}`;
-    placeholder.innerHTML = `↑ Escolle un dos tres niveis para ver as actividades.`;
+    placeholder.innerHTML = '↑ Escolle un dos tres niveis para ver as actividades.';
     nivesEl.appendChild(placeholder);
 
     s.niveis.forEach(niv => {
@@ -993,34 +1081,9 @@ function renderContido() {
         <div class="nivel-body"></div>
       `;
       const body = nivEl.querySelector('.nivel-body');
+
       niv.actividades.forEach((act, i) => {
-        const id = actKey(s.id, niv.nivel, i);
-        const feita = isFeita(s.id, niv.nivel, i);
-        const actEl = document.createElement('div');
-        actEl.className = 'act' + (feita ? ' feita' : '');
-        actEl.dataset.id = id;
-        actEl.innerHTML = `
-          <div class="act-head">
-            <span class="act-num">${i+1}</span>
-            <div style="flex:1">
-              <div class="act-title">${act.t}</div>
-              ${act.cas?.length ? `<div class="act-cas">${act.cas.map(c=>`<span class="ca-chip">${c}</span>`).join('')}</div>` : ''}
-            </div>
-          </div>
-          <div class="act-body">${act.body}</div>
-          <div class="act-actions">
-            <button class="btn btn-feito" onclick="toggleFeita('${s.id}', ${niv.nivel}, ${i}, this)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              ${feita ? 'Feita ✓' : 'Marcar feita'}
-            </button>
-            <button class="btn" onclick="toggleSol(this)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547Z"/></svg>
-              Solución
-            </button>
-          </div>
-          <div class="sol">${act.sol || '<em>(sen solución dispoñible)</em>'}</div>
-        `;
-        body.appendChild(actEl);
+        body.appendChild(renderAct(s.id, niv.nivel, i, act));
       });
       nivesEl.appendChild(nivEl);
     });
@@ -1028,21 +1091,617 @@ function renderContido() {
   actualizarProgreso();
 }
 
-function nomeSentido(id) {
-  const map = { goberno: 'Sistemas de goberno', europa: 'Mapa de Europa', ccaa: 'Comunidades de España' };
-  return map[id] || id;
+// ============================================================
+// RENDER DE ACTIVIDADE (segundo tipo)
+// ============================================================
+function renderAct(sentidoId, nivel, idx, act) {
+  const id = actKey(sentidoId, nivel, idx);
+  const feita = isFeita(sentidoId, nivel, idx);
+  const actEl = document.createElement('div');
+  actEl.className = 'act' + (feita ? ' feita' : '');
+  actEl.dataset.id = id;
+
+  const tipoLabel = { match: '🔗 Unir', class: '🗂 Clasificar', multi: '○ Elixir', curta: '✍ Escribir', longa: '📝 Resposta libre' }[act.tipo] || act.tipo;
+
+  actEl.innerHTML = `
+    <div class="act-head">
+      <span class="act-num">${idx+1}</span>
+      <div style="flex:1">
+        <div class="act-title">${act.t}</div>
+        <div class="act-cas">
+          <span class="act-tipo">${tipoLabel}</span>
+          ${(act.cas || []).map(c => `<span class="ca-chip">${c}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="act-intro">${act.intro}</div>
+    <div class="act-widget"></div>
+    <div class="act-actions"></div>
+    <div class="act-resultado" style="display:none"></div>
+    <div class="sol">${act.sol || ''}</div>
+  `;
+
+  const widgetEl = actEl.querySelector('.act-widget');
+  const actionsEl = actEl.querySelector('.act-actions');
+  const resultadoEl = actEl.querySelector('.act-resultado');
+
+  // Render widget segundo tipo
+  if (act.tipo === 'match') renderMatch(widgetEl, sentidoId, nivel, idx, act);
+  else if (act.tipo === 'class') renderClass(widgetEl, sentidoId, nivel, idx, act);
+  else if (act.tipo === 'multi') renderMulti(widgetEl, sentidoId, nivel, idx, act);
+  else if (act.tipo === 'curta') renderCurta(widgetEl, sentidoId, nivel, idx, act);
+  else if (act.tipo === 'longa') renderLonga(widgetEl, sentidoId, nivel, idx, act);
+
+  // Botóns de acción
+  const corrixirBtn = act.tipo !== 'longa'
+    ? `<button class="btn btn-primary" onclick="corrixirAct('${sentidoId}', ${nivel}, ${idx})">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+         Corrixir
+       </button>` : '';
+
+  actionsEl.innerHTML = `
+    ${corrixirBtn}
+    <button class="btn btn-feito" onclick="marcarFeita('${sentidoId}', ${nivel}, ${idx})">
+      ${feita ? '✓ Feita · Reenviar ao profe' : '📩 Marcar feita e enviar ao profe'}
+    </button>
+    <button class="btn" onclick="toggleSol(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547Z"/></svg>
+      Pista / Solución
+    </button>
+  `;
+
+  return actEl;
 }
 
-function tituloFicha(sentidoId, nivel, idx, act) {
-  return `Propostas 5º Sociais · ${nomeSentido(sentidoId)} · N${nivel} · ${act.t}`;
+// ============================================================
+// WIDGET: MATCH (unir con liñas)
+// ============================================================
+function renderMatch(el, sId, nivel, idx, act) {
+  const data = getRespostas(sId, nivel, idx) || { parellas: {}, ordeDir: shuffle(act.dir.map((_, i) => i)), seleccionado: null };
+  if (!data.ordeDir) data.ordeDir = shuffle(act.dir.map((_, i) => i));
+  setRespostas(sId, nivel, idx, data);
+
+  el.innerHTML = `
+    <div class="match" id="match-${sId}-${nivel}-${idx}">
+      <div class="match-cols">
+        <div class="match-col" data-side="esq"></div>
+        <div class="match-mid"></div>
+        <div class="match-col" data-side="dir"></div>
+        <svg class="match-svg"></svg>
+      </div>
+      <div class="match-controls">
+        <button class="btn" onclick="resetMatch('${sId}', ${nivel}, ${idx})">Limpar todo</button>
+        <span style="margin-left:auto">${Object.keys(data.parellas).length} / ${act.pares.length} parellas</span>
+      </div>
+    </div>
+  `;
+
+  const cont = el.querySelector('.match');
+  const esqCol = cont.querySelector('[data-side="esq"]');
+  const dirCol = cont.querySelector('[data-side="dir"]');
+
+  act.esq.forEach((txt, i) => {
+    const it = document.createElement('div');
+    it.className = 'match-item';
+    it.dataset.side = 'esq'; it.dataset.i = i;
+    it.textContent = txt;
+    it.onclick = () => clicMatchItem(sId, nivel, idx, 'esq', i);
+    esqCol.appendChild(it);
+  });
+  data.ordeDir.forEach(i => {
+    const it = document.createElement('div');
+    it.className = 'match-item';
+    it.dataset.side = 'dir'; it.dataset.i = i;
+    it.textContent = act.dir[i];
+    it.onclick = () => clicMatchItem(sId, nivel, idx, 'dir', i);
+    dirCol.appendChild(it);
+  });
+
+  setTimeout(() => debuxarLiñas(sId, nivel, idx), 0);
+  window.addEventListener('resize', () => debuxarLiñas(sId, nivel, idx));
 }
 
-async function enviarAoBuzon(sentidoId, nivel, idx, act) {
-  if (!estado.alumno) return;
-  const ficha = tituloFicha(sentidoId, nivel, idx, act);
-  const detalle = `Marcouna como FEITA (${nomeSentido(sentidoId)} · Nivel ${nivel} · A${idx+1}).
-CA traballados: ${(act.cas || []).join(', ')}.
-Modo: autoavaliación na páxina de propostas competenciais Sociais 5º.`;
+const MATCH_COLORS = ['#10b981','#f59e0b','#3b82f6','#ec4899','#8b5cf6','#06b6d4','#f43f5e','#84cc16','#fb923c','#a855f7'];
+
+function clicMatchItem(sId, nivel, idx, side, i) {
+  const data = getRespostas(sId, nivel, idx);
+  if (!data) return;
+
+  // Se o item xa está nunha parella, desemparexar
+  if (side === 'esq' && data.parellas[i] !== undefined) {
+    delete data.parellas[i];
+    data.seleccionado = null;
+    data.feedback = null;
+    setRespostas(sId, nivel, idx, data);
+    redrawMatch(sId, nivel, idx);
+    ocultarResultado(sId, nivel, idx);
+    return;
+  }
+  if (side === 'dir') {
+    const claveEsq = Object.keys(data.parellas).find(k => data.parellas[k] === i);
+    if (claveEsq !== undefined) {
+      delete data.parellas[claveEsq];
+      data.seleccionado = null;
+      data.feedback = null;
+      setRespostas(sId, nivel, idx, data);
+      redrawMatch(sId, nivel, idx);
+      ocultarResultado(sId, nivel, idx);
+      return;
+    }
+  }
+
+  // Hai unha selección noutro lado: crear parella
+  if (data.seleccionado && data.seleccionado.side !== side) {
+    const esqIdx = side === 'esq' ? i : data.seleccionado.i;
+    const dirIdx = side === 'dir' ? i : data.seleccionado.i;
+    data.parellas[esqIdx] = dirIdx;
+    data.seleccionado = null;
+    data.feedback = null;
+  }
+  // Mesmo lado: alterna selección
+  else {
+    if (data.seleccionado && data.seleccionado.side === side && data.seleccionado.i === i) {
+      data.seleccionado = null;
+    } else {
+      data.seleccionado = { side, i };
+    }
+  }
+
+  setRespostas(sId, nivel, idx, data);
+  redrawMatch(sId, nivel, idx);
+  ocultarResultado(sId, nivel, idx);
+}
+
+function redrawMatch(sId, nivel, idx) {
+  const data = getRespostas(sId, nivel, idx);
+  const cont = document.getElementById(`match-${sId}-${nivel}-${idx}`);
+  if (!cont || !data) return;
+  // Limpar estados
+  cont.querySelectorAll('.match-item').forEach(el => el.classList.remove('selected','ok','ko','paired'));
+  if (data.seleccionado) {
+    const s = cont.querySelector(`.match-item[data-side="${data.seleccionado.side}"][data-i="${data.seleccionado.i}"]`);
+    if (s) s.classList.add('selected');
+  }
+  Object.keys(data.parellas).forEach(esqIdx => {
+    const dirIdx = data.parellas[esqIdx];
+    const e = cont.querySelector(`.match-item[data-side="esq"][data-i="${esqIdx}"]`);
+    const d = cont.querySelector(`.match-item[data-side="dir"][data-i="${dirIdx}"]`);
+    if (e) e.classList.add('paired');
+    if (d) d.classList.add('paired');
+  });
+  // Actualizar contador
+  const contadorEl = cont.querySelector('.match-controls span');
+  const act = SENTIDOS.find(s=>s.id===sId).niveis.find(n=>n.nivel===nivel).actividades[idx];
+  if (contadorEl) contadorEl.textContent = `${Object.keys(data.parellas).length} / ${act.pares.length} parellas`;
+  debuxarLiñas(sId, nivel, idx);
+}
+
+function debuxarLiñas(sId, nivel, idx) {
+  const cont = document.getElementById(`match-${sId}-${nivel}-${idx}`);
+  if (!cont) return;
+  const data = getRespostas(sId, nivel, idx);
+  if (!data) return;
+  const svg = cont.querySelector('.match-svg');
+  const wrap = cont.querySelector('.match-cols');
+  const wrapRect = wrap.getBoundingClientRect();
+  svg.setAttribute('viewBox', `0 0 ${wrapRect.width} ${wrapRect.height}`);
+  svg.setAttribute('width', wrapRect.width);
+  svg.setAttribute('height', wrapRect.height);
+  svg.innerHTML = '';
+
+  const act = SENTIDOS.find(s=>s.id===sId).niveis.find(n=>n.nivel===nivel).actividades[idx];
+
+  Object.keys(data.parellas).forEach((esqIdx, ord) => {
+    const dirIdx = data.parellas[esqIdx];
+    const e = cont.querySelector(`.match-item[data-side="esq"][data-i="${esqIdx}"]`);
+    const d = cont.querySelector(`.match-item[data-side="dir"][data-i="${dirIdx}"]`);
+    if (!e || !d) return;
+    const er = e.getBoundingClientRect(); const dr = d.getBoundingClientRect();
+    const x1 = er.right - wrapRect.left, y1 = er.top + er.height/2 - wrapRect.top;
+    const x2 = dr.left - wrapRect.left, y2 = dr.top + dr.height/2 - wrapRect.top;
+    const midX = (x1 + x2) / 2;
+    const color = (data.feedback && data.feedback[esqIdx] !== undefined)
+      ? (data.feedback[esqIdx] ? '#16a34a' : '#dc2626')
+      : MATCH_COLORS[ord % MATCH_COLORS.length];
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d', `M${x1},${y1} C${midX},${y1} ${midX},${y2} ${x2},${y2}`);
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', '3');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path);
+
+    [[x1,y1],[x2,y2]].forEach(([x,y]) => {
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 5);
+      c.setAttribute('fill', color);
+      svg.appendChild(c);
+    });
+  });
+}
+
+function resetMatch(sId, nivel, idx) {
+  const data = getRespostas(sId, nivel, idx);
+  if (!data) return;
+  data.parellas = {}; data.seleccionado = null; data.feedback = null;
+  setRespostas(sId, nivel, idx, data);
+  redrawMatch(sId, nivel, idx);
+  ocultarResultado(sId, nivel, idx);
+}
+
+// ============================================================
+// WIDGET: CLASSIFICATION
+// ============================================================
+function renderClass(el, sId, nivel, idx, act) {
+  const data = getRespostas(sId, nivel, idx) || { asign: {}, ordeItems: shuffle(act.items.map((_, i) => i)), seleccionado: null };
+  if (!data.ordeItems) data.ordeItems = shuffle(act.items.map((_, i) => i));
+  if (!data.asign) data.asign = {};
+  setRespostas(sId, nivel, idx, data);
+
+  el.innerHTML = `
+    <div class="class-w" id="class-${sId}-${nivel}-${idx}">
+      <div class="class-pool"></div>
+      <div class="class-cats">
+        ${act.cats.map((c, i) => `
+          <div class="class-cat" data-cat="${i}" onclick="clicClassCat('${sId}', ${nivel}, ${idx}, ${i})">
+            <h4>${c}</h4>
+            <div class="class-cat-items"></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  redrawClass(sId, nivel, idx);
+}
+
+function redrawClass(sId, nivel, idx) {
+  const cont = document.getElementById(`class-${sId}-${nivel}-${idx}`);
+  if (!cont) return;
+  const data = getRespostas(sId, nivel, idx);
+  const act = SENTIDOS.find(s=>s.id===sId).niveis.find(n=>n.nivel===nivel).actividades[idx];
+  const pool = cont.querySelector('.class-pool');
+  pool.innerHTML = '';
+  cont.querySelectorAll('.class-cat-items').forEach(c => c.innerHTML = '');
+
+  // Items no pool (sen asignar)
+  data.ordeItems.forEach(i => {
+    if (data.asign[i] !== undefined) return;
+    const chip = makeClassChip(i, act.items[i].txt, data, sId, nivel, idx);
+    pool.appendChild(chip);
+  });
+  if (pool.children.length === 0) pool.classList.add('empty'); else pool.classList.remove('empty');
+
+  // Items en cada categoría
+  Object.keys(data.asign).forEach(itemIdx => {
+    const cat = data.asign[itemIdx];
+    const catEl = cont.querySelector(`.class-cat[data-cat="${cat}"] .class-cat-items`);
+    if (catEl) catEl.appendChild(makeClassChip(parseInt(itemIdx), act.items[itemIdx].txt, data, sId, nivel, idx));
+  });
+}
+
+function makeClassChip(i, txt, data, sId, nivel, idx) {
+  const chip = document.createElement('span');
+  chip.className = 'class-chip';
+  chip.textContent = txt;
+  chip.dataset.i = i;
+  if (data.seleccionado === i) chip.classList.add('selected');
+  if (data.feedback && data.feedback[i] !== undefined) chip.classList.add(data.feedback[i] ? 'ok' : 'ko');
+  chip.onclick = (e) => { e.stopPropagation(); clicClassChip(sId, nivel, idx, i); };
+  return chip;
+}
+
+function clicClassChip(sId, nivel, idx, i) {
+  const data = getRespostas(sId, nivel, idx);
+  if (!data) return;
+  if (data.asign[i] !== undefined) {
+    // Estaba nunha categoría: sácao
+    delete data.asign[i];
+    data.feedback = null;
+  } else {
+    data.seleccionado = (data.seleccionado === i) ? null : i;
+  }
+  setRespostas(sId, nivel, idx, data);
+  redrawClass(sId, nivel, idx);
+  ocultarResultado(sId, nivel, idx);
+}
+
+function clicClassCat(sId, nivel, idx, cat) {
+  const data = getRespostas(sId, nivel, idx);
+  if (!data || data.seleccionado === null || data.seleccionado === undefined) return;
+  data.asign[data.seleccionado] = cat;
+  data.seleccionado = null;
+  data.feedback = null;
+  setRespostas(sId, nivel, idx, data);
+  redrawClass(sId, nivel, idx);
+  ocultarResultado(sId, nivel, idx);
+}
+
+// ============================================================
+// WIDGET: MULTI
+// ============================================================
+function renderMulti(el, sId, nivel, idx, act) {
+  const data = getRespostas(sId, nivel, idx) || { respostas: {} };
+  if (!data.respostas) data.respostas = {};
+  setRespostas(sId, nivel, idx, data);
+
+  el.innerHTML = `<div class="multi" id="multi-${sId}-${nivel}-${idx}"></div>`;
+  const cont = el.querySelector('.multi');
+
+  act.preguntas.forEach((p, pi) => {
+    const qEl = document.createElement('div');
+    qEl.className = 'multi-q';
+    qEl.innerHTML = `<div class="multi-q-text">${pi+1}. ${p.q}</div><div class="multi-opts"></div>`;
+    const opts = qEl.querySelector('.multi-opts');
+    p.opts.forEach((opt, oi) => {
+      const sel = data.respostas[pi] === oi;
+      const optEl = document.createElement('label');
+      optEl.className = 'multi-opt' + (sel ? ' selected' : '');
+      optEl.innerHTML = `
+        <input type="radio" name="multi-${sId}-${nivel}-${idx}-${pi}" value="${oi}" ${sel?'checked':''}>
+        <span>${opt}</span>
+      `;
+      optEl.querySelector('input').onchange = () => {
+        data.respostas[pi] = oi;
+        data.feedback = null;
+        setRespostas(sId, nivel, idx, data);
+        // Marcar selección
+        optEl.parentElement.querySelectorAll('.multi-opt').forEach(o => o.classList.remove('selected','ok','ko'));
+        optEl.classList.add('selected');
+        ocultarResultado(sId, nivel, idx);
+      };
+      opts.appendChild(optEl);
+    });
+    cont.appendChild(qEl);
+  });
+}
+
+// ============================================================
+// WIDGET: CURTA
+// ============================================================
+function renderCurta(el, sId, nivel, idx, act) {
+  const data = getRespostas(sId, nivel, idx) || { respostas: {} };
+  if (!data.respostas) data.respostas = {};
+  setRespostas(sId, nivel, idx, data);
+
+  el.innerHTML = `<div class="curta" id="curta-${sId}-${nivel}-${idx}"></div>`;
+  const cont = el.querySelector('.curta');
+
+  act.preguntas.forEach((p, pi) => {
+    const val = data.respostas[pi] || '';
+    const qEl = document.createElement('div');
+    qEl.className = 'curta-q';
+    qEl.innerHTML = `
+      <div class="curta-q-text">${pi+1}. ${p.q}</div>
+      <div class="curta-row">
+        <input class="curta-input" type="text" placeholder="A túa resposta…" value="${val.replace(/"/g,'&quot;')}">
+        <span class="curta-feedback"></span>
+      </div>
+    `;
+    const input = qEl.querySelector('.curta-input');
+    input.oninput = () => {
+      data.respostas[pi] = input.value;
+      data.feedback = null;
+      setRespostas(sId, nivel, idx, data);
+      input.classList.remove('ok','ko');
+      qEl.querySelector('.curta-feedback').textContent = '';
+      ocultarResultado(sId, nivel, idx);
+    };
+    cont.appendChild(qEl);
+  });
+}
+
+// ============================================================
+// WIDGET: LONGA
+// ============================================================
+function renderLonga(el, sId, nivel, idx, act) {
+  const data = getRespostas(sId, nivel, idx) || { texto: '' };
+  setRespostas(sId, nivel, idx, data);
+
+  el.innerHTML = `
+    <div class="longa">
+      <textarea class="longa-textarea" placeholder="${(act.placeholder || 'Escribe a túa resposta aquí…').replace(/"/g,'&quot;')}"></textarea>
+      <div class="longa-meta">
+        <span>Mínimo recomendado: 4-6 liñas · Gárdase automaticamente</span>
+        <span class="saved"></span>
+      </div>
+    </div>
+  `;
+  const ta = el.querySelector('textarea');
+  ta.value = data.texto || '';
+  const savedEl = el.querySelector('.saved');
+  let timer;
+  ta.oninput = () => {
+    data.texto = ta.value;
+    setRespostas(sId, nivel, idx, data);
+    clearTimeout(timer);
+    savedEl.textContent = '✓ Gardado';
+    timer = setTimeout(() => savedEl.textContent = '', 1500);
+  };
+}
+
+// ============================================================
+// CORRECCIÓN
+// ============================================================
+function corrixirAct(sentidoId, nivel, idx) {
+  const act = SENTIDOS.find(s=>s.id===sentidoId).niveis.find(n=>n.nivel===nivel).actividades[idx];
+  const data = getRespostas(sentidoId, nivel, idx) || {};
+  let correctas = 0, total = 0;
+
+  if (act.tipo === 'match') {
+    total = act.pares.length;
+    data.feedback = {};
+    act.pares.forEach(([e, d]) => {
+      total; // ya contado
+      if (data.parellas[e] === d) {
+        correctas++;
+        data.feedback[e] = true;
+      } else if (data.parellas[e] !== undefined) {
+        data.feedback[e] = false;
+      }
+    });
+    setRespostas(sentidoId, nivel, idx, data);
+    redrawMatch(sentidoId, nivel, idx);
+  }
+  else if (act.tipo === 'class') {
+    total = act.items.length;
+    data.feedback = {};
+    act.items.forEach((it, i) => {
+      if (data.asign[i] === it.cat) { correctas++; data.feedback[i] = true; }
+      else if (data.asign[i] !== undefined) data.feedback[i] = false;
+    });
+    setRespostas(sentidoId, nivel, idx, data);
+    redrawClass(sentidoId, nivel, idx);
+  }
+  else if (act.tipo === 'multi') {
+    total = act.preguntas.length;
+    const cont = document.getElementById(`multi-${sentidoId}-${nivel}-${idx}`);
+    act.preguntas.forEach((p, pi) => {
+      const opcionsEl = cont.children[pi].querySelectorAll('.multi-opt');
+      opcionsEl.forEach(o => o.classList.remove('ok','ko'));
+      const elixida = data.respostas?.[pi];
+      if (elixida === p.correcta) {
+        correctas++;
+        opcionsEl[elixida]?.classList.add('ok');
+      } else {
+        if (elixida !== undefined) opcionsEl[elixida]?.classList.add('ko');
+        opcionsEl[p.correcta]?.classList.add('ok');
+      }
+    });
+  }
+  else if (act.tipo === 'curta') {
+    total = act.preguntas.length;
+    const cont = document.getElementById(`curta-${sentidoId}-${nivel}-${idx}`);
+    act.preguntas.forEach((p, pi) => {
+      const qEl = cont.children[pi];
+      const input = qEl.querySelector('.curta-input');
+      const fb = qEl.querySelector('.curta-feedback');
+      input.classList.remove('ok','ko'); fb.classList.remove('ok','ko');
+      const val = normaliza(data.respostas?.[pi] || '');
+      const validas = p.resp.map(normaliza);
+      if (val && validas.includes(val)) {
+        correctas++;
+        input.classList.add('ok'); fb.classList.add('ok'); fb.textContent = '✓';
+      } else if (val) {
+        input.classList.add('ko'); fb.classList.add('ko'); fb.textContent = 'Volve probar';
+      } else {
+        fb.textContent = '(sen resposta)';
+      }
+    });
+  }
+
+  mostrarResultado(sentidoId, nivel, idx, correctas, total);
+}
+
+function mostrarResultado(sId, nivel, idx, correctas, total) {
+  const actEl = document.querySelector(`.act[data-id="${actKey(sId, nivel, idx)}"]`);
+  if (!actEl) return;
+  const r = actEl.querySelector('.act-resultado');
+  const pct = total ? Math.round(correctas/total*100) : 0;
+  const nota = total ? (correctas/total*10).toFixed(1) : '—';
+  let cls = 'act-resultado resultado';
+  if (pct >= 80) cls += ' ok'; else if (pct < 50) cls += ' ko';
+  r.className = cls; r.style.display = 'block';
+  r.innerHTML = `
+    <span class="pct">${correctas}/${total}</span> &nbsp;
+    <strong>${pct}%</strong> · Nota: <strong>${nota}/10</strong>
+    ${pct === 100 ? ' · 🎉 Perfecto!' : (pct >= 80 ? ' · 👏 Moi ben' : (pct >= 50 ? ' · 👍 Aprobado, repasa' : ' · Sigue probando!'))}
+  `;
+}
+
+function ocultarResultado(sId, nivel, idx) {
+  const actEl = document.querySelector(`.act[data-id="${actKey(sId, nivel, idx)}"]`);
+  if (!actEl) return;
+  const r = actEl.querySelector('.act-resultado');
+  if (r) r.style.display = 'none';
+}
+
+function toggleSol(btn) {
+  const sol = btn.closest('.act').querySelector('.sol');
+  sol.classList.toggle('show');
+}
+
+// ============================================================
+// MARCAR FEITA + BUZÓN
+// ============================================================
+async function marcarFeita(sentidoId, nivel, idx) {
+  if (!estado.alumno) { alert('Escolle primeiro o teu nome.'); return; }
+  const act = SENTIDOS.find(s=>s.id===sentidoId).niveis.find(n=>n.nivel===nivel).actividades[idx];
+  const data = getRespostas(sentidoId, nivel, idx) || {};
+
+  let correctas = null, total = null, nota = null, detalle = '';
+
+  if (act.tipo === 'match') {
+    total = act.pares.length;
+    correctas = 0;
+    const erros = [];
+    act.pares.forEach(([e, d]) => {
+      if (data.parellas?.[e] === d) correctas++;
+      else if (data.parellas?.[e] !== undefined) erros.push(`${act.esq[e]} → ${act.dir[data.parellas[e]]} (correcto: ${act.dir[d]})`);
+    });
+    detalle = `Parellas: ${correctas}/${total}.${erros.length ? ' Fallos: ' + erros.join('; ') : ''}`;
+  }
+  else if (act.tipo === 'class') {
+    total = act.items.length;
+    correctas = 0;
+    const erros = [];
+    act.items.forEach((it, i) => {
+      if (data.asign?.[i] === it.cat) correctas++;
+      else if (data.asign?.[i] !== undefined) erros.push(`"${it.txt}" → ${act.cats[data.asign[i]]} (correcto: ${act.cats[it.cat]})`);
+    });
+    detalle = `Clasificación: ${correctas}/${total}.${erros.length ? ' Fallos: ' + erros.join('; ') : ''}`;
+  }
+  else if (act.tipo === 'multi') {
+    total = act.preguntas.length;
+    correctas = 0;
+    act.preguntas.forEach((p, pi) => {
+      if (data.respostas?.[pi] === p.correcta) correctas++;
+    });
+    detalle = `Multiopción: ${correctas}/${total}.`;
+  }
+  else if (act.tipo === 'curta') {
+    total = act.preguntas.length;
+    correctas = 0;
+    const respostas = [];
+    act.preguntas.forEach((p, pi) => {
+      const val = normaliza(data.respostas?.[pi] || '');
+      const ok = val && p.resp.map(normaliza).includes(val);
+      if (ok) correctas++;
+      respostas.push(`${pi+1}. ${data.respostas?.[pi] || '(en branco)'} ${ok ? '✓' : '✗'}`);
+    });
+    detalle = `Respostas curtas: ${correctas}/${total}.\n${respostas.join('\n')}`;
+  }
+  else if (act.tipo === 'longa') {
+    const texto = (data.texto || '').trim();
+    if (!texto) {
+      if (!confirm('Non escribiches nada. Marcar feita igual?')) return;
+    }
+    detalle = `Resposta libre (${texto.length} caracteres):\n\n${texto || '(sen texto)'}`;
+  }
+
+  if (total !== null) nota = total ? +(correctas/total*10).toFixed(2) : null;
+
+  setFeita(sentidoId, nivel, idx, true);
+
+  // Render visual
+  const actEl = document.querySelector(`.act[data-id="${actKey(sentidoId, nivel, idx)}"]`);
+  if (actEl) actEl.classList.add('feita');
+  const nivEl = document.getElementById(`nivel-${sentidoId}-${nivel}`);
+  if (nivEl) {
+    const f = nivEl.querySelectorAll('.act.feita').length;
+    const t = nivEl.querySelectorAll('.act').length;
+    nivEl.querySelector('.niv-count').textContent = `${f} / ${t} feitas`;
+  }
+  actualizarChip(sentidoId, nivel);
+  actualizarProgreso();
+
+  if (total !== null) mostrarResultado(sentidoId, nivel, idx, correctas, total);
+
+  // Envío ao buzón
+  const ficha = `Propostas 5º Sociais · ${nomeSentido(sentidoId)} · N${nivel} · ${act.t}`;
+  const detalleCompleto = `${detalle}\n\nTipo: ${act.tipo}. CA: ${(act.cas || []).join(', ')}. Nivel: ${nivel}.\nModo: autoavaliación interactiva.`;
+
   try {
     const r = await fetch(BUZON_ENDPOINT, {
       method: 'POST',
@@ -1050,17 +1709,17 @@ Modo: autoavaliación na páxina de propostas competenciais Sociais 5º.`;
       body: JSON.stringify({
         nome: estado.alumno,
         curso: CURSO,
-        ficha: ficha,
-        nota: null,
-        correctas: null,
-        total: null,
-        detalle: detalle
+        ficha,
+        nota,
+        correctas,
+        total,
+        detalle: detalleCompleto
       })
     });
-    const json = await r.json();
-    return json && json.ok;
+    const j = await r.json();
+    mostrarToast(j && j.ok ? '📩 Enviada ao profe ✓' : '⚠ Gardada en local, non chegou ao profe', j && j.ok);
   } catch (e) {
-    return false;
+    mostrarToast('⚠ Sen conexión: gardada en local', false);
   }
 }
 
@@ -1073,63 +1732,26 @@ function mostrarToast(texto, ok) {
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2400);
 }
 
-function toggleFeita(sentidoId, nivel, idx, btn) {
-  if (!estado.alumno) return;
-  const novoEstado = !isFeita(sentidoId, nivel, idx);
-  setFeita(sentidoId, nivel, idx, novoEstado);
-  const actEl = btn.closest('.act');
-  actEl.classList.toggle('feita', novoEstado);
-  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ${novoEstado ? 'Feita ✓' : 'Marcar feita'}`;
-  const nivEl = btn.closest('.nivel');
-  const total = nivEl.querySelectorAll('.act').length;
-  const f = nivEl.querySelectorAll('.act.feita').length;
-  nivEl.querySelector('.niv-count').textContent = `${f} / ${total} feitas`;
-  actualizarChip(sentidoId, nivel);
-  actualizarProgreso();
-
-  if (novoEstado) {
-    const sen = SENTIDOS.find(s => s.id === sentidoId);
-    const niv = sen?.niveis.find(n => n.nivel === nivel);
-    const act = niv?.actividades[idx];
-    if (act) {
-      enviarAoBuzon(sentidoId, nivel, idx, act).then(ok => {
-        mostrarToast(ok ? '📩 Enviada ao profe ✓' : '⚠ Gardada en local, pero non chegou ao profe', ok);
-      });
-    }
-  }
-}
-
-function toggleSol(btn) {
-  const sol = btn.closest('.act').querySelector('.sol');
-  sol.classList.toggle('show');
-}
-
+// ============================================================
+// SELECCIÓN E TEMA
+// ============================================================
 function mostrarNivel(sentidoId, nivel) {
-  // Ocultar todos os niveis e desmarcar todos os tabs deste bloque
   SENTIDOS.find(s => s.id === sentidoId)?.niveis.forEach(n => {
     document.getElementById(`nivel-${sentidoId}-${n.nivel}`)?.classList.remove('show');
   });
   document.querySelectorAll(`.nivel-tab[data-sentido="${sentidoId}"]`).forEach(t => t.classList.remove('active'));
-  // Mostrar o nivel escollido
   document.getElementById(`nivel-${sentidoId}-${nivel}`)?.classList.add('show');
   document.querySelector(`.nivel-tab[data-sentido="${sentidoId}"][data-nivel="${nivel}"]`)?.classList.add('active');
-  // Ocultar placeholder
   const ph = document.getElementById(`placeholder-${sentidoId}`);
   if (ph) ph.style.display = 'none';
-}
-
-function actualizarChip(sentidoId, nivel) {
-  const sen = SENTIDOS.find(s => s.id === sentidoId);
-  const niv = sen?.niveis.find(n => n.nivel === nivel);
-  if (!niv) return;
-  const total = niv.actividades.length;
-  let feitas = 0;
-  niv.actividades.forEach((_, i) => { if (isFeita(sentidoId, nivel, i)) feitas++; });
-  const chip = document.getElementById(`check-${sentidoId}-${nivel}`);
-  if (chip) {
-    chip.textContent = `${feitas}/${total}`;
-    chip.classList.toggle('done', feitas === total);
-  }
+  // Redebuxar liñas dos match neste nivel
+  setTimeout(() => {
+    document.querySelectorAll(`#nivel-${sentidoId}-${nivel} .match`).forEach(m => {
+      const id = m.id.replace('match-', '');
+      const [s, n, i] = id.split('-');
+      debuxarLiñas(s, parseInt(n), parseInt(i));
+    });
+  }, 50);
 }
 
 function seleccionarAlumno() {
@@ -1141,8 +1763,9 @@ function seleccionarAlumno() {
 
 function resetAlumno() {
   if (!estado.alumno) { alert('Escolle primeiro un alumno.'); return; }
-  if (!confirm(`Borrar todo o progreso de ${estado.alumno}?`)) return;
+  if (!confirm(`Borrar todo o progreso e respostas de ${estado.alumno}?`)) return;
   delete estado.feitas[estado.alumno];
+  delete estado.respostas[estado.alumno];
   gardar();
   renderContido();
 }
