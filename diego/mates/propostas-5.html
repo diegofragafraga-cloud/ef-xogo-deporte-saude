@@ -609,6 +609,82 @@
   .toast.ok { border-color: var(--n1); }
   .toast.err { border-color: var(--n2); background: var(--n2-bg); }
 
+  /* ─── Overlay-onboarding ao abrir a páxina ─── */
+  .onboard-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px 16px; overflow-y: auto;
+    background: rgba(8, 11, 18, .85); backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: ob-fade .25s ease;
+  }
+  :root.light .onboard-overlay { background: rgba(15, 23, 42, .55); }
+  @keyframes ob-fade { from { opacity: 0; } to { opacity: 1; } }
+  .onboard-card-wrap {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 18px;
+    max-width: 760px; width: 100%; padding: 28px 26px 22px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    animation: ob-pop .3s ease;
+  }
+  @keyframes ob-pop {
+    from { transform: scale(.95); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  .ob-icon {
+    width: 60px; height: 60px; margin: 0 auto 12px;
+    background: var(--accent-bg); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-2);
+  }
+  .ob-icon svg { width: 32px; height: 32px; }
+  .ob-titulo {
+    text-align: center; font-size: 1.4rem; font-weight: 800;
+    letter-spacing: -.01em; margin-bottom: 4px; color: var(--text);
+  }
+  .ob-sub {
+    text-align: center; font-size: .92rem; color: var(--text-dim);
+    margin-bottom: 22px;
+  }
+  .ob-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 10px;
+  }
+  .ob-name {
+    background: var(--panel-2); border: 2px solid var(--border);
+    border-radius: 11px; padding: 14px 14px; cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    font-family: inherit; color: var(--text); text-align: left;
+    font-size: .95rem; font-weight: 600;
+    transition: all .15s;
+  }
+  .ob-name:hover {
+    border-color: var(--accent); background: var(--accent-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(16,185,129,.18);
+  }
+  .ob-name .ob-avatar {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: .92rem;
+  }
+  .ob-name .ob-nome { flex: 1; line-height: 1.25; }
+  .ob-name .ob-nome small {
+    display: block; font-weight: 500; font-size: .75rem;
+    color: var(--text-dim); margin-top: 1px;
+  }
+  .ob-footer {
+    text-align: center; margin-top: 16px; font-size: .8rem; color: var(--text-faint);
+  }
+  @media (max-width: 480px) {
+    .onboard-card-wrap { padding: 20px 16px 16px; }
+    .ob-titulo { font-size: 1.15rem; }
+    .ob-grid { grid-template-columns: 1fr 1fr; }
+    .ob-name { padding: 11px 10px; font-size: .85rem; }
+    .ob-name .ob-avatar { width: 30px; height: 30px; font-size: .8rem; }
+  }
+
   /* Responsive */
   @media (max-width: 700px) {
     .container { padding: 12px 10px 40px; }
@@ -702,6 +778,19 @@
 
   <div id="contido"></div>
 
+</div>
+
+<!-- OVERLAY ONBOARDING (preséntase ao abrir sen alumno seleccionado) -->
+<div class="onboard-overlay" id="onboardOverlay" style="display:none">
+  <div class="onboard-card-wrap">
+    <div class="ob-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6"/><path d="M19 8v6"/></svg>
+    </div>
+    <div class="ob-titulo">¿Quen es?</div>
+    <div class="ob-sub">Toca o teu nome para empezar coas <b>24 tarefas de mates</b>.</div>
+    <div class="ob-grid" id="obGrid"></div>
+    <div class="ob-footer">5º B · CEIP de Dena · Curso 25-26</div>
+  </div>
 </div>
 
 <!-- MODAL VISTA PROFESOR -->
@@ -1365,6 +1454,7 @@ function renderContido() {
         <h3>Escolle o teu nome para empezar</h3>
         <p>Cando elixas o teu nome, aparecerán as 24 actividades.</p>
       </div>`;
+    if (typeof mostrarOnboard === 'function') mostrarOnboard();
     return;
   }
 
@@ -1745,10 +1835,19 @@ function mostrarNivel(sentidoId, nivel) {
 }
 
 function seleccionarAlumno() {
-  estado.alumno = document.getElementById('quen').value;
+  const v = document.getElementById('quen').value;
+  if (!v) {
+    estado.alumno = '';
+    atualizarBadge();
+    renderContido();
+    mostrarOnboard();
+    return;
+  }
+  estado.alumno = v;
   gardar();
   atualizarBadge();
   renderContido();
+  pecharOnboard();
 }
 
 function resetAlumno() {
@@ -1857,11 +1956,71 @@ function pecharModal() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') pecharModal(); });
 
+// ============================================================
+// OVERLAY ONBOARDING — escolla de nome ao abrir
+// ============================================================
+function pintarOnboard() {
+  const grid = document.getElementById('obGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  ALUMNADO.forEach(nome => {
+    const partes = nome.split(',');
+    const apel = (partes[0] || '').trim();
+    const propio = (partes[1] || '').trim() || apel;
+    const inicial = (propio[0] || apel[0] || '?').toUpperCase();
+    const apelidoCurto = apel.split(' ')[0] || '';
+    const btn = document.createElement('button');
+    btn.className = 'ob-name';
+    btn.type = 'button';
+    btn.onclick = () => escollerNomeOnboard(nome);
+    btn.innerHTML = `
+      <span class="ob-avatar">${inicial}</span>
+      <span class="ob-nome">${propio}<small>${apelidoCurto}</small></span>
+    `;
+    grid.appendChild(btn);
+  });
+}
+
+function mostrarOnboard() {
+  pintarOnboard();
+  document.getElementById('onboardOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function pecharOnboard() {
+  document.getElementById('onboardOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function escollerNomeOnboard(nome) {
+  estado.alumno = nome;
+  gardar();
+  const sel = document.getElementById('quen');
+  if (sel) sel.value = nome;
+  atualizarBadge();
+  renderContido();
+  pecharOnboard();
+}
+
 // Inicialización
 if (localStorage.getItem(KEY_THEME) === 'light') document.documentElement.classList.add('light');
 if (isProfeOk()) revelarProfe();
 popularAlumnos();
+
+// ?reset=1 ou ?cambiar=1 forza a re-escolla de nome
+const _params = new URLSearchParams(location.search);
+if (_params.get('reset') === '1' || _params.get('cambiar') === '1') {
+  estado.alumno = '';
+  gardar();
+  const sel = document.getElementById('quen');
+  if (sel) sel.value = '';
+  atualizarBadge();
+}
+
 renderContido();
+
+// Mostrar overlay se aínda non escolleu nome
+if (!estado.alumno) mostrarOnboard();
 </script>
 </body>
 </html>
