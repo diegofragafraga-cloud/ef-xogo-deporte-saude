@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propostas competenciais · 5º · Matemáticas</title>
+<style>
+  :root {
+    --bg: #0b0d13;
+    --panel: #13161f;
+    --panel-2: #1c2030;
+    --border: #252a3a;
+    --text: #e8eaf0;
+    --text-dim: #8b92a8;
+    --text-faint: #6b7280;
+    --accent: #10b981;
+    --accent-2: #34d399;
+    --accent-bg: rgba(16,185,129,0.12);
+    --n1: #16a34a;
+    --n2: #eab308;
+    --n3: #dc2626;
+    --n1-bg: rgba(22,163,74,0.10);
+    --n2-bg: rgba(234,179,8,0.10);
+    --n3-bg: rgba(220,38,38,0.10);
+    --radius: 14px;
+    --shadow: 0 4px 16px rgba(0,0,0,.25);
+  }
+  :root.light {
+    --bg: #f5f7fa;
+    --panel: #ffffff;
+    --panel-2: #f1f5f9;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-dim: #475569;
+    --text-faint: #94a3b8;
+    --shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.5; font-size: 15px;
+    transition: background .25s, color .25s;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* Header */
+  header.top {
+    display: flex; gap: 14px; align-items: center;
+    padding: 16px 0 18px; border-bottom: 1px solid var(--border);
+    margin-bottom: 22px;
+  }
+  .back-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    width: 38px; height: 38px; border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: all .15s; flex-shrink: 0;
+  }
+  .back-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .back-btn svg { width: 18px; height: 18px; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: #fff; flex-shrink: 0;
+  }
+  .title-block { flex: 1; min-width: 0; }
+  .title-block h1 {
+    font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em;
+  }
+  .title-block .sub {
+    font-size: .78rem; color: var(--text-dim); margin-top: 2px;
+  }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .icon-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    width: 38px; height: 38px; border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .icon-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .icon-sun { display: none; }
+  :root.light .icon-moon { display: none; }
+  :root.light .icon-sun { display: block; }
+
+  /* Quen es */
+  .quen-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 22px; margin-bottom: 22px; box-shadow: var(--shadow);
+  }
+  .quen-card h2 {
+    font-size: 1rem; font-weight: 700; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .quen-card h2 svg { width: 18px; height: 18px; color: var(--accent); }
+  .quen-card p { font-size: .85rem; color: var(--text-dim); margin-bottom: 12px; }
+  .quen-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  select.quen-select {
+    background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 14px; border-radius: 10px; font-size: .95rem;
+    font-family: inherit; min-width: 240px; cursor: pointer;
+  }
+  select.quen-select:focus { outline: none; border-color: var(--accent); }
+  .quen-badge {
+    background: var(--accent-bg); color: var(--accent-2);
+    border: 1px solid transparent; padding: 8px 14px; border-radius: 10px;
+    font-size: .85rem; font-weight: 600;
+  }
+  .quen-badge.empty { color: var(--text-faint); background: var(--panel-2); }
+  .progress-mini {
+    margin-left: auto; display: flex; align-items: center; gap: 8px;
+    font-size: .8rem; color: var(--text-dim);
+  }
+  .progress-bar {
+    width: 140px; height: 8px; background: var(--panel-2);
+    border-radius: 999px; overflow: hidden;
+  }
+  .progress-bar > span {
+    display: block; height: 100%; background: var(--accent);
+    width: 0%; transition: width .3s ease;
+  }
+
+  /* Escala leyenda */
+  .escala {
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 16px; margin-bottom: 22px; font-size: .82rem;
+  }
+  .escala .title { font-weight: 600; color: var(--text-dim); }
+  .escala .item { display: inline-flex; align-items: center; gap: 6px; }
+  .niv-demo {
+    width: 22px; height: 22px; border-radius: 6px; color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+  }
+  .niv-demo.n1 { background: var(--n1); }
+  .niv-demo.n2 { background: var(--n2); color: #1a1a1a; }
+  .niv-demo.n3 { background: var(--n3); }
+  .escala .hint { color: var(--text-faint); margin-left: auto; font-size: .78rem; }
+
+  /* Sección por sentido */
+  section.sentido { margin-bottom: 32px; }
+  section.sentido > .sec-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 12px;
+  }
+  .sec-head .sec-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-bg); color: var(--accent-2);
+  }
+  .sec-head .sec-icon svg { width: 20px; height: 20px; }
+  .sec-head h2 { font-size: 1.1rem; font-weight: 700; }
+  .sec-head .sec-sub { font-size: .78rem; color: var(--text-dim); }
+  .sec-head .sec-progress {
+    margin-left: auto; font-size: .78rem; color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sec-head .sec-progress .pct { font-weight: 700; color: var(--accent-2); }
+
+  /* Niveis */
+  .niveis { display: flex; flex-direction: column; gap: 10px; }
+  .nivel-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .nivel-tab {
+    flex: 1; min-width: 200px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; background: var(--panel); border: 2px solid var(--border);
+    border-radius: 10px; color: var(--text); cursor: pointer;
+    font-family: inherit; text-align: left; transition: all .15s;
+  }
+  .nivel-tab:hover { border-color: var(--accent); background: var(--panel-2); }
+  .nivel-tab .niv-demo { flex-shrink: 0; width: 26px; height: 26px; font-size: 12px; }
+  .nivel-tab .nt-info { flex: 1; min-width: 0; }
+  .nivel-tab .nt-nome { font-weight: 700; font-size: .88rem; line-height: 1.2; }
+  .nivel-tab .nt-meta { font-size: .72rem; color: var(--text-dim); margin-top: 2px; }
+  .nivel-tab.active.n1 { border-color: var(--n1); box-shadow: 0 0 0 2px var(--n1-bg); background: var(--n1-bg); }
+  .nivel-tab.active.n2 { border-color: var(--n2); box-shadow: 0 0 0 2px var(--n2-bg); background: var(--n2-bg); }
+  .nivel-tab.active.n3 { border-color: var(--n3); box-shadow: 0 0 0 2px var(--n3-bg); background: var(--n3-bg); }
+  .nivel-tab .nt-check {
+    background: var(--bg); color: var(--text-dim); padding: 3px 9px;
+    border-radius: 999px; font-size: .72rem; font-weight: 700;
+    border: 1px solid var(--border);
+  }
+  .nivel-tab .nt-check.done { background: var(--n1); color: #fff; border-color: var(--n1); }
+
+  .nivel-empty {
+    padding: 26px 20px; text-align: center; color: var(--text-dim);
+    background: var(--panel); border: 1px dashed var(--border); border-radius: var(--radius);
+    font-size: .9rem;
+  }
+
+  .nivel {
+    display: none;
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .nivel.show { display: block; }
+  .nivel.n1 { border-left: 4px solid var(--n1); }
+  .nivel.n2 { border-left: 4px solid var(--n2); }
+  .nivel.n3 { border-left: 4px solid var(--n3); }
+  .nivel-head {
+    padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+    background: var(--panel-2);
+  }
+  .nivel-head .niv-demo { flex-shrink: 0; width: 28px; height: 28px; font-size: 13px; }
+  .nivel-head h3 { font-size: .98rem; font-weight: 700; }
+  .nivel-head .niv-tag {
+    font-size: .72rem; color: var(--text-dim); text-transform: uppercase;
+    letter-spacing: .04em; margin-top: 1px;
+  }
+  .nivel-head .niv-count {
+    margin-left: auto; font-size: .78rem; color: var(--text-dim);
+    background: var(--panel); border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 999px;
+  }
+  .nivel-body { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* Actividade card */
+  .act {
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; background: var(--bg);
+    transition: border-color .15s;
+  }
+  .act:hover { border-color: var(--accent); }
+  .act.feita {
+    background: var(--n1-bg);
+    border-color: var(--n1);
+  }
+  .act-head {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 8px;
+  }
+  .act-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px;
+    background: var(--panel-2); color: var(--text-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .82rem;
+  }
+  .act.feita .act-num { background: var(--n1); color: #fff; }
+  .act-title { flex: 1; font-weight: 600; font-size: .95rem; }
+  .act-cas {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    margin-top: 2px;
+  }
+  .ca-chip {
+    font-size: .7rem; padding: 2px 7px; border-radius: 5px;
+    background: var(--accent-bg); color: var(--accent-2);
+    font-weight: 600;
+  }
+  .act-body {
+    font-size: .9rem; color: var(--text); line-height: 1.55;
+    margin-left: 36px;
+  }
+  .act-body p { margin-bottom: 6px; }
+  .act-body ul, .act-body ol { margin: 6px 0 6px 18px; }
+  .act-body li { margin-bottom: 3px; }
+  .act-body code {
+    background: var(--panel-2); padding: 1px 6px; border-radius: 4px;
+    font-size: .85em; font-family: 'Courier New', monospace;
+  }
+  .act-body .ascii-art {
+    font-family: 'Courier New', monospace; background: var(--panel-2);
+    padding: 10px 12px; border-radius: 6px; font-size: .82rem;
+    white-space: pre; overflow-x: auto; margin: 8px 0;
+    color: var(--text-dim);
+  }
+  .act-actions {
+    margin-top: 12px; margin-left: 36px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .btn {
+    padding: 7px 14px; border-radius: 8px; font-size: .82rem;
+    border: 1px solid var(--border); background: var(--panel-2);
+    color: var(--text); cursor: pointer; font-family: inherit; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px; transition: all .15s;
+  }
+  .btn:hover { background: var(--panel); border-color: var(--accent); }
+  .btn svg { width: 14px; height: 14px; }
+  .btn-feito {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .btn-feito:hover { background: var(--accent-2); border-color: var(--accent-2); }
+  .act.feita .btn-feito { background: var(--n1); border-color: var(--n1); }
+
+  .sol {
+    display: none; margin-top: 10px; margin-left: 36px;
+    padding: 12px 14px; border-radius: 8px;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    font-size: .88rem; line-height: 1.55;
+  }
+  .sol.show { display: block; }
+  .sol strong { color: var(--accent-2); }
+
+  /* Empty state */
+  .empty {
+    text-align: center; padding: 50px 20px; color: var(--text-dim);
+    background: var(--panel); border: 1px dashed var(--border); border-radius: var(--radius);
+  }
+  .empty svg { width: 40px; height: 40px; color: var(--text-faint); margin-bottom: 10px; }
+  .empty h3 { font-size: 1rem; margin-bottom: 4px; color: var(--text); }
+  .empty p { font-size: .85rem; }
+
+  /* Preguntas interactivas */
+  .preguntas { display: flex; flex-direction: column; gap: 10px; margin: 12px 0 4px; }
+  .pregunta {
+    background: var(--panel-2); border: 1px solid var(--border); border-radius: 9px;
+    padding: 10px 14px; transition: border-color .15s;
+  }
+  .pregunta.acertada { border-color: var(--n1); background: var(--n1-bg); }
+  .pregunta.fallada { border-color: var(--n3); background: var(--n3-bg); }
+  .pregunta-q {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: .9rem; margin-bottom: 6px;
+  }
+  .pregunta-q .q-letra {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px;
+    background: var(--accent-bg); color: var(--accent-2);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .75rem;
+  }
+  .pregunta.acertada .q-letra { background: var(--n1); color: #fff; }
+  .pregunta.fallada .q-letra { background: var(--n3); color: #fff; }
+  .pregunta-q .q-text { flex: 1; }
+  .pregunta-q .q-text code {
+    background: var(--bg); padding: 1px 6px; border-radius: 4px;
+    font-size: .85em; font-family: 'Courier New', monospace;
+  }
+
+  /* Input numérico/texto */
+  .input-resp {
+    background: var(--bg); border: 2px solid var(--border); color: var(--text);
+    padding: 7px 12px; border-radius: 7px; font-size: .95rem; font-weight: 600;
+    font-family: inherit; min-width: 100px; max-width: 220px;
+    transition: border-color .15s, background .15s;
+  }
+  .input-resp:focus { outline: none; border-color: var(--accent); }
+  .input-resp.ok {
+    background: rgba(22,163,74,0.20); border-color: var(--n1); color: #4ade80;
+  }
+  .input-resp.fail {
+    background: rgba(220,38,38,0.15); border-color: var(--n3); color: #fca5a5;
+  }
+  .unidade { color: var(--text-dim); font-size: .85rem; margin-left: 6px; font-weight: 500; }
+
+  /* Opcións (radio/checkbox) como botóns */
+  .opcions { display: flex; flex-wrap: wrap; gap: 6px; }
+  .opcions.col { flex-direction: column; align-items: flex-start; }
+  .opc-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; background: var(--bg); border: 2px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: .87rem; font-weight: 600;
+    cursor: pointer; transition: all .15s; font-family: inherit; user-select: none;
+  }
+  .opc-btn:hover { border-color: var(--accent); }
+  .opc-btn input { display: none; }
+  .opc-btn.selected { background: var(--accent-bg); border-color: var(--accent); color: var(--accent-2); }
+  .opc-btn.ok { background: rgba(22,163,74,0.20); border-color: var(--n1); color: #4ade80; }
+  .opc-btn.fail { background: rgba(220,38,38,0.15); border-color: var(--n3); color: #fca5a5; }
+  .opc-btn.marca-correcta {
+    border-color: var(--n1); background: transparent; color: #86efac;
+    position: relative;
+  }
+  .opc-btn.marca-correcta::after {
+    content: '✓'; margin-left: 4px; font-weight: 800; color: var(--n1);
+  }
+
+  /* Sino: dous botóns grandes */
+  .opcions-sino { display: flex; gap: 8px; }
+  .opcions-sino .opc-btn { flex: 1; justify-content: center; padding: 10px 20px; font-size: .92rem; }
+
+  /* Textarea aberto */
+  .input-aberto {
+    width: 100%; min-height: 80px; resize: vertical;
+    background: var(--bg); border: 2px solid var(--border); color: var(--text);
+    padding: 10px 12px; border-radius: 8px; font-size: .9rem;
+    font-family: inherit; line-height: 1.5;
+  }
+  .input-aberto:focus { outline: none; border-color: var(--accent); }
+
+  /* Score display */
+  .score {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 8px; font-size: .82rem; font-weight: 700;
+    background: var(--panel-2); border: 1px solid var(--border);
+    margin-left: 6px;
+  }
+  .score.alto { background: var(--n1-bg); border-color: var(--n1); color: #4ade80; }
+  .score.medio { background: var(--n2-bg); border-color: var(--n2); color: #facc15; }
+  .score.baixo { background: var(--n3-bg); border-color: var(--n3); color: #fca5a5; }
+
+  /* Botón corrixir */
+  .btn-corrixir {
+    background: var(--accent-bg); color: var(--accent-2); border-color: var(--accent);
+  }
+  .btn-corrixir:hover { background: var(--accent); color: #fff; }
+
+  /* Polígono visual card */
+  .poligono-card {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 12px; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .poligono-glyph { font-size: 1.6rem; flex-shrink: 0; width: 28px; text-align: center; }
+  .poligono-nome { flex: 1; font-size: .85rem; }
+
+  /* Gráfico de barras inline (estatística) */
+  .bar-chart {
+    display: flex; flex-direction: column; gap: 5px;
+    background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; margin: 8px 0;
+  }
+  .bar-row { display: flex; align-items: center; gap: 8px; font-size: .85rem; }
+  .bar-label { min-width: 80px; color: var(--text-dim); }
+  .bar-bar {
+    height: 14px; background: var(--accent); border-radius: 4px;
+    display: flex; align-items: center; padding: 0 6px; color: #fff; font-size: .72rem; font-weight: 700;
+  }
+  .bar-bar.b2 { background: #f59e0b; }
+  .bar-bar.b3 { background: #ef4444; }
+  .bar-bar.b4 { background: #8b5cf6; }
+
+  /* Tarxeta-saldo da clase (apoio visual lites) */
+  .lite-card {
+    position: relative;
+    background: linear-gradient(135deg, #065f46 0%, #10b981 55%, #34d399 100%);
+    color: #fff; border-radius: 12px; padding: 14px 18px;
+    margin: 10px 0; max-width: 360px;
+    box-shadow: 0 4px 14px rgba(16,185,129,.25);
+    overflow: hidden;
+  }
+  .lite-card::before {
+    content: ''; position: absolute; width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+    top: -50px; right: -30px; border-radius: 50%;
+  }
+  .lite-card .lc-top {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+    opacity: .85; margin-bottom: 8px; position: relative;
+  }
+  .lite-card .lc-chip {
+    width: 26px; height: 18px; background: linear-gradient(135deg, #facc15, #f59e0b);
+    border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+  }
+  .lite-card .lc-saldo {
+    font-size: 1.7rem; font-weight: 800; letter-spacing: -.02em;
+    line-height: 1.1; position: relative;
+  }
+  .lite-card .lc-saldo .lc-moeda {
+    font-size: .85rem; font-weight: 700; opacity: .85; margin-left: 6px;
+  }
+  .lite-card .lc-clase {
+    font-size: .78rem; opacity: .88; margin-top: 6px; position: relative;
+    font-family: 'Courier New', monospace; letter-spacing: .12em;
+  }
+
+  /* Grid de xogos con prezo */
+  .xogos-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px; margin: 10px 0;
+  }
+  .xogo-tag {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 9px;
+    padding: 8px 10px; display: flex; align-items: center; gap: 8px;
+    font-size: .85rem;
+  }
+  .xogo-tag .xt-icon {
+    font-size: 1.4rem; flex-shrink: 0;
+  }
+  .xogo-tag .xt-nome { flex: 1; color: var(--text); font-weight: 600; }
+  .xogo-tag .xt-prezo {
+    background: var(--accent-bg); color: var(--accent-2);
+    padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: .78rem;
+    white-space: nowrap;
+  }
+
+  /* Táboa de regra de tres (apoio visual) */
+  .rt-tabla {
+    width: auto; margin: 8px 0; border-collapse: collapse;
+    background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; font-size: .9rem;
+  }
+  .rt-tabla th, .rt-tabla td {
+    padding: 8px 14px; text-align: center; border-right: 1px solid var(--border);
+  }
+  .rt-tabla tr { border-bottom: 1px solid var(--border); }
+  .rt-tabla tr:last-child { border-bottom: 0; }
+  .rt-tabla th { background: var(--panel); color: var(--text-dim); font-weight: 700; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+  .rt-tabla td { color: var(--text); font-weight: 600; }
+  .rt-tabla td.rt-q { color: var(--accent-2); font-weight: 800; }
+  .rt-tabla .rt-arrow { font-size: 1.05rem; color: var(--accent-2); }
+
+  /* Gate profesor */
+  .profe-gate {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 14px; font-size: .85rem;
+  }
+  .profe-gate .icon { font-size: 18px; }
+  .profe-gate .txt { flex: 1; min-width: 220px; color: var(--text-dim); }
+  .profe-gate .txt b { color: var(--text); }
+  .profe-gate .gate-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .profe-gate input {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 7px 11px; border-radius: 7px; font: inherit; min-width: 160px; font-size: .85rem;
+  }
+  .profe-gate input:focus { outline: none; border-color: var(--accent); }
+  .profe-gate .gate-btn {
+    padding: 7px 14px; background: var(--accent); color: #fff; border: 0;
+    border-radius: 7px; font: 700 .8rem inherit; cursor: pointer;
+  }
+  .profe-gate .gate-btn:hover { background: var(--accent-2); }
+  .profe-gate .err { color: #fca5a5; font-size: .78rem; margin-left: 6px; display: none; }
+  .profe-gate.ok { background: var(--n1-bg); border-color: var(--n1); }
+  .profe-gate.ok .gate-form { display: none; }
+  .profe-gate .ok-msg { display: none; align-items: center; gap: 8px; font-weight: 700; font-size: .85rem; color: #4ade80; }
+  .profe-gate.ok .ok-msg { display: inline-flex; }
+  .profe-gate .logout {
+    background: transparent; color: var(--text-dim);
+    border: 1px solid var(--border); padding: 5px 10px; border-radius: 6px;
+    font-size: .75rem; font-weight: 600; cursor: pointer; margin-left: 8px;
+  }
+  .profe-gate .logout:hover { background: var(--n3-bg); color: #fca5a5; border-color: var(--n3); }
+
+  /* Botón Profesor por actividade */
+  .btn-profe { background: #6d28d9; color: #fff; border-color: #6d28d9; }
+  .btn-profe:hover { background: #7c3aed; border-color: #7c3aed; }
+
+  /* Modal vista profesor */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,.65);
+    display: none; align-items: center; justify-content: center;
+    z-index: 200; padding: 20px;
+  }
+  .modal-backdrop.aberto { display: flex; }
+  .modal {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    max-width: 720px; width: 100%; max-height: 85vh; overflow: hidden;
+    display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .modal-head {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #4c1d95, #6d28d9);
+  }
+  .modal-head h2 { flex: 1; font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.3; }
+  .modal-head h2 .nivel-tag {
+    display: inline-block; background: rgba(255,255,255,.2); padding: 2px 8px;
+    border-radius: 5px; font-size: .72rem; margin-right: 6px; vertical-align: middle;
+  }
+  .modal-close {
+    background: rgba(255,255,255,.15); border: 0; color: #fff;
+    width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
+    font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+  }
+  .modal-close:hover { background: rgba(255,255,255,.3); }
+  .modal-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+  .modal-body .lock { font-size: 3rem; text-align: center; margin: 20px 0 10px; }
+  .modal-body .lock-msg { text-align: center; color: var(--text-dim); font-size: .9rem; margin-bottom: 16px; }
+  .prof-tabla { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+  .prof-tabla th, .prof-tabla td {
+    padding: 9px 12px; text-align: left; vertical-align: top;
+    border-bottom: 1px solid var(--border); font-size: .85rem;
+  }
+  .prof-tabla th {
+    background: var(--panel-2); color: var(--text-dim); font-weight: 600;
+    width: 32%; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em;
+  }
+  .prof-tabla td b { color: var(--accent-2); }
+  .grao-pill {
+    display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-weight: 700; font-size: .78rem; color: #fff;
+  }
+  .grao-pill.g1 { background: var(--n1); }
+  .grao-pill.g2 { background: var(--n2); color: #1a1a1a; }
+  .grao-pill.g3 { background: var(--n3); }
+  .ca-list { display: flex; flex-direction: column; gap: 4px; }
+  .ca-list-item {
+    display: flex; gap: 8px; align-items: flex-start;
+    padding: 7px 10px; background: var(--panel-2); border-radius: 6px;
+    font-size: .82rem; line-height: 1.4;
+  }
+  .ca-list-item .ca-code {
+    background: var(--accent-bg); color: var(--accent-2); padding: 2px 7px;
+    border-radius: 4px; font-weight: 700; font-size: .72rem; flex-shrink: 0;
+  }
+  .obx-bloque {
+    margin-top: 6px; padding: 12px 14px; background: var(--accent-bg);
+    border-left: 3px solid var(--accent); border-radius: 8px;
+    font-size: .85rem; line-height: 1.5;
+  }
+  .obx-bloque b { color: var(--accent-2); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 20px; font-size: .9rem; font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0,0,0,.3);
+    opacity: 0; transition: opacity .25s, transform .25s;
+    z-index: 999; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.ok { border-color: var(--n1); }
+  .toast.err { border-color: var(--n2); background: var(--n2-bg); }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .container { padding: 12px 10px 40px; }
+    header.top { gap: 10px; }
+    .title-block h1 { font-size: 1rem; }
+    .quen-row { flex-direction: column; align-items: stretch; }
+    .progress-mini { margin-left: 0; justify-content: space-between; }
+    .progress-bar { flex: 1; }
+    select.quen-select { min-width: 0; width: 100%; }
+    .act-body, .act-actions, .sol { margin-left: 0; }
+    .escala .hint { display: none; }
+  }
+
+  /* Print */
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    body { background: #fff !important; color: #000 !important; font-size: 11px; }
+    .header-actions, .icon-btn, .btn, .quen-row { display: none !important; }
+    .container { padding: 0; max-width: 100%; }
+    .nivel, .sec-head, .quen-card, .escala { page-break-inside: avoid; }
+    section.sentido + section.sentido { page-break-before: always; }
+    .sol { display: block !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="top">
+    <a class="back-btn" href="../index.html" title="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </a>
+    <div class="avatar">D</div>
+    <div class="title-block">
+      <h1>Propostas competenciais · Matemáticas</h1>
+      <div class="sub">5º Primaria · 3º trimestre · Escalas · Polígonos · Estatística</div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="window.print()" title="Imprimir">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </button>
+      <button class="icon-btn" onclick="resetAlumno()" title="Reiniciar o meu progreso">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/></svg>
+      </button>
+      <button class="icon-btn" onclick="toggleTheme()" title="Cambiar tema">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="quen-card">
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg>
+      Quen es?
+    </h2>
+    <p>Escolle o teu nome para gardar o teu progreso neste dispositivo.</p>
+    <div class="quen-row">
+      <select id="quen" class="quen-select" onchange="seleccionarAlumno()">
+        <option value="">— escolle o teu nome —</option>
+      </select>
+      <span id="quenBadge" class="quen-badge empty">Sen seleccionar</span>
+      <div class="progress-mini">
+        <span id="progressLabel">0 / 24</span>
+        <div class="progress-bar"><span id="progressFill"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="escala">
+    <span class="title">Niveis:</span>
+    <span class="item"><span class="niv-demo n1">1</span> Básico</span>
+    <span class="item"><span class="niv-demo n2">2</span> Medio</span>
+    <span class="item"><span class="niv-demo n3">3</span> Avanzado</span>
+    <span class="hint">Responde · Pulsa <b>Corrixir</b> para ver acertos · <b>Enviar e marcar feita</b> manda ao profe</span>
+  </div>
+
+  <div class="profe-gate" id="profeGate">
+    <span class="icon">👨‍🏫</span>
+    <span class="txt"><b>Vista profesor</b>: cada tarefa ten un botón "Profesor" coa relación curricular (CA · OBX · Sentido · Contido · Grao). Protexida con contrasinal.</span>
+    <form class="gate-form" onsubmit="return checkProfePassword(event)">
+      <input id="profePw" type="password" placeholder="Clave do profesorado" autocomplete="off">
+      <button class="gate-btn" type="submit">Acceder</button>
+      <span class="err" id="gateErr">Clave incorrecta</span>
+    </form>
+    <span class="ok-msg">
+      ✅ <span>Vista profesor activa</span>
+      <button class="logout" type="button" onclick="profeLogout()">Bloquear de novo</button>
+    </span>
+  </div>
+
+  <div id="contido"></div>
+
+</div>
+
+<!-- MODAL VISTA PROFESOR -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)pecharModal()">
+  <div class="modal" id="modalProfe">
+    <div class="modal-head">
+      <h2 id="modalTitulo"></h2>
+      <button class="modal-close" onclick="pecharModal()" aria-label="Pechar">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+const BUZON_ENDPOINT = 'https://buzon-fichas.diegofragafraga.workers.dev/enviar';
+const CURSO = '5º B · Propostas Mates';
+
+// ============================================================
+// RELACIÓN CURRICULAR (para a vista profesor)
+// ============================================================
+const PROFE_KEY = 'propostas_mates_profe_ok';
+const PROFE_HASH = 'e49ae5dc21c06b242735a5a7dbf8d371cbb0d6286d243c9b6d0ef27710558fe2'; // SHA-256("suerte")
+
+const CA_TO_OBX = {
+  'CA1.1':'OBX7','CA1.2':'OBX1','CA1.3':'OBX2','CA1.4':'OBX2','CA1.5':'OBX3','CA1.6':'OBX3','CA1.7':'OBX4','CA1.8':'OBX5','CA1.9':'OBX6',
+  'CA2.1':'OBX8','CA2.2':'OBX2','CA2.3':'OBX2','CA2.4':'OBX2','CA2.5':'OBX5','CA2.6':'OBX5','CA2.7':'OBX6','CA2.8':'OBX6',
+  'CA3.1':'OBX8','CA3.2':'OBX1','CA3.3':'OBX2','CA3.4':'OBX3','CA3.5':'OBX5','CA3.6':'OBX5','CA3.7':'OBX6','CA3.8':'OBX6',
+  'CA4.1':'OBX7','CA4.2':'OBX1','CA4.3':'OBX2','CA4.4':'OBX2','CA4.5':'OBX3','CA4.6':'OBX4','CA4.7':'OBX4','CA4.8':'OBX5','CA4.9':'OBX6',
+  'CA5.1':'OBX8','CA5.2':'OBX1','CA5.3':'OBX1','CA5.4':'OBX2','CA5.5':'OBX3','CA5.6':'OBX3','CA5.7':'OBX5','CA5.8':'OBX6',
+  'CA6.1':'OBX7','CA6.2':'OBX7','CA6.3':'OBX8','CA6.4':'OBX8','CA6.5':'OBX3','CA6.6':'OBX5','CA6.7':'OBX5','CA6.8':'OBX6'
+};
+
+const OBX_TEXTOS = {
+  OBX1: 'Interpretar situacións da vida cotiá proporcionando unha representación matemática mediante conceptos, ferramentas e estratexias, para analizar a información máis relevante.',
+  OBX2: 'Resolver situacións problematizadas aplicando diferentes técnicas, estratexias e formas de razoamento, para explorar distintas maneiras de proceder.',
+  OBX3: 'Explorar, formular e comprobar conxecturas sinxelas ou formular problemas matemáticos, recoñecendo o valor do razoamento e a argumentación.',
+  OBX4: 'Utilizar o pensamento computacional, organizando datos, descompoñendo en partes, recoñecendo patróns e xeneralizando.',
+  OBX5: 'Recoñecer e utilizar conexións entre as diferentes ideas matemáticas, así como identificar as matemáticas noutras áreas ou na vida cotiá.',
+  OBX6: 'Comunicar e representar conceptos, procedementos e resultados matemáticos, utilizando a linguaxe oral, escrita, gráfica e a terminoloxía apropiadas.',
+  OBX7: 'Desenvolver destrezas persoais (xestión emocional, perseveranza, autoconfianza) ao enfrontarse a retos matemáticos.',
+  OBX8: 'Desenvolver destrezas sociais e cooperativas, traballando en equipo con roles asignados.'
+};
+
+const CA_TEXTOS = {
+  'CA1.3': 'Seleccionar entre diferentes estratexias para resolver un problema, xustificando a elección.',
+  'CA1.4': 'Obter posibles solucións dun problema, seleccionando entre varias estratexias coñecidas de forma autónoma.',
+  'CA1.5': 'Formular conxecturas matemáticas sinxelas investigando patróns, propiedades e relacións de forma guiada.',
+  'CA1.6': 'Formular novos problemas sobre situacións cotiás que se resolvan matematicamente.',
+  'CA1.8': 'Utilizar as conexións entre as matemáticas, outras áreas e a vida cotiá para resolver problemas.',
+  'CA2.5': 'Utilizar conexións entre diferentes elementos matemáticos mobilizando coñecementos e experiencias propios.',
+  'CA2.7': 'Interpretar a linguaxe matemática sinxela presente na vida cotiá en diferentes formatos, mostrando a comprensión da mensaxe.',
+  'CA2.8': 'Comunicar en diferentes formatos as conxecturas e procesos matemáticos, utilizando linguaxe matemática adecuada.',
+  'CA3.3': 'Seleccionar entre diferentes estratexias para resolver un problema, xustificando a elección.',
+  'CA3.4': 'Formular conxecturas matemáticas sinxelas investigando patróns, propiedades e relacións de forma guiada.',
+  'CA3.5': 'Utilizar conexións entre diferentes elementos matemáticos.',
+  'CA3.7': 'Interpretar a linguaxe matemática sinxela en diferentes formatos.',
+  'CA4.5': 'Formular conxecturas matemáticas sinxelas investigando patróns e relacións.',
+  'CA4.8': 'Utilizar conexións entre diferentes elementos matemáticos.',
+  'CA5.6': 'Formular novos problemas sobre situacións cotiás que se resolvan matematicamente.',
+  'CA5.7': 'Utilizar as conexións entre as matemáticas e a vida cotiá para resolver problemas.',
+  'CA5.8': 'Interpretar a linguaxe matemática sinxela presente na vida cotiá.',
+  'CA6.4': 'Colaborar na repartición de tarefas, asumindo as responsabilidades individuais asignadas.',
+  'CA6.5': 'Formular conxecturas matemáticas sinxelas investigando patróns de forma guiada.',
+  'CA6.7': 'Utilizar as conexións entre as matemáticas e outras áreas e a vida cotiá.'
+};
+
+const ALUMNADO = [
+  "Abal Dorado, Iker",
+  "Búa Pardo, Adrián",
+  "Castro Cernadas, Paula",
+  "Costa Castro, Ingrid",
+  "Fernándes Leonor, Eloá",
+  "Ferro Pita, Alex",
+  "Pazos Sineiro, Xurxo",
+  "Pedreira González, Anxo",
+  "Pereira Fariña, Antía",
+  "Radío Prieto, Unai",
+  "Suárez Khoule, Aisha",
+  "Varela Porto, David",
+  "Veiga García, Mateo"
+];
+
+const KEY = 'propostas_mates5_2026';
+const KEY_THEME = 'ef_theme';
+
+// ============================================================
+// CONTIDO: 4 sentidos × 3 niveis × 2 actividades = 24 tarefas
+// ============================================================
+const SENTIDOS = [
+  {
+    id: 'numerico',
+    nome: 'Sentido numérico',
+    sub: 'As lites: aluguer de xogos no recreo (operacións, proporcionalidade, %)',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="14" x2="10" y2="14"/></svg>',
+    niveis: [
+      {
+        nivel: 1, nome: 'Operar coas lites', tag: 'Sumar · restar · comparar',
+        actividades: [
+          {
+            t: 'A semana da tarxeta',
+            cas: ['CA5.7', 'CA5.8'],
+            intro: `<p>No noso cole alugamos xogos no recreo cunha <strong>tarxeta de crédito da clase</strong>. Cada vez que collemos un xogo, descóntannos as <strong>lites</strong> correspondentes. A clase de <strong>5º B</strong> empezou o luns con este saldo:</p>
+              <div class="lite-card">
+                <div class="lc-top"><span>Tarxeta da clase</span><span class="lc-chip"></span></div>
+                <div class="lc-saldo">120 <span class="lc-moeda">LITES</span></div>
+                <div class="lc-clase">●●●● ●●●● 5ºB · CEIP DENA</div>
+              </div>
+              <p>Durante a semana fixeron estes alugueres:</p>
+              <div class="xogos-grid">
+                <div class="xogo-tag"><span class="xt-icon">⚽</span><span class="xt-nome">Balón (luns)</span><span class="xt-prezo">3 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">♟️</span><span class="xt-nome">Xadrez (martes)</span><span class="xt-prezo">4 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🪀</span><span class="xt-nome">Iô-iô (martes)</span><span class="xt-prezo">2 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🥏</span><span class="xt-nome">Frisbee (mércores)</span><span class="xt-prezo">3 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🎯</span><span class="xt-nome">Diana (xoves)</span><span class="xt-prezo">5 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🦘</span><span class="xt-nome">Comba (venres)</span><span class="xt-prezo">2 lites</span></div>
+              </div>`,
+            preguntas: [
+              { tipo: 'num', q: '¿Cantas lites gastou a clase en toda a semana?', unidade: 'lites', ok: 19 },
+              { tipo: 'num', q: 'Saldo da tarxeta o venres pola tarde', unidade: 'lites', ok: 101 },
+              { tipo: 'num', q: '¿Cantos recreos máis de iô-iô (2 lites) pode pagar coa cantidade que queda?', unidade: 'recreos', ok: 50 },
+              { tipo: 'opc', q: '¿Cal foi o día máis caro?', opcions: ['Luns','Martes','Mércores','Xoves'], ok: 1 }
+            ],
+            sol: `<strong>Solucións:</strong><br>· Gastado: 3+4+2+3+5+2 = <strong>19 lites</strong><br>· Saldo: 120 − 19 = <strong>101 lites</strong><br>· 101 ÷ 2 = 50,5 → <strong>50 recreos</strong> (sobrarían 1 lite)<br>· Día máis caro: <strong>martes</strong> (4+2 = 6 lites)`
+          },
+          {
+            t: '¿Que podemos coller hoxe?',
+            cas: ['CA2.7', 'CA5.7'],
+            intro: `<p>Hoxe a clase ten <strong>15 lites</strong> para gastar. Estes son os prezos da tenda do recreo:</p>
+              <div class="xogos-grid">
+                <div class="xogo-tag"><span class="xt-icon">🪀</span><span class="xt-nome">Iô-iô</span><span class="xt-prezo">2 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🦘</span><span class="xt-nome">Comba</span><span class="xt-prezo">2 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">⚽</span><span class="xt-nome">Balón</span><span class="xt-prezo">3 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🥏</span><span class="xt-nome">Frisbee</span><span class="xt-prezo">3 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">♟️</span><span class="xt-nome">Xadrez</span><span class="xt-prezo">4 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🎲</span><span class="xt-nome">Parchís</span><span class="xt-prezo">4 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🎯</span><span class="xt-nome">Diana</span><span class="xt-prezo">5 lites</span></div>
+              </div>
+              <p>Decide se a clase <strong>pode permitirse</strong> cada combinación:</p>`,
+            preguntas: [
+              { tipo: 'opc', q: '1 diana + 1 xadrez + 1 frisbee', opcions: ['Si chega (15 ou menos)','Non chega (máis de 15)'], ok: 0 },
+              { tipo: 'opc', q: '2 dianas + 1 parchís + 1 iô-iô', opcions: ['Si chega','Non chega'], ok: 1 },
+              { tipo: 'opc', q: '3 balóns + 2 combas + 1 xadrez', opcions: ['Si chega','Non chega'], ok: 0 },
+              { tipo: 'num', q: 'Se cada un dos 13 nenos colle UN iô-iô, ¿chega cos 15 lites?', unidade: 'Non. Mín. de lites para que chegue:', ok: 26 },
+              { tipo: 'num', q: 'Combinación máis cara que chega a 15 exactos: 1 diana + 1 parchís + 1 frisbee + ... (¿que custa o que falta?)', unidade: 'lites', ok: 3 }
+            ],
+            sol: `<strong>Solucións:</strong><br>· 5+4+3 = 12 → <strong>si</strong><br>· 5+5+4+2 = 16 → <strong>non</strong><br>· 3+3+3+2+2+4 = 17 → <strong>non</strong><br>· 13 iô-iôs = 26 lites → fan falta <strong>26 lites</strong><br>· 5+4+3+X = 15 → X = <strong>3 lites</strong> (balón ou frisbee)`
+          }
+        ]
+      },
+      {
+        nivel: 2, nome: 'Regra de tres con lites', tag: 'Proporcionalidade directa',
+        actividades: [
+          {
+            t: '¿Cantos recreos de parchís?',
+            cas: ['CA1.3', 'CA1.4'],
+            intro: `<p>O xefe de tenda di que <strong>3 recreos de parchís custan 12 lites</strong>. Sabendo iso, calcula os demais usando a <strong>regra de tres</strong>:</p>
+              <table class="rt-tabla">
+                <tr><th>Recreos</th><th></th><th>Lites</th></tr>
+                <tr><td>3</td><td class="rt-arrow">→</td><td>12</td></tr>
+                <tr><td>1</td><td class="rt-arrow">→</td><td class="rt-q">?</td></tr>
+                <tr><td>7</td><td class="rt-arrow">→</td><td class="rt-q">?</td></tr>
+                <tr><td class="rt-q">?</td><td class="rt-arrow">→</td><td>20</td></tr>
+              </table>
+              <p><em>Pista:</em> primeiro calcula <strong>canto custa 1 recreo</strong> (12 ÷ 3). Despois multiplica ou divide.</p>`,
+            preguntas: [
+              { tipo: 'num', q: 'Prezo de 1 recreo (12 ÷ 3)', unidade: 'lites', ok: 4 },
+              { tipo: 'num', q: '7 recreos de parchís', unidade: 'lites', ok: 28 },
+              { tipo: 'num', q: 'Con 20 lites, ¿cantos recreos podemos pagar?', unidade: 'recreos', ok: 5 },
+              { tipo: 'opc', q: 'Se o prezo SOBE ao dobre (1 recreo = 8 lites), con 20 lites poderiamos coller...', opcions: ['o mesmo número','o dobre','a metade','non chega para nada'], ok: 2 }
+            ],
+            sol: `<strong>Solucións:</strong><br>· 1 recreo = 12 ÷ 3 = <strong>4 lites</strong><br>· 7 recreos = 7 × 4 = <strong>28 lites</strong><br>· 20 ÷ 4 = <strong>5 recreos</strong><br>· Se o prezo é o dobre, con 20 lites colleriamos a <strong>metade</strong> (20 ÷ 8 = 2,5 recreos vs. 5 antes).`
+          },
+          {
+            t: 'Cambio de lites a euros',
+            cas: ['CA2.5', 'CA3.5'],
+            intro: `<p>Na festa de fin de curso o cole cambia lites por euros para mercar lambonadas. A <strong>regra de cambio</strong> é:</p>
+              <table class="rt-tabla">
+                <tr><th>Lites</th><th></th><th>Euros</th></tr>
+                <tr><td>5</td><td class="rt-arrow">↔</td><td>1 €</td></tr>
+                <tr><td>10</td><td class="rt-arrow">↔</td><td>2 €</td></tr>
+                <tr><td>15</td><td class="rt-arrow">↔</td><td>3 €</td></tr>
+              </table>
+              <p>Pasa as cantidades coa <strong>regra de tres</strong>:</p>`,
+            preguntas: [
+              { tipo: 'num', q: '25 lites equivalen a...', unidade: '€', ok: 5 },
+              { tipo: 'num', q: '8 € equivalen a...', unidade: 'lites', ok: 40 },
+              { tipo: 'num', q: 'Se tes 35 lites, ¿cantos € son?', unidade: '€', ok: 7 },
+              { tipo: 'opc', q: 'Esta proporción é...', opcions: ['Directa (máis lites → máis €)','Inversa (máis lites → menos €)'], ok: 0 },
+              { tipo: 'texto', q: '¿Cantas lites custaría un xeado de 1,40 €? (resposta numérica con punto decimal admítese)', ok: '7', alts: ['7 lites','7,0','7.0'] }
+            ],
+            sol: `<strong>Solucións:</strong><br>· 25 ÷ 5 = <strong>5 €</strong><br>· 8 × 5 = <strong>40 lites</strong><br>· 35 ÷ 5 = <strong>7 €</strong><br>· É <strong>directa</strong>: ao subir un, sobe o outro<br>· 1,40 € × 5 = <strong>7 lites</strong>`
+          }
+        ]
+      },
+      {
+        nivel: 3, nome: 'Orzamento e descontos', tag: 'Planificar · razoar con %',
+        actividades: [
+          {
+            t: 'Plan da quincena',
+            cas: ['CA1.6', 'CA3.4', 'CA6.7'],
+            intro: `<p>A clase de 5º B recibe <strong>100 lites para 15 recreos</strong> da próxima quincena. Hai que <strong>planificar</strong> os alugueres para que ninguén quede sen xogo.</p>
+              <div class="xogos-grid">
+                <div class="xogo-tag"><span class="xt-icon">🪀</span><span class="xt-nome">Iô-iô</span><span class="xt-prezo">2 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">⚽</span><span class="xt-nome">Balón</span><span class="xt-prezo">3 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">♟️</span><span class="xt-nome">Xadrez</span><span class="xt-prezo">4 lites</span></div>
+                <div class="xogo-tag"><span class="xt-icon">🎯</span><span class="xt-nome">Diana</span><span class="xt-prezo">5 lites</span></div>
+              </div>`,
+            preguntas: [
+              { tipo: 'num', q: 'Se gastaramos o mesmo cada recreo, ¿cantas lites tocan por recreo?', unidade: 'lites', ok: 6.67, tol: 0.05, alts: ['6,67'] },
+              { tipo: 'num', q: 'Plan A: 15 recreos de balón (3 lites cada un). ¿Canto se gasta?', unidade: 'lites', ok: 45 },
+              { tipo: 'num', q: 'Plan A: lites que sobran (100 − gastado)', unidade: 'lites', ok: 55 },
+              { tipo: 'opc', q: 'Plan B: alternar 1 día balón, 1 día diana (3+5 cada par de días). Para 14 recreos (7 pares), ¿chegan as 100 lites?', opcions: ['Si chega','Non chega'], ok: 0 },
+              { tipo: 'num', q: 'Plan B: lites usadas en 14 recreos (7 × (3+5))', unidade: 'lites', ok: 56 },
+              { tipo: 'aberto', q: 'Propón o teu plan para 15 recreos sen pasar de 100 lites. Que xogos collerías?' }
+            ],
+            sol: `<strong>Solucións:</strong><br>· 100 ÷ 15 = <strong>6,67 lites</strong> por recreo<br>· Plan A: 15 × 3 = <strong>45 lites</strong> → sobran <strong>55 lites</strong><br>· Plan B: 7 × 8 = <strong>56 lites</strong> en 14 recreos → si chega (sobran 44 para o último recreo)<br><em>Plan aberto:</em> calquera proposta válida onde a suma ≤ 100 lites e cubra 15 recreos.`
+          },
+          {
+            t: 'Desconto da Semana das Letras',
+            cas: ['CA1.4', 'CA5.7', 'CA5.8'],
+            intro: `<p>Durante a <strong>Semana das Letras Galegas</strong> a tenda fai un <strong>desconto do 20%</strong> en todos os xogos. O xadrez normalmente custa <strong>4 lites</strong>.</p>
+              <p><em>Pista:</em> 20% de 4 = 4 × 0,2 = 0,8. Prezo rebaixado = 4 − 0,8 = 3,2 lites.</p>
+              <table class="rt-tabla">
+                <tr><th>Xogo</th><th>Prezo</th><th>−20%</th></tr>
+                <tr><td>⚽ Balón</td><td>3 lites</td><td class="rt-q">?</td></tr>
+                <tr><td>♟️ Xadrez</td><td>4 lites</td><td>3,2 lites</td></tr>
+                <tr><td>🎯 Diana</td><td>5 lites</td><td class="rt-q">?</td></tr>
+              </table>`,
+            preguntas: [
+              { tipo: 'num', q: 'Prezo do balón con desconto (−20%)', unidade: 'lites', ok: 2.4, tol: 0.05, alts: ['2,4'] },
+              { tipo: 'num', q: 'Prezo da diana con desconto', unidade: 'lites', ok: 4, tol: 0.05 },
+              { tipo: 'num', q: 'Aforro total se collemos 10 xadreces a 3,2 en vez de 4 lites', unidade: 'lites', ok: 8 },
+              { tipo: 'num', q: 'Cunha tarxeta de 50 lites, ¿cantos xadreces con desconto podemos coller? (resposta enteira)', unidade: 'xadreces', ok: 15 },
+              { tipo: 'opc', q: 'Se quitan o desconto e o xadrez volve a 4 lites, con 50 lites poderiamos coller...', opcions: ['Máis xadreces (porque é máis caro)','Menos xadreces (porque é máis caro)','Os mesmos'], ok: 1 }
+            ],
+            sol: `<strong>Solucións:</strong><br>· Balón: 3 × 0,8 = <strong>2,4 lites</strong><br>· Diana: 5 × 0,8 = <strong>4 lites</strong><br>· Aforro: 10 × (4 − 3,2) = 10 × 0,8 = <strong>8 lites</strong><br>· 50 ÷ 3,2 = 15,6 → <strong>15 xadreces</strong> (sobran 2 lites)<br>· Sen desconto: 50 ÷ 4 = 12,5 → 12 xadreces → <strong>menos</strong> que con desconto.`
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'medida',
+    nome: 'Sentido da medida',
+    sub: 'Escalas, proporcionalidade e medidas reais',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3a2.4 2.4 0 0 1-3.4 0L2.7 18.7a2.4 2.4 0 0 1 0-3.4L15.3 2.7a2.4 2.4 0 0 1 3.4 0l2.6 2.6a2.4 2.4 0 0 1 0 3.4Z"/><path d="m7 17 1-1"/><path d="m11 13 1-1"/><path d="m15 9 1-1"/></svg>',
+    niveis: [
+      {
+        nivel: 1, nome: 'Lectura de escalas', tag: 'Recoñecer · interpretar',
+        actividades: [
+          {
+            t: 'Ler unha escala numérica',
+            cas: ['CA5.7', 'CA5.8'],
+            intro: `<p>Nun mapa lese: <code>Escala 1 : 100</code>. Isto significa que <strong>1 cm no mapa = 100 cm na realidade</strong> (ou sexa, 1 m).</p>
+              <p>Calcula <strong>en metros</strong> a distancia real para cada caso:</p>`,
+            preguntas: [
+              { tipo: 'num', q: 'Casa de Paula → escola (3 cm no mapa)', unidade: 'm', ok: 3 },
+              { tipo: 'num', q: 'Escola → parque (7 cm no mapa)', unidade: 'm', ok: 7 },
+              { tipo: 'num', q: 'Casa de Paula → parque (pasando pola escola)', unidade: 'm', ok: 10 }
+            ],
+            sol: `<strong>Solucións:</strong><br>· 3 cm × 100 = 300 cm = <strong>3 m</strong><br>· 7 cm × 100 = 700 cm = <strong>7 m</strong><br>· 3 m + 7 m = <strong>10 m</strong>`
+          },
+          {
+            t: 'Escoller a escala adecuada',
+            cas: ['CA2.7', 'CA5.7'],
+            intro: `<p>Queres debuxar nun folio A4 (≈ 30 cm de longo) catro cousas. <strong>Selecciona</strong> a escala adecuada para cada unha:</p>`,
+            preguntas: [
+              { tipo: 'opc', q: 'Un campo de fútbol (100 m de longo)', opcions: ['1:5','1:500','5:1','1:1.000.000'], ok: 1 },
+              { tipo: 'opc', q: 'Unha pulga (2 mm)', opcions: ['1:5','1:500','5:1','1:1.000.000'], ok: 2 },
+              { tipo: 'opc', q: 'O teu pupitre (60 cm)', opcions: ['1:5','1:500','5:1','1:1.000.000'], ok: 0 },
+              { tipo: 'opc', q: 'Galicia (290 km de norte a sur)', opcions: ['1:5','1:500','5:1','1:1.000.000'], ok: 3 }
+            ],
+            sol: `<strong>Solucións:</strong><br>1. Campo (100m=10.000cm; ÷500=20cm) → <strong>1:500</strong><br>2. Pulga → <strong>5:1</strong> (ampliación: 2mm × 5 = 10mm)<br>3. Pupitre (60÷5=12cm) → <strong>1:5</strong><br>4. Galicia (290km=29.000.000cm; ÷1M=29cm) → <strong>1:1.000.000</strong>`
+          }
+        ]
+      },
+      {
+        nivel: 2, nome: 'Calcular con escalas', tag: 'Aplicar · converter',
+        actividades: [
+          {
+            t: 'Plano da aula',
+            cas: ['CA1.3', 'CA1.4'],
+            intro: `<p>O plano da túa aula está debuxado a <strong>escala 1:50</strong>. No plano, o encerado mide 4 cm e a porta 1,8 cm.</p>`,
+            preguntas: [
+              { tipo: 'num', q: '¿Canto mide o encerado na realidade?', unidade: 'm', ok: 2 },
+              { tipo: 'num', q: '¿E a porta?', unidade: 'm', ok: 0.9, tol: 0.05 },
+              { tipo: 'num', q: 'Se a aula real ten 8 m de longo, ¿cantos cm ten no plano?', unidade: 'cm', ok: 16 }
+            ],
+            sol: `<strong>Solucións:</strong><br>· Encerado: 4 × 50 = 200 cm = <strong>2 m</strong><br>· Porta: 1,8 × 50 = 90 cm = <strong>0,9 m</strong><br>· 8 m = 800 cm → 800 ÷ 50 = <strong>16 cm</strong>`
+          },
+          {
+            t: 'Cambio de escala',
+            cas: ['CA2.5', 'CA3.5'],
+            intro: `<p>Un mesmo edificio aparece en dous planos:</p>
+              <ul><li><strong>Plano A</strong> (escala 1:100) → o edificio mide 6 cm</li>
+              <li><strong>Plano B</strong> (escala 1:200) → ¿cantos cm?</li></ul>`,
+            preguntas: [
+              { tipo: 'num', q: '¿Canto mide o edificio en realidade?', unidade: 'm', ok: 6 },
+              { tipo: 'num', q: '¿Cantos cm mide no plano B?', unidade: 'cm', ok: 3 },
+              { tipo: 'opc', q: 'No plano B verémolo...', opcions: ['Máis grande que no A','Igual','Máis pequeno que no A'], ok: 2 }
+            ],
+            sol: `<strong>Solución:</strong><br>Real: 6 × 100 = 600 cm = <strong>6 m</strong>. Plano B: 600 ÷ 200 = <strong>3 cm</strong>. Verémolo <strong>máis pequeno</strong> (a escala 1:200 reduce máis que 1:100).`
+          }
+        ]
+      },
+      {
+        nivel: 3, nome: 'Crear e razoar con escalas', tag: 'Crear · proxectar',
+        actividades: [
+          {
+            t: 'Plano da túa habitación',
+            cas: ['CA1.6', 'CA3.4', 'CA6.5'],
+            intro: `<p>Vas debuxar o plano da túa habitación a <strong>escala 1:25</strong> (1 cm = 25 cm reais).</p>
+              <p><strong>Practica primeiro</strong> antes de pasar á tarefa de casa:</p>`,
+            preguntas: [
+              { tipo: 'num', q: 'Se o teu cuarto fai 3 m de longo, ¿cantos cm no plano (1:25)?', unidade: 'cm', ok: 12, tol: 0.5 },
+              { tipo: 'num', q: 'A cama (2 m de longo) → ¿cm no plano?', unidade: 'cm', ok: 8, tol: 0.5 },
+              { tipo: 'num', q: 'Un moble de 50 cm → ¿cm no plano?', unidade: 'cm', ok: 2, tol: 0.5 },
+              { tipo: 'sino', q: 'Comprométome a entregar o plano da miña habitación en papel', ok: true }
+            ],
+            sol: `<strong>Como facer o plano:</strong> mide en metros e divide entre 25 (ou pasa a cm e divide entre 25). Exemplo: 3 m → 300 cm ÷ 25 = 12 cm. Inclúe porta, ventá e mobles.`
+          },
+          {
+            t: 'Excursión en mapa',
+            cas: ['CA1.8', 'CA5.7'],
+            intro: `<p>Un mapa de sendeirismo ten escala <code>1:50.000</code>. Entre dúas vilas hai <strong>7 cm</strong> no mapa.</p>`,
+            preguntas: [
+              { tipo: 'num', q: 'Distancia real entre as vilas', unidade: 'km', ok: 3.5, tol: 0.05 },
+              { tipo: 'num', q: 'Tempo andando a 5 km/h', unidade: 'min', ok: 42, tol: 1 },
+              { tipo: 'texto', q: 'Hora de chegada (sae ás 10:00, descansa 20 min a metade)', ok: '11:02', alts: ['11.02', '11h02'] }
+            ],
+            sol: `<strong>Solucións:</strong><br>1. 7 × 50.000 = 350.000 cm = <strong>3,5 km</strong><br>2. 3,5 ÷ 5 = 0,7 h = <strong>42 min</strong><br>3. 42 min + 20 min descanso = 62 min → <strong>11:02</strong>`
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'espacial',
+    nome: 'Sentido espacial',
+    sub: 'Polígonos: clasificación, propiedades e construción',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-9 5-9-5V8l9-5 9 5v8Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>',
+    niveis: [
+      {
+        nivel: 1, nome: 'Clasificar polígonos', tag: 'Identificar · nomear',
+        actividades: [
+          {
+            t: 'Regular ou irregular',
+            cas: ['CA2.7', 'CA5.7'],
+            intro: `<p>Lembra: un polígono é <strong>regular</strong> se ten todos os lados iguais <em>e</em> todos os ángulos iguais. Se non, é <strong>irregular</strong>.</p>
+              <p><strong>Marca</strong> a categoría de cada un:</p>`,
+            preguntas: [
+              { tipo: 'opc', q: 'A · ⬣ Hexágono cos 6 lados iguais', opcions: ['Regular','Irregular'], ok: 0 },
+              { tipo: 'opc', q: 'B · ▱ Paralelogramo (lados opostos iguais)', opcions: ['Regular','Irregular'], ok: 1 },
+              { tipo: 'opc', q: 'C · ▲ Triángulo equilátero', opcions: ['Regular','Irregular'], ok: 0 },
+              { tipo: 'opc', q: 'D · ◇ Rombo (lados iguais, ángulos non)', opcions: ['Regular','Irregular'], ok: 1 },
+              { tipo: 'opc', q: 'E · ⬟ Pentágono cos 5 lados iguais', opcions: ['Regular','Irregular'], ok: 0 },
+              { tipo: 'opc', q: 'F · ▭ Rectángulo (ángulos iguais, lados non)', opcions: ['Regular','Irregular'], ok: 1 }
+            ],
+            sol: `<strong>Solucións:</strong> A regular · B irregular · C regular · D irregular · E regular · F irregular.<br><em>Atención:</em> rombo (D) ten lados iguais pero ángulos distintos; rectángulo (F) ten ángulos iguais pero lados distintos.`
+          },
+          {
+            t: 'Nomes segundo o número de lados',
+            cas: ['CA2.7', 'CA5.6'],
+            intro: `<p>¿Cantos lados ten cada polígono? Escribe o número:</p>`,
+            preguntas: [
+              { tipo: 'num', q: 'Triángulo', unidade: 'lados', ok: 3 },
+              { tipo: 'num', q: 'Cuadrilátero', unidade: 'lados', ok: 4 },
+              { tipo: 'num', q: 'Pentágono', unidade: 'lados', ok: 5 },
+              { tipo: 'num', q: 'Hexágono', unidade: 'lados', ok: 6 },
+              { tipo: 'num', q: 'Heptágono', unidade: 'lados', ok: 7 },
+              { tipo: 'num', q: 'Octógono', unidade: 'lados', ok: 8 },
+              { tipo: 'num', q: 'Decágono', unidade: 'lados', ok: 10 },
+              { tipo: 'texto', q: 'Reto extra: ¿como se chama un polígono de 12 lados?', ok: 'dodecágono', alts: ['dodecagono'] },
+              { tipo: 'texto', q: '¿E un de 9?', ok: 'eneágono', alts: ['eneagono','nonágono','nonagono'] }
+            ],
+            sol: `<strong>Solucións:</strong> 3,4,5,6,7,8,10 lados respectivamente. 12 lados = <strong>dodecágono</strong>. 9 lados = <strong>eneágono</strong> (tamén "nonágono").`
+          }
+        ]
+      },
+      {
+        nivel: 2, nome: 'Perímetros e ángulos', tag: 'Calcular · razoar',
+        actividades: [
+          {
+            t: 'Perímetro dun hexágono regular',
+            cas: ['CA1.4', 'CA3.3'],
+            intro: `<p>Un hexágono regular ten os 6 lados iguais. Cada lado mide <strong>4,5 cm</strong>.</p>`,
+            preguntas: [
+              { tipo: 'num', q: '¿Canto vale o perímetro?', unidade: 'cm', ok: 27 },
+              { tipo: 'num', q: 'Se colocamos 8 hexágonos un detrás doutro, ¿cantos cm de fío necesitamos para bordealos todos?', unidade: 'cm', ok: 216 }
+            ],
+            sol: `<strong>Solucións:</strong><br>· Perímetro = 6 × 4,5 = <strong>27 cm</strong><br>· 8 hexágonos = 8 × 27 = <strong>216 cm</strong> (2,16 m)`
+          },
+          {
+            t: 'Suma de ángulos interiores',
+            cas: ['CA1.5', 'CA6.5'],
+            intro: `<p>Os 3 ángulos dun triángulo suman <strong>180°</strong>. Sabendo iso, descubre canto suman os ángulos interiores:</p>
+              <p><em>Truco: divide o polígono en triángulos coas diagonais desde un vértice.</em></p>`,
+            preguntas: [
+              { tipo: 'num', q: 'Cuadrilátero (2 triángulos)', unidade: '°', ok: 360 },
+              { tipo: 'num', q: 'Pentágono (3 triángulos)', unidade: '°', ok: 540 },
+              { tipo: 'num', q: 'Hexágono (4 triángulos)', unidade: '°', ok: 720 },
+              { tipo: 'opc', q: '¿Cal é o patrón? A suma = ...', opcions: ['(lados + 2) × 180°','(lados − 2) × 180°','(lados ÷ 2) × 180°','lados × 180°'], ok: 1 }
+            ],
+            sol: `<strong>Solucións:</strong> 360°, 540°, 720°.<br><strong>Patrón:</strong> nº de triángulos = lados − 2 → suma = <strong>(lados − 2) × 180°</strong>`
+          }
+        ]
+      },
+      {
+        nivel: 3, nome: 'Construír e aplicar', tag: 'Crear · resolver',
+        actividades: [
+          {
+            t: 'Mosaico ou teselado',
+            cas: ['CA1.6', 'CA4.5'],
+            intro: `<p>Un <strong>teselado</strong> é cubrir unha superficie sen ocos nin solapamentos. Só algúns polígonos regulares teselan sós: o triángulo equilátero, o cadrado e o hexágono regular.</p>
+              <p>Investiga por que:</p>`,
+            preguntas: [
+              { tipo: 'num', q: '¿Canto mide cada ángulo interior dun hexágono regular? (Pista: 720° ÷ 6)', unidade: '°', ok: 120 },
+              { tipo: 'num', q: '¿Cantos hexágonos caben sen ocos arredor dun vértice? (360° ÷ ángulo)', unidade: '', ok: 3 },
+              { tipo: 'opc', q: '¿Tesela o pentágono regular só?', opcions: ['Si','Non'], ok: 1 },
+              { tipo: 'opc', q: '¿Por que NON tesela o pentágono?', opcions: ['Porque ten 5 lados (impar)','Porque 360° ÷ 108° = 3,33 non é exacto','Porque é convexo'], ok: 1 },
+              { tipo: 'sino', q: 'Comprométome a debuxar un teselado de triángulos (mínimo 12 pezas) en papel', ok: true }
+            ],
+            sol: `<strong>Solucións:</strong><br>· Ángulo do hexágono regular = 720° ÷ 6 = <strong>120°</strong><br>· 360° ÷ 120° = <strong>3</strong> hexágonos por vértice<br>· O pentágono NON tesela porque 360° ÷ 108° = 3,33… (deixa ocos)`
+          },
+          {
+            t: 'Valla para un xardín octogonal',
+            cas: ['CA1.4', 'CA5.7'],
+            intro: `<p>Un xardín ten forma de <strong>octógono regular</strong> e cada lado mide <strong>3,5 m</strong>.</p>`,
+            preguntas: [
+              { tipo: 'num', q: 'Perímetro do xardín', unidade: 'm', ok: 28 },
+              { tipo: 'num', q: 'Custo dunha valla a 8 €/m', unidade: '€', ok: 224 },
+              { tipo: 'num', q: 'Custo deixando unha porta de 1,2 m sen valla', unidade: '€', ok: 214.4, tol: 0.05 }
+            ],
+            sol: `<strong>Solucións:</strong><br>· Perímetro = 8 × 3,5 = <strong>28 m</strong><br>· Valla = 28 × 8 = <strong>224 €</strong><br>· Con porta: (28 − 1,2) × 8 = 26,8 × 8 = <strong>214,40 €</strong>`
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'estocastico',
+    nome: 'Sentido estocástico',
+    sub: 'Estatística: recoller, representar e interpretar datos',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>',
+    niveis: [
+      {
+        nivel: 1, nome: 'Ler datos', tag: 'Interpretar · contar',
+        actividades: [
+          {
+            t: 'Mascotas da clase',
+            cas: ['CA2.8', 'CA3.7'],
+            intro: `<p>Preguntámoslle á clase: <em>"¿Que mascota tes?"</em>. Os 13 alumnos de 5º responden:</p>
+              <div class="bar-chart">
+                <div class="bar-row"><span class="bar-label">🐶 Can</span><span class="bar-bar" style="width:240px">8</span></div>
+                <div class="bar-row"><span class="bar-label">🐱 Gato</span><span class="bar-bar b2" style="width:90px">3</span></div>
+                <div class="bar-row"><span class="bar-label">🐠 Peixe</span><span class="bar-bar b3" style="width:30px">1</span></div>
+                <div class="bar-row"><span class="bar-label">— Ningunha</span><span class="bar-bar b4" style="width:30px">1</span></div>
+              </div>`,
+            preguntas: [
+              { tipo: 'num', q: '¿Cantos teñen can?', ok: 8 },
+              { tipo: 'num', q: '¿Cantos teñen algunha mascota?', ok: 12 },
+              { tipo: 'opc', q: '¿Cal é a moda (mascota máis común)?', opcions: ['🐶 Can','🐱 Gato','🐠 Peixe','— Ningunha'], ok: 0 },
+              { tipo: 'num', q: '¿Cantos máis teñen can que gato?', ok: 5 }
+            ],
+            sol: `<strong>Solucións:</strong> 8 teñen can · 13−1=12 teñen mascota · moda = <strong>can</strong> · 8−3 = 5 máis.`
+          },
+          {
+            t: 'Táboa de frecuencias',
+            cas: ['CA1.3', 'CA3.7'],
+            intro: `<p>Os 13 nenos elixen zume favorito:</p>
+              <p><code>laranxa, mazá, mazá, piña, laranxa, mazá, laranxa, piña, mazá, mazá, laranxa, piña, mazá</code></p>
+              <p>Conta cantas veces aparece cada un:</p>`,
+            preguntas: [
+              { tipo: 'num', q: '🍎 Mazá', ok: 6 },
+              { tipo: 'num', q: '🍊 Laranxa', ok: 4 },
+              { tipo: 'num', q: '🍍 Piña', ok: 3 },
+              { tipo: 'opc', q: '¿Cal é a moda?', opcions: ['Mazá','Laranxa','Piña'], ok: 0 },
+              { tipo: 'texto', q: 'Fracción que prefire mazá (formato a/b simplificada)', ok: '6/13', alts: ['6 / 13'] }
+            ],
+            sol: `<strong>Solucións:</strong> Mazá 6 · Laranxa 4 · Piña 3 (total 13 ✓). Moda = <strong>mazá</strong>. Fracción = <strong>6/13</strong> (xa está simplificada: 6 e 13 non teñen divisores comúns).`
+          }
+        ]
+      },
+      {
+        nivel: 2, nome: 'Media, moda e mediana', tag: 'Calcular · comparar',
+        actividades: [
+          {
+            t: 'Media de alturas',
+            cas: ['CA1.4', 'CA4.8'],
+            intro: `<p>Alturas (en cm) de 6 nenos do equipo de baloncesto:</p>
+              <p style="text-align:center;font-weight:700;font-size:1.05rem;">142 · 138 · 145 · 150 · 140 · 145</p>`,
+            preguntas: [
+              { tipo: 'num', q: 'Suma de todas as alturas', ok: 860 },
+              { tipo: 'num', q: 'Media (suma ÷ 6) en cm', ok: 143.33, tol: 0.5 },
+              { tipo: 'num', q: 'Moda (en cm)', ok: 145 },
+              { tipo: 'num', q: '¿Cantos están por riba da media?', ok: 3 }
+            ],
+            sol: `<strong>Solucións:</strong> Suma = 860 · Media = 860÷6 = <strong>143,33 cm</strong> · Moda = <strong>145</strong> (aparece 2 veces) · Por riba da media: 145, 150, 145 → <strong>3 nenos</strong>.`
+          },
+          {
+            t: 'Mediana paso a paso',
+            cas: ['CA1.5', 'CA3.4'],
+            intro: `<p>A <strong>mediana</strong> é o valor central cando ordenamos os datos.</p>
+              <p>Notas de 7 alumnos: <strong>6, 9, 5, 8, 7, 10, 4</strong></p>`,
+            preguntas: [
+              { tipo: 'texto', q: 'Ordena de menor a maior (separa con comas)', ok: '4, 5, 6, 7, 8, 9, 10', alts: ['4,5,6,7,8,9,10','4 5 6 7 8 9 10'] },
+              { tipo: 'num', q: 'Mediana (valor central)', ok: 7 },
+              { tipo: 'num', q: 'Media (suma ÷ 7)', ok: 7 },
+              { tipo: 'opc', q: 'Neste caso, mediana e media son...', opcions: ['Iguais','Mediana maior','Media maior'], ok: 0 }
+            ],
+            sol: `<strong>Solucións:</strong> Ordenado: 4, 5, 6, <strong>7</strong>, 8, 9, 10 · Mediana = <strong>7</strong> · Media = 49 ÷ 7 = <strong>7</strong> · Iguais (datos moi simétricos).`
+          }
+        ]
+      },
+      {
+        nivel: 3, nome: 'Investigación estatística', tag: 'Recoller · analizar',
+        actividades: [
+          {
+            t: 'A miña enquisa',
+            cas: ['CA1.6', 'CA4.5', 'CA6.4'],
+            intro: `<p>Convertete en investigador/a estatístico/a. Marca cada paso a medida que o fas:</p>`,
+            preguntas: [
+              { tipo: 'sino', q: '1. Escollín a miña pregunta (ex: cantos libros liches?)', ok: true },
+              { tipo: 'sino', q: '2. Pregunteille aos 13 alumnos de 5º', ok: true },
+              { tipo: 'sino', q: '3. Fixen a táboa de frecuencias', ok: true },
+              { tipo: 'sino', q: '4. Calculei a media (se son números)', ok: true },
+              { tipo: 'sino', q: '5. Debuxei o gráfico de barras nun folio cuadriculado', ok: true },
+              { tipo: 'aberto', q: '¿Cal foi a túa pregunta de investigación?' }
+            ],
+            sol: `<strong>Comprobación:</strong> a suma das frecuencias debe ser 13. No gráfico, o eixe vertical ten que ter escala uniforme (cada cadradiño = 1 persoa).`
+          },
+          {
+            t: 'Transporte para vir ao cole',
+            cas: ['CA1.8', 'CA5.7', 'CA6.7'],
+            intro: `<p>Recolliches estes datos da clase:</p>
+              <div class="bar-chart">
+                <div class="bar-row"><span class="bar-label">🚶 A pé</span><span class="bar-bar" style="width:90px">3</span></div>
+                <div class="bar-row"><span class="bar-label">🚲 Bici</span><span class="bar-bar b2" style="width:30px">1</span></div>
+                <div class="bar-row"><span class="bar-label">🚗 Coche</span><span class="bar-bar b3" style="width:180px">6</span></div>
+                <div class="bar-row"><span class="bar-label">🚌 Bus</span><span class="bar-bar b4" style="width:90px">3</span></div>
+              </div>`,
+            preguntas: [
+              { tipo: 'opc', q: '¿Cal é a moda?', opcions: ['🚶 A pé','🚲 Bici','🚗 Coche','🚌 Bus'], ok: 2 },
+              { tipo: 'texto', q: 'Fracción que vén en coche (a/b simplificada)', ok: '6/13', alts: ['6 / 13'] },
+              { tipo: 'num', q: 'Porcentaxe en coche (%)', ok: 46, tol: 1 },
+              { tipo: 'aberto', q: 'Propón unha medida para que veña máis xente en bici ou andando. ¿Por que?' }
+            ],
+            sol: `<strong>Solucións:</strong> Moda = <strong>coche</strong> · Fracción = 6/13 · 6÷13 ≈ <strong>46%</strong> · Medidas posibles: camiño escolar seguro, aparcadoiro de bicis, días sen coche…`
+          }
+        ]
+      }
+    ]
+  }
+];
+
+// ============================================================
+// ESTADO E PERSISTENCIA
+// ============================================================
+function cargarEstado() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { alumno: '', feitas: {} };
+}
+
+function gardar() {
+  try { localStorage.setItem(KEY, JSON.stringify(estado)); } catch(e) {}
+}
+
+let estado = cargarEstado();
+
+// ============================================================
+// RENDER
+// ============================================================
+function popularAlumnos() {
+  const sel = document.getElementById('quen');
+  ALUMNADO.forEach(nome => {
+    const opt = document.createElement('option');
+    opt.value = nome;
+    opt.textContent = nome;
+    sel.appendChild(opt);
+  });
+  sel.value = estado.alumno || '';
+  atualizarBadge();
+}
+
+function atualizarBadge() {
+  const badge = document.getElementById('quenBadge');
+  if (estado.alumno) {
+    const primeiro = estado.alumno.split(',')[1]?.trim() || estado.alumno.split(' ')[0];
+    badge.textContent = '👋 Ola, ' + primeiro;
+    badge.classList.remove('empty');
+  } else {
+    badge.textContent = 'Sen seleccionar';
+    badge.classList.add('empty');
+  }
+}
+
+function actKey(sentidoId, nivel, idx) {
+  return `${sentidoId}.${nivel}.${idx}`;
+}
+
+function isFeita(sentidoId, nivel, idx) {
+  if (!estado.alumno) return false;
+  const f = estado.feitas[estado.alumno] || {};
+  return !!f[actKey(sentidoId, nivel, idx)];
+}
+
+function setFeita(sentidoId, nivel, idx, valor) {
+  if (!estado.alumno) return;
+  if (!estado.feitas[estado.alumno]) estado.feitas[estado.alumno] = {};
+  const k = actKey(sentidoId, nivel, idx);
+  if (valor) estado.feitas[estado.alumno][k] = true;
+  else delete estado.feitas[estado.alumno][k];
+  gardar();
+}
+
+function totalActividades() {
+  let n = 0;
+  SENTIDOS.forEach(s => s.niveis.forEach(niv => n += niv.actividades.length));
+  return n;
+}
+
+function totalFeitas() {
+  if (!estado.alumno) return 0;
+  const f = estado.feitas[estado.alumno] || {};
+  return Object.keys(f).length;
+}
+
+function actualizarProgreso() {
+  const total = totalActividades();
+  const feitas = totalFeitas();
+  document.getElementById('progressLabel').textContent = `${feitas} / ${total}`;
+  document.getElementById('progressFill').style.width = (total ? (feitas/total*100) : 0) + '%';
+  // Por sección
+  SENTIDOS.forEach(s => {
+    let totSec = 0, feiSec = 0;
+    s.niveis.forEach(niv => {
+      niv.actividades.forEach((_, i) => {
+        totSec++;
+        if (isFeita(s.id, niv.nivel, i)) feiSec++;
+      });
+    });
+    const pctEl = document.getElementById(`pct-${s.id}`);
+    if (pctEl) pctEl.textContent = `${feiSec}/${totSec}`;
+  });
+}
+
+function renderContido() {
+  const cont = document.getElementById('contido');
+  cont.innerHTML = '';
+
+  if (!estado.alumno) {
+    cont.innerHTML = `
+      <div class="empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+        <h3>Escolle o teu nome para empezar</h3>
+        <p>Cando elixas o teu nome, aparecerán as 24 actividades.</p>
+      </div>`;
+    return;
+  }
+
+  SENTIDOS.forEach(s => {
+    const section = document.createElement('section');
+    section.className = 'sentido';
+    section.innerHTML = `
+      <div class="sec-head">
+        <div class="sec-icon">${s.icon}</div>
+        <div>
+          <h2>${s.nome}</h2>
+          <div class="sec-sub">${s.sub}</div>
+        </div>
+        <div class="sec-progress">Avance: <span class="pct" id="pct-${s.id}">0/0</span></div>
+      </div>
+      <div class="niveis" id="niveis-${s.id}"></div>
+    `;
+    cont.appendChild(section);
+
+    const nivesEl = section.querySelector(`#niveis-${s.id}`);
+
+    // Tabs por nivel — o alumno elixe que nivel facer
+    const tabs = document.createElement('div'); tabs.className = 'nivel-tabs';
+    s.niveis.forEach(niv => {
+      const total = niv.actividades.length;
+      let feitas = 0;
+      niv.actividades.forEach((_, i) => { if (isFeita(s.id, niv.nivel, i)) feitas++; });
+      const tag = niv.nivel === 1 ? 'Básico' : (niv.nivel === 2 ? 'Medio' : 'Avanzado');
+      const tab = document.createElement('button');
+      tab.className = `nivel-tab n${niv.nivel}`;
+      tab.dataset.nivel = niv.nivel; tab.dataset.sentido = s.id;
+      tab.onclick = () => mostrarNivel(s.id, niv.nivel);
+      tab.innerHTML = `
+        <span class="niv-demo n${niv.nivel}">${niv.nivel}</span>
+        <div class="nt-info">
+          <div class="nt-nome">${niv.nome}</div>
+          <div class="nt-meta">Nivel ${niv.nivel} · ${tag} · ${niv.tag}</div>
+        </div>
+        <span class="nt-check ${feitas === total ? 'done' : ''}" id="check-${s.id}-${niv.nivel}">${feitas}/${total}</span>
+      `;
+      tabs.appendChild(tab);
+    });
+    nivesEl.appendChild(tabs);
+
+    const placeholder = document.createElement('div');
+    placeholder.className = 'nivel-empty';
+    placeholder.id = `placeholder-${s.id}`;
+    placeholder.innerHTML = '↑ Escolle un nivel para empezar (básico, medio ou avanzado)';
+    nivesEl.appendChild(placeholder);
+
+    s.niveis.forEach(niv => {
+      const nivEl = document.createElement('div');
+      nivEl.className = `nivel n${niv.nivel}`;
+      nivEl.id = `nivel-${s.id}-${niv.nivel}`;
+      const total = niv.actividades.length;
+      let feitas = 0;
+      niv.actividades.forEach((_, i) => { if (isFeita(s.id, niv.nivel, i)) feitas++; });
+
+      nivEl.innerHTML = `
+        <div class="nivel-head">
+          <span class="niv-demo n${niv.nivel}">${niv.nivel}</span>
+          <div>
+            <h3>${niv.nome}</h3>
+            <div class="niv-tag">Nivel ${niv.nivel} · ${niv.tag}</div>
+          </div>
+          <span class="niv-count">${feitas} / ${total} feitas</span>
+        </div>
+        <div class="nivel-body"></div>
+      `;
+      const body = nivEl.querySelector('.nivel-body');
+      niv.actividades.forEach((act, i) => {
+        const id = actKey(s.id, niv.nivel, i);
+        const feita = isFeita(s.id, niv.nivel, i);
+        const actEl = document.createElement('div');
+        actEl.className = 'act' + (feita ? ' feita' : '');
+        actEl.dataset.id = id;
+        actEl.dataset.sentido = s.id;
+        actEl.dataset.nivel = niv.nivel;
+        actEl.dataset.idx = i;
+        actEl.innerHTML = `
+          <div class="act-head">
+            <span class="act-num">${i+1}</span>
+            <div style="flex:1">
+              <div class="act-title">${act.t}</div>
+              ${act.cas?.length ? `<div class="act-cas">${act.cas.map(c=>`<span class="ca-chip">${c}</span>`).join('')}</div>` : ''}
+            </div>
+          </div>
+          <div class="act-body">
+            ${act.intro || ''}
+            ${renderPreguntas(act.preguntas || [], id)}
+          </div>
+          <div class="act-actions">
+            ${act.preguntas?.length ? `<button class="btn btn-corrixir" onclick="corrixirActividade(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              Corrixir
+            </button>` : ''}
+            <button class="btn btn-feito" onclick="toggleFeita('${s.id}', ${niv.nivel}, ${i}, this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              ${feita ? 'Feita ✓' : 'Enviar e marcar feita'}
+            </button>
+            <button class="btn" onclick="toggleSol(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547Z"/></svg>
+              Solución
+            </button>
+            <button class="btn btn-profe" onclick="abrirVistaProfe('${s.id}', ${niv.nivel}, ${i})">
+              👨‍🏫 Profesor
+            </button>
+            <span class="score" id="score-${id}" style="display:none">0/0</span>
+          </div>
+          <div class="sol">${act.sol || '<em>(sen solución dispoñible)</em>'}</div>
+        `;
+        body.appendChild(actEl);
+      });
+      nivesEl.appendChild(nivEl);
+    });
+  });
+  actualizarProgreso();
+}
+
+function nomeSentido(id) {
+  const map = { numerico: 'Lites', medida: 'Escalas', espacial: 'Polígonos', estocastico: 'Estatística' };
+  return map[id] || id;
+}
+
+function tituloFicha(sentidoId, nivel, idx, act) {
+  return `Propostas 5º · ${nomeSentido(sentidoId)} · N${nivel} · ${act.t}`;
+}
+
+// ============================================================
+// MOTOR DE PREGUNTAS INTERACTIVAS
+// ============================================================
+function renderPreguntas(preguntas, actId) {
+  if (!preguntas || !preguntas.length) return '';
+  const items = preguntas.map((p, qi) => {
+    const qid = `${actId}.q${qi}`;
+    const letra = String.fromCharCode(97 + qi); // a, b, c...
+    let inputHtml = '';
+    if (p.tipo === 'num') {
+      inputHtml = `<input type="number" step="any" class="input-resp" data-q="${qid}" data-tipo="num" data-ok="${p.ok}" data-tol="${p.tol || 0}" data-alts="${(p.alts || []).join('|')}" placeholder="?">${p.unidade ? `<span class="unidade">${p.unidade}</span>` : ''}`;
+    } else if (p.tipo === 'opc') {
+      inputHtml = `<div class="opcions ${p.opcions.length > 4 ? 'col' : ''}">${p.opcions.map((o, oi) => `
+        <label class="opc-btn" data-q="${qid}" data-tipo="opc" data-oi="${oi}" data-ok="${oi === p.ok}">
+          <input type="radio" name="${qid}" value="${oi}" onchange="seleccionarOpc(this)">${o}
+        </label>`).join('')}</div>`;
+    } else if (p.tipo === 'sino') {
+      inputHtml = `<div class="opcions-sino">
+        <label class="opc-btn" data-q="${qid}" data-tipo="sino" data-val="true" data-ok="${p.ok === true}">
+          <input type="radio" name="${qid}" value="true" onchange="seleccionarOpc(this)">✓ Si
+        </label>
+        <label class="opc-btn" data-q="${qid}" data-tipo="sino" data-val="false" data-ok="${p.ok === false}">
+          <input type="radio" name="${qid}" value="false" onchange="seleccionarOpc(this)">✗ Non
+        </label>
+      </div>`;
+    } else if (p.tipo === 'texto') {
+      inputHtml = `<input type="text" class="input-resp" data-q="${qid}" data-tipo="texto" data-ok="${escapeAttr(p.ok)}" data-alts="${(p.alts || []).join('|')}" placeholder="Escribe a túa resposta…">`;
+    } else if (p.tipo === 'aberto') {
+      inputHtml = `<textarea class="input-aberto" data-q="${qid}" data-tipo="aberto" placeholder="Resposta aberta — escribe a túa idea aquí…"></textarea>`;
+    }
+    return `<div class="pregunta" data-qid="${qid}">
+      <div class="pregunta-q"><span class="q-letra">${letra}</span><span class="q-text">${p.q}</span></div>
+      ${inputHtml}
+    </div>`;
+  }).join('');
+  return `<div class="preguntas">${items}</div>`;
+}
+
+function escapeAttr(v) { return String(v == null ? '' : v).replace(/"/g, '&quot;'); }
+
+function seleccionarOpc(input) {
+  const name = input.name;
+  // Limpar selección anterior dentro do mesmo grupo (na propia actividade)
+  const labels = input.closest('.pregunta').querySelectorAll('.opc-btn');
+  labels.forEach(l => l.classList.remove('selected', 'ok', 'fail', 'marca-correcta'));
+  // Marcar a actual como seleccionada (estilo neutral ata corrixir)
+  input.closest('.opc-btn').classList.add('selected');
+  // Limpar estado da pregunta
+  input.closest('.pregunta').classList.remove('acertada', 'fallada');
+}
+
+function normalizarTexto(s) {
+  return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim();
+}
+
+function recollerRespostas(actEl) {
+  const preguntasEl = actEl.querySelectorAll('.pregunta');
+  const respostas = [];
+  preguntasEl.forEach(pEl => {
+    const qid = pEl.dataset.qid;
+    const inp = pEl.querySelector('[data-tipo]');
+    const tipo = inp?.dataset.tipo;
+    const qText = pEl.querySelector('.q-text').textContent;
+    let valor = null, ok = null;
+    if (tipo === 'num') {
+      const raw = inp.value;
+      if (raw === '' || raw == null) { valor = null; ok = false; }
+      else {
+        const v = parseFloat(String(raw).replace(',', '.'));
+        const target = parseFloat(inp.dataset.ok);
+        const tol = parseFloat(inp.dataset.tol) || 0;
+        const alts = (inp.dataset.alts || '').split('|').filter(Boolean).map(parseFloat);
+        ok = !isNaN(v) && (Math.abs(v - target) <= tol + 1e-9 || alts.some(a => !isNaN(a) && Math.abs(v - a) <= tol + 1e-9));
+        valor = raw;
+      }
+    } else if (tipo === 'opc' || tipo === 'sino') {
+      const checked = pEl.querySelector('input:checked');
+      if (!checked) { valor = null; ok = false; }
+      else {
+        const lbl = checked.closest('.opc-btn');
+        valor = lbl.textContent.trim();
+        ok = lbl.dataset.ok === 'true';
+      }
+    } else if (tipo === 'texto') {
+      const raw = inp.value;
+      if (!raw || !raw.trim()) { valor = null; ok = false; }
+      else {
+        const target = normalizarTexto(inp.dataset.ok);
+        const alts = (inp.dataset.alts || '').split('|').filter(Boolean).map(normalizarTexto);
+        const got = normalizarTexto(raw);
+        ok = got === target || alts.includes(got);
+        valor = raw;
+      }
+    } else if (tipo === 'aberto') {
+      valor = (inp.value || '').trim();
+      ok = null; // aberta non se corrixe automaticamente
+    }
+    respostas.push({ qid, q: qText, tipo, valor, ok });
+  });
+  return respostas;
+}
+
+function corrixirActividade(btn) {
+  const actEl = btn.closest('.act');
+  const respostas = recollerRespostas(actEl);
+  const id = actEl.dataset.id;
+  let total = 0, correctas = 0;
+
+  respostas.forEach(r => {
+    if (r.ok === null) return; // abertas: non contan
+    total++;
+    if (r.ok) correctas++;
+    const pEl = actEl.querySelector(`.pregunta[data-qid="${r.qid}"]`);
+    pEl.classList.toggle('acertada', r.ok);
+    pEl.classList.toggle('fallada', !r.ok);
+    const inp = pEl.querySelector('[data-tipo]');
+    if (r.tipo === 'num' || r.tipo === 'texto') {
+      inp.classList.toggle('ok', r.ok);
+      inp.classList.toggle('fail', !r.ok);
+    } else {
+      // opc/sino: marcar a seleccionada con ok/fail e a correcta (se non é a seleccionada) cunha marca
+      const labels = pEl.querySelectorAll('.opc-btn');
+      const checked = pEl.querySelector('input:checked');
+      labels.forEach(l => {
+        l.classList.remove('selected', 'ok', 'fail', 'marca-correcta');
+        const isOk = l.dataset.ok === 'true';
+        const isChecked = checked && l.contains(checked);
+        if (isChecked && isOk) l.classList.add('ok');
+        else if (isChecked && !isOk) l.classList.add('fail');
+        else if (isOk) l.classList.add('marca-correcta');
+      });
+    }
+  });
+
+  // Mostrar score
+  const scoreEl = document.getElementById(`score-${id}`);
+  if (scoreEl) {
+    scoreEl.style.display = 'inline-flex';
+    scoreEl.textContent = total ? `${correctas} / ${total} acertos` : 'sen preguntas auto-corrixibles';
+    scoreEl.classList.remove('alto', 'medio', 'baixo');
+    if (total) {
+      const pct = correctas / total;
+      scoreEl.classList.add(pct >= 0.8 ? 'alto' : (pct >= 0.5 ? 'medio' : 'baixo'));
+    }
+  }
+  return { correctas, total, respostas };
+}
+
+async function enviarAoBuzon(sentidoId, nivel, idx, act, btnEl) {
+  if (!estado.alumno) return;
+  const ficha = tituloFicha(sentidoId, nivel, idx, act);
+  // Recoller respostas se hai preguntas
+  let scoreLine = '', detalleResp = '', nota = null, correctas = null, total = null;
+  if (act.preguntas?.length && btnEl) {
+    const actEl = btnEl.closest('.act');
+    const res = corrixirActividade(actEl); // tamén pinta cores
+    correctas = res.correctas;
+    total = res.total;
+    if (total > 0) {
+      nota = Math.round((correctas / total) * 100) / 10; // /10 con 1 decimal
+      scoreLine = `Resultado: ${correctas}/${total} acertos (${nota}/10).\n`;
+    }
+    detalleResp = '\nRespostas:\n' + res.respostas.map((r, i) => {
+      const mark = r.ok === true ? '✓' : (r.ok === false ? '✗' : '·');
+      const v = r.valor != null && r.valor !== '' ? r.valor : '(sen resposta)';
+      return `  ${i+1}. ${mark} ${r.q}\n     → ${v}`;
+    }).join('\n');
+  }
+  const detalle = `${scoreLine}CA traballados: ${(act.cas || []).join(', ')}.${detalleResp}`;
+  try {
+    const r = await fetch(BUZON_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome: estado.alumno,
+        curso: CURSO,
+        ficha: ficha,
+        nota: nota,
+        correctas: correctas,
+        total: total,
+        detalle: detalle
+      })
+    });
+    const json = await r.json();
+    return json && json.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+function mostrarToast(texto, ok) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + (ok ? 'ok' : 'err');
+  t.textContent = texto;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2400);
+}
+
+function toggleFeita(sentidoId, nivel, idx, btn) {
+  if (!estado.alumno) return;
+  const novoEstado = !isFeita(sentidoId, nivel, idx);
+  setFeita(sentidoId, nivel, idx, novoEstado);
+  const actEl = btn.closest('.act');
+  actEl.classList.toggle('feita', novoEstado);
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> ${novoEstado ? 'Feita ✓' : 'Marcar feita'}`;
+  // actualizar contadores
+  const nivEl = btn.closest('.nivel');
+  const total = nivEl.querySelectorAll('.act').length;
+  const f = nivEl.querySelectorAll('.act.feita').length;
+  nivEl.querySelector('.niv-count').textContent = `${f} / ${total} feitas`;
+  // Actualizar a tab correspondente
+  const tabCheck = document.getElementById(`check-${sentidoId}-${nivel}`);
+  if (tabCheck) {
+    tabCheck.textContent = `${f}/${total}`;
+    tabCheck.classList.toggle('done', f === total);
+  }
+  actualizarProgreso();
+
+  // Enviar ao buzón só ao MARCAR como feita (non ao desmarcar)
+  if (novoEstado) {
+    // Localizar a actividade para sacar título + CAs
+    const sen = SENTIDOS.find(s => s.id === sentidoId);
+    const niv = sen?.niveis.find(n => n.nivel === nivel);
+    const act = niv?.actividades[idx];
+    if (act) {
+      enviarAoBuzon(sentidoId, nivel, idx, act, btn).then(ok => {
+        mostrarToast(ok ? '📩 Enviada ao profe ✓' : '⚠ Gardada en local, pero non chegou ao profe', ok);
+      });
+    }
+  }
+}
+
+function toggleSol(btn) {
+  const sol = btn.closest('.act').querySelector('.sol');
+  sol.classList.toggle('show');
+}
+
+function mostrarNivel(sentidoId, nivel) {
+  // Ocultar todos os niveis do sentido
+  SENTIDOS.find(s => s.id === sentidoId)?.niveis.forEach(n => {
+    document.getElementById(`nivel-${sentidoId}-${n.nivel}`)?.classList.remove('show');
+  });
+  document.querySelectorAll(`.nivel-tab[data-sentido="${sentidoId}"]`).forEach(t => t.classList.remove('active'));
+  // Amosar o nivel elixido
+  document.getElementById(`nivel-${sentidoId}-${nivel}`)?.classList.add('show');
+  document.querySelector(`.nivel-tab[data-sentido="${sentidoId}"][data-nivel="${nivel}"]`)?.classList.add('active');
+  const ph = document.getElementById(`placeholder-${sentidoId}`);
+  if (ph) ph.style.display = 'none';
+}
+
+function seleccionarAlumno() {
+  estado.alumno = document.getElementById('quen').value;
+  gardar();
+  atualizarBadge();
+  renderContido();
+}
+
+function resetAlumno() {
+  if (!estado.alumno) { alert('Escolle primeiro un alumno.'); return; }
+  if (!confirm(`Borrar todo o progreso de ${estado.alumno}?`)) return;
+  delete estado.feitas[estado.alumno];
+  gardar();
+  renderContido();
+}
+
+function toggleTheme() {
+  const light = document.documentElement.classList.toggle('light');
+  localStorage.setItem(KEY_THEME, light ? 'light' : 'dark');
+}
+
+// ============================================================
+// VISTA PROFESOR (modal + gate)
+// ============================================================
+async function sha256(str) {
+  const buf = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkProfePassword(e) {
+  e.preventDefault();
+  const pw = document.getElementById('profePw').value;
+  const err = document.getElementById('gateErr');
+  const hashed = await sha256(pw);
+  if (hashed === PROFE_HASH) {
+    sessionStorage.setItem(PROFE_KEY, '1');
+    revelarProfe();
+  } else {
+    err.style.display = 'inline';
+    document.getElementById('profePw').value = '';
+    document.getElementById('profePw').focus();
+    setTimeout(() => { err.style.display = 'none'; }, 2500);
+  }
+  return false;
+}
+
+function revelarProfe() {
+  document.getElementById('profeGate').classList.add('ok');
+}
+
+function profeLogout() {
+  sessionStorage.removeItem(PROFE_KEY);
+  document.getElementById('profeGate').classList.remove('ok');
+}
+
+function isProfeOk() {
+  return sessionStorage.getItem(PROFE_KEY) === '1';
+}
+
+function grauTag(g) {
+  return ['', 'BÁSICO · Bloom 1-2 (Recordar/Comprender)', 'MEDIO · Bloom 3-4 (Aplicar/Analizar)', 'AVANZADO · Bloom 5-6 (Avaliar/Crear)'][g] || '';
+}
+
+function tipoTarefa(act) {
+  if (!act.preguntas?.length) return 'Sen preguntas auto-corrixibles';
+  const tipos = [...new Set(act.preguntas.map(p => p.tipo))];
+  const nomes = { num: 'numérico', opc: 'opcion única', multi: 'opcion múltiple', sino: 'si/non', texto: 'texto', aberto: 'resposta aberta' };
+  return tipos.map(t => nomes[t] || t).join(' · ');
+}
+
+function abrirVistaProfe(sentidoId, nivel, idx) {
+  const sen = SENTIDOS.find(s => s.id === sentidoId);
+  const niv = sen?.niveis.find(n => n.nivel === nivel);
+  const act = niv?.actividades[idx];
+  if (!act) return;
+
+  const tag = nivel === 1 ? 'Básico' : (nivel === 2 ? 'Medio' : 'Avanzado');
+  document.getElementById('modalTitulo').innerHTML = `<span class="nivel-tag">N${nivel} · ${tag}</span>${act.t}`;
+
+  if (!isProfeOk()) {
+    document.getElementById('modalBody').innerHTML = `
+      <div class="lock">🔒</div>
+      <div class="lock-msg">A vista do profesor está <b>bloqueada</b>.<br>Introduce a clave do profesorado na banda superior para acceder.</div>
+    `;
+  } else {
+    const cas = act.cas || [];
+    const obxs = [...new Set(cas.map(c => CA_TO_OBX[c]).filter(Boolean))];
+    const obxHtml = obxs.map(o => `<div class="obx-bloque"><b>${o}</b> · ${OBX_TEXTOS[o] || ''}</div>`).join('');
+    const caHtml = cas.map(c => `<div class="ca-list-item"><span class="ca-code">${c}</span><span>${CA_TEXTOS[c] || '<em>(criterio sen texto detallado)</em>'}</span></div>`).join('');
+    document.getElementById('modalBody').innerHTML = `
+      <table class="prof-tabla">
+        <tr><th>Sentido matemático</th><td><b>${sen.nome}</b><br><span style="font-size:.78rem;color:var(--text-dim)">${sen.sub}</span></td></tr>
+        <tr><th>Contido traballado</th><td>${niv.nome} <span style="color:var(--text-faint)">· ${niv.tag}</span></td></tr>
+        <tr><th>Grao de dificultade</th><td><span class="grao-pill g${nivel}">GRAO ${nivel}</span> <span style="font-size:.75rem;color:var(--text-faint);margin-left:8px">${grauTag(nivel)}</span></td></tr>
+        <tr><th>Tipo de tarefa</th><td>${tipoTarefa(act)}</td></tr>
+        <tr><th>Nº de preguntas</th><td>${act.preguntas?.length || 0} preguntas (${act.preguntas?.filter(p => p.tipo !== 'aberto').length || 0} auto-corrixibles)</td></tr>
+      </table>
+      <h3 style="font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);margin:18px 0 8px">Criterios de avaliación</h3>
+      <div class="ca-list">${caHtml || '<em>(sen CA asignados)</em>'}</div>
+      <h3 style="font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);margin:18px 0 8px">Obxectivo(s) de área</h3>
+      ${obxHtml || '<em>(sen OBX derivable)</em>'}
+    `;
+  }
+  document.getElementById('modalBackdrop').classList.add('aberto');
+  document.body.style.overflow = 'hidden';
+}
+
+function pecharModal() {
+  document.getElementById('modalBackdrop').classList.remove('aberto');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') pecharModal(); });
+
+// Inicialización
+if (localStorage.getItem(KEY_THEME) === 'light') document.documentElement.classList.add('light');
+if (isProfeOk()) revelarProfe();
+popularAlumnos();
+renderContido();
+</script>
+</body>
+</html>
