@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xogos interactivos · Primaria</title>
+<style>
+  :root {
+    --bg:#0b0d13; --bg2:#13161f; --bg3:#1c2030;
+    --text:#e8eaf0; --text2:#8b92a8;
+    --accent:#10b981; --accent2:#34d399;
+    --border:#252a3a; --radius:14px;
+  }
+  .light{--bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .hidden{display:none !important}
+
+  .header{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .back-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;flex-shrink:0}
+  .back-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .back-btn svg{width:18px;height:18px}
+  .header h1{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:10px}
+  .header-right{margin-left:auto;display:flex;gap:8px}
+  .icon-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .icon-btn:hover{background:var(--accent);color:#fff}
+  .icon-btn svg{width:16px;height:16px}
+
+  .wrap{max-width:920px;margin:0 auto;padding:36px 22px}
+  .intro{margin-bottom:28px}
+  .intro h2{font-size:1.6rem;margin-bottom:8px}
+  .intro h2 span{color:var(--accent2)}
+  .intro p{color:var(--text2);font-size:.95rem;line-height:1.55;max-width:640px}
+
+  .section-title{font-size:.72rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1.6px;margin:30px 0 14px}
+
+  .game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .game-card{
+    background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px;text-decoration:none;color:var(--text);transition:all .2s;
+    display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;
+  }
+  .game-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(16,185,129,.06));opacity:0;transition:opacity .2s;pointer-events:none}
+  .game-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .game-card:hover::before{opacity:1}
+  .game-card.coming{opacity:.55;cursor:not-allowed;pointer-events:none}
+
+  .gc-head{display:flex;align-items:center;gap:14px}
+  .gc-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+  .gc-meta{flex:1;min-width:0}
+  .gc-title{font-weight:700;font-size:1.05rem;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .gc-tag{font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:8px;text-transform:uppercase;letter-spacing:.6px}
+  .gc-tag-sociales{background:rgba(245,158,11,.15);color:#fbbf24}
+  .gc-tag-mat{background:rgba(99,102,241,.15);color:#a5b4fc}
+  .gc-tag-soon{background:rgba(139,146,168,.15);color:var(--text2)}
+  .gc-area{font-size:.78rem;color:var(--text2)}
+  .gc-desc{font-size:.85rem;color:var(--text2);line-height:1.5;flex:1}
+  .gc-foot{display:flex;justify-content:flex-end;align-items:center;font-size:.78rem;color:var(--text2);padding-top:10px;border-top:1px solid var(--border)}
+  .gc-foot strong{color:var(--text);font-weight:600}
+
+  .game-card-wrap{display:flex;flex-direction:column;gap:6px}
+  .btn-edixgal{
+    background:transparent;color:var(--text2);border:none;padding:0;
+    cursor:pointer;font-size:.72rem;font-weight:500;font-family:inherit;
+    display:inline-flex;align-items:center;gap:4px;transition:color .15s;
+    align-self:flex-start;text-decoration:underline;text-decoration-color:var(--border);
+    text-underline-offset:3px;padding-left:4px;
+  }
+  .btn-edixgal:hover{color:var(--accent2);text-decoration-color:var(--accent2)}
+  .btn-edixgal.ok{color:#3a8a3a;text-decoration-color:#3a8a3a}
+  .btn-edixgal svg{width:11px;height:11px;opacity:.7}
+
+  .toast-bg{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);
+    background:var(--bg2);border:1px solid var(--accent);border-radius:12px;
+    padding:14px 18px;box-shadow:0 12px 32px rgba(0,0,0,.4);z-index:300;
+    max-width:min(640px,90vw);font-size:.84rem;display:flex;align-items:center;gap:12px;
+    opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+  .toast-bg.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .toast-bg .toast-msg{color:var(--accent2);font-weight:700;flex-shrink:0}
+  .toast-bg .toast-url{color:var(--text);word-break:break-all;font-family:ui-monospace,Menlo,monospace;font-size:.78rem}
+
+  @media (max-width:640px){
+    .wrap{padding:24px 16px}
+    .game-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="index.html" title="Volver ao espazo de Diego">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+  </a>
+  <h1>🎮 Xogos interactivos · Primaria</h1>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn" title="Cambiar tema">
+      <svg id="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="sun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="intro">
+    <h2>Xogos interactivos para <span>Primaria</span></h2>
+    <p>Actividades web para repasar contidos curriculares xogando. Funcionan en calquera dispositivo (ordenador, tablet ou móbil) e non precisan instalación.</p>
+  </div>
+
+  <div class="section-title">Coñecemento do medio · Sociales</div>
+
+  <div class="game-grid">
+    <div class="game-card-wrap">
+      <a class="game-card" href="xogos/mapa-mundi.html">
+        <div class="gc-head">
+          <div class="gc-icon" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">🌍</div>
+          <div class="gc-meta">
+            <div class="gc-title">Mapa do mundo <span class="gc-tag gc-tag-sociales">Sociales</span></div>
+            <div class="gc-area">Países do mundo</div>
+          </div>
+        </div>
+        <div class="gc-desc">O alumnado ve o nome dun país e ten que pulsar nel sobre o mapa mundial. Ten 3 niveis de dificultade (fácil, medio, difícil), pista tras 2 fallos e contador de aciertos.</div>
+        <div class="gc-foot"><strong>Xogar →</strong></div>
+      </a>
+      <button class="btn-edixgal" data-href="xogos/mapa-mundi.html" title="Copiar enlace para Edixgal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        Copiar enlace para Edixgal
+      </button>
+    </div>
+
+    <div class="game-card-wrap">
+      <a class="game-card" href="xogos/mapa-ue.html">
+        <div class="gc-head">
+          <div class="gc-icon" style="background:linear-gradient(135deg,#003399,#ffcc00)">🇪🇺</div>
+          <div class="gc-meta">
+            <div class="gc-title">Mapa da Unión Europea <span class="gc-tag gc-tag-sociales">Sociales</span></div>
+            <div class="gc-area">Países membros da UE</div>
+          </div>
+        </div>
+        <div class="gc-desc">Mesmo formato pero limitado aos 27 estados membros da Unión Europea. Dous niveis: 12 países principais ou os 27 completos.</div>
+        <div class="gc-foot"><strong>Xogar →</strong></div>
+      </a>
+      <button class="btn-edixgal" data-href="xogos/mapa-ue.html" title="Copiar enlace para Edixgal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        Copiar enlace para Edixgal
+      </button>
+    </div>
+
+    <div class="game-card-wrap">
+      <a class="game-card" href="xogos/mapa-ccaa.html">
+        <div class="gc-head">
+          <div class="gc-icon" style="background:linear-gradient(135deg,#aa151b,#f1bf00)">🇪🇸</div>
+          <div class="gc-meta">
+            <div class="gc-title">CCAA de España <span class="gc-tag gc-tag-sociales">Sociales</span></div>
+            <div class="gc-area">17 Comunidades + Ceuta e Melilla</div>
+          </div>
+        </div>
+        <div class="gc-desc">3 niveis (5 / 12 / 19 CCAA). Dous modos (CCAA ou capitales). Ficha educativa con capital e idiomas oficiais ao acertar. Mares e océanos da Península.</div>
+        <div class="gc-foot"><strong>Xogar →</strong></div>
+      </a>
+      <button class="btn-edixgal" data-href="xogos/mapa-ccaa.html" title="Copiar enlace para Edixgal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        Copiar enlace para Edixgal
+      </button>
+    </div>
+
+    <div class="game-card-wrap">
+      <a class="game-card" href="xogos/mapa-galicia-provincias.html">
+        <div class="gc-head">
+          <div class="gc-icon" style="background:linear-gradient(135deg,#0066b3,#5b9bd5)">🏛️</div>
+          <div class="gc-meta">
+            <div class="gc-title">Provincias de Galicia <span class="gc-tag gc-tag-sociales">Sociales</span></div>
+            <div class="gc-area">As 4 provincias galegas</div>
+          </div>
+        </div>
+        <div class="gc-desc">Xogo curto e simple para repasar as catro provincias de Galicia: A Coruña, Lugo, Ourense e Pontevedra. Cada provincia ten cor distinta no mapa.</div>
+        <div class="gc-foot"><strong>Xogar →</strong></div>
+      </a>
+      <button class="btn-edixgal" data-href="xogos/mapa-galicia-provincias.html" title="Copiar enlace para Edixgal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        Copiar enlace para Edixgal
+      </button>
+    </div>
+
+    <div class="game-card-wrap">
+      <a class="game-card" href="xogos/mapa-galicia-municipios.html">
+        <div class="gc-head">
+          <div class="gc-icon" style="background:linear-gradient(135deg,#1e5f3e,#22c55e)">🏘️</div>
+          <div class="gc-meta">
+            <div class="gc-title">Concellos de Galicia <span class="gc-tag gc-tag-sociales">Sociales</span></div>
+            <div class="gc-area">Os 313 concellos galegos</div>
+          </div>
+        </div>
+        <div class="gc-desc">3 niveis (12 / 38 / 313 concellos). Bordo das provincias destacado. Pista de provincia no nivel medio tras o 1.º fallo. Reto extremo no nivel difícil!</div>
+        <div class="gc-foot"><strong>Xogar →</strong></div>
+      </a>
+      <button class="btn-edixgal" data-href="xogos/mapa-galicia-municipios.html" title="Copiar enlace para Edixgal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        Copiar enlace para Edixgal
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+$('#themeBtn').onclick = () => {
+  document.body.classList.toggle('light');
+  $('#moon').classList.toggle('hidden');
+  $('#sun').classList.toggle('hidden');
+  localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+};
+if (localStorage.getItem('ef_theme') === 'light') {
+  document.body.classList.add('light');
+  $('#moon').classList.add('hidden');
+  $('#sun').classList.remove('hidden');
+}
+
+// Toast (mensaxe transitoria con URL para verificar)
+const toast = document.createElement('div');
+toast.className = 'toast-bg';
+toast.innerHTML = '<span class="toast-msg">✓ Copiado</span><span class="toast-url"></span>';
+document.body.appendChild(toast);
+let toastTimer = null;
+function showToast(url) {
+  toast.querySelector('.toast-url').textContent = url;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4500);
+}
+
+// Copiar enlace público para Edixgal
+document.querySelectorAll('.btn-edixgal').forEach(btn => {
+  btn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const href = btn.getAttribute('data-href');
+    const url = new URL(href, location.href).href;
+    const original = btn.innerHTML;
+    const setOk = () => {
+      btn.classList.add('ok');
+      btn.innerHTML = '✓ Copiado';
+      setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = original; }, 1600);
+      showToast(url);
+    };
+    try {
+      await navigator.clipboard.writeText(url);
+      setOk();
+    } catch (_) {
+      const ta = document.createElement('textarea');
+      ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); setOk(); }
+      catch (_) { alert('Copia manualmente: ' + url); }
+      ta.remove();
+    }
+  });
+});
+</script>
+<script src="timer.js"></script>
+</body>
+</html>
