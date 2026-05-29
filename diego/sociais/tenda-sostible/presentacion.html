@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vivir en sociedade · Gobernar a Tenda Sostible · 5º</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --bg-2: #161922;
+    --surface: #1c2030;
+    --surface-2: #232838;
+    --txt: #f4f1ea;
+    --txt-2: #b8b3a8;
+    --grey: #6b6e7a;
+    --line: #2a2f3d;
+    /* Tres bloques de cor */
+    --bA: #f5b450; /* Convivencia (slides 1-5) */
+    --bB: #6cc0d0; /* Goberno (slides 6-9) */
+    --bC: #9bcc6b; /* Aplicación á tenda (slides 10-14) */
+    --c3: #b48ad1;
+    --c5: #e07a8c;
+    --c6: #f0a060;
+    --c7: #7fc0a8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Inter, sans-serif;
+    background: var(--bg);
+    color: var(--txt);
+    line-height: 1.45;
+  }
+
+  /* ============== DECK ============== */
+  .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .slide {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    padding: clamp(24px, 3.5vw, 60px) clamp(28px, 5vw, 90px);
+    background: var(--bg);
+    overflow-y: auto;
+  }
+  .slide.active { display: flex; animation: slideIn .35s cubic-bezier(.2,.7,.2,1); }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* HEADER */
+  .meta { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--txt-2); flex-wrap: wrap; }
+  .meta .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bA); }
+  .meta b { color: var(--txt); font-weight: 700; }
+  .chip { display: inline-flex; gap: 6px; align-items: center; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 11px; letter-spacing: 1.5px; color: var(--txt-2); }
+  .meta.b-A .dot { background: var(--bA); } .meta.b-B .dot { background: var(--bB); } .meta.b-C .dot { background: var(--bC); }
+
+  h1, h2, h3 { font-weight: 900; letter-spacing: -1px; line-height: 1.05; color: var(--txt); }
+  h1 { font-size: clamp(38px, 6.5vw, 84px); }
+  h2 { font-size: clamp(26px, 4.2vw, 52px); margin-bottom: 14px; }
+  h3 { font-size: clamp(18px, 2.3vw, 26px); }
+  .hl { color: #0c0e14; padding: 2px 12px; display: inline-block; border-radius: 6px; transform: rotate(-.6deg); background: var(--bA); }
+  .hl.B { background: var(--bB); }
+  .hl.C { background: var(--bC); }
+  .lead { font-size: clamp(15px, 1.5vw, 20px); color: var(--txt-2); max-width: 90ch; margin-top: 12px; font-weight: 300; }
+
+  /* ============== LAYOUT GRIDS ============== */
+  .row { display: grid; gap: 18px; margin-top: 18px; }
+  .row.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .row.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .row.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 900px) {
+    .row.cols-3, .row.cols-4 { grid-template-columns: 1fr 1fr; }
+    .row.cols-2 { grid-template-columns: 1fr; }
+  }
+
+  .twocol { display: grid; grid-template-columns: 1.05fr .95fr; gap: 28px; align-items: start; margin-top: 18px; }
+  .twocol.flip { grid-template-columns: .95fr 1.05fr; }
+  @media (max-width: 900px) { .twocol, .twocol.flip { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .card.outline { background: transparent; }
+  .card .icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 9px; background: rgba(245,180,80,.12); color: var(--bA); }
+  .card.B .icon { background: rgba(108,192,208,.12); color: var(--bB); }
+  .card.C .icon { background: rgba(155,204,107,.12); color: var(--bC); }
+  .card h3 { font-size: 17px; letter-spacing: -.2px; }
+  .card p { font-size: 14px; color: var(--txt-2); }
+
+  /* ============== BOXES ============== */
+  .box { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .box.accent { border-left: 4px solid var(--bA); }
+  .box.B { border-left: 4px solid var(--bB); }
+  .box.C { border-left: 4px solid var(--bC); }
+  .box h4 { font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--bA); margin-bottom: 8px; font-weight: 800; }
+  .box.B h4 { color: var(--bB); }
+  .box.C h4 { color: var(--bC); }
+  .box p, .box ul { color: var(--txt-2); font-size: 14px; }
+  .box ul { padding-left: 16px; }
+  .box ul li { margin-bottom: 4px; }
+
+  /* ============== STOP & PENSA ============== */
+  .stop-pensa {
+    margin-top: 16px;
+    padding: 18px 22px;
+    background: linear-gradient(135deg, rgba(255,80,80,.15), rgba(245,180,80,.12));
+    border: 2px dashed var(--bA);
+    border-radius: 14px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .stop-pensa .stop-ic {
+    width: 48px; height: 48px;
+    background: var(--bA);
+    color: #0c0e14;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 900;
+  }
+  .stop-pensa .stop-body { flex: 1; }
+  .stop-pensa h4 {
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bA);
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .stop-pensa .stop-q { font-size: 18px; font-weight: 700; color: var(--txt); line-height: 1.35; }
+  .stop-pensa .stop-hint { font-size: 13px; color: var(--txt-2); margin-top: 8px; font-style: italic; }
+
+  /* ============== MICROQUIZ ============== */
+  .microquiz { margin-top: 16px; background: var(--surface); border-radius: 14px; padding: 18px 22px; border-left: 4px solid var(--bB); }
+  .microquiz h4 { font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--bB); margin-bottom: 4px; font-weight: 800; }
+  .microquiz .mq-q { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--txt); }
+  .microquiz .mq-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 700px) { .microquiz .mq-opts { grid-template-columns: 1fr; } }
+  .microquiz .mq-opt {
+    background: var(--surface-2); border: 1.5px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; text-align: left; color: var(--txt); cursor: pointer; font-size: 14px; font-weight: 600; transition: all .15s;
+  }
+  .microquiz .mq-opt:hover { border-color: var(--bB); transform: translateY(-1px); }
+  .microquiz .mq-opt.right { background: rgba(155,204,107,.18); border-color: var(--bC); color: var(--bC); }
+  .microquiz .mq-opt.wrong { background: rgba(224,122,140,.12); border-color: var(--c5); color: var(--c5); }
+  .microquiz .mq-fb { margin-top: 10px; font-size: 14px; color: var(--txt-2); min-height: 22px; }
+  .microquiz .mq-fb.ok { color: var(--bC); }
+
+  /* ============== ACORDEÓN +info ============== */
+  details.acc {
+    margin-top: 12px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    border: 1px dashed var(--line);
+  }
+  details.acc summary {
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--bA);
+    font-weight: 700;
+    list-style: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  details.acc summary::-webkit-details-marker { display: none; }
+  details.acc summary::before { content: '+'; display: inline-block; width: 18px; height: 18px; line-height: 16px; text-align: center; border: 1.5px solid var(--bA); border-radius: 50%; font-size: 14px; color: var(--bA); font-weight: 900; }
+  details.acc[open] summary::before { content: '−'; }
+  details.acc .acc-body { padding-top: 10px; color: var(--txt-2); font-size: 14px; line-height: 1.5; }
+  details.acc .acc-body ul { padding-left: 18px; margin-top: 4px; }
+  details.acc.B summary { color: var(--bB); } details.acc.B summary::before { border-color: var(--bB); color: var(--bB); }
+  details.acc.C summary { color: var(--bC); } details.acc.C summary::before { border-color: var(--bC); color: var(--bC); }
+
+  /* ============== COMPARATIVE TABLE sistemas ============== */
+  .gov-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  .gov-card { background: var(--surface); border-radius: 14px; padding: 16px 18px; border-top: 4px solid var(--bA); display: flex; flex-direction: column; gap: 6px; }
+  .gov-card.alt { border-top-color: var(--c5); }
+  .gov-card.aut { border-top-color: var(--c3); }
+  .gov-card .tag { font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--txt-2); }
+  .gov-card h3 { font-size: 20px; }
+  .gov-card ul { list-style: none; margin-top: 4px; font-size: 13px; color: var(--txt-2); }
+  .gov-card ul li { padding: 5px 0; border-top: 1px dashed var(--line); }
+  .gov-card ul li:first-child { border-top: 0; }
+  .gov-card .who { font-size: 12px; color: var(--bA); margin-top: 6px; font-weight: 700; }
+  .gov-card.alt .who { color: var(--c5); }
+  .gov-card.aut .who { color: var(--c3); }
+  @media (max-width: 900px) { .gov-grid { grid-template-columns: 1fr; } }
+
+  /* ============== ROLES ============== */
+  .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  @media (max-width: 900px) { .roles-grid { grid-template-columns: 1fr 1fr; } }
+  .role { background: var(--surface); border-radius: 12px; padding: 16px; border-top: 4px solid var(--bC); }
+  .role .name { font-size: 17px; font-weight: 800; color: var(--txt); }
+  .role .num { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--txt-2); margin-bottom: 4px; }
+  .role p { font-size: 13px; color: var(--txt-2); margin-top: 5px; }
+  .role .tag { font-size: 10.5px; letter-spacing: 1.5px; padding: 3px 8px; background: rgba(155,204,107,.14); color: var(--bC); border-radius: 10px; display: inline-block; margin-top: 8px; font-weight: 700; }
+
+  /* ============== TIMELINE ============== */
+  .timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 26px; position: relative; }
+  .timeline::before { content: ''; position: absolute; top: 22px; left: 0; right: 0; height: 2px; background: var(--line); z-index: 0; }
+  .step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .step .dot { width: 44px; height: 44px; background: var(--bA); border-radius: 50%; color: #0c0e14; font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 0 0 5px var(--bg); }
+  .step:nth-child(2) .dot { background: var(--bB); }
+  .step:nth-child(3) .dot { background: var(--c3); }
+  .step:nth-child(4) .dot { background: var(--bC); }
+  .step:nth-child(5) .dot { background: var(--c5); }
+  .step .name { margin-top: 10px; font-size: 14px; font-weight: 700; }
+  .step .desc { font-size: 12px; color: var(--txt-2); margin-top: 4px; }
+  @media (max-width: 900px) { .timeline { grid-template-columns: repeat(2, 1fr); } .timeline::before { display: none; } }
+
+  /* ============== SVG ILUSTRACIÓNS hand-drawn ============== */
+  .illus { width: 100%; height: auto; max-height: 360px; display: block; }
+  .illus-wrap {
+    background: #fefdf8;
+    border-radius: 14px;
+    padding: 14px;
+    border: 1px solid var(--line);
+  }
+  .illus-wrap.tight { padding: 6px; }
+  .illus * { stroke-linecap: round; stroke-linejoin: round; }
+  .illus text { font-family: 'Patrick Hand', 'Comic Sans MS', cursive; fill: #1f1d1a; font-weight: 700; }
+  .illus .frame { fill: white; stroke: #1f1d1a; stroke-width: 2; }
+  .illus .stroke { stroke: #1f1d1a; fill: none; stroke-width: 2.5; }
+  .illus .stroke-thin { stroke: #1f1d1a; fill: none; stroke-width: 1.6; }
+  .illus .accent-orange { fill: #c55a11; }
+  .illus .accent-blue { fill: #2e86ab; }
+  .illus .accent-green { fill: #6b8e23; }
+  .illus .label-bg { fill: #f5b450; stroke: #1f1d1a; stroke-width: 2; }
+  .illus .label-bg-B { fill: #6cc0d0; stroke: #1f1d1a; stroke-width: 2; }
+  .illus .crowd { fill: #ebe4d2; stroke: #1f1d1a; stroke-width: 2; }
+
+  .illus-cap {
+    font-size: 12px; color: var(--txt-2); text-align: center; margin-top: 6px; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
+  /* MAPA externo */
+  .map-wrap {
+    background: #fefdf8;
+    border-radius: 14px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    position: relative;
+  }
+  .map-wrap img { width: 100%; height: auto; max-height: 380px; display: block; object-fit: contain; }
+  .map-wrap .mk {
+    position: absolute;
+    background: var(--bA); color: #0c0e14;
+    font-weight: 800; font-size: 12px; letter-spacing: 1px;
+    padding: 4px 10px; border-radius: 14px;
+    border: 2px solid #0c0e14;
+    transform: rotate(-3deg);
+    text-transform: uppercase;
+  }
+  .map-cap { font-size: 12px; color: var(--txt-2); text-align: center; margin-top: 6px; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  /* ============== ORG TREE ============== */
+  .org { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 22px; }
+  .org .level { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .org .node { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 18px; text-align: center; min-width: 140px; }
+  .org .node .l1 { font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--txt-2); }
+  .org .node .l2 { font-size: 15px; font-weight: 800; color: var(--txt); margin-top: 3px; }
+  .org .node.head { border-color: var(--bC); }
+  .org .node.head .l2 { color: var(--bC); }
+  .org .arrow { width: 2px; height: 18px; background: linear-gradient(var(--bC), transparent); }
+
+  /* ============== PROGRESS + CONTROLS ============== */
+  .progress { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--line); z-index: 50; display: flex; }
+  .progress .seg { height: 100%; flex: 1; opacity: .25; transition: opacity .35s; position: relative; }
+  .progress .seg.A { background: var(--bA); }
+  .progress .seg.B { background: var(--bB); }
+  .progress .seg.C { background: var(--bC); }
+  .progress .seg.A.active, .progress .seg.B.active, .progress .seg.C.active { opacity: 1; }
+  .progress .seg .fill { position: absolute; top: 0; left: 0; bottom: 0; background: rgba(255,255,255,.35); transition: width .35s; }
+
+  .controls { position: fixed; bottom: 18px; right: 22px; display: flex; gap: 8px; z-index: 50; }
+  .ctrl { width: 38px; height: 38px; border-radius: 10px; background: rgba(28,32,48,.85); border: 1px solid var(--line); color: var(--txt); cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); transition: all .15s; }
+  .ctrl:hover { background: var(--bA); color: #0c0e14; border-color: var(--bA); }
+
+  .pageref { position: fixed; bottom: 22px; left: 22px; z-index: 50; font-size: 12px; color: var(--txt-2); letter-spacing: 2px; display: flex; gap: 12px; align-items: center; }
+  .pageref b { color: var(--txt); }
+  .pageref .blk { font-size: 10px; padding: 3px 8px; border-radius: 8px; font-weight: 800; letter-spacing: 1px; }
+  .pageref .blk.A { background: rgba(245,180,80,.18); color: var(--bA); }
+  .pageref .blk.B { background: rgba(108,192,208,.18); color: var(--bB); }
+  .pageref .blk.C { background: rgba(155,204,107,.18); color: var(--bC); }
+
+  .footnote { margin-top: auto; padding-top: 12px; font-size: 11.5px; color: var(--grey); letter-spacing: 1px; }
+  .footnote a { color: var(--bB); text-decoration: none; border-bottom: 1px dotted var(--bB); }
+
+  /* PORTADA */
+  .portada { background: radial-gradient(circle at 20% 30%, rgba(245,180,80,.18), transparent 50%), radial-gradient(circle at 80% 70%, rgba(108,192,208,.16), transparent 50%), var(--bg); justify-content: center; align-items: flex-start; }
+  .portada h1 { font-size: clamp(48px, 8vw, 110px); }
+  .portada .sub { font-size: clamp(17px, 1.9vw, 26px); color: var(--txt-2); margin-top: 16px; max-width: 75ch; font-weight: 300; }
+  .portada .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .portada .stat { background: rgba(28,32,48,.6); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; backdrop-filter: blur(4px); }
+  .portada .stat .num { font-size: 22px; font-weight: 900; color: var(--bA); line-height: 1; }
+  .portada .stat .label { font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--txt-2); margin-top: 4px; }
+
+  /* FINAL slide */
+  .final { background: linear-gradient(135deg, var(--surface), var(--bg) 70%); align-items: center; justify-content: center; text-align: center; }
+  .final h2 { font-size: clamp(36px, 5.5vw, 70px); }
+  .final .cta { margin-top: 20px; padding: 14px 24px; background: var(--bC); color: #0c0e14; border-radius: 12px; font-size: 16px; font-weight: 800; border: 0; cursor: pointer; }
+  .final .cta:hover { transform: translateY(-2px); }
+
+  /* HORQUE slide (gancho) */
+  .hooks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+  @media (max-width: 900px) { .hooks { grid-template-columns: 1fr; } }
+  .hook {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 18px;
+    border-left: 4px solid var(--bA);
+  }
+  .hook .ico { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(245,180,80,.12); color: var(--bA); border-radius: 12px; margin-bottom: 10px; }
+  .hook h3 { font-size: 18px; }
+  .hook p { font-size: 14px; color: var(--txt-2); margin-top: 4px; }
+
+  /* PRINT */
+  @page { size: A4 landscape; margin: 8mm; }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { height: auto; overflow: visible; background: white !important; color: black !important; font-size: 9.5pt; line-height: 1.3; }
+    .deck { position: static !important; width: 100% !important; height: auto !important; overflow: visible !important; display: block; }
+    .slide {
+      position: relative !important;
+      inset: auto !important;
+      display: flex !important;
+      flex-direction: column;
+      page-break-after: always !important;
+      break-after: page !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      width: 100%;
+      height: 194mm;
+      max-height: 194mm;
+      background: white !important;
+      color: black !important;
+      padding: 6mm 10mm;
+      overflow: hidden !important;
+      animation: none !important;
+    }
+    .slide:last-child { page-break-after: auto; }
+    .controls, .pageref, .progress { display: none !important; }
+
+    /* Texto en branco-papel */
+    .meta { color: #555 !important; margin-bottom: 4px; font-size: 8.5pt; }
+    h1, h2, h3, h4, p, li, b, strong, span, ul { color: black !important; }
+    .lead { font-size: 10pt !important; margin-top: 4px; color: #333 !important; }
+    .card p, .box p, .box ul li, .gov-card ul li, .role p, .step .desc, .org .node .l1, .hook p, .mq-q, .stop-pensa .stop-q { color: #333 !important; }
+
+    /* Tamaños h1/h2 reducidos */
+    h1 { font-size: 28pt !important; }
+    h2 { font-size: 22pt !important; margin-bottom: 6px; }
+    h3 { font-size: 13pt !important; }
+    h4 { font-size: 9pt !important; }
+
+    /* Cards e boxes con fondo branco e marca de cor */
+    .card, .box, .gov-card, .role, .org .node, .hook { background: #fafafa !important; border-color: #ccc !important; box-shadow: none !important; padding: 8px 10px !important; gap: 4px; }
+    .card h3, .role .name, .hook h3, .box h4 { font-size: 11pt !important; }
+    .card p, .role p { font-size: 9pt !important; }
+    .gov-card ul li { font-size: 9pt !important; border-color: #ddd !important; padding: 3px 0 !important; }
+    .gov-card { padding: 8px 10px !important; }
+    .gov-card h3 { font-size: 12pt !important; }
+    .gov-grid { gap: 8px !important; }
+    .row { gap: 8px !important; margin-top: 8px !important; }
+    .twocol, .twocol.flip { gap: 12px !important; margin-top: 8px !important; }
+
+    /* HL color destacado */
+    .hl { background: #f5b450 !important; color: black !important; padding: 0 8px !important; }
+    .hl.B { background: #6cc0d0 !important; }
+    .hl.C { background: #9bcc6b !important; }
+    .meta .dot { background: #f5b450 !important; }
+
+    /* SVG e mapa máis pequenos */
+    .illus { max-height: 90mm !important; }
+    .map-wrap img { max-height: 90mm !important; }
+    .illus-wrap, .map-wrap { background: #fefdf8 !important; padding: 6px !important; }
+
+    /* STOP & PENSA texto negro */
+    .stop-pensa {
+      background: #fff8ec !important;
+      border: 1.5px dashed #c55a11 !important;
+      padding: 8px 12px !important;
+      gap: 10px !important;
+      margin-top: 8px !important;
+    }
+    .stop-pensa .stop-ic { width: 28px !important; height: 28px !important; background: #f5b450 !important; color: black !important; font-size: 14pt; }
+    .stop-pensa h4 { color: #c55a11 !important; font-size: 9pt !important; }
+    .stop-pensa .stop-q { font-size: 11pt !important; color: black !important; }
+    .stop-pensa .stop-hint { color: #555 !important; font-size: 9pt !important; }
+
+    /* MICROQUIZ */
+    .microquiz { background: #f0f9fb !important; border-left: 3px solid #6cc0d0 !important; padding: 8px 12px !important; margin-top: 8px !important; }
+    .microquiz h4 { color: #2a6c8a !important; font-size: 9pt !important; }
+    .microquiz .mq-q { font-size: 10.5pt !important; color: black !important; margin-bottom: 6px; }
+    .microquiz .mq-opt { background: white !important; border: 1px solid #aaa !important; padding: 5px 8px !important; font-size: 9.5pt !important; color: black !important; }
+    .microquiz .mq-fb { font-size: 9pt !important; }
+
+    /* ACORDEÓNS abertos */
+    details.acc { background: #f5f5f0 !important; border: 1px solid #ccc !important; padding: 6px 10px !important; }
+    details.acc summary { color: black !important; font-size: 9pt !important; }
+    details.acc summary::before { border-color: #c55a11 !important; color: #c55a11 !important; }
+    details.acc .acc-body { color: #333 !important; font-size: 9.5pt !important; padding-top: 4px !important; }
+
+    /* ORG + ROLES */
+    .org { gap: 6px !important; margin-top: 10px !important; }
+    .org .node { padding: 6px 10px !important; min-width: 100px; }
+    .org .node .l1 { font-size: 8pt !important; }
+    .org .node .l2 { font-size: 10pt !important; }
+    .org .arrow { height: 10px !important; }
+    .role { padding: 6px 8px !important; }
+    .role .name { font-size: 11pt !important; }
+    .role .num { font-size: 8pt !important; }
+    .role p { font-size: 9pt !important; }
+    .role .tag { font-size: 8pt !important; padding: 2px 6px !important; }
+
+    /* TIMELINE */
+    .timeline { gap: 6px !important; margin-top: 12px !important; }
+    .timeline::before { background: #aaa !important; top: 18px !important; }
+    .step .dot { width: 36px !important; height: 36px !important; font-size: 14pt !important; box-shadow: 0 0 0 4px white !important; color: black !important; }
+    .step .name { font-size: 10pt !important; }
+    .step .desc { font-size: 8.5pt !important; }
+
+    /* HOOKS */
+    .hooks { gap: 8px !important; margin-top: 8px !important; }
+    .hook { padding: 8px 10px !important; }
+    .hook h3 { font-size: 12pt !important; }
+    .hook p { font-size: 9pt !important; }
+    .hook .ico { width: 28px !important; height: 28px !important; }
+
+    /* PORTADA */
+    .portada { background: white !important; }
+    .portada h1 { font-size: 36pt !important; }
+    .portada .sub { font-size: 11pt !important; margin-top: 8px; }
+    .portada .stats { gap: 8px !important; margin-top: 14px !important; }
+    .portada .stat { background: #fafafa !important; padding: 6px 10px !important; }
+    .portada .stat .num { color: #c55a11 !important; font-size: 16pt !important; }
+
+    /* FINAL */
+    .final { background: white !important; }
+    .final h2 { font-size: 28pt !important; }
+    .final .cta { display: none !important; }
+
+    .footnote { font-size: 8pt !important; color: #555 !important; }
+    .footnote a { color: #2a6c8a !important; }
+    .chip { font-size: 8pt !important; color: #555 !important; border-color: #ccc !important; padding: 2px 6px !important; }
+
+    /* Asegurar mostrar contido oculto */
+    details.acc[open] .acc-body, details.acc .acc-body { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress">
+  <div class="seg A" id="seg-A"><div class="fill" id="fill-A"></div></div>
+  <div class="seg B" id="seg-B"><div class="fill" id="fill-B"></div></div>
+  <div class="seg C" id="seg-C"><div class="fill" id="fill-C"></div></div>
+</div>
+
+<div class="deck" id="deck">
+
+  <!-- =============== SLIDE 1 · PORTADA =============== -->
+  <section class="slide portada active" data-block="A">
+    <div class="meta b-A">
+      <span class="dot"></span>
+      <span>Ciencias Sociais · 5º · Bloque 3 · <b>Vivir en sociedade</b></span>
+    </div>
+    <h1>Aprendemos a <span class="hl">gobernar</span><br>a nosa Tenda Sostible.</h1>
+    <p class="sub">Como se organizan os países e as empresas. Como nos podemos organizar nós para que a tenda do colexio funcione mellor: con xefatura, subxefatura e un equipo con responsabilidades.</p>
+    <div class="stats">
+      <div class="stat"><div class="num">14</div><div class="label">Slides</div></div>
+      <div class="stat"><div class="num">3</div><div class="label">Bloques</div></div>
+      <div class="stat"><div class="num">4</div><div class="label">Microquizzes</div></div>
+      <div class="stat"><div class="num">3</div><div class="label">Stop &amp; pensa</div></div>
+      <div class="stat"><div class="num">6</div><div class="label">Roles tenda</div></div>
+    </div>
+    <div class="footnote">CEIP Coirón Dena · 5º · <a href="competencial-sociais.html" target="_blank">Guía competencial para profesorado</a></div>
+  </section>
+
+  <!-- =============== SLIDE 2 · POR QUE APRENDEMOS ISTO =============== -->
+  <section class="slide" data-block="A">
+    <div class="meta b-A"><span class="dot"></span><span>00 · Por que aprendemos isto?</span><span class="chip">Gancho</span></div>
+    <h2>E se na clase non houbera <span class="hl">normas</span>?</h2>
+    <p class="lead">Imaxina por un momento que mañá chegas á clase e o profesor di: <b>"hoxe ninguén manda, ninguén decide, ninguén se respecta"</b>. Que pasaría no recreo? E ao escribir? E ao querer falar?</p>
+
+    <div class="hooks">
+      <div class="hook">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+        <h3>Sen normas</h3>
+        <p>Manda sempre o máis forte. Os demais non poden falar nin participar. Reina o caos.</p>
+      </div>
+      <div class="hook">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h3>Con normas xustas</h3>
+        <p>Cada quen sabe que pode facer e que non. Hai turnos, espazos compartidos e respecto.</p>
+      </div>
+      <div class="hook">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Decidimos xuntos</h3>
+        <p>Cando hai dúbida, falamos, votamos e damos voz á maioría sen pisar á minoría.</p>
+      </div>
+    </div>
+
+    <div class="stop-pensa">
+      <div class="stop-ic">!</div>
+      <div class="stop-body">
+        <h4>Stop &amp; pensa</h4>
+        <div class="stop-q">Que tres normas mínimas porías na túa clase para que funcione todo o ano?</div>
+        <div class="stop-hint">Anota mentalmente as túas tres. Despois compárteas co compañeiro/a do lado.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 3 · VIVIR EN SOCIEDADE =============== -->
+  <section class="slide" data-block="A">
+    <div class="meta b-A"><span class="dot"></span><span>01 · Vivir en sociedade</span><span class="chip">CA3.1</span></div>
+    <h2>Vivir en sociedade <span class="hl">non é estar só</span>.</h2>
+
+    <div class="twocol">
+      <div>
+        <p class="lead">Unha sociedade somos moitas persoas convivindo. Compartimos lingua, costumes e normas, pero non somos todas iguais. Para que funcione hai tres ingredientes básicos:</p>
+
+        <div class="row cols-3" style="margin-top:14px">
+          <div class="card">
+            <h3>Organización</h3>
+            <p>Alguén coordina. Países teñen goberno, empresas teñen xefatura.</p>
+          </div>
+          <div class="card B">
+            <h3>Normas</h3>
+            <p>Acordos para vivir xuntos. Chámanse leis a nivel país, regras na clase.</p>
+          </div>
+          <div class="card C">
+            <h3>Respecto</h3>
+            <p>A diversidade é riqueza, non problema. Cada quen aporta algo.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="illus-wrap">
+          <!-- SVG inline: Asemblea de crianzas (v2 mellorada) -->
+          <svg class="illus" viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="408" height="308" rx="12" class="frame"/>
+            <!-- chan suxerido -->
+            <ellipse cx="210" cy="285" rx="180" ry="12" fill="#f9ead8" opacity=".6"/>
+            <!-- mesa central -->
+            <ellipse cx="210" cy="225" rx="115" ry="18" fill="#f9ead8" stroke="#1f1d1a" stroke-width="2.2"/>
+            <ellipse cx="210" cy="222" rx="115" ry="18" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2.2"/>
+            <!-- libro na mesa -->
+            <g transform="translate(180 213)">
+              <rect x="0" y="0" width="22" height="14" fill="white" stroke="#1f1d1a" stroke-width="1.6"/>
+              <line x1="2" y1="4" x2="20" y2="4" class="stroke-thin"/>
+              <line x1="2" y1="8" x2="20" y2="8" class="stroke-thin"/>
+              <line x1="2" y1="12" x2="14" y2="12" class="stroke-thin"/>
+            </g>
+            <!-- caderno na mesa -->
+            <g transform="translate(230 211) rotate(8)">
+              <rect x="0" y="0" width="20" height="16" fill="#e3eff5" stroke="#1f1d1a" stroke-width="1.6"/>
+              <line x1="3" y1="6" x2="17" y2="6" class="stroke-thin"/>
+              <line x1="3" y1="11" x2="17" y2="11" class="stroke-thin"/>
+            </g>
+
+            <!-- CRIANZA 1 (esq, man levantada) -->
+            <g>
+              <!-- corpo camiseta verde -->
+              <path d="M55 200 q-3 -8 0 -16 q5 -10 18 -10 q13 0 18 10 q3 8 0 16 l-2 6 q-8 4 -16 4 q-8 0 -16 -4 z" fill="#9bcc6b" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- cabeza -->
+              <circle cx="73" cy="160" r="18" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pelo curto -->
+              <path d="M58 153 q3 -10 15 -10 q12 0 15 10" fill="#3d2c20" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- ollos -->
+              <circle cx="67" cy="160" r="1.8" fill="#1f1d1a"/>
+              <circle cx="79" cy="160" r="1.8" fill="#1f1d1a"/>
+              <!-- sorriso -->
+              <path d="M66 167 q7 5 14 0" stroke="#1f1d1a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <!-- brazo levantado curvo -->
+              <path d="M58 192 q-8 -18 0 -50" stroke="#fef3e5" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M58 192 q-8 -18 0 -50" stroke="#1f1d1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- man -->
+              <circle cx="59" cy="139" r="6.5" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pernas -->
+              <line x1="65" y1="208" x2="62" y2="240" stroke="#2e86ab" stroke-width="6" stroke-linecap="round"/>
+              <line x1="81" y1="208" x2="84" y2="240" stroke="#2e86ab" stroke-width="6" stroke-linecap="round"/>
+            </g>
+
+            <!-- CRIANZA 2 -->
+            <g>
+              <path d="M120 195 q-3 -8 0 -16 q5 -10 18 -10 q13 0 18 10 q3 8 0 16 l-2 6 q-8 4 -16 4 q-8 0 -16 -4 z" fill="#e07a8c" stroke="#1f1d1a" stroke-width="2"/>
+              <circle cx="138" cy="155" r="18" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pelo longo (con coletas) -->
+              <path d="M123 150 q3 -12 15 -12 q12 0 15 12 q-2 4 -4 6 l-3 -2 q-3 8 -8 8 q-5 0 -8 -8 l-3 2 q-2 -2 -4 -6" fill="#5a3d28" stroke="#1f1d1a" stroke-width="1.8"/>
+              <!-- coletas laterais -->
+              <path d="M120 161 q-4 4 -3 14" stroke="#5a3d28" stroke-width="3" fill="none"/>
+              <path d="M156 161 q4 4 3 14" stroke="#5a3d28" stroke-width="3" fill="none"/>
+              <circle cx="132" cy="155" r="1.8" fill="#1f1d1a"/>
+              <circle cx="144" cy="155" r="1.8" fill="#1f1d1a"/>
+              <path d="M131 162 q7 5 14 0" stroke="#1f1d1a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <!-- brazo levantado -->
+              <path d="M122 188 q-8 -22 -2 -45" stroke="#fef3e5" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M122 188 q-8 -22 -2 -45" stroke="#1f1d1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <circle cx="120" cy="144" r="6.5" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pernas -->
+              <line x1="130" y1="203" x2="127" y2="240" stroke="#1f1d1a" stroke-width="6" stroke-linecap="round"/>
+              <line x1="146" y1="203" x2="149" y2="240" stroke="#1f1d1a" stroke-width="6" stroke-linecap="round"/>
+            </g>
+
+            <!-- CRIANZA 3 (centro · fala) -->
+            <g>
+              <path d="M185 195 q-3 -10 0 -18 q5 -12 25 -12 q20 0 25 12 q3 8 0 18 l-2 6 q-10 4 -23 4 q-13 0 -23 -4 z" fill="#f5b450" stroke="#1f1d1a" stroke-width="2"/>
+              <circle cx="210" cy="150" r="20" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pelo medio -->
+              <path d="M192 144 q4 -12 18 -12 q14 0 18 12 q-2 2 -3 4" fill="#1f1d1a" stroke="#1f1d1a" stroke-width="1.8"/>
+              <circle cx="203" cy="150" r="1.8" fill="#1f1d1a"/>
+              <circle cx="217" cy="150" r="1.8" fill="#1f1d1a"/>
+              <!-- boca aberta falando -->
+              <ellipse cx="210" cy="160" rx="5" ry="3.5" fill="#1f1d1a"/>
+              <!-- pernas -->
+              <line x1="200" y1="203" x2="197" y2="240" stroke="#c55a11" stroke-width="6" stroke-linecap="round"/>
+              <line x1="220" y1="203" x2="223" y2="240" stroke="#c55a11" stroke-width="6" stroke-linecap="round"/>
+              <!-- bocadillo -->
+              <path d="M245 80 q-6 -10 6 -12 l60 0 q14 0 14 14 l0 26 q0 14 -14 14 l-35 0 l-10 12 l-3 -12 l-2 0 q-14 0 -14 -14 l0 -26 q0 -2 -2 -2 z" class="frame" stroke-width="2.5"/>
+              <text x="252" y="104" font-size="15">EU OPINO!</text>
+            </g>
+
+            <!-- CRIANZA 4 -->
+            <g>
+              <path d="M260 195 q-3 -8 0 -16 q5 -10 18 -10 q13 0 18 10 q3 8 0 16 l-2 6 q-8 4 -16 4 q-8 0 -16 -4 z" fill="#6cc0d0" stroke="#1f1d1a" stroke-width="2"/>
+              <circle cx="278" cy="155" r="18" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pelo rizado -->
+              <path d="M263 152 q1 -8 6 -10 q5 -2 9 0 q5 2 9 0 q5 2 6 10" fill="#a35a23" stroke="#1f1d1a" stroke-width="1.8"/>
+              <circle cx="272" cy="155" r="1.8" fill="#1f1d1a"/>
+              <circle cx="284" cy="155" r="1.8" fill="#1f1d1a"/>
+              <path d="M271 162 q7 5 14 0" stroke="#1f1d1a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <!-- pernas -->
+              <line x1="270" y1="203" x2="267" y2="240" stroke="#1f1d1a" stroke-width="6" stroke-linecap="round"/>
+              <line x1="286" y1="203" x2="289" y2="240" stroke="#1f1d1a" stroke-width="6" stroke-linecap="round"/>
+            </g>
+
+            <!-- CRIANZA 5 (man levantada) -->
+            <g>
+              <path d="M325 200 q-3 -8 0 -16 q5 -10 18 -10 q13 0 18 10 q3 8 0 16 l-2 6 q-8 4 -16 4 q-8 0 -16 -4 z" fill="#b48ad1" stroke="#1f1d1a" stroke-width="2"/>
+              <circle cx="343" cy="160" r="18" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pelo curto outro estilo -->
+              <path d="M328 154 q3 -10 15 -10 q12 0 15 10 l-3 6" fill="#3d2c20" stroke="#1f1d1a" stroke-width="2"/>
+              <circle cx="337" cy="160" r="1.8" fill="#1f1d1a"/>
+              <circle cx="349" cy="160" r="1.8" fill="#1f1d1a"/>
+              <path d="M336 167 q7 5 14 0" stroke="#1f1d1a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <!-- brazo levantado -->
+              <path d="M363 192 q10 -20 -2 -50" stroke="#fef3e5" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M363 192 q10 -20 -2 -50" stroke="#1f1d1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <circle cx="361" cy="139" r="6.5" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pernas -->
+              <line x1="335" y1="208" x2="332" y2="240" stroke="#6b8e23" stroke-width="6" stroke-linecap="round"/>
+              <line x1="351" y1="208" x2="354" y2="240" stroke="#6b8e23" stroke-width="6" stroke-linecap="round"/>
+            </g>
+
+            <!-- etiqueta título -->
+            <g transform="rotate(-2 88 40)">
+              <rect x="30" y="22" width="115" height="32" rx="8" class="label-bg"/>
+              <text x="88" y="44" font-size="20" text-anchor="middle">ASEMBLEA</text>
+            </g>
+
+            <!-- liña chan dotada -->
+            <line x1="20" y1="265" x2="400" y2="265" class="stroke-thin" stroke-dasharray="3 5"/>
+          </svg>
+          <div class="illus-cap">Decidir falando, escoitando</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stop-pensa">
+      <div class="stop-ic">!</div>
+      <div class="stop-body">
+        <h4>Stop &amp; pensa</h4>
+        <div class="stop-q">Sen normas: que pasaría no comedor do colexio?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 4 · DIVERSIDADE & IGUALDADE =============== -->
+  <section class="slide" data-block="A">
+    <div class="meta b-A"><span class="dot" style="background:var(--c5)"></span><span>02 · Diversidade e igualdade</span><span class="chip">CA3.1 · CA3.2</span></div>
+    <h2>Iguais en <span class="hl" style="background:var(--c5)">dereitos</span>, distintos en todo o demais.</h2>
+    <p class="lead">Persoas con culturas, linguas, xéneros e idades distintas comparten o mesmo territorio. As leis garanten que todas e todos teñamos os mesmos dereitos.</p>
+
+    <div class="twocol">
+      <div>
+        <div class="box accent" style="border-left-color:var(--c5)">
+          <h4 style="color:var(--c5)">Que é a diversidade?</h4>
+          <p>É a mestura de culturas, linguas, idades, capacidades e xéneros nunha sociedade. En Galicia falamos galego e castelán, e tamén veñen veciñas e veciños doutros países.</p>
+        </div>
+        <div class="box accent" style="border-left-color:var(--c5); margin-top:14px">
+          <h4 style="color:var(--c5)">Igualdade de xénero</h4>
+          <p>Mulleres e homes teñen os mesmos dereitos e oportunidades. Non hai traballos, deportes ou cargos só "para nenas" ou só "para nenos".</p>
+        </div>
+
+        <details class="acc">
+          <summary>+ Linguas que escoitamos en España</summary>
+          <div class="acc-body">
+            <ul>
+              <li><b>Castelán</b> — oficial en toda España</li>
+              <li><b>Galego</b> — oficial en Galicia</li>
+              <li><b>Catalán</b> — oficial en Cataluña, Illes Balears e Comunidade Valenciana (como valenciano)</li>
+              <li><b>Eúscaro</b> — oficial no País Vasco e parte de Navarra</li>
+              <li><b>Aranés</b> — oficial no Val d'Aran (occitano)</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+      <div>
+        <div class="box">
+          <h4>Aplicación á tenda</h4>
+          <ul>
+            <li>Calquera pode ser xefe/a, rapaza ou rapaz.</li>
+            <li>Os roles repártense por <b>interese e capacidade</b>, non por xénero.</li>
+            <li>Atendemos por igual a todos os cursos.</li>
+            <li>Se vén alguén que fala outra lingua, axudámoslle igual.</li>
+          </ul>
+        </div>
+
+        <div class="box B" style="margin-top:14px">
+          <h4>Sabías?</h4>
+          <p>As mulleres españolas non puideron votar ata <b>1933</b>. A deputada <b>Clara Campoamor</b> foi quen máis loitou por ese dereito.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 5 · CONFLITOS + CONSTITUCIÓN + MICROQUIZ =============== -->
+  <section class="slide" data-block="A">
+    <div class="meta b-A"><span class="dot" style="background:var(--c3)"></span><span>03 · Resolver conflitos</span><span class="chip">CA3.3</span></div>
+    <h2>Cando hai conflito: <span class="hl" style="background:var(--c3);color:#fff">diálogo</span>, non pelexa.</h2>
+
+    <div class="twocol">
+      <div>
+        <p class="lead">Toda sociedade ten desacordos. O que diferencia unha democracia é como os resolve: <b>falando</b>, escoitando e usando normas xustas. En España, as normas básicas están na <b>Constitución</b>.</p>
+
+        <div class="row cols-2" style="margin-top:12px">
+          <div class="card">
+            <h3>Diálogo</h3>
+            <p>Escoita antes de falar. Linguaxe respectuosa. Pedir axuda a un terceiro se non hai acordo.</p>
+          </div>
+          <div class="card B">
+            <h3>Constitución 1978</h3>
+            <p>Texto cos <b>dereitos e deberes</b> de toda a cidadanía. Define España como Estado social e democrático de dereito.</p>
+          </div>
+        </div>
+
+        <div class="box accent" style="margin-top:14px">
+          <h4>Dereitos que sempre temos</h4>
+          <p>Educación · sanidade · expresión libre · voto (cando temos idade) · non ser discriminados por sexo, lingua ou orixe.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="illus-wrap">
+          <!-- SVG inline: Urna de voto (v2) -->
+          <svg class="illus" viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="408" height="288" rx="12" class="frame"/>
+            <!-- chan -->
+            <line x1="20" y1="265" x2="400" y2="265" class="stroke-thin" stroke-dasharray="3 5"/>
+            <!-- mesa -->
+            <rect x="50" y="225" width="220" height="8" fill="#f9ead8" stroke="#1f1d1a" stroke-width="2"/>
+            <line x1="70" y1="233" x2="65" y2="265" class="stroke"/>
+            <line x1="250" y1="233" x2="255" y2="265" class="stroke"/>
+
+            <!-- URNA -->
+            <!-- corpo -->
+            <path d="M110 225 L110 125 Q110 115 120 115 L240 115 Q250 115 250 125 L250 225 Z" fill="#fdfaf0" stroke="#1f1d1a" stroke-width="2.5"/>
+            <!-- liñas verticais hatch (cross-hatching para volume) -->
+            <line x1="130" y1="130" x2="130" y2="220" class="stroke-thin" opacity=".25"/>
+            <line x1="230" y1="130" x2="230" y2="220" class="stroke-thin" opacity=".25"/>
+            <!-- tapa -->
+            <path d="M105 115 L255 115 L255 108 Q255 100 247 100 L113 100 Q105 100 105 108 Z" fill="#f5b450" stroke="#1f1d1a" stroke-width="2.5"/>
+            <!-- ranura -->
+            <rect x="150" y="103" width="60" height="6" rx="2" fill="#1f1d1a"/>
+            <!-- papeleta dentro -->
+            <rect x="160" y="155" width="40" height="50" fill="white" stroke="#1f1d1a" stroke-width="1.8" transform="rotate(-5 180 180)"/>
+            <line x1="166" y1="165" x2="194" y2="165" class="stroke-thin"/>
+            <line x1="166" y1="175" x2="194" y2="175" class="stroke-thin"/>
+            <line x1="166" y1="185" x2="194" y2="185" class="stroke-thin"/>
+            <!-- VOTO badge -->
+            <g transform="rotate(-4 180 220)">
+              <rect x="135" y="208" width="90" height="22" rx="5" class="label-bg"/>
+              <text x="180" y="223" font-size="14" text-anchor="middle" font-weight="bold">URNA</text>
+            </g>
+
+            <!-- PERSOA VOTANDO á dereita -->
+            <g>
+              <!-- pernas -->
+              <line x1="335" y1="220" x2="333" y2="262" stroke="#2e86ab" stroke-width="9" stroke-linecap="round"/>
+              <line x1="355" y1="220" x2="357" y2="262" stroke="#2e86ab" stroke-width="9" stroke-linecap="round"/>
+              <!-- zapatos -->
+              <ellipse cx="333" cy="263" rx="7" ry="3" fill="#1f1d1a"/>
+              <ellipse cx="357" cy="263" rx="7" ry="3" fill="#1f1d1a"/>
+              <!-- corpo camiseta -->
+              <path d="M315 220 q-4 -10 0 -22 q6 -16 30 -16 q24 0 30 16 q4 12 0 22 z" fill="#9bcc6b" stroke="#1f1d1a" stroke-width="2.2"/>
+              <!-- cabeza -->
+              <circle cx="345" cy="160" r="20" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2.2"/>
+              <!-- pelo -->
+              <path d="M328 156 q3 -14 17 -14 q14 0 17 14 l-3 6" fill="#5a3d28" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- ollos -->
+              <circle cx="338" cy="160" r="2" fill="#1f1d1a"/>
+              <circle cx="352" cy="160" r="2" fill="#1f1d1a"/>
+              <!-- sorriso -->
+              <path d="M337 167 q8 6 16 0" stroke="#1f1d1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- BRAZO esténdese cara á urna coa papeleta -->
+              <path d="M315 200 q-30 -20 -55 -90" stroke="#9bcc6b" stroke-width="12" fill="none" stroke-linecap="round"/>
+              <path d="M315 200 q-30 -20 -55 -90" stroke="#1f1d1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- man con dedos -->
+              <g transform="translate(252 102)">
+                <ellipse cx="0" cy="0" rx="12" ry="9" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+                <!-- dedos visibles -->
+                <path d="M-8 -4 q-3 -6 0 -10" stroke="#1f1d1a" stroke-width="1.5" fill="#fef3e5"/>
+                <path d="M-3 -6 q-1 -8 2 -12" stroke="#1f1d1a" stroke-width="1.5" fill="#fef3e5"/>
+                <path d="M3 -6 q1 -8 -1 -12" stroke="#1f1d1a" stroke-width="1.5" fill="#fef3e5"/>
+                <path d="M8 -4 q3 -6 0 -10" stroke="#1f1d1a" stroke-width="1.5" fill="#fef3e5"/>
+              </g>
+              <!-- papeleta na man -->
+              <g transform="translate(232 75) rotate(-15)">
+                <rect x="0" y="0" width="40" height="26" fill="white" stroke="#1f1d1a" stroke-width="2"/>
+                <line x1="6" y1="8" x2="34" y2="8" class="stroke-thin"/>
+                <line x1="6" y1="15" x2="34" y2="15" class="stroke-thin"/>
+                <line x1="6" y1="20" x2="22" y2="20" class="stroke-thin"/>
+                <circle cx="32" cy="20" r="3" fill="none" stroke="#c55a11" stroke-width="2"/>
+                <path d="M30 20 l2 2 l4 -4" stroke="#c55a11" stroke-width="2" fill="none"/>
+              </g>
+            </g>
+
+            <!-- etiqueta VOTO SECRETO -->
+            <g transform="rotate(-3 90 50)">
+              <rect x="22" y="38" width="135" height="22" rx="5" class="label-bg-B"/>
+              <text x="90" y="53" font-size="12" text-anchor="middle">1 PERSOA = 1 VOTO</text>
+            </g>
+            <!-- etiqueta título -->
+            <g transform="rotate(-3 200 285)">
+              <rect x="120" y="270" width="160" height="24" rx="6" class="label-bg"/>
+              <text x="200" y="287" font-size="14" text-anchor="middle">VOTO SECRETO</text>
+            </g>
+          </svg>
+          <div class="illus-cap">Eleccións libres e secretas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="microquiz">
+      <h4>Microquiz · 03</h4>
+      <div class="mq-q">Hai un conflito no recreo: dous compañeiros queren o mesmo xogo. Que é o máis democrático?</div>
+      <div class="mq-opts" data-q="q-conflito">
+        <button class="mq-opt" data-correct="false">Decídeo o máis forte.</button>
+        <button class="mq-opt" data-correct="true">Falan, escoitan, e se non chegan a acordo piden axuda.</button>
+        <button class="mq-opt" data-correct="false">Tira unha moeda, sen falar.</button>
+        <button class="mq-opt" data-correct="false">Quítaselle a un dos dous e gárdase o xogo.</button>
+      </div>
+      <div class="mq-fb" data-fb="q-conflito">Toca unha resposta.</div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 6 · SISTEMAS DE GOBERNO (BLOQUE B) =============== -->
+  <section class="slide" data-block="B">
+    <div class="meta b-B"><span class="dot" style="background:var(--bB)"></span><span>04 · Sistemas de goberno</span><span class="chip">Teoría</span></div>
+    <h2>Quen <span class="hl B">manda</span>? Tres formas básicas.</h2>
+    <p class="lead">Sociedades organizáronse de moitas maneiras ao longo da historia. Hoxe hai tres grandes familias:</p>
+
+    <div class="twocol flip">
+      <div>
+        <div class="illus-wrap">
+          <!-- SVG inline: Tres sistemas (v2) -->
+          <svg class="illus" viewBox="0 0 540 320" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="532" height="312" rx="12" class="frame"/>
+            <!-- separadores verticais hand-drawn -->
+            <path d="M183 30 Q185 160 181 290" class="stroke-thin" stroke-dasharray="5 5"/>
+            <path d="M363 30 Q361 160 365 290" class="stroke-thin" stroke-dasharray="5 5"/>
+
+            <!-- título xeral -->
+            <g transform="rotate(-1 270 20)">
+              <text x="270" y="27" font-size="12" text-anchor="middle" fill="#666" font-weight="bold">TRES FORMAS DE GOBERNAR</text>
+            </g>
+
+            <!-- ============ PANEL 1: DEMOCRACIA ============ -->
+            <g transform="translate(95 60)">
+              <!-- 4 persoiñas en fila con mans levantadas -->
+              <g transform="translate(-50 0)">
+                <!-- pernas -->
+                <line x1="-3" y1="105" x2="-5" y2="135" stroke="#9bcc6b" stroke-width="5" stroke-linecap="round"/>
+                <line x1="5" y1="105" x2="7" y2="135" stroke="#9bcc6b" stroke-width="5" stroke-linecap="round"/>
+                <!-- corpo -->
+                <path d="M-12 105 q-2 -6 0 -12 q3 -7 12 -7 q9 0 12 7 q2 6 0 12 z" fill="#9bcc6b" stroke="#1f1d1a" stroke-width="1.8"/>
+                <!-- cabeza -->
+                <circle cx="0" cy="78" r="9" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.8"/>
+                <circle cx="-3" cy="78" r="1.2" fill="#1f1d1a"/>
+                <circle cx="3" cy="78" r="1.2" fill="#1f1d1a"/>
+                <path d="M-3 82 q3 3 6 0" stroke="#1f1d1a" stroke-width="1.5" fill="none"/>
+                <!-- brazo levantado -->
+                <path d="M-9 95 q-5 -15 -2 -30" stroke="#1f1d1a" stroke-width="1.8" fill="none"/>
+                <circle cx="-11" cy="63" r="3" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.5"/>
+              </g>
+              <g transform="translate(-22 4)">
+                <line x1="-3" y1="105" x2="-5" y2="135" stroke="#6cc0d0" stroke-width="5" stroke-linecap="round"/>
+                <line x1="5" y1="105" x2="7" y2="135" stroke="#6cc0d0" stroke-width="5" stroke-linecap="round"/>
+                <path d="M-12 105 q-2 -6 0 -12 q3 -7 12 -7 q9 0 12 7 q2 6 0 12 z" fill="#6cc0d0" stroke="#1f1d1a" stroke-width="1.8"/>
+                <circle cx="0" cy="78" r="9" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.8"/>
+                <circle cx="-3" cy="78" r="1.2" fill="#1f1d1a"/>
+                <circle cx="3" cy="78" r="1.2" fill="#1f1d1a"/>
+                <path d="M-3 82 q3 3 6 0" stroke="#1f1d1a" stroke-width="1.5" fill="none"/>
+                <path d="M9 95 q5 -15 2 -30" stroke="#1f1d1a" stroke-width="1.8" fill="none"/>
+                <circle cx="11" cy="63" r="3" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.5"/>
+              </g>
+              <g transform="translate(6 0)">
+                <line x1="-3" y1="105" x2="-5" y2="135" stroke="#e07a8c" stroke-width="5" stroke-linecap="round"/>
+                <line x1="5" y1="105" x2="7" y2="135" stroke="#e07a8c" stroke-width="5" stroke-linecap="round"/>
+                <path d="M-12 105 q-2 -6 0 -12 q3 -7 12 -7 q9 0 12 7 q2 6 0 12 z" fill="#e07a8c" stroke="#1f1d1a" stroke-width="1.8"/>
+                <circle cx="0" cy="78" r="9" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.8"/>
+                <circle cx="-3" cy="78" r="1.2" fill="#1f1d1a"/>
+                <circle cx="3" cy="78" r="1.2" fill="#1f1d1a"/>
+                <path d="M-3 82 q3 3 6 0" stroke="#1f1d1a" stroke-width="1.5" fill="none"/>
+                <path d="M-9 95 q-5 -15 -2 -30" stroke="#1f1d1a" stroke-width="1.8" fill="none"/>
+                <circle cx="-11" cy="63" r="3" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.5"/>
+              </g>
+              <g transform="translate(34 4)">
+                <line x1="-3" y1="105" x2="-5" y2="135" stroke="#b48ad1" stroke-width="5" stroke-linecap="round"/>
+                <line x1="5" y1="105" x2="7" y2="135" stroke="#b48ad1" stroke-width="5" stroke-linecap="round"/>
+                <path d="M-12 105 q-2 -6 0 -12 q3 -7 12 -7 q9 0 12 7 q2 6 0 12 z" fill="#b48ad1" stroke="#1f1d1a" stroke-width="1.8"/>
+                <circle cx="0" cy="78" r="9" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.8"/>
+                <circle cx="-3" cy="78" r="1.2" fill="#1f1d1a"/>
+                <circle cx="3" cy="78" r="1.2" fill="#1f1d1a"/>
+                <path d="M-3 82 q3 3 6 0" stroke="#1f1d1a" stroke-width="1.5" fill="none"/>
+                <path d="M9 95 q5 -15 2 -30" stroke="#1f1d1a" stroke-width="1.8" fill="none"/>
+                <circle cx="11" cy="63" r="3" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.5"/>
+              </g>
+              <!-- chan -->
+              <line x1="-65" y1="138" x2="55" y2="138" class="stroke-thin" stroke-dasharray="2 3"/>
+              <!-- bocadillo "votamos" -->
+              <g transform="translate(-30 20)">
+                <path d="M-22 -10 q-3 -5 4 -6 l45 0 q9 0 9 9 l0 12 q0 9 -9 9 l-25 0 l-6 8 l-1 -8 l-1 0 q-9 0 -9 -9 l0 -12 q0 -2 -3 -3 z" fill="white" stroke="#1f1d1a" stroke-width="1.5"/>
+                <text x="-17" y="9" font-size="11" font-weight="bold">VOTAMOS!</text>
+              </g>
+            </g>
+            <!-- título DEMOCRACIA -->
+            <g transform="rotate(-2 95 220)">
+              <rect x="30" y="206" width="130" height="28" rx="6" class="label-bg"/>
+              <text x="95" y="225" font-size="15" text-anchor="middle" font-weight="bold">DEMOCRACIA</text>
+            </g>
+
+            <!-- ============ PANEL 2: MONARQUÍA ============ -->
+            <g transform="translate(273 60)">
+              <!-- trono -->
+              <rect x="-38" y="80" width="76" height="60" rx="4" fill="#a83246" stroke="#1f1d1a" stroke-width="2.2"/>
+              <rect x="-44" y="68" width="88" height="14" rx="3" fill="#7e2434" stroke="#1f1d1a" stroke-width="2.2"/>
+              <!-- respaldo trono alto -->
+              <path d="M-38 78 L-38 30 Q-38 22 -30 22 L30 22 Q38 22 38 30 L38 78" fill="#a83246" stroke="#1f1d1a" stroke-width="2.2"/>
+              <!-- xoia central trono -->
+              <circle cx="0" cy="35" r="5" fill="#f5b450" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- figura sentada -->
+              <!-- manto vermello -->
+              <path d="M-22 90 q-5 30 0 50 L22 140 q5 -20 0 -50 z" fill="#7e2434" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- corpo -->
+              <path d="M-15 90 q-3 -8 0 -16 q4 -10 15 -10 q11 0 15 10 q3 8 0 16 z" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- cabeza -->
+              <circle cx="0" cy="60" r="16" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- pelo -->
+              <path d="M-14 55 q3 -10 14 -10 q11 0 14 10" fill="#3d2c20" stroke="#1f1d1a" stroke-width="1.8"/>
+              <!-- ollos serios -->
+              <circle cx="-5" cy="60" r="1.6" fill="#1f1d1a"/>
+              <circle cx="5" cy="60" r="1.6" fill="#1f1d1a"/>
+              <!-- expresión neutra -->
+              <line x1="-4" y1="68" x2="4" y2="68" stroke="#1f1d1a" stroke-width="1.6" stroke-linecap="round"/>
+              <!-- coroa -->
+              <path d="M-15 42 L-11 32 L-6 38 L-3 28 L0 36 L3 28 L6 38 L11 32 L15 42 z" fill="#f5b450" stroke="#1f1d1a" stroke-width="2"/>
+              <circle cx="-8" cy="36" r="1.8" fill="#a83246"/>
+              <circle cx="0" cy="32" r="1.8" fill="#2e86ab"/>
+              <circle cx="8" cy="36" r="1.8" fill="#a83246"/>
+              <!-- cetro na man -->
+              <line x1="22" y1="100" x2="38" y2="55" stroke="#1f1d1a" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="38" cy="50" r="4" fill="#f5b450" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- chan -->
+              <line x1="-50" y1="143" x2="50" y2="143" class="stroke-thin" stroke-dasharray="2 3"/>
+            </g>
+            <!-- título MONARQUÍA -->
+            <g transform="rotate(-2 273 220)">
+              <rect x="210" y="206" width="125" height="28" rx="6" fill="#e07a8c" stroke="#1f1d1a" stroke-width="2"/>
+              <text x="273" y="225" font-size="15" text-anchor="middle" fill="#fff" font-weight="bold">MONARQUÍA</text>
+            </g>
+
+            <!-- ============ PANEL 3: DITADURA ============ -->
+            <g transform="translate(450 50)">
+              <!-- nube oscura fondo -->
+              <path d="M-50 10 q-15 0 -15 18 q-12 12 -2 25 q5 12 18 8 q3 18 22 14 q5 16 25 8 q12 12 22 -4 q18 -8 8 -25 q12 -12 -2 -22 q-12 -16 -28 -6 q-15 -16 -32 -6 q-10 -15 -16 -10 z" fill="#1f1d1a" opacity=".12"/>
+              <!-- figura grande con uniforme militar -->
+              <!-- pernas -->
+              <rect x="-12" y="105" width="9" height="32" fill="#3d4220" stroke="#1f1d1a" stroke-width="2"/>
+              <rect x="3" y="105" width="9" height="32" fill="#3d4220" stroke="#1f1d1a" stroke-width="2"/>
+              <!-- botas -->
+              <rect x="-14" y="135" width="13" height="6" fill="#1f1d1a"/>
+              <rect x="1" y="135" width="13" height="6" fill="#1f1d1a"/>
+              <!-- corpo uniforme -->
+              <path d="M-22 105 q-4 -14 0 -28 q6 -18 22 -18 q16 0 22 18 q4 14 0 28 z" fill="#5a6a23" stroke="#1f1d1a" stroke-width="2.2"/>
+              <!-- charreteras -->
+              <rect x="-22" y="65" width="8" height="6" fill="#f5b450" stroke="#1f1d1a" stroke-width="1.5"/>
+              <rect x="14" y="65" width="8" height="6" fill="#f5b450" stroke="#1f1d1a" stroke-width="1.5"/>
+              <!-- cinto -->
+              <rect x="-22" y="95" width="44" height="6" fill="#3d2c20" stroke="#1f1d1a" stroke-width="1.5"/>
+              <rect x="-3" y="93" width="6" height="10" fill="#f5b450" stroke="#1f1d1a" stroke-width="1.5"/>
+              <!-- medalla -->
+              <circle cx="-8" cy="80" r="3" fill="#f5b450" stroke="#1f1d1a" stroke-width="1.5"/>
+              <!-- cabeza -->
+              <circle cx="0" cy="50" r="18" fill="#fef3e5" stroke="#1f1d1a" stroke-width="2.5"/>
+              <!-- gorra militar -->
+              <path d="M-18 38 L18 38 L18 32 Q18 24 10 24 L-10 24 Q-18 24 -18 32 Z" fill="#3d4220" stroke="#1f1d1a" stroke-width="2"/>
+              <rect x="-18" y="38" width="36" height="4" fill="#1f1d1a"/>
+              <!-- estrella na gorra -->
+              <path d="M0 27 l1.5 3 l3 0 l-2.5 2 l1 3 l-3 -2 l-3 2 l1 -3 l-2.5 -2 l3 0 z" fill="#a83246" stroke="#1f1d1a" stroke-width="0.5"/>
+              <!-- expresión brava: cellas inclinadas -->
+              <line x1="-10" y1="45" x2="-3" y2="48" stroke="#1f1d1a" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="10" y1="45" x2="3" y2="48" stroke="#1f1d1a" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- ollos -->
+              <circle cx="-5" cy="52" r="1.8" fill="#1f1d1a"/>
+              <circle cx="5" cy="52" r="1.8" fill="#1f1d1a"/>
+              <!-- boca seria -->
+              <line x1="-5" y1="62" x2="5" y2="62" stroke="#1f1d1a" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- 3 figuras pequenas asustadas debaixo -->
+              <g transform="translate(-30 158) scale(0.55)">
+                <line x1="-3" y1="42" x2="-5" y2="58" stroke="#1f1d1a" stroke-width="3"/>
+                <line x1="5" y1="42" x2="7" y2="58" stroke="#1f1d1a" stroke-width="3"/>
+                <path d="M-10 42 q-3 -8 0 -14 q4 -8 10 -8 q6 0 10 8 q3 6 0 14 z" fill="#ebe4d2" stroke="#1f1d1a" stroke-width="1.5"/>
+                <circle cx="0" cy="18" r="8" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="-3" y1="18" x2="-3" y2="20" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="3" y1="18" x2="3" y2="20" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="-3" y1="24" x2="3" y2="24" stroke="#1f1d1a" stroke-width="1.5"/>
+              </g>
+              <g transform="translate(0 158) scale(0.55)">
+                <line x1="-3" y1="42" x2="-5" y2="58" stroke="#1f1d1a" stroke-width="3"/>
+                <line x1="5" y1="42" x2="7" y2="58" stroke="#1f1d1a" stroke-width="3"/>
+                <path d="M-10 42 q-3 -8 0 -14 q4 -8 10 -8 q6 0 10 8 q3 6 0 14 z" fill="#ebe4d2" stroke="#1f1d1a" stroke-width="1.5"/>
+                <circle cx="0" cy="18" r="8" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="-3" y1="18" x2="-3" y2="20" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="3" y1="18" x2="3" y2="20" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="-3" y1="24" x2="3" y2="24" stroke="#1f1d1a" stroke-width="1.5"/>
+              </g>
+              <g transform="translate(30 158) scale(0.55)">
+                <line x1="-3" y1="42" x2="-5" y2="58" stroke="#1f1d1a" stroke-width="3"/>
+                <line x1="5" y1="42" x2="7" y2="58" stroke="#1f1d1a" stroke-width="3"/>
+                <path d="M-10 42 q-3 -8 0 -14 q4 -8 10 -8 q6 0 10 8 q3 6 0 14 z" fill="#ebe4d2" stroke="#1f1d1a" stroke-width="1.5"/>
+                <circle cx="0" cy="18" r="8" fill="#fef3e5" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="-3" y1="18" x2="-3" y2="20" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="3" y1="18" x2="3" y2="20" stroke="#1f1d1a" stroke-width="1.5"/>
+                <line x1="-3" y1="24" x2="3" y2="24" stroke="#1f1d1a" stroke-width="1.5"/>
+              </g>
+            </g>
+            <!-- título DITADURA -->
+            <g transform="rotate(-2 450 220)">
+              <rect x="390" y="206" width="120" height="28" rx="6" fill="#b48ad1" stroke="#1f1d1a" stroke-width="2"/>
+              <text x="450" y="225" font-size="15" text-anchor="middle" fill="#fff" font-weight="bold">DITADURA</text>
+            </g>
+          </svg>
+          <div class="illus-cap">Quen toma as decisións?</div>
+        </div>
+      </div>
+      <div>
+        <div class="gov-grid" style="grid-template-columns:1fr">
+          <div class="gov-card">
+            <span class="tag">Sistema 1</span>
+            <h3>Democracia</h3>
+            <ul>
+              <li>O poder está na cidadanía.</li>
+              <li>Vótase para elixir representantes.</li>
+              <li>Hai eleccións cada poucos anos.</li>
+            </ul>
+            <div class="who">EX. España, Francia, Portugal…</div>
+          </div>
+          <div class="gov-card alt">
+            <span class="tag">Sistema 2</span>
+            <h3>Monarquía</h3>
+            <ul>
+              <li>O xefe do Estado é un rei ou raíña.</li>
+              <li>Se é <b>parlamentaria</b>, o rei reina pero non goberna.</li>
+              <li>Se é <b>absoluta</b>, o rei manda en todo.</li>
+            </ul>
+            <div class="who">EX. España, Reino Unido (parlamentaria)</div>
+          </div>
+          <div class="gov-card aut">
+            <span class="tag">Sistema 3</span>
+            <h3>Ditadura</h3>
+            <ul>
+              <li>Manda unha persoa ou grupo só.</li>
+              <li>Non hai eleccións libres.</li>
+              <li>Limítanse os dereitos.</li>
+            </ul>
+            <div class="who">EX. España viviu unha ditadura ata 1975.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="microquiz">
+      <h4>Microquiz · 04</h4>
+      <div class="mq-q">Cal é o sistema de goberno actual de España?</div>
+      <div class="mq-opts" data-q="q-espana">
+        <button class="mq-opt" data-correct="false">Ditadura</button>
+        <button class="mq-opt" data-correct="false">Monarquía absoluta</button>
+        <button class="mq-opt" data-correct="true">Monarquía parlamentaria (democracia)</button>
+        <button class="mq-opt" data-correct="false">República</button>
+      </div>
+      <div class="mq-fb" data-fb="q-espana">Toca unha resposta.</div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 7 · ESPAÑA HOXE =============== -->
+  <section class="slide" data-block="B">
+    <div class="meta b-B"><span class="dot" style="background:var(--bB)"></span><span>05 · España hoxe</span><span class="chip">CA3.3 · CA3.4</span></div>
+    <h2>España é unha <span class="hl B">democracia</span> desde 1978.</h2>
+
+    <div class="twocol">
+      <div>
+        <p class="lead">Desde a Constitución de 1978, España é unha <b>monarquía parlamentaria</b>: hai un rei como xefe de Estado (<b>Felipe VI</b>), pero quen goberna é un Presidente elixido nas urnas. España forma parte da <b>Unión Europea</b> desde 1986.</p>
+
+        <div class="row cols-2" style="margin-top:14px">
+          <div class="card"><h3>Constitución</h3><p>Aprobada en <b>1978</b>. Dereitos, deberes e organización do Estado.</p></div>
+          <div class="card B"><h3>Estado de dereito</h3><p>Ninguén está por riba das leis, nin sequera o goberno.</p></div>
+          <div class="card"><h3>Tres poderes</h3><p>Lexislativo (Parlamento), executivo (Goberno), xudicial (Tribunais). Sepáranse.</p></div>
+          <div class="card B"><h3>Unión Europea</h3><p>27 países comparten leis e moeda (euro).</p></div>
+        </div>
+
+        <details class="acc B">
+          <summary>+ Memoria democrática</summary>
+          <div class="acc-body">
+            Antes da Constitución, España viviu case <b>40 anos baixo unha ditadura (1939–1975)</b>. Non se podía votar, nin haber partidos políticos, nin imprimir libros que criticasen o goberno. O galego foi prohibido nos colexios e nos rótulos oficiais. Por iso é tan importante lembrar e protexer a democracia que custou tanto conseguir.
+          </div>
+        </details>
+      </div>
+
+      <div>
+        <div class="map-wrap">
+          <img src="img/mapa-espana.svg" alt="Mapa de España coas comunidades autónomas">
+          <span class="mk" style="top: 18%; left: 12%;">Galicia</span>
+          <span class="mk" style="bottom: 14%; right: 26%; background:var(--bB); transform:rotate(2deg);">Capital: Madrid</span>
+        </div>
+        <div class="map-cap">Mapa España · 17 CCAA + 2 cidades autónomas</div>
+      </div>
+    </div>
+
+    <div class="stop-pensa">
+      <div class="stop-ic">!</div>
+      <div class="stop-body">
+        <h4>Stop &amp; pensa</h4>
+        <div class="stop-q">Antes de 1978 non había Constitución. Que tres cousas que hoxe fas a diario non poderías facer?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 8 · ÓRGANOS DE GOBERNO + MICROQUIZ =============== -->
+  <section class="slide" data-block="B">
+    <div class="meta b-B"><span class="dot" style="background:var(--bB)"></span><span>06 · Órganos de goberno</span><span class="chip">CA3.4</span></div>
+    <h2>Goberno por <span class="hl B">niveis</span>: do concello á UE.</h2>
+
+    <div class="twocol flip">
+      <div>
+        <div class="illus-wrap">
+          <!-- SVG inline: pirámide niveis -->
+          <svg class="illus" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="388" height="308" rx="12" class="frame"/>
+            <!-- Pirámide 4 niveis -->
+            <!-- nivel 4 (cima UE) -->
+            <path d="M170 30 L230 30 L240 65 L160 65 Z" fill="#e3eff5" stroke="#1f1d1a" stroke-width="2.5"/>
+            <text x="200" y="52" font-size="14" text-anchor="middle">UE</text>
+            <!-- nivel 3 (España) -->
+            <path d="M140 75 L260 75 L275 130 L125 130 Z" fill="#f9ead8" stroke="#1f1d1a" stroke-width="2.5"/>
+            <text x="200" y="107" font-size="14" text-anchor="middle">ESPAÑA</text>
+            <!-- nivel 2 (Galicia) -->
+            <path d="M105 140 L295 140 L315 215 L85 215 Z" fill="#f0f5dd" stroke="#1f1d1a" stroke-width="2.5"/>
+            <text x="200" y="180" font-size="16" text-anchor="middle">GALICIA</text>
+            <!-- nivel 1 (Concello) -->
+            <path d="M55 225 L345 225 L375 295 L25 295 Z" fill="#fdf4f5" stroke="#1f1d1a" stroke-width="2.5"/>
+            <text x="200" y="265" font-size="18" text-anchor="middle">CONCELLO</text>
+
+            <!-- frecha "máis preto" -->
+            <path d="M380 295 Q395 200 380 100" class="stroke-thin" stroke-dasharray="3 4" fill="none"/>
+            <text x="370" y="260" font-size="9" transform="rotate(-90 370 260)">+ preto</text>
+            <text x="370" y="80" font-size="9" transform="rotate(-90 370 80)">+ amplo</text>
+          </svg>
+          <div class="illus-cap">Catro niveis</div>
+        </div>
+      </div>
+
+      <div>
+        <p class="lead">O poder non está nun só sitio. Repártese en catro niveis para que cada cousa se decida o máis preto da xente posible. Cada nivel ocúpase do que mellor coñece.</p>
+
+        <div class="row cols-2" style="margin-top:14px">
+          <div class="card"><h3>Concello</h3><p>Lixo, parques, festas, deporte municipal. <b>No teu caso: Meaño.</b></p></div>
+          <div class="card B"><h3>Xunta</h3><p>Educación, sanidade e medio ambiente. Sede en Santiago.</p></div>
+          <div class="card"><h3>Estado</h3><p>Exército, xustiza, moeda, transporte estatal. Sede en Madrid.</p></div>
+          <div class="card B"><h3>Unión Europea</h3><p>Comercio, euro e leis comúns. Sede en Bruxelas.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="microquiz">
+      <h4>Microquiz · 06</h4>
+      <div class="mq-q">Que nivel decide se hai novos parques infantís ou un polideportivo no Coirón, Dena?</div>
+      <div class="mq-opts" data-q="q-nivel">
+        <button class="mq-opt" data-correct="true">O concello de Meaño.</button>
+        <button class="mq-opt" data-correct="false">A Unión Europea.</button>
+        <button class="mq-opt" data-correct="false">O Goberno de España directamente.</button>
+        <button class="mq-opt" data-correct="false">Decídese só en Madrid.</button>
+      </div>
+      <div class="mq-fb" data-fb="q-nivel">Toca unha resposta.</div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 9 · GALICIA (NOVA) =============== -->
+  <section class="slide" data-block="B">
+    <div class="meta b-B"><span class="dot" style="background:var(--bB)"></span><span>07 · Galicia, as nosas institucións</span><span class="chip">CA3.4</span></div>
+    <h2>Galicia ten <span class="hl B">goberno propio</span>.</h2>
+
+    <div class="twocol">
+      <div>
+        <p class="lead">Galicia é unha das 17 comunidades autónomas. Ten o seu <b>Estatuto de Autonomía</b> (1981), a súa lingua propia (galego), as súas institucións e os seus símbolos.</p>
+
+        <div class="row cols-2" style="margin-top:14px">
+          <div class="card B"><h3>Parlamento</h3><p>75 deputadas e deputados elixidos polo pobo. Sede no <b>Pazo do Hórreo</b>, en Santiago. Aproban as leis galegas.</p></div>
+          <div class="card B"><h3>Xunta</h3><p>É o goberno. Préside o <b>Presidente da Xunta</b>. Inclúe as consellerías (Educación, Sanidade, Cultura, Mar…).</p></div>
+        </div>
+
+        <details class="acc B">
+          <summary>+ Símbolos de Galicia</summary>
+          <div class="acc-body">
+            <ul>
+              <li><b>Bandeira</b>: branca cunha banda azul diagonal.</li>
+              <li><b>Himno</b>: <i>Os Pinos</i>, letra de Eduardo Pondal.</li>
+              <li><b>Día das Letras Galegas</b>: 17 de maio.</li>
+              <li><b>Día de Galicia</b>: 25 de xullo.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+      <div>
+        <div class="map-wrap">
+          <img src="img/mapa-galicia.svg" alt="Mapa de Galicia coas 4 provincias">
+        </div>
+        <div class="map-cap">A Coruña · Lugo · Ourense · Pontevedra (a túa)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 10 · ANALOXÍA PAÍS/EMPRESA (BLOQUE C) =============== -->
+  <section class="slide" data-block="C">
+    <div class="meta b-C"><span class="dot" style="background:var(--bC)"></span><span>08 · Do país á empresa</span><span class="chip">Ponte</span></div>
+    <h2>Un país é, no fondo, unha <span class="hl C">organización enorme</span>.</h2>
+    <p class="lead">As regras que serven para gobernar un país tamén serven para gobernar unha empresa ou unha tenda. Cambian os nomes, pero o esquema é o mesmo: dirección, áreas e equipos.</p>
+
+    <div class="row cols-2">
+      <div class="card">
+        <h3>NO PAÍS</h3>
+        <ul style="list-style:none;color:var(--txt-2);font-size:14px;margin-top:6px">
+          <li style="padding:6px 0;border-bottom:1px dashed var(--line)"><b>Presidente/a</b> · dirixe o goberno</li>
+          <li style="padding:6px 0;border-bottom:1px dashed var(--line)"><b>Ministros/as</b> · cada área (sanidade, educación…)</li>
+          <li style="padding:6px 0;border-bottom:1px dashed var(--line)"><b>Funcionariado</b> · executa o día a día</li>
+          <li style="padding:6px 0"><b>Cidadanía</b> · elixe e supervisa</li>
+        </ul>
+      </div>
+      <div class="card C">
+        <h3>NA EMPRESA</h3>
+        <ul style="list-style:none;color:var(--txt-2);font-size:14px;margin-top:6px">
+          <li style="padding:6px 0;border-bottom:1px dashed var(--line)"><b>Dirección / CEO</b> · dirixe a empresa</li>
+          <li style="padding:6px 0;border-bottom:1px dashed var(--line)"><b>Xefes/as de área</b> · cada departamento</li>
+          <li style="padding:6px 0;border-bottom:1px dashed var(--line)"><b>Equipo</b> · fai o produto ou servizo</li>
+          <li style="padding:6px 0"><b>Clientela</b> · merca e opina</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stop-pensa">
+      <div class="stop-ic">!</div>
+      <div class="stop-body">
+        <h4>Stop &amp; pensa</h4>
+        <div class="stop-q">Na túa familia, quen sería o "presidente"? E os "ministros" de cada cousa (cociña, compras, deberes…)?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 11 · QUIZ INTEGRAL =============== -->
+  <section class="slide" data-block="C">
+    <div class="meta b-C"><span class="dot" style="background:var(--bC)"></span><span>09 · Repaso · Que aprendiches?</span><span class="chip">Quiz</span></div>
+    <h2>Comprobemos o <span class="hl C">aprendido</span>.</h2>
+
+    <div class="microquiz" style="border-left-color:var(--bC)">
+      <h4 style="color:var(--bC)">Pregunta 1</h4>
+      <div class="mq-q">En España, quen aproba as leis?</div>
+      <div class="mq-opts" data-q="qf1">
+        <button class="mq-opt" data-correct="false">O Rei pola súa conta.</button>
+        <button class="mq-opt" data-correct="true">O Congreso e o Senado (Parlamento), elixidos pola cidadanía.</button>
+        <button class="mq-opt" data-correct="false">Cada concello en solitario.</button>
+        <button class="mq-opt" data-correct="false">A Unión Europea sempre.</button>
+      </div>
+      <div class="mq-fb" data-fb="qf1">Toca unha resposta.</div>
+    </div>
+
+    <div class="microquiz" style="border-left-color:var(--bC); margin-top:14px">
+      <h4 style="color:var(--bC)">Pregunta 2</h4>
+      <div class="mq-q">Que diferenza unha democracia dunha ditadura?</div>
+      <div class="mq-opts" data-q="qf2">
+        <button class="mq-opt" data-correct="false">A democracia é máis vella.</button>
+        <button class="mq-opt" data-correct="true">Na democracia hai eleccións libres e dereitos garantidos.</button>
+        <button class="mq-opt" data-correct="false">A ditadura ten máis xente.</button>
+        <button class="mq-opt" data-correct="false">Non hai diferenza.</button>
+      </div>
+      <div class="mq-fb" data-fb="qf2">Toca unha resposta.</div>
+    </div>
+
+    <div class="microquiz" style="border-left-color:var(--bC); margin-top:14px">
+      <h4 style="color:var(--bC)">Pregunta 3</h4>
+      <div class="mq-q">A Constitución española aprobouse en:</div>
+      <div class="mq-opts" data-q="qf3">
+        <button class="mq-opt" data-correct="false">1900</button>
+        <button class="mq-opt" data-correct="false">1939</button>
+        <button class="mq-opt" data-correct="true">1978</button>
+        <button class="mq-opt" data-correct="false">2002</button>
+      </div>
+      <div class="mq-fb" data-fb="qf3">Toca unha resposta.</div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 12 · A TENDA COMO MINI-EMPRESA =============== -->
+  <section class="slide" data-block="C">
+    <div class="meta b-C"><span class="dot" style="background:var(--bC)"></span><span>10 · A tenda necesita gobernarse</span><span class="chip">Aplicación</span></div>
+    <h2>A Tenda Sostible é unha <span class="hl C">mini-empresa</span>.</h2>
+    <p class="lead">Prestamos xogos no recreo e para a casa. Para que funcione cada día, alguén ten que abrir, anotar, reparar, comunicar e decidir. Copiamos o modelo dunha empresa: <b>xefatura</b>, <b>departamentos</b> e <b>equipo</b>.</p>
+
+    <div class="org">
+      <div class="level">
+        <div class="node head"><div class="l1">Dirección</div><div class="l2">Xefe/a · Subxefe/a</div></div>
+      </div>
+      <div class="arrow"></div>
+      <div class="level">
+        <div class="node"><div class="l1">Departamento</div><div class="l2">Tesourería</div></div>
+        <div class="node"><div class="l1">Departamento</div><div class="l2">Comunicación</div></div>
+        <div class="node"><div class="l1">Departamento</div><div class="l2">Inventario</div></div>
+        <div class="node"><div class="l1">Departamento</div><div class="l2">Atención</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 13 · ROLES =============== -->
+  <section class="slide" data-block="C">
+    <div class="meta b-C"><span class="dot" style="background:var(--bC)"></span><span>11 · Os 6 roles da Tenda</span><span class="chip">Organigrama</span></div>
+    <h2>Cada quen, o seu <span class="hl C">papel</span>.</h2>
+
+    <div class="roles-grid">
+      <div class="role">
+        <div class="num">Rol 1</div>
+        <div class="name">Xefe / Xefa</div>
+        <p>Dirixe reunións, toma a decisión final, representa a tenda.</p>
+        <span class="tag">1 persoa · por voto</span>
+      </div>
+      <div class="role">
+        <div class="num">Rol 2</div>
+        <div class="name">Subxefe / Subxefa</div>
+        <p>Substitúe á xefatura, coordina departamentos, supervisa acordos.</p>
+        <span class="tag">1 persoa · por voto</span>
+      </div>
+      <div class="role">
+        <div class="num">Rol 3</div>
+        <div class="name">Tesourería</div>
+        <p>Moedas-tenda, anotacións e balance semanal.</p>
+        <span class="tag">2 persoas</span>
+      </div>
+      <div class="role">
+        <div class="num">Rol 4</div>
+        <div class="name">Comunicación</div>
+        <p>Carteis, anuncios e buzón de suxestións.</p>
+        <span class="tag">2 persoas</span>
+      </div>
+      <div class="role">
+        <div class="num">Rol 5</div>
+        <div class="name">Inventario</div>
+        <p>Estado dos xogos, reparacións e novas incorporacións.</p>
+        <span class="tag">2 persoas</span>
+      </div>
+      <div class="role">
+        <div class="num">Rol 6</div>
+        <div class="name">Atención</div>
+        <p>Apertura nos recreos, explicación e axuda á clientela.</p>
+        <span class="tag">3 persoas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== SLIDE 14 · TAREFA FINAL =============== -->
+  <section class="slide final" data-block="C">
+    <div class="meta b-C" style="justify-content:center"><span class="dot" style="background:var(--bC)"></span><span>12 · Tarefa final · 1 semana</span></div>
+    <h2>Eleccións na clase.<br>Repartimos os <span class="hl C">cargos</span> da tenda.</h2>
+    <p class="lead" style="text-align:center">Vamos vivir nós mesmos un proceso democrático: candidaturas, debate, voto secreto, reconto público e toma de posesión.</p>
+
+    <div class="timeline">
+      <div class="step"><div class="dot">1</div><div class="name">Candidaturas</div><div class="desc">Quen queira ser xefe/a presenta mini-programa de 3 ideas.</div></div>
+      <div class="step"><div class="dot">2</div><div class="name">Debate</div><div class="desc">Cada candidatura defende en 1 minuto.</div></div>
+      <div class="step"><div class="dot">3</div><div class="name">Voto secreto</div><div class="desc">Cada persoa vota nunha papeleta sen nome.</div></div>
+      <div class="step"><div class="dot">4</div><div class="name">Reconto</div><div class="desc">Conta pública diante de todos. Transparencia.</div></div>
+      <div class="step"><div class="dot">5</div><div class="name">Toma de posesión</div><div class="desc">A xefatura asigna departamentos. Comeza o curso da tenda.</div></div>
+    </div>
+
+    <button class="cta" onclick="document.getElementById('deck').scrollIntoView()">Comezamos as eleccións</button>
+
+    <div class="footnote" style="margin-top:28px">Guía para o profesor: <a href="competencial-sociais.html" target="_blank">competencial-sociais.html</a> · Apuntes para imprimir: <a href="../apuntes-vivir-en-sociedade.pdf" target="_blank">PDF Vivir en sociedade</a></div>
+  </section>
+
+</div>
+
+<!-- ============== PAGEREF + CONTROLS ============== -->
+<div class="pageref">
+  <span class="blk" id="blk-label">A</span>
+  <span><b id="cur">1</b> / <span id="tot">14</span></span>
+</div>
+<div class="controls">
+  <button class="ctrl" id="prev" title="Anterior (←)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="ctrl" id="next" title="Seguinte (→)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <button class="ctrl" id="fs" title="Pantalla completa (F)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+  </button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let idx = 0;
+  const cur = document.getElementById('cur');
+  const blkLabel = document.getElementById('blk-label');
+  document.getElementById('tot').textContent = total;
+
+  // Block ranges
+  // Block A: 1-5, Block B: 6-9, Block C: 10-14
+  const BLOCKS = { A: [0, 4], B: [5, 8], C: [9, 13] };
+
+  function updateProgress(i) {
+    for (const [b, [s, e]] of Object.entries(BLOCKS)) {
+      const seg = document.getElementById('seg-' + b);
+      const fill = document.getElementById('fill-' + b);
+      const inBlock = i >= s && i <= e;
+      seg.classList.toggle('active', inBlock || i > e);
+      // Fill the segment proportionally
+      let pct;
+      if (i < s) pct = 0;
+      else if (i > e) pct = 100;
+      else pct = ((i - s + 1) / (e - s + 1)) * 100;
+      fill.style.width = pct + '%';
+    }
+  }
+
+  function show(i) {
+    if (i < 0) i = 0;
+    if (i >= total) i = total - 1;
+    slides[idx].classList.remove('active');
+    idx = i;
+    slides[idx].classList.add('active');
+    cur.textContent = idx + 1;
+    const block = slides[idx].dataset.block || 'A';
+    blkLabel.textContent = block;
+    blkLabel.className = 'blk ' + block;
+    updateProgress(idx);
+    location.hash = 's' + (idx + 1);
+    slides[idx].scrollTop = 0;
+  }
+
+  document.getElementById('prev').onclick = () => show(idx - 1);
+  document.getElementById('next').onclick = () => show(idx + 1);
+  document.getElementById('fs').onclick = () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  };
+
+  document.addEventListener('keydown', e => {
+    // Don't intercept arrows when inside a quiz button focus
+    const tag = (document.activeElement && document.activeElement.tagName || '').toLowerCase();
+    if (tag === 'button' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(idx + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(idx - 1); }
+    if (e.key === 'Home') { e.preventDefault(); show(0); }
+    if (e.key === 'End') { e.preventDefault(); show(total - 1); }
+    if (e.key === 'f' || e.key === 'F') document.getElementById('fs').click();
+  });
+
+  // Open at hash slide if present
+  const h = location.hash.match(/^#s(\d+)$/);
+  if (h) show(parseInt(h[1]) - 1); else show(0);
+
+  // En print: abrir todos os <details> e amosar todas as slides
+  window.addEventListener('beforeprint', () => {
+    document.querySelectorAll('details.acc').forEach(d => d.open = true);
+    document.querySelectorAll('.slide').forEach(s => s.classList.add('active'));
+  });
+  window.addEventListener('afterprint', () => {
+    document.querySelectorAll('.slide').forEach((s, i) => { if (i !== idx) s.classList.remove('active'); });
+  });
+
+  // ============== MICROQUIZ wiring ==============
+  document.querySelectorAll('.mq-opts').forEach(opts => {
+    const q = opts.dataset.q;
+    const fb = document.querySelector(`[data-fb="${q}"]`);
+    opts.querySelectorAll('.mq-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        opts.querySelectorAll('.mq-opt').forEach(x => x.classList.remove('right','wrong'));
+        if (b.dataset.correct === 'true') {
+          b.classList.add('right');
+          fb.textContent = 'Correcto! Vai pola boa pista.';
+          fb.classList.add('ok');
+        } else {
+          b.classList.add('wrong');
+          fb.textContent = 'Non é esa. Mira a slide anterior e proba outra vez.';
+          fb.classList.remove('ok');
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

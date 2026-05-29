@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vivir en sociedade · Apuntes · Sociais 5º</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm 14mm 14mm; }
+
+  :root {
+    --ink: #1f1d1a;
+    --ink-2: #4a463f;
+    --line: #d8d2c3;
+    --paper: #faf7f0;
+    --accent: #b85a1f;
+    --accent-d: #843d10;
+    --accent-l: #f9ead8;
+    --blue: #2a6c8a;
+    --blue-l: #e3eff5;
+    --green: #4a7a32;
+    --green-l: #e8f0dd;
+    --soft: #6b6457;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: white; color: var(--ink); }
+  body {
+    font-family: 'Georgia', 'Iowan Old Style', 'Palatino', serif;
+    font-size: 11.5pt;
+    line-height: 1.45;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 182mm;
+    margin: 0 auto;
+    padding: 14mm 0 10mm;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* HEADER común */
+  .running {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 4px;
+    margin-bottom: 14px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  .running .topic {
+    font-size: 9.5pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-d);
+    font-weight: 800;
+  }
+  .running .pn {
+    font-size: 9pt;
+    color: var(--soft);
+    letter-spacing: 1.5px;
+  }
+
+  h1.cover {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 36pt;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -1.2px;
+    color: var(--ink);
+    margin-top: 20mm;
+  }
+  h1.cover .accent { color: var(--accent); }
+  .cover-sub {
+    font-size: 13pt;
+    color: var(--soft);
+    margin-top: 8mm;
+    max-width: 130mm;
+    line-height: 1.4;
+  }
+  .cover-meta {
+    margin-top: 20mm;
+    display: flex;
+    gap: 18mm;
+    border-top: 1px solid var(--line);
+    padding-top: 6mm;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+  }
+  .cover-meta .item .l {
+    font-size: 8.5pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .cover-meta .item .v { font-size: 12pt; color: var(--ink); font-weight: 700; }
+
+  h2 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 22pt;
+    line-height: 1.05;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+    margin-bottom: 4mm;
+  }
+  h2 .num {
+    display: inline-block;
+    width: 11mm; height: 11mm;
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    font-size: 14pt;
+    text-align: center;
+    line-height: 11mm;
+    margin-right: 5mm;
+    vertical-align: middle;
+  }
+  h3 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13pt;
+    font-weight: 800;
+    color: var(--accent-d);
+    margin-top: 6mm;
+    margin-bottom: 2.5mm;
+  }
+  h4 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 4mm;
+    margin-bottom: 1.5mm;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  p { margin-bottom: 2.5mm; text-align: justify; hyphens: auto; }
+  p.lead {
+    font-size: 12pt;
+    color: var(--ink-2);
+    font-style: italic;
+    border-left: 3px solid var(--accent);
+    padding-left: 4mm;
+    margin-bottom: 5mm;
+  }
+
+  ul, ol { margin: 2mm 0 3mm 6mm; }
+  li { margin-bottom: 1.5mm; }
+
+  b, strong { color: var(--ink); font-weight: 800; }
+
+  /* BOXES laterais */
+  .twocol {
+    display: grid;
+    grid-template-columns: 1fr 60mm;
+    gap: 6mm;
+    align-items: start;
+  }
+  .twocol.reverse { grid-template-columns: 60mm 1fr; }
+
+  .box {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    padding: 4mm 4.5mm;
+    border-radius: 3px;
+    font-size: 10pt;
+    line-height: 1.35;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    page-break-inside: avoid;
+  }
+  .box.accent { border-left: 4px solid var(--accent); background: var(--accent-l); }
+  .box.blue { border-left: 4px solid var(--blue); background: var(--blue-l); }
+  .box.green { border-left: 4px solid var(--green); background: var(--green-l); }
+  .box h5 {
+    font-size: 9pt;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--accent-d);
+    margin-bottom: 2.5mm;
+    font-weight: 800;
+  }
+  .box.blue h5 { color: var(--blue); }
+  .box.green h5 { color: var(--green); }
+  .box ul { margin-left: 4mm; margin-top: 1mm; }
+  .box li { margin-bottom: 1mm; font-size: 9.5pt; }
+
+  /* COMPARATIVE table de sistemas */
+  .gov-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin-top: 3mm;
+    page-break-inside: avoid;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  .gov-table th, .gov-table td {
+    border: 1px solid var(--line);
+    padding: 3mm 3.5mm;
+    vertical-align: top;
+    text-align: left;
+  }
+  .gov-table thead th {
+    background: var(--accent);
+    color: white;
+    font-size: 9.5pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .gov-table tbody th {
+    background: var(--accent-l);
+    width: 28mm;
+    color: var(--accent-d);
+    font-weight: 800;
+  }
+
+  /* PIRAMID órganos */
+  .pyramid {
+    margin: 4mm 0;
+    page-break-inside: avoid;
+  }
+  .pyramid .layer {
+    background: var(--paper);
+    border: 1.5px solid var(--accent);
+    border-radius: 3px;
+    padding: 3mm 4mm;
+    margin-bottom: 1.8mm;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .pyramid .layer .name { font-weight: 800; font-size: 11pt; }
+  .pyramid .layer .ex { font-size: 9.5pt; color: var(--soft); }
+  .pyramid .l1 { width: 50%; margin-left: 25%; }
+  .pyramid .l2 { width: 65%; margin-left: 17.5%; }
+  .pyramid .l3 { width: 80%; margin-left: 10%; }
+  .pyramid .l4 { width: 95%; margin-left: 2.5%; }
+
+  /* TIMELINE histórico */
+  .timeline {
+    margin: 4mm 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3mm;
+    page-break-inside: avoid;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  .timeline .ev {
+    background: var(--paper);
+    border-top: 3px solid var(--accent);
+    padding: 3mm;
+  }
+  .timeline .ev .year { font-weight: 800; font-size: 11pt; color: var(--accent-d); }
+  .timeline .ev .nm { font-size: 9.5pt; color: var(--ink); margin-top: 1mm; line-height: 1.3; }
+
+  /* DEMOGRAPHIC bars */
+  .demo {
+    margin: 3mm 0;
+    page-break-inside: avoid;
+  }
+  .demo .row {
+    display: grid;
+    grid-template-columns: 32mm 1fr 12mm;
+    gap: 3mm;
+    align-items: center;
+    margin-bottom: 1.5mm;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+  }
+  .demo .lbl { font-weight: 700; color: var(--ink); }
+  .demo .bar { height: 5mm; background: #ebe4d2; border-radius: 2px; overflow: hidden; }
+  .demo .bar .fill { height: 100%; background: var(--accent); }
+  .demo .val { font-weight: 800; color: var(--accent-d); text-align: right; }
+
+  /* DERS table */
+  .ders {
+    columns: 2;
+    column-gap: 7mm;
+    font-size: 10pt;
+    margin: 3mm 0;
+  }
+  .ders div { padding: 1.5mm 0; border-bottom: 1px dashed var(--line); break-inside: avoid; }
+  .ders div b { color: var(--accent-d); }
+
+  /* INDEX */
+  .toc { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin-top: 8mm; }
+  .toc .row {
+    display: grid;
+    grid-template-columns: 12mm 1fr 14mm;
+    gap: 4mm;
+    align-items: baseline;
+    padding: 3mm 0;
+    border-bottom: 1px dotted var(--line);
+    font-size: 11pt;
+  }
+  .toc .row .num { font-weight: 800; color: var(--accent); font-size: 13pt; }
+  .toc .row .nm { font-weight: 700; color: var(--ink); }
+  .toc .row .pg { text-align: right; color: var(--soft); font-size: 9.5pt; letter-spacing: 1px; }
+
+  /* GLOSSARY */
+  .gloss { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10pt; }
+  .gloss .term {
+    page-break-inside: avoid;
+    margin-bottom: 4mm;
+    padding-left: 5mm;
+    border-left: 2px solid var(--line);
+  }
+  .gloss .term .t {
+    font-weight: 800;
+    color: var(--accent-d);
+    font-size: 11pt;
+    margin-bottom: 1.5mm;
+  }
+  .gloss .term .d { color: var(--ink-2); line-height: 1.4; }
+
+  /* MAP placeholder simple */
+  .galmap {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 4mm;
+    font-size: 10pt;
+    margin: 3mm 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  .galmap .prov {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2mm;
+    margin-top: 2mm;
+  }
+  .galmap .prov div {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 2mm;
+    text-align: center;
+  }
+  .galmap .prov div b { display: block; color: var(--accent-d); font-size: 10.5pt; }
+  .galmap .prov div span { font-size: 8.5pt; color: var(--soft); }
+
+  /* FACTS strip */
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3mm;
+    margin: 4mm 0;
+    page-break-inside: avoid;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  .fact {
+    background: var(--paper);
+    border-left: 3px solid var(--accent);
+    padding: 3mm;
+    font-size: 9.5pt;
+    line-height: 1.35;
+  }
+  .fact b { display: block; color: var(--accent-d); font-size: 14pt; line-height: 1; }
+  .fact span { color: var(--ink-2); }
+
+  /* Footer guide */
+  .foot {
+    margin-top: 6mm;
+    padding-top: 2.5mm;
+    border-top: 1px solid var(--line);
+    font-size: 8.5pt;
+    color: var(--soft);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* SCREEN: emular folio cunha sombra */
+  @media screen {
+    body { background: #d6cfbb; padding: 12mm 0; }
+    .page {
+      background: white;
+      box-shadow: 0 4px 24px rgba(0,0,0,.15);
+      padding: 16mm 14mm;
+      margin-bottom: 8mm;
+      min-height: 297mm;
+      width: 210mm;
+    }
+  }
+
+  @media print {
+    body { background: white; padding: 0; margin: 0; font-size: 10pt; line-height: 1.35; }
+    .page {
+      box-shadow: none;
+      width: 100%;
+      max-width: 100%;
+      min-height: 0;
+      padding: 0;
+      margin: 0;
+    }
+    .page:last-child { page-break-after: auto; }
+    .running { margin-bottom: 5px; padding-bottom: 2px; }
+    p { margin-bottom: 2mm; }
+    p.lead { font-size: 10.5pt; margin-bottom: 2.5mm; padding-left: 3mm; }
+    h2 { font-size: 16pt; margin-bottom: 2.5mm; }
+    h2 .num { width: 8mm; height: 8mm; line-height: 8mm; font-size: 11pt; margin-right: 3mm; }
+    h3 { font-size: 11.5pt; margin-top: 3mm; margin-bottom: 1.5mm; }
+    h4 { font-size: 9.5pt; margin-top: 2.5mm; margin-bottom: 1mm; }
+    ul, ol { margin: 1mm 0 2mm 5mm; }
+    li { margin-bottom: 0.8mm; }
+    .gov-table th, .gov-table td { padding: 1.8mm 2.2mm; font-size: 9pt; }
+    .gov-table thead th { font-size: 8.5pt; }
+    .box { padding: 2.5mm 3mm; }
+    .box h5 { font-size: 8pt; margin-bottom: 1.5mm; }
+    .box li, .box p { font-size: 8.5pt; line-height: 1.3; }
+    .box ul { margin-top: 0.5mm; }
+    .twocol { gap: 4mm; }
+    .pyramid { margin: 2mm 0; }
+    .pyramid .layer { padding: 2mm 3mm; margin-bottom: 1.2mm; }
+    .pyramid .layer .name { font-size: 10pt; }
+    .pyramid .layer .ex { font-size: 8.5pt; }
+    .timeline { gap: 2mm; margin: 2mm 0; }
+    .timeline .ev { padding: 2mm; }
+    .timeline .ev .year { font-size: 10pt; }
+    .timeline .ev .nm { font-size: 8.5pt; }
+    .demo .row { font-size: 8.5pt; margin-bottom: 1mm; }
+    .ders { font-size: 9pt; }
+    .ders div { padding: 1mm 0; }
+    .facts { gap: 2mm; margin: 2mm 0; }
+    .fact { padding: 2mm; font-size: 8.5pt; }
+    .fact b { font-size: 11pt; }
+    .galmap { padding: 3mm; font-size: 9pt; margin: 2mm 0; }
+    .galmap .prov div { padding: 1.5mm; }
+    .gloss .term { margin-bottom: 2.5mm; padding-left: 3mm; }
+    .gloss .term .t { font-size: 9.5pt; margin-bottom: 0.8mm; }
+    .gloss .term .d { font-size: 8.5pt; line-height: 1.3; }
+    .foot { margin-top: 4mm; padding-top: 1.5mm; font-size: 8pt; }
+    h1.cover { margin-top: 8mm; font-size: 28pt; }
+    .cover-sub { font-size: 11pt; margin-top: 5mm; }
+    .cover-meta { margin-top: 10mm; padding-top: 4mm; font-size: 9pt; }
+    .cover-meta .item .v { font-size: 11pt; }
+    .toc { margin-top: 4mm; }
+    .toc .row { padding: 2mm 0; font-size: 10pt; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================ PORTADA + ÍNDICE ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Ciencias Sociais · 5º curso · Bloque 3</span>
+    <span class="pn">Apuntes para imprimir</span>
+  </div>
+
+  <h1 class="cover">Vivir en <span class="accent">sociedade</span>.</h1>
+  <p class="cover-sub">Dossier de apuntes sobre diversidade, igualdade, migracións, Constitución española, sistemas de goberno e organización política de España, Galicia e a Unión Europea.</p>
+
+  <div class="cover-meta">
+    <div class="item"><div class="l">Área</div><div class="v">Ciencias Sociais</div></div>
+    <div class="item"><div class="l">Curso</div><div class="v">5.º Primaria</div></div>
+    <div class="item"><div class="l">Bloque</div><div class="v">3. Vivir en sociedade</div></div>
+    <div class="item"><div class="l">Páxinas</div><div class="v">12</div></div>
+  </div>
+
+  <h3 style="margin-top:18mm">Índice</h3>
+  <div class="toc">
+    <div class="row"><span class="num">1</span><span class="nm">Unha sociedade diversa</span><span class="pg">P. 2</span></div>
+    <div class="row"><span class="num">2</span><span class="nm">Migracións e poboación</span><span class="pg">P. 3</span></div>
+    <div class="row"><span class="num">3</span><span class="nm">Igualdade de xénero</span><span class="pg">P. 4</span></div>
+    <div class="row"><span class="num">4</span><span class="nm">A Constitución española</span><span class="pg">P. 5</span></div>
+    <div class="row"><span class="num">5</span><span class="nm">Sistemas de goberno</span><span class="pg">P. 7</span></div>
+    <div class="row"><span class="num">6</span><span class="nm">Órganos de goberno</span><span class="pg">P. 9</span></div>
+    <div class="row"><span class="num">7</span><span class="nm">Galicia · institucións propias</span><span class="pg">P. 10</span></div>
+    <div class="row"><span class="num">8</span><span class="nm">Glosario</span><span class="pg">P. 12</span></div>
+  </div>
+
+  <div class="foot">
+    <span>CEIP Coirón Dena · Sociais 5.º</span>
+    <span>P. 1</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 1 · DIVERSIDADE ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 1 · Unha sociedade diversa</span>
+    <span class="pn">P. 2</span>
+  </div>
+
+  <h2><span class="num">1</span>Unha sociedade <em>diversa</em>.</h2>
+  <p class="lead">Unha sociedade somos moitas persoas convivindo no mesmo territorio. Compartimos lingua, normas e costumes, pero non somos todos iguais: temos culturas, idiomas, idades, capacidades e crenzas diferentes.</p>
+
+  <div class="twocol">
+    <div>
+      <h3>Que é a diversidade?</h3>
+      <p>A <b>diversidade</b> é a mestura de persoas distintas que viven nun mesmo lugar. Esa mestura non é un problema: é unha <b>riqueza</b>. Cada persoa achega algo distinto á comunidade.</p>
+
+      <h3>Tipos de diversidade</h3>
+      <ul>
+        <li><b>Cultural</b>: costumes, festas, comidas, vestido, música.</li>
+        <li><b>Lingüística</b>: as linguas que falamos.</li>
+        <li><b>Étnica</b>: poboacións con tradicións comúns (en España viven, por exemplo, persoas xitanas desde hai séculos).</li>
+        <li><b>Relixiosa</b>: cristiáns, musulmáns, xudeus, persoas sen relixión...</li>
+        <li><b>Funcional</b>: persoas con diferentes capacidades físicas ou mentais.</li>
+        <li><b>De idade, xénero ou orientación afectivo-sexual</b>.</li>
+      </ul>
+
+      <h3>Linguas en Galicia</h3>
+      <p>En Galicia falamos <b>galego</b> e <b>castelán</b>. As dúas son linguas oficiais. O galego é a lingua propia do territorio e está protexido polo <b>Estatuto de Autonomía</b>. Hoxe convivimos con persoas que tamén falan outras linguas (árabe, romanés, portugués, inglés...) porque chegaron de outros países.</p>
+    </div>
+
+    <div>
+      <div class="box accent">
+        <h5>Palabras clave</h5>
+        <ul>
+          <li><b>Sociedade</b> · grupo de persoas que viven xuntas baixo unhas mesmas normas.</li>
+          <li><b>Diversidade</b> · existencia de diferenzas entre persoas.</li>
+          <li><b>Cohesión social</b> · sentirse parte do mesmo grupo a pesar das diferenzas.</li>
+          <li><b>Cultura</b> · conxunto de costumes, ideas e crenzas dun grupo.</li>
+        </ul>
+      </div>
+      <div class="box blue" style="margin-top:4mm">
+        <h5>Sabías que?</h5>
+        <p>En Galicia hai catro provincias e máis de 300 concellos. Aínda así, todos compartimos a mesma lingua propia e moitas tradicións: as festas patronais, o entroido, a Rapa das Bestas...</p>
+      </div>
+      <div class="box green" style="margin-top:4mm">
+        <h5>Para pensar</h5>
+        <p>Imaxina que toda a xente da clase fose exactamente igual: mesma idade, mesma roupa, mesmas afeccións. Sería interesante? Que perdería a clase?</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>A diversidade como riqueza</h3>
+  <p>Cando convivimos con persoas distintas <b>aprendemos máis</b>: novos idiomas, novas comidas, formas de ver o mundo diferentes. Tamén nos fai máis tolerantes e empáticos. Por iso a Constitución española e a Unión Europea defenden a igualdade de todas as persoas, veñan de onde veñan e crean no que crean.</p>
+
+  <div class="foot">
+    <span>Tema 1 · Diversidade</span>
+    <span>P. 2 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 2 · MIGRACIÓNS ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 2 · Migracións e poboación</span>
+    <span class="pn">P. 3</span>
+  </div>
+
+  <h2><span class="num">2</span>Migracións e <em>poboación</em>.</h2>
+  <p class="lead">A poboación é o conxunto de persoas que viven nun lugar. Cambia co tempo: nacen e morren persoas, e tamén marchan ou chegan dende outros sitios. A esas chegadas e marchadas chamámoslles <b>migracións</b>.</p>
+
+  <h3>Variables demográficas básicas</h3>
+  <ul>
+    <li><b>Natalidade</b> · cantos nenos e nenas nacen cada ano.</li>
+    <li><b>Mortalidade</b> · cantas persoas morren cada ano.</li>
+    <li><b>Crecemento natural</b> · resultado de restar mortalidade a natalidade.</li>
+    <li><b>Esperanza de vida</b> · anos que de media vive unha persoa. En Galicia é unha das máis altas do mundo (máis de 83 anos).</li>
+    <li><b>Saldo migratorio</b> · diferenza entre quen chega e quen marcha.</li>
+  </ul>
+
+  <h3>Tipos de migracións</h3>
+  <div class="twocol">
+    <div>
+      <p>Cando unha persoa cambia o lugar onde vive, fai unha migración. Hai varias clases:</p>
+      <ul>
+        <li><b>Emigración</b> · marchar do propio país ou pobo.</li>
+        <li><b>Inmigración</b> · chegar a un país ou pobo novo.</li>
+        <li><b>Migración interior</b> · dentro do mesmo país (do rural á cidade).</li>
+        <li><b>Migración exterior</b> · entre países distintos.</li>
+      </ul>
+
+      <h3>Por que migra a xente?</h3>
+      <ul>
+        <li><b>Por traballo</b> · buscan emprego ou mellores soldos.</li>
+        <li><b>Por estudos</b> · ir a outra universidade.</li>
+        <li><b>Para reunirse coa familia</b> que xa marchou antes.</li>
+        <li><b>Fuxindo da guerra</b> ou da fame (<b>persoas refuxiadas</b>).</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box accent">
+        <h5>Palabras clave</h5>
+        <ul>
+          <li><b>Emigrante</b> · quen se vai.</li>
+          <li><b>Inmigrante</b> · quen chega.</li>
+          <li><b>Refuxiado/a</b> · persoa que foxe dunha guerra ou persecución.</li>
+          <li><b>Despoboamento</b> · perda de habitantes nun lugar.</li>
+        </ul>
+      </div>
+      <div class="box blue" style="margin-top:4mm">
+        <h5>Sabías que?</h5>
+        <p>Galicia foi <b>un país de emigrantes</b> durante moitos anos. Centos de miles de galegas e galegos marcharon a América (Arxentina, Cuba, Venezuela) e a Europa (Alemaña, Suíza) entre 1850 e 1970. Por iso hoxe hai centros galegos no estranxeiro.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Cidade e rural en Galicia</h3>
+  <p>En Galicia, a maior parte da poboación vive nas <b>cidades e vilas costeiras</b> (Vigo, A Coruña, Santiago, Pontevedra, Ferrol, Ourense, Lugo). O <b>interior rural</b> está cada vez máis baleiro: é o que se chama <b>despoboamento</b>. As aldeas pequenas teñen poucos nenos e moita xente maior.</p>
+
+  <div class="demo">
+    <h4>Onde vive a xente en Galicia (aprox.)</h4>
+    <div class="row"><span class="lbl">Cidades grandes</span><div class="bar"><div class="fill" style="width:55%"></div></div><span class="val">55%</span></div>
+    <div class="row"><span class="lbl">Vilas medianas</span><div class="bar"><div class="fill" style="width:30%"></div></div><span class="val">30%</span></div>
+    <div class="row"><span class="lbl">Aldeas pequenas</span><div class="bar"><div class="fill" style="width:15%"></div></div><span class="val">15%</span></div>
+  </div>
+
+  <div class="foot">
+    <span>Tema 2 · Migracións e poboación</span>
+    <span>P. 3 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 3 · IGUALDADE ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 3 · Igualdade de xénero</span>
+    <span class="pn">P. 4</span>
+  </div>
+
+  <h2><span class="num">3</span>Igualdade de <em>xénero</em>.</h2>
+  <p class="lead">A igualdade de xénero é o dereito de mulleres e homes a ter as mesmas oportunidades e os mesmos dereitos. Non quere dicir que sexamos exactamente iguais, senón que ninguén pode ter menos oportunidades polo simple feito de ser muller ou home.</p>
+
+  <div class="twocol">
+    <div>
+      <h3>Sexo e xénero</h3>
+      <ul>
+        <li><b>Sexo</b> é unha característica biolóxica (con que corpo naces).</li>
+        <li><b>Xénero</b> son as ideas e regras que cada sociedade ensina sobre como deben comportarse mulleres e homes.</li>
+      </ul>
+
+      <h3>Que son os estereotipos?</h3>
+      <p>Un <b>estereotipo</b> é unha idea moi simplificada e xeralmente <b>inxusta</b> sobre un grupo de persoas. Exemplos de estereotipos de xénero:</p>
+      <ul>
+        <li>"As nenas non son boas en matemáticas." → Falso.</li>
+        <li>"Os nenos non poden chorar." → Falso.</li>
+        <li>"As cores rosas son para nenas." → Convencionalismo, non hai cores de xénero.</li>
+        <li>"Coidar dos fillos é cousa de mulleres." → É cousa dos dous proxenitores.</li>
+      </ul>
+
+      <h3>Que son os roles de xénero?</h3>
+      <p>Un <b>rol</b> é o papel que se espera que xogue alguén. Durante moito tempo, esperábase que as mulleres se quedasen na casa coidando da familia, e que os homes traballasen fóra. Isto cambiou: hoxe homes e mulleres comparten tarefas, traballan e coidan.</p>
+    </div>
+
+    <div>
+      <div class="box accent">
+        <h5>Palabras clave</h5>
+        <ul>
+          <li><b>Igualdade</b> · mesmos dereitos e oportunidades.</li>
+          <li><b>Estereotipo</b> · idea simplificada e inxusta dun grupo.</li>
+          <li><b>Sexismo</b> · trato distinto e inxusto a alguén polo seu sexo.</li>
+          <li><b>Corresponsabilidade</b> · compartir as tarefas da casa entre todos.</li>
+        </ul>
+      </div>
+      <div class="box blue" style="margin-top:4mm">
+        <h5>Sabías que?</h5>
+        <p>As mulleres españolas non puideron votar ata o ano <b>1933</b>. Antes diso, só os homes podían facelo. Quen máis defendeu o voto feminino foi a deputada <b>Clara Campoamor</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Mulleres que romperon estereotipos</h3>
+  <div class="facts">
+    <div class="fact"><b>Rosalía de Castro</b><span>Escritora galega do XIX. Reivindicou a lingua galega e a vida das mulleres rurais.</span></div>
+    <div class="fact"><b>Concepción Arenal</b><span>Pioneira galega da defensa dos dereitos das mulleres no século XIX.</span></div>
+    <div class="fact"><b>Marie Curie</b><span>Primeira muller en gañar un Premio Nobel. Estudou a radioactividade.</span></div>
+  </div>
+
+  <h3>Como se constrúe a igualdade?</h3>
+  <ul>
+    <li>Repartindo as tarefas da casa por igual (<b>corresponsabilidade</b>).</li>
+    <li>Usando linguaxe <b>inclusiva</b> (nenas e nenos, profesorado...).</li>
+    <li>Garantindo mesmo soldo polo mesmo traballo.</li>
+    <li>Cuestionando estereotipos cando os escoitamos.</li>
+  </ul>
+
+  <div class="foot">
+    <span>Tema 3 · Igualdade de xénero</span>
+    <span>P. 4 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 4 · CONSTITUCIÓN ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 4 · A Constitución española</span>
+    <span class="pn">P. 5</span>
+  </div>
+
+  <h2><span class="num">4</span>A <em>Constitución</em> española.</h2>
+  <p class="lead">A Constitución é a lei máis importante de España. Está por riba de calquera outra lei. Aprobouse o <b>6 de decembro de 1978</b>, polo que cada 6 de decembro se celebra o Día da Constitución.</p>
+
+  <div class="twocol">
+    <div>
+      <h3>Que é unha Constitución?</h3>
+      <p>É un texto que recolle:</p>
+      <ul>
+        <li>Os <b>dereitos e deberes</b> da cidadanía.</li>
+        <li>A forma de <b>organización do Estado</b>.</li>
+        <li>As <b>institucións</b> e como funcionan.</li>
+        <li>O xeito de elixir gobernos e cambiar as leis.</li>
+      </ul>
+
+      <h3>Que di a nosa Constitución?</h3>
+      <p>Que <b>España é un Estado social e democrático de dereito</b>. Vexamos o que significa:</p>
+      <ul>
+        <li><b>Estado social</b> · ten que coidar das persoas (sanidade, educación, pensións).</li>
+        <li><b>Democrático</b> · o poder vén do pobo, que vota.</li>
+        <li><b>De dereito</b> · todas as persoas están sometidas á lei, incluso o goberno.</li>
+      </ul>
+      <p>Tamén estabelece que España é unha <b>monarquía parlamentaria</b>: hai un rei como xefe do Estado, pero quen goberna é un Presidente elixido polo Parlamento.</p>
+    </div>
+
+    <div>
+      <div class="box accent">
+        <h5>Palabras clave</h5>
+        <ul>
+          <li><b>Constitución</b> · lei suprema dun país.</li>
+          <li><b>Dereito</b> · algo que toda persoa pode esixir.</li>
+          <li><b>Deber</b> · algo que toda persoa ten que facer.</li>
+          <li><b>Soberanía</b> · poder superior. En democracia reside no pobo.</li>
+        </ul>
+      </div>
+      <div class="box blue" style="margin-top:4mm">
+        <h5>Sabías que?</h5>
+        <p>A Constitución española aprobouse <b>en referendo</b>: o pobo votou si ou non. Votou que SI o <b>87,87%</b> de quen acudiu ás urnas. Por iso é unha lei moi lexítima.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Os teus dereitos e deberes</h3>
+  <p>A Constitución recoñece dereitos para todas as persoas que viven en España. Tamén deberes que hai que cumprir para que a convivencia funcione.</p>
+
+  <div class="ders">
+    <div><b>Dereito</b> á vida e á integridade física</div>
+    <div><b>Dereito</b> á educación obrigatoria e gratuíta</div>
+    <div><b>Dereito</b> á sanidade pública</div>
+    <div><b>Dereito</b> a expresarse libremente</div>
+    <div><b>Dereito</b> a reunirse, asociarse e manifestarse</div>
+    <div><b>Dereito</b> a non ser discriminado por sexo, lingua, relixión...</div>
+    <div><b>Dereito</b> a unha vivenda digna</div>
+    <div><b>Dereito</b> ao traballo e a un soldo xusto</div>
+    <div><b>Deber</b> de respectar as leis</div>
+    <div><b>Deber</b> de pagar impostos</div>
+    <div><b>Deber</b> de defender o medio ambiente</div>
+    <div><b>Deber</b> de defender o país en caso de necesidade</div>
+  </div>
+
+  <div class="foot">
+    <span>Tema 4 · A Constitución española</span>
+    <span>P. 5 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 4b · DIVISIÓN DE PODERES ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 4 · División de poderes</span>
+    <span class="pn">P. 6</span>
+  </div>
+
+  <h2><span class="num">4</span>División de <em>poderes</em>.</h2>
+  <p class="lead">Para que ningunha persoa ou grupo teña demasiado poder, a Constitución divide o goberno do país en <b>tres poderes</b> separados. Cada un controla aos outros.</p>
+
+  <h3>Os tres poderes do Estado</h3>
+  <table class="gov-table">
+    <thead>
+      <tr>
+        <th>Poder</th>
+        <th>Para que serve?</th>
+        <th>Quen o exerce?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Lexislativo</th>
+        <td>Fai as leis.</td>
+        <td>O <b>Parlamento</b> (Congreso dos Deputados + Senado), elixido por toda a cidadanía.</td>
+      </tr>
+      <tr>
+        <th>Executivo</th>
+        <td>Aplica as leis e dirixe o país no día a día.</td>
+        <td>O <b>Goberno</b>: a Presidencia + ministerios. A Presidencia é elixida polo Congreso.</td>
+      </tr>
+      <tr>
+        <th>Xudicial</th>
+        <td>Xulga se alguén cumpre ou non as leis.</td>
+        <td>Os <b>xuíces e maxistrados</b>. Non poden ser controlados nin polo goberno nin polo parlamento.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="twocol" style="margin-top:6mm">
+    <div>
+      <h3>Por que é importante esta división?</h3>
+      <p>Porque <b>ninguén pode acumular todo o poder</b>. Se a mesma persoa fixese as leis, as aplicase e tamén xulgase os casos, sería un sistema moi perigoso (case unha ditadura).</p>
+      <p>Ao estaren os tres poderes separados, cada un vixía aos outros. A isto chámase <b>sistema de pesos e contrapesos</b>.</p>
+
+      <h3>O papel do Rei</h3>
+      <p>O <b>Rei</b> (actualmente <b>Felipe VI</b>) é o <b>xefe do Estado</b>: representa a España, sanciona as leis, recibe as embaixadas... pero <b>non goberna</b>. Por iso a España se chama <b>monarquía parlamentaria</b>.</p>
+    </div>
+    <div>
+      <div class="box accent">
+        <h5>Palabras clave</h5>
+        <ul>
+          <li><b>Poder lexislativo</b> · fai leis.</li>
+          <li><b>Poder executivo</b> · aplica leis.</li>
+          <li><b>Poder xudicial</b> · xulga.</li>
+          <li><b>Sufraxio</b> · dereito a votar.</li>
+          <li><b>Investidura</b> · acto polo que o Congreso elixe presidente.</li>
+        </ul>
+      </div>
+      <div class="box green" style="margin-top:4mm">
+        <h5>Para pensar</h5>
+        <p>Por que cres que é perigoso que unha mesma persoa faga as leis, as aplique e tamén decida quen as cumpriu mal? Pensa nun exemplo dunha clase ou un xogo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Tema 4 · División de poderes</span>
+    <span>P. 6 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 5 · SISTEMAS DE GOBERNO ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 5 · Sistemas de goberno</span>
+    <span class="pn">P. 7</span>
+  </div>
+
+  <h2><span class="num">5</span>Sistemas de <em>goberno</em>.</h2>
+  <p class="lead">Ao longo da historia, as sociedades organizáronse de moitas maneiras. Hoxe en día existen tres grandes familias de sistemas políticos. A democracia é o sistema que defende a Constitución española.</p>
+
+  <h3>Comparativa dos tres sistemas</h3>
+  <table class="gov-table">
+    <thead>
+      <tr>
+        <th>Característica</th>
+        <th>Democracia</th>
+        <th>Monarquía absoluta</th>
+        <th>Ditadura</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Quen ten o poder?</th>
+        <td>A cidadanía mediante o voto.</td>
+        <td>Un rei ou raíña, polo seu nacemento.</td>
+        <td>Unha persoa ou un grupo único.</td>
+      </tr>
+      <tr>
+        <th>Hai eleccións?</th>
+        <td>Si, libres e periódicas.</td>
+        <td>Non.</td>
+        <td>Non, ou só de mentira (sen oposición).</td>
+      </tr>
+      <tr>
+        <th>Hai liberdade de expresión?</th>
+        <td>Si, garantida pola Constitución.</td>
+        <td>Depende. Non está garantida.</td>
+        <td>Non. Critícase o goberno con risco.</td>
+      </tr>
+      <tr>
+        <th>Hai división de poderes?</th>
+        <td>Si.</td>
+        <td>Non. Todos os poderes nun só.</td>
+        <td>Non. Concentrados no líder.</td>
+      </tr>
+      <tr>
+        <th>Exemplos actuais</th>
+        <td>España, Francia, Alemaña, Portugal, Italia...</td>
+        <td>Arabia Saudita, Eswatini.</td>
+        <td>Corea do Norte.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Tipos especiais de monarquía</h3>
+  <ul>
+    <li><b>Monarquía absoluta</b> · o rei manda en todo (sistema antigo, pouco común hoxe).</li>
+    <li><b>Monarquía parlamentaria</b> · o rei reina pero non goberna; quen goberna é un Parlamento elixido. <b>É o sistema español</b>.</li>
+    <li><b>República</b> · non hai rei. O xefe do Estado é un Presidente ou Presidenta elixida (caso de Francia, Portugal, Alemaña).</li>
+  </ul>
+
+  <div class="box blue">
+    <h5>Sabías que?</h5>
+    <p>Algunhas monarquías parlamentarias actuais son <b>Reino Unido, Suecia, Noruega, Países Baixos, Bélxica, Xapón ou España</b>. En todas, o rei é só un símbolo: quen toma as decisións é o goberno elixido nas urnas.</p>
+  </div>
+
+  <div class="foot">
+    <span>Tema 5 · Sistemas de goberno</span>
+    <span>P. 7 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 5b · MEMORIA DEMOCRÁTICA ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 5 · Memoria democrática</span>
+    <span class="pn">P. 8</span>
+  </div>
+
+  <h2><span class="num">5</span>España: do <em>pasado</em> ao presente.</h2>
+  <p class="lead">España non foi sempre unha democracia. Saber como conseguimos a democracia que hoxe temos axúdanos a coidala mellor. A isto chámaselle <b>memoria democrática</b>.</p>
+
+  <h3>Liña do tempo</h3>
+  <div class="timeline">
+    <div class="ev"><div class="year">1931</div><div class="nm">Proclámase a <b>II República</b>. Por primeira vez, as mulleres conseguen o dereito ao voto (1933).</div></div>
+    <div class="ev"><div class="year">1936</div><div class="nm">Comeza a <b>Guerra Civil</b>. Dura tres anos e divide o país.</div></div>
+    <div class="ev"><div class="year">1939–75</div><div class="nm"><b>Ditadura de Franco</b>: case 40 anos sen democracia, sen liberdades nin partidos políticos.</div></div>
+    <div class="ev"><div class="year">1978</div><div class="nm">Apróbase a <b>Constitución</b>. Volve a democracia. Iníciase a Transición.</div></div>
+  </div>
+
+  <h3>Que pasou na ditadura?</h3>
+  <ul>
+    <li>Non se podía votar nin haber partidos políticos.</li>
+    <li>Non se podían imprimir libros ou xornais que criticasen o goberno.</li>
+    <li>O galego foi prohibido nas escolas e nos rótulos oficiais.</li>
+    <li>Moitas persoas foron perseguidas polas súas ideas.</li>
+  </ul>
+
+  <h3>Por que é importante a memoria democrática?</h3>
+  <p>Para <b>recordar o que custou conseguir a democracia</b> e por que merece a pena defendela. Cando esquecemos como era vivir sen liberdades, é máis fácil perdelas. Por iso lembramos as vítimas e estudamos esta etapa.</p>
+
+  <div class="box accent">
+    <h5>Para pensar</h5>
+    <p>Cantos anos pasaron desde 1978 ata hoxe? E desde 1939 ata 1975? Que etapa foi máis longa: a ditadura ou a democracia actual?</p>
+  </div>
+
+  <div class="foot">
+    <span>Tema 5 · Memoria democrática</span>
+    <span>P. 8 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 6 · ÓRGANOS DE GOBERNO ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 6 · Órganos de goberno</span>
+    <span class="pn">P. 9</span>
+  </div>
+
+  <h2><span class="num">6</span>Órganos de <em>goberno</em>.</h2>
+  <p class="lead">En España, o poder non se concentra nun só sitio. Repártese en <b>catro niveis</b>, do máis preto da cidadanía (o concello) ao máis grande (a Unión Europea). Cada nivel toma as decisións sobre as cousas que mellor coñece.</p>
+
+  <h3>Pirámide de niveis</h3>
+  <div class="pyramid">
+    <div class="layer l1"><span class="name">UE</span><span class="ex">27 países · Bruxelas</span></div>
+    <div class="layer l2"><span class="name">Estado</span><span class="ex">España · Madrid</span></div>
+    <div class="layer l3"><span class="name">Comunidade Autónoma</span><span class="ex">Galicia · Santiago</span></div>
+    <div class="layer l4"><span class="name">Concello</span><span class="ex">Meaño · Coirón Dena</span></div>
+  </div>
+
+  <h3>Que decide cada nivel?</h3>
+  <table class="gov-table">
+    <thead>
+      <tr>
+        <th>Nivel</th>
+        <th>Órgano principal</th>
+        <th>De que se ocupa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Concello</th>
+        <td>Alcaldía e Pleno municipal</td>
+        <td>Lixo, parques, deportes municipais, festas, urbanismo, augas...</td>
+      </tr>
+      <tr>
+        <th>Comunidade<br>Autónoma</th>
+        <td>Xunta + Parlamento</td>
+        <td>Educación, sanidade, medio ambiente, agricultura, lingua propia.</td>
+      </tr>
+      <tr>
+        <th>Estado</th>
+        <td>Goberno + Cortes Xerais</td>
+        <td>Defensa, xustiza, transportes, moeda, relacións internacionais.</td>
+      </tr>
+      <tr>
+        <th>Unión<br>Europea</th>
+        <td>Comisión + Parlamento Europeo</td>
+        <td>Comercio interior, moeda común (euro), políticas comúns.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="box blue" style="margin-top:5mm">
+    <h5>Sabías que?</h5>
+    <p>España forma parte da Unión Europea desde <b>1986</b>. Antes diso, cada país europeo tiña a súa moeda. Desde 2002 usamos o <b>euro</b>, que serve en 20 países da UE.</p>
+  </div>
+
+  <div class="foot">
+    <span>Tema 6 · Órganos de goberno</span>
+    <span>P. 9 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 7 · GALICIA ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 7 · Galicia · institucións</span>
+    <span class="pn">P. 10</span>
+  </div>
+
+  <h2><span class="num">7</span>Galicia, as nosas <em>institucións</em>.</h2>
+  <p class="lead">Galicia é unha das 17 <b>comunidades autónomas</b> de España. Ten as súas propias institucións de goberno e a súa lingua propia: o galego. Todo isto está protexido polo Estatuto de Autonomía de 1981.</p>
+
+  <div class="twocol">
+    <div>
+      <h3>Que é o Estatuto de Autonomía?</h3>
+      <p>É unha lei que organiza Galicia. Aprobouse en <b>1981</b>, en referendo (vontou si o 71% dos votantes). Recoñece que Galicia é unha <b>nacionalidade histórica</b> con lingua e cultura propias.</p>
+
+      <h3>As institucións galegas</h3>
+      <ul>
+        <li><b>Parlamento de Galicia</b> · 75 deputados e deputadas elixidos polo pobo. Reúnense no Pazo do Hórreo, en Santiago. Aproban as leis galegas.</li>
+        <li><b>Xunta de Galicia</b> · é o goberno. Presídea o <b>Presidente da Xunta</b>, elixido polo Parlamento. Inclúe as <b>consellerías</b> (Educación, Sanidade, Medio Ambiente...).</li>
+        <li><b>Tribunal Superior de Xustiza de Galicia</b> · o máis alto na orde xudicial galega.</li>
+      </ul>
+
+      <h3>Símbolos de Galicia</h3>
+      <ul>
+        <li><b>Bandeira</b> · branca cunha banda azul diagonal.</li>
+        <li><b>Escudo</b> · cáliz e cruces sobre fondo azul.</li>
+        <li><b>Himno</b> · <i>Os Pinos</i>, letra de Eduardo Pondal.</li>
+        <li><b>Día das Letras Galegas</b> · 17 de maio.</li>
+        <li><b>Día de Galicia</b> · 25 de xullo.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box accent">
+        <h5>Palabras clave</h5>
+        <ul>
+          <li><b>Estatuto</b> · lei propia dunha comunidade autónoma.</li>
+          <li><b>Autonomía</b> · poder propio para decidir asuntos da comunidade.</li>
+          <li><b>Conselleiro/a</b> · responsable dunha área da Xunta.</li>
+          <li><b>Nacionalidade histórica</b> · territorio con identidade propia recoñecida.</li>
+        </ul>
+      </div>
+      <div class="box blue" style="margin-top:4mm">
+        <h5>Sabías que?</h5>
+        <p>O <b>Día das Letras Galegas</b> celébrase desde 1963. Cada ano dedícase a un escritor ou escritora en galego: Rosalía de Castro, Castelao, Cunqueiro, Manuel María, Xela Arias...</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="galmap">
+    <h4 style="margin-top:0">As catro provincias galegas</h4>
+    <div class="prov">
+      <div><b>A Coruña</b><span>Capital · A Coruña</span></div>
+      <div><b>Lugo</b><span>Capital · Lugo</span></div>
+      <div><b>Ourense</b><span>Capital · Ourense</span></div>
+      <div><b>Pontevedra</b><span>Capital · Pontevedra</span></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Tema 7 · Institucións galegas</span>
+    <span>P. 10 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ TEMA 7b · CONCELLO ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Tema 7 · O concello, a institución máis próxima</span>
+    <span class="pn">P. 11</span>
+  </div>
+
+  <h2><span class="num">7</span>O concello, a institución máis <em>próxima</em>.</h2>
+  <p class="lead">O concello é a administración máis preto da xente. É quen se ocupa das cousas do día a día no teu pobo ou cidade: as rúas, os colexios públicos, os parques, o lixo, as festas, os polideportivos...</p>
+
+  <div class="twocol">
+    <div>
+      <h3>Como se goberna un concello?</h3>
+      <ul>
+        <li><b>Alcaldía</b> · a persoa que dirixe o concello. Tamén se chama "alcalde" ou "alcaldesa".</li>
+        <li><b>Concelleiros e concelleiras</b> · forman o equipo de goberno e a oposición. Cada un coida unha área (educación, deportes, cultura, urbanismo...).</li>
+        <li><b>Pleno municipal</b> · reunión onde se toman as decisións importantes. É público.</li>
+      </ul>
+
+      <h3>Como se elixe a alcaldía?</h3>
+      <p>Cada catro anos hai <b>eleccións municipais</b>: a cidadanía vota listas de partidos. Os concelleiros e concelleiras elixidos votan entre si quen será a Alcaldía. Normalmente é a cabeza da lista máis votada.</p>
+
+      <h3>De que se ocupa o concello?</h3>
+      <ul>
+        <li>Recollida do <b>lixo</b> e limpeza viaria.</li>
+        <li>Mantemento de <b>rúas, parques e xardíns</b>.</li>
+        <li><b>Augas</b> e sumidoiros.</li>
+        <li><b>Polideportivos</b>, bibliotecas e centros culturais.</li>
+        <li><b>Festas</b> patronais e actividades culturais.</li>
+        <li>Tráfico e <b>seguridade local</b> (policía municipal).</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box accent">
+        <h5>Palabras clave</h5>
+        <ul>
+          <li><b>Concello</b> · administración local.</li>
+          <li><b>Alcaldía</b> · cargo que dirixe o concello.</li>
+          <li><b>Pleno</b> · reunión pública onde se decide.</li>
+          <li><b>Ordenanza municipal</b> · norma que aproba o concello.</li>
+        </ul>
+      </div>
+      <div class="box green" style="margin-top:4mm">
+        <h5>Para pensar</h5>
+        <p>Cal é o nome do concello onde vives? Sabes como se chama a alcaldía actual? Que ordenanzas afectan á túa familia (por exemplo, sobre lixo ou sobre o ruído)?</p>
+      </div>
+      <div class="box blue" style="margin-top:4mm">
+        <h5>Sabías que?</h5>
+        <p>En España hai <b>case 8.000 concellos</b>. Galicia ten <b>313</b>. Algúns son moi pequenos (con menos de 200 habitantes) e outros moi grandes (Vigo ten máis de 290.000).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Tema 7 · O concello</span>
+    <span>P. 11 / 12</span>
+  </div>
+</section>
+
+<!-- ============================ GLOSARIO ============================ -->
+<section class="page">
+  <div class="running">
+    <span class="topic">Glosario · termos clave</span>
+    <span class="pn">P. 12</span>
+  </div>
+
+  <h2><span class="num">8</span><em>Glosario</em>.</h2>
+  <p class="lead">Repaso final co vocabulario importante destes apuntes. Memoriza ben estas palabras: aparecerán nas probas e nos comentarios de actualidade.</p>
+
+  <div class="gloss" style="columns:2;column-gap:8mm">
+    <div class="term"><div class="t">Sociedade</div><div class="d">Conxunto de persoas que viven xuntas baixo unhas mesmas normas e institucións.</div></div>
+    <div class="term"><div class="t">Diversidade</div><div class="d">Existencia de diferenzas entre as persoas (cultura, lingua, idade, xénero...).</div></div>
+    <div class="term"><div class="t">Cohesión social</div><div class="d">Sentir que somos parte do mesmo grupo a pesar das diferenzas.</div></div>
+    <div class="term"><div class="t">Estereotipo</div><div class="d">Idea simplificada e inxusta sobre un grupo de persoas.</div></div>
+    <div class="term"><div class="t">Igualdade</div><div class="d">Tratar a todas as persoas cos mesmos dereitos e oportunidades.</div></div>
+    <div class="term"><div class="t">Sexismo</div><div class="d">Trato distinto e inxusto a alguén polo seu sexo.</div></div>
+    <div class="term"><div class="t">Corresponsabilidade</div><div class="d">Compartir as tarefas entre todas as persoas que conviven (na casa, na clase...).</div></div>
+    <div class="term"><div class="t">Migración</div><div class="d">Movemento de persoas dun lugar a outro para vivir.</div></div>
+    <div class="term"><div class="t">Emigrante</div><div class="d">Persoa que abandona o seu lugar de orixe.</div></div>
+    <div class="term"><div class="t">Inmigrante</div><div class="d">Persoa que chega a un lugar novo.</div></div>
+    <div class="term"><div class="t">Refuxiado/a</div><div class="d">Persoa que escapa do seu país por guerra ou persecución.</div></div>
+    <div class="term"><div class="t">Despoboamento</div><div class="d">Perda de habitantes nun territorio.</div></div>
+    <div class="term"><div class="t">Constitución</div><div class="d">Lei suprema dun país. Por riba dela non hai outra lei.</div></div>
+    <div class="term"><div class="t">Dereito</div><div class="d">Algo que toda persoa pode esixir polas leis.</div></div>
+    <div class="term"><div class="t">Deber</div><div class="d">Algo que toda persoa ten que cumprir.</div></div>
+    <div class="term"><div class="t">Democracia</div><div class="d">Sistema no que o poder reside na cidadanía, que vota representantes.</div></div>
+    <div class="term"><div class="t">Monarquía parlamentaria</div><div class="d">Sistema no que hai un rei como xefe do Estado pero quen goberna é o Parlamento.</div></div>
+    <div class="term"><div class="t">Ditadura</div><div class="d">Sistema no que manda unha soa persoa ou grupo, sen eleccións nin liberdades.</div></div>
+    <div class="term"><div class="t">División de poderes</div><div class="d">Separación do poder en lexislativo, executivo e xudicial.</div></div>
+    <div class="term"><div class="t">Sufraxio</div><div class="d">Dereito a votar. En España, dos 18 anos en diante.</div></div>
+    <div class="term"><div class="t">Parlamento</div><div class="d">Conxunto de representantes elixidos polo pobo que fan as leis.</div></div>
+    <div class="term"><div class="t">Goberno</div><div class="d">Equipo que dirixe un país, comunidade ou concello.</div></div>
+    <div class="term"><div class="t">Concello</div><div class="d">Administración local que goberna un municipio.</div></div>
+    <div class="term"><div class="t">Comunidade autónoma</div><div class="d">Territorio con goberno propio dentro de España.</div></div>
+    <div class="term"><div class="t">Estatuto</div><div class="d">Lei principal dunha comunidade autónoma.</div></div>
+    <div class="term"><div class="t">Unión Europea (UE)</div><div class="d">Organización formada por 27 países europeos con políticas e moeda comúns.</div></div>
+    <div class="term"><div class="t">Memoria democrática</div><div class="d">Lembranza do que custou conseguir a democracia e dos seus dereitos.</div></div>
+  </div>
+
+  <div class="foot">
+    <span>CEIP Coirón Dena · Sociais 5.º · Apuntes Vivir en sociedade</span>
+    <span>P. 12 / 12</span>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documento Competencial · Ciencias Sociais 5.º · Bloque 3</title>
+<style>
+  :root {
+    --terra: #c55a11; --terra-d: #8a3e0c; --terra-l: #fef3e5;
+    --dixi: #2e86ab; --dixi-d: #1e4650; --dixi-l: #e9f2f7;
+    --salu: #6b8e23; --salu-d: #3a5a1a; --salu-l: #f0f5dd;
+    --plas: #a83246; --plas-d: #7e2434; --plas-l: #fdf4f5;
+    --purp: #8b4a8e; --purp-d: #6a2b6e; --purp-l: #f2e6f3;
+    --crem: #faf7f2; --txt: #2D2A26; --grey: #6b5d48; --light: #e8e2d8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--txt); background: var(--crem); line-height: 1.5; min-height: 100vh; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* NAV */
+  .topnav { background: var(--purp-d); color: white; padding: 10px 20px; }
+  .topnav-inner { max-width: 1160px; margin: 0 auto; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+  .topnav .label { opacity: .7; margin-right: 10px; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; }
+  .topnav a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 18px; color: white; text-decoration: none; font-weight: 600; transition: background .15s; }
+  .topnav a:hover { background: rgba(255,255,255,.15); }
+  .topnav a.active { background: #f5b450; color: var(--purp-d); }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--purp-d) 0%, var(--purp) 50%, var(--terra) 100%); color: white; padding: 50px 30px 60px; margin: 0 -20px 30px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -150px; right: -150px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(245,180,80,.25), transparent 65%); }
+  .hero-inner { max-width: 1160px; margin: 0 auto; position: relative; z-index: 2; }
+  .hero .marca { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; opacity: .85; }
+  .hero .marca .dot { width: 10px; height: 10px; background: #f5b450; border-radius: 50%; }
+  .hero h1 { font-size: clamp(34px, 5.5vw, 56px); font-weight: 900; letter-spacing: -1.5px; line-height: 1; margin-bottom: 14px; }
+  .hero h1 .hl { background: #f5b450; color: var(--purp-d); padding: 0 10px; display: inline-block; transform: rotate(-1deg); }
+  .hero p.lead { font-size: 17px; font-weight: 300; max-width: 740px; opacity: .95; margin-bottom: 28px; }
+  .stats { display: flex; gap: 12px; flex-wrap: wrap; }
+  .stat { background: rgba(255,255,255,.15); padding: 12px 18px; border-radius: 12px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.18); }
+  .stat .num { font-size: 26px; font-weight: 800; line-height: 1; }
+  .stat .label { font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; opacity: .88; margin-top: 4px; }
+
+  /* HELPER */
+  .helper { background: white; border-radius: 14px; padding: 22px 26px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,.05); border-left: 5px solid var(--purp); }
+  .helper h2 { font-size: 15px; color: var(--purp-d); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+  .helper-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; font-size: 13px; }
+  .helper-grid div { display: flex; gap: 8px; align-items: flex-start; }
+  .helper-grid b { color: var(--purp-d); }
+
+  /* OBX NAV QUICK */
+  .obx-quick { background: white; border-radius: 14px; padding: 14px 18px; margin-bottom: 22px; box-shadow: 0 4px 20px rgba(0,0,0,.05); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; position: sticky; top: 0; z-index: 30; }
+  .obx-quick .ql { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--grey); font-weight: 700; margin-right: 6px; }
+  .obx-quick a { padding: 5px 11px; background: var(--crem); border: 1.5px solid var(--light); border-radius: 14px; font-size: 12px; font-weight: 700; color: var(--txt); text-decoration: none; transition: all .15s; }
+  .obx-quick a:hover { border-color: var(--purp); background: var(--purp); color: white; }
+
+  /* OBX CARDS */
+  .obx-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,.05); border-top: 5px solid var(--purp); }
+  .obx-card.color-terra { border-top-color: var(--terra); }
+  .obx-card.color-dixi { border-top-color: var(--dixi); }
+  .obx-card.color-purp { border-top-color: var(--purp); }
+  .obx-card.color-salu { border-top-color: var(--salu); }
+  .obx-card.color-plas { border-top-color: var(--plas); }
+  .obx-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 12px; }
+  .obx-num { font-size: 22px; font-weight: 800; padding: 4px 14px; border-radius: 10px; background: var(--purp); color: white; }
+  .obx-card.color-terra .obx-num { background: var(--terra); }
+  .obx-card.color-dixi .obx-num { background: var(--dixi); }
+  .obx-card.color-salu .obx-num { background: var(--salu); }
+  .obx-card.color-plas .obx-num { background: var(--plas); }
+  .obx-right { text-align: right; }
+  .obx-peso { font-size: 22px; font-weight: 800; color: var(--purp-d); line-height: 1; }
+  .obx-peso-l { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); }
+  .obx-desc { font-size: 14px; color: var(--txt); margin-bottom: 16px; padding-left: 2px; line-height: 1.5; }
+  .ce-block { background: var(--crem); border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; border-left: 3px solid var(--light); }
+  .ce-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .ce-desc { font-size: 13px; color: var(--txt); font-weight: 500; flex: 1; line-height: 1.45; }
+  .ce-meta { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; flex-shrink: 0; }
+  .bloom { font-size: 10px; letter-spacing: 1px; padding: 2px 8px; border-radius: 10px; background: var(--purp-l); color: var(--purp-d); font-weight: 700; text-transform: uppercase; }
+  .peso { font-size: 10px; letter-spacing: 1px; padding: 2px 8px; border-radius: 10px; background: var(--salu-l); color: var(--salu-d); font-weight: 700; }
+  .ca-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .ca-card { background: white; border: 1px solid var(--light); border-radius: 8px; padding: 10px 12px; }
+  .ca-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .ca-code { font-family: 'Courier New', monospace; font-size: 12px; font-weight: 800; color: var(--purp-d); background: var(--purp-l); padding: 3px 7px; border-radius: 5px; }
+  .trim { font-size: 9px; letter-spacing: 1px; padding: 2px 6px; border-radius: 10px; color: white; font-weight: 700; }
+  .trim-1 { background: #6b8e23; }
+  .trim-2 { background: #2e86ab; }
+  .trim-3 { background: #c55a11; }
+  .ca-sess { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sess-chip { font-size: 10.5px; padding: 3px 8px; background: var(--crem); border: 1px solid var(--light); border-radius: 12px; color: var(--txt); text-decoration: none; transition: all .12s; font-weight: 600; }
+  .sess-chip:hover { background: var(--purp); color: white; border-color: var(--purp); }
+
+  /* Sesións SdA */
+  .sda-block { background: white; border-radius: 14px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,.05); margin-bottom: 24px; border-top: 5px solid var(--terra); }
+  .sda-block h2 { font-size: 22px; color: var(--terra-d); margin-bottom: 6px; }
+  .sda-block .subt { font-size: 13px; color: var(--grey); margin-bottom: 18px; }
+  .sda-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .sda-card { background: var(--crem); border: 1px solid var(--light); border-radius: 10px; padding: 14px; transition: all .15s; }
+  .sda-card:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.06); border-color: var(--terra); }
+  .sda-card .ses-num { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--terra); font-weight: 800; }
+  .sda-card .ses-title { font-size: 15px; font-weight: 800; color: var(--txt); margin: 4px 0 6px; }
+  .sda-card .ses-desc { font-size: 12.5px; color: var(--grey); line-height: 1.4; }
+  .sda-card .ses-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+  .sda-card .ses-tag { font-size: 9.5px; padding: 2px 6px; background: white; border: 1px solid var(--light); border-radius: 8px; font-weight: 700; color: var(--purp-d); }
+
+  /* Producto final */
+  .final-card { background: linear-gradient(135deg, var(--terra) 0%, var(--terra-d) 100%); color: white; border-radius: 14px; padding: 28px 30px; margin-bottom: 24px; box-shadow: 0 6px 30px rgba(197,90,17,.25); }
+  .final-card h2 { font-size: 26px; margin-bottom: 8px; }
+  .final-card .ft-pretitle { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; opacity: .85; margin-bottom: 8px; }
+  .final-card p { font-size: 14.5px; opacity: .95; line-height: 1.5; max-width: 800px; }
+  .final-card .pasos { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+  .final-card .paso { background: rgba(255,255,255,.16); padding: 12px; border-radius: 10px; backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.18); }
+  .final-card .paso .pnum { font-size: 11px; opacity: .85; letter-spacing: 1.5px; font-weight: 800; }
+  .final-card .paso .pname { font-size: 14px; font-weight: 800; margin-top: 4px; }
+  .final-card .paso .pdesc { font-size: 11.5px; opacity: .9; margin-top: 4px; line-height: 1.35; }
+  @media (max-width: 800px) { .final-card .pasos { grid-template-columns: 1fr 1fr; } }
+
+  /* Trimester bar */
+  .trim-summary { background: white; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,.05); }
+  .trim-summary h3 { font-size: 13px; color: var(--purp-d); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+  .trim-bars { display: flex; gap: 6px; height: 40px; border-radius: 10px; overflow: hidden; background: var(--light); }
+  .trim-bar { display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 14px; }
+  .trim-bar-1 { background: #6b8e23; width: 20%; }
+  .trim-bar-2 { background: #2e86ab; width: 30%; }
+  .trim-bar-3 { background: #c55a11; width: 50%; }
+  .trim-legend { display: flex; gap: 16px; margin-top: 10px; font-size: 12px; color: var(--grey); flex-wrap: wrap; }
+  .trim-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  .trim-legend .t1::before { background: #6b8e23; }
+  .trim-legend .t2::before { background: #2e86ab; }
+  .trim-legend .t3::before { background: #c55a11; }
+
+  /* Rol matrix */
+  .rol-section { background: white; border-radius: 14px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,.05); margin-bottom: 24px; border-top: 5px solid var(--salu); }
+  .rol-section h2 { font-size: 22px; color: var(--salu-d); margin-bottom: 6px; }
+  .rol-section .subt { font-size: 13px; color: var(--grey); margin-bottom: 18px; }
+  .rol-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rol-table th, .rol-table td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--light); }
+  .rol-table th { background: var(--salu-l); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--salu-d); }
+  .rol-table td .rname { font-weight: 800; color: var(--txt); }
+  .rol-table td .rtag { display: inline-block; font-size: 9.5px; padding: 2px 6px; background: var(--purp-l); color: var(--purp-d); border-radius: 6px; margin-right: 4px; font-weight: 700; }
+
+  .footer-ind { margin-top: 30px; text-align: center; color: var(--grey); font-size: 12.5px; padding: 20px; }
+  .footer-ind b { color: var(--purp-d); }
+
+  @media print {
+    .topnav, .obx-quick { display: none; }
+    .obx-card, .sda-block, .rol-section { break-inside: avoid; box-shadow: none; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="topnav-inner">
+    <span class="label">Navegación</span>
+    <a href="presentacion.html">Presentación alumnado</a>
+    <a href="competencial-sociais.html" class="active">Competencial CCSS · B3</a>
+    <a href="../apuntes-vivir-en-sociedade.html">Apuntes Vivir en sociedade</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="marca">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f5b450" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span>Documento Competencial · 5.º Primaria · CCSS Bloque 3</span>
+      <span class="dot"></span>
+    </div>
+    <h1>Vivir en sociedade,<br>gobernar a <span class="hl">Tenda Sostible</span>.</h1>
+    <p class="lead">SdA do Bloque 3 (<b>Vivir en sociedade</b>): 4 criterios de avaliación distribuídos entre OBX6 e OBX7. Cada CA ten asignadas as sesións concretas e o produto final é organizar a tenda do colexio como unha mini-empresa con xefatura e departamentos electos democraticamente.</p>
+    <div class="stats">
+      <div class="stat"><div class="num">2</div><div class="label">OBX</div></div>
+      <div class="stat"><div class="num">4</div><div class="label">Criterios</div></div>
+      <div class="stat"><div class="num">3.º</div><div class="label">Trimestre eixo</div></div>
+      <div class="stat"><div class="num">6</div><div class="label">Sesións</div></div>
+      <div class="stat"><div class="num">1</div><div class="label">Produto final</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="helper">
+    <h2>Como ler esta páxina</h2>
+    <div class="helper-grid">
+      <div><div><b>OBX</b>: obxectivo de área. Esta SdA toca OBX6 (diversidade) e OBX7 (participación cívica).</div></div>
+      <div><div><b>CA</b>: criterio concreto. Mostra <b>código</b>, <b>Bloom</b>, <b>trimestre</b> e <b>peso</b>.</div></div>
+      <div><div><b>Sesións S1-S6</b>: as cápsulas clicables levan á slide correspondente da presentación.</div></div>
+      <div><div><b>Produto final</b>: eleccións de cargos + reparto de departamentos da tenda.</div></div>
+    </div>
+  </div>
+
+  <div class="trim-summary">
+    <h3>Distribución por trimestres (peso global da SdA)</h3>
+    <div class="trim-bars">
+      <div class="trim-bar trim-bar-1">1ºT · 20%</div>
+      <div class="trim-bar trim-bar-2">2ºT · 30%</div>
+      <div class="trim-bar trim-bar-3">3ºT · 50%</div>
+    </div>
+    <div class="trim-legend">
+      <span class="t1">1º T · Diversidade e convivencia na clase (CA3.1 introducidos)</span>
+      <span class="t2">2º T · Igualdade, conflitos, normas comúns (CA3.2, CA3.3 introducidos)</span>
+      <span class="t3">3º T · SdA completa: sistemas de goberno + eleccións + tenda (CA3.3, CA3.4 produto)</span>
+    </div>
+  </div>
+
+  <div class="obx-quick">
+    <span class="ql">Saltar a</span>
+    <a href="#obx6">OBX6 · Diversidade</a>
+    <a href="#obx7">OBX7 · Participación</a>
+    <a href="#sesions">Sesións SdA</a>
+    <a href="#roles">Roles tenda</a>
+    <a href="#produto">Produto final</a>
+  </div>
+
+  <!-- ===== OBX 6 ===== -->
+  <div class="obx-card color-purp" id="obx6">
+    <div class="obx-head">
+      <div class="obx-num">OBX6</div>
+      <div class="obx-right">
+        <div class="obx-peso">40%</div>
+        <div class="obx-peso-l">Peso na SdA</div>
+      </div>
+    </div>
+    <div class="obx-desc">Recoñecer e valorar a diversidade e a igualdade de xénero, mostrando empatía e respecto por outras culturas e reflexionando sobre cuestións éticas, para contribuír ao benestar individual e colectivo dunha sociedade en continua transformación e ao logro dos valores de integración europea.</div>
+    <div class="ces">
+
+      <div class="ce-block">
+        <div class="ce-head">
+          <div class="ce-desc"><b>CA3.1</b> · Analizar os procesos xeográficos, históricos e culturais que conformaron a sociedade actual, valorando a diversidade etnocultural ou afectivo-sexual e a cohesión social, e mostrando empatía e respecto por outras culturas e pola igualdade de xénero.</div>
+          <div class="ce-meta"><span class="bloom">Bloom 4</span><span class="peso">22%</span></div>
+        </div>
+        <div class="ca-grid">
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">CA3.1</span>
+              <span class="trim trim-3">T3</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s2">S01 · Vivir en sociedade</a>
+              <a class="sess-chip" href="presentacion.html#s3">S02 · Diversidade</a>
+            </div>
+          </div>
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">Evidencia</span>
+              <span class="trim trim-3">Produto</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s11">S10 · Roles inclusivos</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ce-block">
+        <div class="ce-head">
+          <div class="ce-desc"><b>CA3.2</b> · Promover actitudes de igualdade de xénero e condutas non sexistas, analizando e contrastando diferentes modelos na nosa sociedade.</div>
+          <div class="ce-meta"><span class="bloom">Bloom 5</span><span class="peso">18%</span></div>
+        </div>
+        <div class="ca-grid">
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">CA3.2</span>
+              <span class="trim trim-3">T3</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s3">S02 · Igualdade xénero</a>
+            </div>
+          </div>
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">Evidencia</span>
+              <span class="trim trim-3">Produto</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s11">Distribución cargos sen sesgo</a>
+              <a class="sess-chip" href="presentacion.html#s12">Eleccións paritarias</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== OBX 7 ===== -->
+  <div class="obx-card color-terra" id="obx7">
+    <div class="obx-head">
+      <div class="obx-num">OBX7</div>
+      <div class="obx-right">
+        <div class="obx-peso">60%</div>
+        <div class="obx-peso-l">Peso na SdA</div>
+      </div>
+    </div>
+    <div class="obx-desc">Participar na contorna e na vida social de forma eficaz e construtiva desde o respecto aos valores democráticos, aos dereitos humanos e da infancia e aos principios e valores do Estatuto de autonomía de Galicia, da Constitución española e da Unión Europea, valorando a función do Estado e das súas institucións no mantemento da paz e da seguridade integral cidadá, para xerar interaccións respectuosas e equitativas e promover a resolución pacífica e dialogada dos conflitos.</div>
+    <div class="ces">
+
+      <div class="ce-block">
+        <div class="ce-head">
+          <div class="ce-desc"><b>CA3.3</b> · Resolver de forma pacífica e dialogada os conflitos, promovendo unha interacción respectuosa e equitativa a partir da linguaxe inclusiva e non violenta e explicando e exercitando as principais normas, dereitos, deberes e liberdades que forman parte da Constitución española e da de Unión Europea, e coñecendo a función que o Estado e as súas institucións desempeñan no mantemento da paz, da seguridade integral cidadá e no recoñecemento das vítimas da violencia.</div>
+          <div class="ce-meta"><span class="bloom">Bloom 5</span><span class="peso">28%</span></div>
+        </div>
+        <div class="ca-grid">
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">CA3.3</span>
+              <span class="trim trim-3">T3</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s4">S03 · Conflitos + Constitución</a>
+              <a class="sess-chip" href="presentacion.html#s6">S05 · España hoxe</a>
+            </div>
+          </div>
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">Quiz</span>
+              <span class="trim trim-3">Activación</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s9">S08 · Quiz democracia</a>
+            </div>
+          </div>
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">Evidencia</span>
+              <span class="trim trim-3">Produto</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s12">S12 · Eleccións voto secreto</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ce-block">
+        <div class="ce-head">
+          <div class="ce-desc"><b>CA3.4</b> · Explicar o funcionamento xeral dos órganos de goberno do concello, das comunidades autónomas, do Estado español e da Unión Europea, valorando as súas funcións e a xestión dos servizos públicos para a cidadanía.</div>
+          <div class="ce-meta"><span class="bloom">Bloom 4</span><span class="peso">32%</span></div>
+        </div>
+        <div class="ca-grid">
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">CA3.4</span>
+              <span class="trim trim-3">T3</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s5">S04 · Sistemas de goberno</a>
+              <a class="sess-chip" href="presentacion.html#s7">S06 · Órganos por niveis</a>
+            </div>
+          </div>
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">Analoxía</span>
+              <span class="trim trim-3">Transferencia</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s8">S07 · País ↔ empresa</a>
+              <a class="sess-chip" href="presentacion.html#s10">S09 · Tenda como empresa</a>
+            </div>
+          </div>
+          <div class="ca-card">
+            <div class="ca-head">
+              <span class="ca-code">Evidencia</span>
+              <span class="trim trim-3">Produto</span>
+            </div>
+            <div class="ca-sess">
+              <a class="sess-chip" href="presentacion.html#s11">S10 · Organigrama operativo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SESIÓNS ===== -->
+  <div class="sda-block" id="sesions">
+    <h2>Sesións da SdA</h2>
+    <div class="subt">12 slides agrupadas en 6 momentos didácticos. Recomendado: 2 sesións longas (90 min) ou 4 curtas (45 min) + 1 sesión final para as eleccións.</div>
+    <div class="sda-grid">
+
+      <a class="sda-card" href="presentacion.html#s2" style="text-decoration:none">
+        <div class="ses-num">S01 · Slide 2</div>
+        <div class="ses-title">Que é vivir en sociedade</div>
+        <div class="ses-desc">Conversa inicial: organización, normas e respecto. Conecta coa convivencia da clase.</div>
+        <div class="ses-tags"><span class="ses-tag">CA3.1</span><span class="ses-tag">Bloom 2</span></div>
+      </a>
+
+      <a class="sda-card" href="presentacion.html#s3" style="text-decoration:none">
+        <div class="ses-num">S02 · Slide 3</div>
+        <div class="ses-title">Diversidade e igualdade</div>
+        <div class="ses-desc">Cultura, lingua, xénero. Igualdade de oportunidades aplicada á tenda.</div>
+        <div class="ses-tags"><span class="ses-tag">CA3.1</span><span class="ses-tag">CA3.2</span><span class="ses-tag">Bloom 4</span></div>
+      </a>
+
+      <a class="sda-card" href="presentacion.html#s4" style="text-decoration:none">
+        <div class="ses-num">S03 · Slide 4</div>
+        <div class="ses-title">Conflitos e Constitución</div>
+        <div class="ses-desc">Diálogo como ferramenta. Dereitos básicos. Constitución 1978 como acordo común.</div>
+        <div class="ses-tags"><span class="ses-tag">CA3.3</span><span class="ses-tag">Bloom 4</span></div>
+      </a>
+
+      <a class="sda-card" href="presentacion.html#s5" style="text-decoration:none">
+        <div class="ses-num">S04 · Slide 5</div>
+        <div class="ses-title">Sistemas de goberno</div>
+        <div class="ses-desc">Comparativa democracia / monarquía / autoritarismo con exemplos contemporáneos.</div>
+        <div class="ses-tags"><span class="ses-tag">CA3.3</span><span class="ses-tag">CA3.4</span><span class="ses-tag">Bloom 4</span></div>
+      </a>
+
+      <a class="sda-card" href="presentacion.html#s6" style="text-decoration:none">
+        <div class="ses-num">S05 · Slides 6-7</div>
+        <div class="ses-title">España + órganos de goberno</div>
+        <div class="ses-desc">Constitución, monarquía parlamentaria, UE. Pirámide: concello → CCAA → Estado → UE.</div>
+        <div class="ses-tags"><span class="ses-tag">CA3.3</span><span class="ses-tag">CA3.4</span><span class="ses-tag">Bloom 4</span></div>
+      </a>
+
+      <a class="sda-card" href="presentacion.html#s8" style="text-decoration:none">
+        <div class="ses-num">S06 · Slides 8-9</div>
+        <div class="ses-title">Analoxía + quiz</div>
+        <div class="ses-desc">País ↔ empresa: organigrama. Quiz interactivo de comprobación (slides 8 e 9).</div>
+        <div class="ses-tags"><span class="ses-tag">CA3.4</span><span class="ses-tag">Bloom 5</span></div>
+      </a>
+
+      <a class="sda-card" href="presentacion.html#s10" style="text-decoration:none">
+        <div class="ses-num">S07 · Slides 10-11</div>
+        <div class="ses-title">A Tenda como mini-empresa</div>
+        <div class="ses-desc">Organigrama da tenda: xefatura + 4 departamentos. Definición dos 6 roles.</div>
+        <div class="ses-tags"><span class="ses-tag">CA3.2</span><span class="ses-tag">CA3.4</span><span class="ses-tag">Bloom 4-5</span></div>
+      </a>
+
+      <a class="sda-card" href="presentacion.html#s12" style="text-decoration:none">
+        <div class="ses-num">S08 · Slide 12</div>
+        <div class="ses-title">Eleccións na clase</div>
+        <div class="ses-desc">Candidaturas, debate, voto secreto, reconto público, toma de posesión.</div>
+        <div class="ses-tags"><span class="ses-tag">CA3.3</span><span class="ses-tag">CA3.4</span><span class="ses-tag">Bloom 6</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ===== ROLES ===== -->
+  <div class="rol-section" id="roles">
+    <h2>Roles da Tenda · evidencia de aprendizaxe</h2>
+    <div class="subt">Cada rol pon en xogo competencias específicas. A asignación é a evidencia observable do CA3.4 e CA3.3 (toma de decisións pacífica e estruturada).</div>
+    <table class="rol-table">
+      <thead>
+        <tr>
+          <th style="width:18%">Rol</th>
+          <th style="width:14%">Nº persoas</th>
+          <th>Tarefa principal</th>
+          <th style="width:22%">CAs en xogo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rname">Xefe / Xefa</span></td>
+          <td>1 · voto directo</td>
+          <td>Dirixe reunións, fai cumprir acordos, representa a tenda ante o profesorado.</td>
+          <td><span class="rtag">CA3.3</span><span class="rtag">CA3.4</span></td>
+        </tr>
+        <tr>
+          <td><span class="rname">Subxefe / Subxefa</span></td>
+          <td>1 · voto directo</td>
+          <td>Substitúe, coordina departamentos, supervisa cumprimento de acordos.</td>
+          <td><span class="rtag">CA3.3</span><span class="rtag">CA3.4</span></td>
+        </tr>
+        <tr>
+          <td><span class="rname">Tesourería</span></td>
+          <td>2 · designación</td>
+          <td>Controla moedas-tenda, anota préstamos/devolucións, balance semanal.</td>
+          <td><span class="rtag">CA3.4</span></td>
+        </tr>
+        <tr>
+          <td><span class="rname">Comunicación</span></td>
+          <td>2 · designación</td>
+          <td>Carteis, anuncios, atención a queixas e suxestións. Buzón.</td>
+          <td><span class="rtag">CA3.1</span><span class="rtag">CA3.3</span></td>
+        </tr>
+        <tr>
+          <td><span class="rname">Inventario</span></td>
+          <td>2 · designación</td>
+          <td>Estado dos xogos, reparacións sinxelas, propostas de incorporación.</td>
+          <td><span class="rtag">CA3.4</span></td>
+        </tr>
+        <tr>
+          <td><span class="rname">Atención á clientela</span></td>
+          <td>3 · designación</td>
+          <td>Apertura/peche en recreos, explicación de xogos, axuda a usuarios novos.</td>
+          <td><span class="rtag">CA3.1</span><span class="rtag">CA3.2</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== PRODUTO FINAL ===== -->
+  <div class="final-card" id="produto">
+    <div class="ft-pretitle">Produto final · 3.º trimestre</div>
+    <h2>Eleccións na clase + organigrama operativo da Tenda Sostible</h2>
+    <p>O alumnado vive un proceso democrático en miniatura e remata cunha tenda real funcionando con xefatura electa e departamentos asignados. Os roles permanecen vixentes ata final de curso, con rotacións intermedias se procede.</p>
+    <div class="pasos">
+      <div class="paso">
+        <div class="pnum">PASO 1</div>
+        <div class="pname">Candidaturas</div>
+        <div class="pdesc">Mini-programa de 3 ideas por candidato/a a xefatura e subxefatura.</div>
+      </div>
+      <div class="paso">
+        <div class="pnum">PASO 2</div>
+        <div class="pname">Debate público</div>
+        <div class="pdesc">Defensa en 1 min por candidatura + 1 pregunta da aula.</div>
+      </div>
+      <div class="paso">
+        <div class="pnum">PASO 3</div>
+        <div class="pname">Voto secreto</div>
+        <div class="pdesc">Papeletas e urna. Sen identificación. Igualdade real de voto.</div>
+      </div>
+      <div class="paso">
+        <div class="pnum">PASO 4</div>
+        <div class="pname">Reconto público</div>
+        <div class="pdesc">Apertura da urna diante de todos. Transparencia.</div>
+      </div>
+      <div class="paso">
+        <div class="pnum">PASO 5</div>
+        <div class="pname">Toma de posesión</div>
+        <div class="pdesc">Xefatura asigna departamentos. Asinatura de compromisos.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-ind">
+    Documento competencial xerado para a SdA <b>Vivir en sociedade · Tenda Sostible</b>. Bloque 3 do currículo de Ciencias Sociais (5.º · Decreto 155/2022).<br>
+    Conexións cruzadas: <a href="presentacion.html" style="color:var(--purp-d);font-weight:700">Presentación do alumnado</a> · <a href="../apuntes-vivir-en-sociedade.html" style="color:var(--terra-d);font-weight:700">Apuntes Vivir en sociedade</a>
+  </div>
+
+</div>
+</body>
+</html>
