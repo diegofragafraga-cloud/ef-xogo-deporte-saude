@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tríptico · Visita CEIP Coirón Dena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════ RESET + PALETA CREMA ═══════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#f5ead7;
+  --cream-soft:#ede1c8;
+  --cream-deep:#e2d3b3;
+  --paper:#fbf6ea;
+  --ink:#3a2e1a;
+  --ink-soft:rgba(58,46,26,.68);
+  --ink-mute:rgba(58,46,26,.45);
+  --ink-faint:rgba(58,46,26,.25);
+  --sage:#6c8b6a;
+  --sage-deep:#4e6b4c;
+  --terra:#b07a55;
+  --rule:rgba(58,46,26,.14);
+}
+
+html,body{
+  font-family:'Inter',sans-serif;
+  background:#2a2620;
+  color:var(--ink);
+  font-weight:400;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  letter-spacing:.01em;
+}
+body{padding:30px 0;display:flex;flex-direction:column;align-items:center;gap:24px}
+
+/* ═══════════ TOOLBAR (oculta na impresión) ═══════════ */
+.toolbar{position:fixed;top:14px;right:14px;display:flex;gap:8px;z-index:1000}
+.tbtn{width:40px;height:40px;border-radius:8px;border:none;background:var(--cream);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:all .2s}
+.tbtn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.tbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tbtn.print{background:var(--sage);color:var(--cream)}
+
+/* ═══════════ PÁXINAS A4 LANDSCAPE ═══════════ */
+.page{
+  width:297mm;height:210mm;
+  background:var(--cream);
+  display:grid;grid-template-columns:repeat(3,1fr);
+  position:relative;
+  box-shadow:0 8px 30px rgba(0,0,0,.5);
+  overflow:hidden;
+}
+.page-label{position:absolute;top:6mm;left:50%;transform:translateX(-50%);font-family:'Inter',sans-serif;font-size:7pt;color:var(--ink-mute);background:rgba(58,46,26,.06);padding:2px 10px;border-radius:50px;letter-spacing:2px;text-transform:uppercase;z-index:50;font-weight:500}
+
+/* Liñas de prega */
+.page::before,.page::after{
+  content:'';position:absolute;top:0;bottom:0;width:0;
+  border-left:1px dashed var(--ink-faint);
+  z-index:10;pointer-events:none;
+}
+.page::before{left:33.333%}
+.page::after{left:66.666%}
+
+.fold-mark{position:absolute;top:-2px;width:0;border-left:1px solid var(--ink-mute);height:6px;z-index:11}
+.fold-mark.f1{left:33.333%}
+.fold-mark.f2{left:66.666%}
+.fold-mark.bottom{top:auto;bottom:-2px}
+
+/* ═══════════ PANEL XENÉRICO ═══════════ */
+.panel{
+  padding:18mm 13mm;
+  display:flex;flex-direction:column;
+  position:relative;
+  overflow:hidden;
+}
+
+/* ═══════════ TIPOGRAFÍA SUAVE ═══════════ */
+.panel h1,.panel h2,.panel h3{font-family:'Lora',serif;font-weight:500;line-height:1.15;color:var(--ink);letter-spacing:-.005em}
+.panel h4{font-family:'Lora',serif;font-weight:600;line-height:1.2;color:var(--ink)}
+.panel .eyebrow{
+  font-family:'Inter',sans-serif;font-size:7pt;letter-spacing:2.2px;
+  text-transform:uppercase;color:var(--ink-mute);font-weight:500;
+  margin-bottom:7mm;display:flex;align-items:center;gap:8px;
+}
+.panel .eyebrow::before{content:'';width:18px;height:1px;background:var(--ink-mute)}
+.panel p{font-size:9pt;line-height:1.65;color:var(--ink-soft);font-weight:400}
+
+/* ═══════════════════════════════════════════
+  PÁXINA 1 · CARA EXTERIOR
+  Panel 1 back · Panel 2 cronograma · Panel 3 portada
+═══════════════════════════════════════════ */
+
+/* Panel 1 · Back cover · cita + QR + pé */
+.p-back{
+  background:var(--cream-soft);
+  justify-content:space-between;
+  padding:20mm 13mm 16mm;
+}
+
+.edgerton-quote{
+  text-align:center;
+  padding:0 2mm;
+}
+.edgerton-quote blockquote{
+  font-family:'Lora',serif;
+  font-size:11pt;
+  line-height:1.55;
+  color:var(--ink);
+  font-style:italic;
+  font-weight:400;
+  margin-bottom:4mm;
+}
+.edgerton-quote cite{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:6.5pt;
+  letter-spacing:2.2px;
+  text-transform:uppercase;
+  color:var(--sage-deep);
+  font-style:normal;
+  font-weight:500;
+}
+
+/* QR de valoración */
+.qr-block{
+  display:flex;align-items:center;gap:5mm;
+  padding:6mm 0;
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+.qr-card{
+  background:var(--paper);
+  padding:2.5mm;
+  border-radius:2mm;
+  flex-shrink:0;
+  border:1px solid var(--rule);
+}
+.qr-card svg{display:block;width:28mm;height:28mm}
+.qr-text{flex:1;min-width:0}
+.qr-label{
+  font-family:'Inter',sans-serif;
+  font-size:6.5pt;letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--sage-deep);
+  font-weight:500;margin-bottom:2mm;
+}
+.qr-title{
+  font-family:'Lora',serif;
+  font-size:13pt;line-height:1.2;
+  color:var(--ink);font-weight:500;
+  margin-bottom:2mm;
+}
+.qr-desc{
+  font-size:8pt;line-height:1.55;
+  color:var(--ink-soft);
+}
+
+.back-foot{
+  text-align:center;
+  font-family:'Inter',sans-serif;
+  font-size:7pt;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  color:var(--ink-mute);
+  font-weight:500;
+}
+.back-foot strong{color:var(--ink-soft);font-weight:500;display:block;font-size:8.5pt;letter-spacing:1.2px;text-transform:none;font-family:'Lora',serif;font-style:italic;margin-bottom:1.5mm}
+
+/* Panel 2 · Cronograma da visita */
+.p-cron{
+  background:var(--cream);
+  justify-content:flex-start;
+}
+.cronograma{display:flex;flex-direction:column;gap:3mm;margin-top:2mm}
+.cron-row{
+  display:grid;grid-template-columns:28mm 1fr;gap:4mm;
+  align-items:baseline;
+  padding:2.5mm 0;
+  border-bottom:1px solid var(--rule);
+}
+.cron-row:last-of-type{border-bottom:none}
+.cron-hora{
+  font-family:'Inter',sans-serif;font-size:7.5pt;letter-spacing:1.2px;
+  color:var(--sage-deep);font-weight:500;
+  text-transform:uppercase;
+}
+.cron-parada{
+  font-family:'Lora',serif;font-size:10pt;color:var(--ink);
+  line-height:1.35;font-weight:400;
+}
+.cron-row.cron-fin .cron-hora{color:var(--terra)}
+.cron-row.cron-fin .cron-parada{font-style:italic}
+
+/* Panel 3 · Front cover */
+.p-cover{
+  background:var(--cream-deep);
+  justify-content:flex-end;
+  position:relative;
+  overflow:hidden;
+}
+.p-cover::before{
+  content:'';
+  position:absolute;
+  top:0;right:0;
+  width:55mm;height:55mm;
+  background:radial-gradient(circle at center,rgba(108,139,106,.22),transparent 70%);
+  pointer-events:none;
+}
+.p-cover .cover-eyebrow{
+  font-family:'Inter',sans-serif;font-size:7.5pt;letter-spacing:3px;
+  text-transform:uppercase;color:var(--sage-deep);
+  margin-bottom:8mm;font-weight:500;
+}
+.p-cover h1{
+  font-family:'Lora',serif;font-size:42pt;line-height:1.0;
+  font-weight:400;color:var(--ink);
+  letter-spacing:-.015em;margin-bottom:7mm;
+}
+.p-cover h1 em{font-style:italic;font-weight:500;color:var(--sage-deep)}
+.p-cover .cover-sub{
+  font-family:'Lora',serif;
+  font-size:11pt;line-height:1.55;
+  color:var(--ink-soft);
+  font-style:italic;font-weight:400;
+  max-width:75mm;margin-bottom:10mm;
+}
+.p-cover .cover-meta{
+  font-family:'Inter',sans-serif;font-size:7pt;letter-spacing:2.2px;
+  text-transform:uppercase;color:var(--ink-mute);
+  border-top:1px solid var(--rule);padding-top:4mm;font-weight:500;
+}
+
+/* ═══════════════════════════════════════════
+  PÁXINA 2 · CARA INTERIOR
+  Panel 4 · día a día | Panel 5 · Superliga | Panel 6 · aula
+═══════════════════════════════════════════ */
+
+/* Panel 4 · O día a día */
+.p-dia{
+  background:var(--cream);
+}
+.p-dia h2{font-size:18pt;color:var(--ink);margin-bottom:4mm}
+.p-dia h2 em{font-style:italic;color:var(--sage-deep);font-weight:500}
+.p-dia .lead{font-size:9.5pt;line-height:1.6;color:var(--ink-soft);margin-bottom:8mm;font-family:'Lora',serif;font-style:italic}
+
+.dia-cards{display:flex;flex-direction:column;gap:5mm}
+.dia-card{
+  background:var(--paper);
+  border-radius:2mm;
+  padding:5mm 5mm;
+  border-left:2pt solid var(--sage);
+}
+.dia-card .dc-time{
+  font-family:'Inter',sans-serif;font-size:6.5pt;letter-spacing:1.8px;
+  color:var(--sage-deep);font-weight:500;margin-bottom:1.5mm;text-transform:uppercase;
+}
+.dia-card h4{font-size:11pt;color:var(--ink);margin-bottom:1.5mm}
+.dia-card p{font-size:8.5pt;line-height:1.55;color:var(--ink-soft)}
+
+.dia-foot{
+  margin-top:auto;padding-top:5mm;
+  font-family:'Lora',serif;font-style:italic;
+  font-size:8.5pt;line-height:1.55;color:var(--ink-mute);
+  text-align:center;
+}
+.dia-foot strong{color:var(--sage-deep);font-style:normal;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:1px;font-size:7.5pt;text-transform:uppercase;display:block;margin-bottom:1mm}
+
+/* Panel 5 · PDI fío común */
+.p-pdi{
+  background:var(--cream-soft);
+  border-left:1px solid var(--rule);
+  border-right:1px solid var(--rule);
+}
+.p-pdi h2{font-size:17pt;color:var(--ink);margin-bottom:5mm;text-align:center}
+.p-pdi h2 em{font-style:italic;color:var(--sage-deep);font-weight:500}
+.p-pdi .pdi-intro{
+  font-family:'Lora',serif;font-style:italic;
+  font-size:9pt;line-height:1.6;text-align:center;
+  color:var(--ink-soft);margin-bottom:7mm;
+}
+
+.pdi-card{
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:2.5mm;
+  padding:5mm 5mm;
+  margin-bottom:4mm;
+  border-left:2pt solid var(--sage);
+}
+.pdi-card.pc-past{border-left-color:var(--terra)}
+.pdi-card .pc-tag{
+  font-family:'Inter',sans-serif;font-size:6.5pt;letter-spacing:2px;
+  color:var(--sage-deep);text-transform:uppercase;font-weight:500;
+  margin-bottom:2mm;
+}
+.pdi-card.pc-past .pc-tag{color:var(--terra)}
+.pdi-card h3{
+  font-family:'Lora',serif;font-size:14pt;
+  color:var(--ink);line-height:1.15;font-weight:500;
+  margin-bottom:1.5mm;
+}
+.pdi-card .pc-sub{
+  font-family:'Lora',serif;font-style:italic;
+  font-size:8.5pt;line-height:1.5;color:var(--ink-soft);
+}
+
+.chips{
+  display:flex;flex-wrap:wrap;gap:1.5mm;
+  margin-top:3mm;
+}
+.chip{
+  font-family:'Inter',sans-serif;font-size:7pt;
+  color:var(--ink-soft);
+  background:rgba(176,122,85,.1);
+  border:1px solid rgba(176,122,85,.2);
+  padding:1mm 2.5mm;
+  border-radius:50px;
+  font-weight:400;
+  letter-spacing:.01em;
+}
+
+/* Panel 6 · Aula viva */
+.p-aula{
+  background:var(--cream);
+}
+.p-aula h2{font-size:18pt;color:var(--ink);margin-bottom:4mm}
+.p-aula h2 em{font-style:italic;color:var(--terra);font-weight:500}
+.p-aula .lead{
+  font-family:'Lora',serif;font-style:italic;
+  font-size:9.5pt;line-height:1.6;color:var(--ink-soft);margin-bottom:8mm;
+}
+
+.aula-card{
+  background:var(--paper);
+  border-radius:2mm;
+  padding:5mm 5mm;
+  margin-bottom:4mm;
+  border-left:2pt solid var(--terra);
+}
+.aula-card.b-sage{border-left-color:var(--sage)}
+.aula-card .ac-tag{
+  font-family:'Inter',sans-serif;font-size:6.5pt;letter-spacing:1.8px;
+  color:var(--terra);font-weight:500;margin-bottom:1.5mm;text-transform:uppercase;
+}
+.aula-card.b-sage .ac-tag{color:var(--sage-deep)}
+.aula-card h4{font-size:11pt;color:var(--ink);margin-bottom:1.5mm}
+.aula-card p{font-size:8.5pt;line-height:1.55;color:var(--ink-soft)}
+
+.aula-foot{
+  margin-top:auto;padding-top:4mm;
+  text-align:center;
+  font-family:'Lora',serif;font-style:italic;
+  font-size:8.5pt;line-height:1.55;color:var(--ink-mute);
+}
+.aula-foot strong{
+  color:var(--sage-deep);font-style:normal;
+  font-family:'Inter',sans-serif;font-weight:500;
+  letter-spacing:1.2px;font-size:7pt;text-transform:uppercase;
+  display:block;margin-bottom:1mm;
+}
+
+/* ═══════════ IMPRESIÓN ═══════════ */
+@media print{
+  @page{size:A4 landscape;margin:0}
+  html,body{background:#fff;padding:0;margin:0}
+  body{display:block}
+  .toolbar,.page-info{display:none!important}
+  .page{
+    width:297mm;height:210mm;
+    box-shadow:none;margin:0;
+    page-break-after:always;page-break-inside:avoid;
+  }
+  .page:last-child{page-break-after:auto}
+  .page-label{display:none}
+}
+
+/* ═══════════ INFO BAR ═══════════ */
+.page-info{font-family:'Inter',sans-serif;font-size:10pt;color:#aaa;text-align:center;padding:8px 14px;letter-spacing:1.5px;text-transform:uppercase;font-weight:400}
+
+/* ═══════════ RESPONSIVE PARA PANTALLA PEQUENA ═══════════ */
+@media screen and (max-width:1100px){
+  body{padding:14px 0}
+  .page{transform:scale(.7);transform-origin:top center;margin-bottom:-30%}
+  .page:last-of-type{margin-bottom:0}
+}
+@media screen and (max-width:780px){
+  .page{transform:scale(.45);margin-bottom:-55%}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="tbtn print" onclick="window.print()" title="Imprimir">
+    <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  PÁXINA 1 · CARA EXTERIOR
+═══════════════════════════════════════════ -->
+<div class="page-info">Páxina 1 · cara exterior · imprimir como reverso</div>
+<div class="page" id="page-1">
+  <div class="page-label">Exterior · 297×210mm</div>
+  <span class="fold-mark f1"></span>
+  <span class="fold-mark f2"></span>
+  <span class="fold-mark f1 bottom"></span>
+  <span class="fold-mark f2 bottom"></span>
+
+  <!-- PANEL 1 · BACK COVER · cita + QR + pé -->
+  <section class="panel p-back">
+    <div class="edgerton-quote">
+      <blockquote>O segredo da educación é ensinar de tal maneira que non se den conta de que están aprendendo ata que é demasiado tarde.</blockquote>
+      <cite>— Harold Edgerton</cite>
+    </div>
+
+    <div class="qr-block">
+      <div class="qr-card">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41"><path stroke="#3a2e1a" d="M0 0.5h7m1 0h3m2 0h2m1 0h2m4 0h1m2 0h1m2 0h2m4 0h7m-41 1h1m5 0h1m1 0h2m3 0h4m1 0h2m2 0h1m1 0h2m4 0h2m2 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m1 0h4m4 0h1m3 0h2m1 0h1m1 0h2m1 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h2m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m1 0h2m3 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m1 0h2m2 0h3m2 0h1m2 0h3m4 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m5 0h1m1 0h1m1 0h1m3 0h1m2 0h4m2 0h1m2 0h1m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-22 1h2m1 0h2m1 0h1m4 0h3m-33 1h1m2 0h6m1 0h8m1 0h1m2 0h3m1 0h4m1 0h1m1 0h1m2 0h1m1 0h3m-41 1h4m5 0h1m1 0h1m4 0h5m1 0h2m1 0h3m2 0h2m2 0h3m3 0h1m-40 1h1m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m5 0h2m2 0h1m5 0h2m3 0h1m-39 1h3m1 0h1m3 0h1m3 0h1m1 0h1m1 0h2m2 0h1m1 0h2m3 0h1m1 0h4m1 0h4m1 0h1m-39 1h1m1 0h2m1 0h2m1 0h3m1 0h1m1 0h1m1 0h1m2 0h2m2 0h2m2 0h2m4 0h2m-36 1h3m1 0h1m2 0h1m1 0h1m1 0h2m5 0h2m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m3 0h1m2 0h2m-41 1h1m1 0h1m2 0h2m1 0h1m5 0h1m1 0h1m1 0h1m5 0h1m2 0h1m3 0h1m1 0h2m1 0h1m3 0h1m-37 1h2m4 0h4m1 0h2m1 0h2m2 0h3m3 0h1m1 0h1m2 0h1m1 0h5m-40 1h1m4 0h7m1 0h1m4 0h2m3 0h3m4 0h1m2 0h1m3 0h1m2 0h1m-41 1h3m1 0h2m1 0h1m3 0h2m3 0h1m3 0h1m1 0h1m3 0h2m1 0h1m1 0h3m2 0h2m-38 1h1m1 0h2m2 0h1m2 0h4m3 0h1m2 0h1m1 0h4m2 0h5m3 0h2m3 0h1m-41 1h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h2m6 0h1m2 0h1m4 0h2m1 0h1m1 0h1m1 0h1m-41 1h1m1 0h1m2 0h3m1 0h3m1 0h3m3 0h4m1 0h1m1 0h2m1 0h4m1 0h2m2 0h3m-41 1h3m1 0h1m4 0h3m3 0h2m1 0h2m1 0h2m2 0h2m2 0h4m3 0h2m-37 1h1m4 0h1m2 0h1m3 0h3m4 0h1m1 0h2m1 0h1m1 0h1m6 0h1m2 0h2m-39 1h1m1 0h2m3 0h3m2 0h2m2 0h3m3 0h2m2 0h1m1 0h2m1 0h4m1 0h2m1 0h1m-40 1h1m2 0h4m6 0h4m3 0h1m3 0h1m2 0h2m3 0h1m1 0h1m4 0h2m-38 1h3m2 0h1m5 0h3m1 0h1m4 0h1m1 0h3m2 0h1m1 0h2m1 0h2m1 0h1m1 0h1m-41 1h2m4 0h2m2 0h3m2 0h1m3 0h2m6 0h1m2 0h8m2 0h1m-38 1h2m2 0h2m1 0h2m7 0h1m2 0h2m3 0h2m2 0h1m1 0h1m1 0h1m1 0h2m1 0h1m-38 1h1m1 0h2m2 0h1m1 0h2m2 0h2m2 0h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-38 1h2m5 0h1m3 0h1m2 0h1m2 0h2m2 0h1m5 0h1m2 0h1m1 0h1m3 0h1m-37 1h2m2 0h5m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h5m1 0h1m6 0h1m-41 1h3m2 0h1m1 0h2m1 0h1m1 0h1m1 0h3m1 0h3m1 0h2m1 0h1m1 0h2m1 0h2m2 0h2m1 0h4m-41 1h8m1 0h2m2 0h1m1 0h1m1 0h1m1 0h3m1 0h1m3 0h1m1 0h2m1 0h9m-33 1h1m2 0h1m1 0h1m4 0h2m1 0h1m5 0h1m1 0h1m2 0h1m3 0h1m2 0h1m-40 1h7m1 0h2m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m2 0h2m1 0h1m1 0h1m-37 1h1m5 0h1m1 0h1m2 0h1m2 0h2m1 0h1m2 0h4m5 0h1m1 0h2m3 0h2m1 0h1m-40 1h1m1 0h3m1 0h1m1 0h1m7 0h4m1 0h1m1 0h2m2 0h1m3 0h7m-38 1h1m1 0h3m1 0h1m1 0h5m1 0h1m2 0h1m8 0h3m6 0h1m2 0h1m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1m2 0h1m2 0h1m3 0h2m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m-41 1h1m5 0h1m2 0h1m1 0h1m5 0h2m1 0h1m7 0h1m4 0h2m1 0h3m1 0h1m-41 1h7m1 0h1m1 0h2m2 0h1m2 0h4m1 0h4m2 0h1m3 0h1m3 0h1m1 0h1"/></svg>
+      </div>
+      <div class="qr-text">
+        <div class="qr-label">Ticket de saída</div>
+        <div class="qr-title">Conta a túa visita</div>
+        <div class="qr-desc">Escanea o código para deixar a túa valoración.</div>
+      </div>
+    </div>
+
+    <div class="back-foot">
+      <strong>CEIP Coirón Dena</strong>
+      Visita pedagóxica · 2026
+    </div>
+  </section>
+
+  <!-- PANEL 2 · CRONOGRAMA -->
+  <section class="panel p-cron">
+    <div class="eyebrow">Cronograma da xornada</div>
+    <div class="cronograma">
+      <div class="cron-row">
+        <span class="cron-hora">8:35 — 8:45</span>
+        <span class="cron-parada">Alborada e Despertar Máxico</span>
+      </div>
+      <div class="cron-row">
+        <span class="cron-hora">8:45 — 9:30</span>
+        <span class="cron-parada">Asemblea en 1.º curso</span>
+      </div>
+      <div class="cron-row">
+        <span class="cron-hora">9:30 — 10:00</span>
+        <span class="cron-parada">Educación Infantil</span>
+      </div>
+      <div class="cron-row">
+        <span class="cron-hora">10:00 — 10:30</span>
+        <span class="cron-parada">5.º B · Superliga e Tenda</span>
+      </div>
+      <div class="cron-row">
+        <span class="cron-hora">10:30 — 11:30</span>
+        <span class="cron-parada">2.º · datos e mates con Brais</span>
+      </div>
+      <div class="cron-row">
+        <span class="cron-hora">11:30 — 12:00</span>
+        <span class="cron-parada">Recreo · Patios DINS</span>
+      </div>
+      <div class="cron-row">
+        <span class="cron-hora">12:00 — 12:30</span>
+        <span class="cron-parada">Café e presentación</span>
+      </div>
+      <div class="cron-row">
+        <span class="cron-hora">12:30 — 13:00</span>
+        <span class="cron-parada">Salón de actos · PDI Arte</span>
+      </div>
+      <div class="cron-row cron-fin">
+        <span class="cron-hora">13:00</span>
+        <span class="cron-parada">Despedida</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANEL 3 · FRONT COVER -->
+  <section class="panel p-cover">
+    <div>
+      <div class="cover-eyebrow">CEIP Coirón Dena</div>
+      <h1>Unha liña <em>común</em></h1>
+      <p class="cover-sub">Propostas que conectan a aula, o patio e a vida do centro.</p>
+      <div class="cover-meta">Visita pedagóxica · 2026</div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  PÁXINA 2 · CARA INTERIOR
+═══════════════════════════════════════════ -->
+<div class="page-info">Páxina 2 · cara interior · imprimir como anverso</div>
+<div class="page" id="page-2">
+  <div class="page-label">Interior · 297×210mm</div>
+  <span class="fold-mark f1"></span>
+  <span class="fold-mark f2"></span>
+  <span class="fold-mark f1 bottom"></span>
+  <span class="fold-mark f2 bottom"></span>
+
+  <!-- PANEL 4 · O DÍA A DÍA -->
+  <section class="panel p-dia">
+    <div class="eyebrow">O día a día</div>
+    <h2>Como <em>comezamos</em></h2>
+    <p class="lead">Dúas pezas que abren a xornada con calma e atención.</p>
+
+    <div class="dia-cards">
+      <div class="dia-card">
+        <div class="dc-time">8:35 — 8:45</div>
+        <h4>Tempo de Alborada</h4>
+        <p>Entrada libre durante dez minutos, sen filas. Cada quen chega ao seu ritmo.</p>
+      </div>
+      <div class="dia-card">
+        <div class="dc-time">Tras a campá</div>
+        <h4>Despertar Máxico</h4>
+        <p>Rutina activa que prepara o corpo e a atención antes da asemblea.</p>
+      </div>
+    </div>
+
+    <div class="dia-foot">
+      <strong>+ Método HERVAT</strong>
+      Seis estímulos breves para activar os sentidos en calquera transición.
+    </div>
+  </section>
+
+  <!-- PANEL 5 · PDI · fío común -->
+  <section class="panel p-pdi">
+    <div class="eyebrow" style="justify-content:center">Fío común</div>
+    <h2>Todo conecta arredor do <em>PDI</em></h2>
+    <p class="pdi-intro">Cada curso, un mesmo tema únenos: as aulas, a biblioteca e os espazos comúns traballan arredor do mesmo proxecto.</p>
+
+    <div class="pdi-card">
+      <div class="pc-tag">Este curso · 2026</div>
+      <h3>PDI de Arte</h3>
+      <p class="pc-sub">Proxecto a nivel centro. Hoxe expoñen o seu traballo o segundo ciclo no salón de actos.</p>
+    </div>
+
+    <div class="pdi-card pc-past">
+      <div class="pc-tag">Hai tres cursos</div>
+      <h3>PDI Superliga Saudable</h3>
+      <p class="pc-sub">O motor de saúde do centro. Os seus engrenaxes seguen activos:</p>
+      <div class="chips">
+        <span class="chip">Froitómetro</span>
+        <span class="chip">Actividade física</span>
+        <span class="chip">Mochilas saudables</span>
+        <span class="chip">Patios DINS</span>
+        <span class="chip">Tenda Sostible</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANEL 6 · AULA VIVA -->
+  <section class="panel p-aula">
+    <div class="eyebrow">Aula viva</div>
+    <h2>A vida do centro é o <em>contexto</em></h2>
+    <p class="lead">Os xogos do patio entran na aula. Os datos da Superliga son material real para traballar competencias.</p>
+
+    <div class="aula-card">
+      <div class="ac-tag">SdA · 2.º curso</div>
+      <h4>Xogos na rúa</h4>
+      <p>Matemáticas manipulativas con datos da Superliga e dos patios.</p>
+    </div>
+
+    <div class="aula-card b-sage">
+      <div class="ac-tag">SdA · 5.º curso</div>
+      <h4>Mochilas saudables</h4>
+      <p>ABP de saúde postural: fraccións e porcentaxes en contexto real.</p>
+    </div>
+
+    <div class="aula-foot">
+      <strong>Aprender no contexto real</strong>
+      Cando os datos do centro entran na aula, as competencias gañan sentido.
+    </div>
+  </section>
+</div>
+
+<div class="page-info">Imprime a dobre cara · dobra en 3 polas liñas marcadas</div>
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<title>Cronograma · Visita pedagóxica CEIP Coirón Dena</title>
+<style>
+@page { size: A4; margin: 1.3cm 1.6cm; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #111;
+    background: #fff;
+    font-size: 10.5pt;
+    line-height: 1.4;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.page { padding: 0; }
+
+.header {
+    border-bottom: 2px solid #111;
+    padding-bottom: 10px;
+    margin-bottom: 13px;
+}
+.eyebrow {
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #00946f;
+    margin-bottom: 6px;
+}
+h1 {
+    font-size: 22pt;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 6px;
+}
+h1 .accent { color: #00946f; }
+.sub {
+    font-size: 10pt;
+    color: #444;
+    max-width: 70ch;
+    line-height: 1.4;
+}
+
+.meta {
+    display: flex;
+    gap: 22px;
+    margin-bottom: 13px;
+    font-size: 9.5pt;
+    color: #555;
+}
+.meta strong { color: #111; font-weight: 700; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 13px;
+}
+thead th {
+    text-align: left;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #666;
+    padding: 7px 12px 7px 0;
+    border-bottom: 1.5px solid #111;
+}
+thead th.col-time { width: 20%; }
+thead th.col-loc { width: 24%; }
+
+tbody tr {
+    border-bottom: 1px dashed #ccc;
+    page-break-inside: avoid;
+}
+tbody tr:last-child { border-bottom: 1.5px solid #111; }
+tbody td {
+    padding: 9px 12px 9px 0;
+    vertical-align: top;
+}
+.time {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: #00946f;
+    font-size: 10pt;
+    white-space: nowrap;
+}
+.parada {
+    font-weight: 700;
+    color: #111;
+    font-size: 10.5pt;
+    margin-bottom: 2px;
+}
+.parada-desc {
+    font-size: 9.5pt;
+    color: #555;
+    font-weight: 400;
+    line-height: 1.35;
+}
+.loc {
+    font-size: 9.5pt;
+    color: #666;
+    font-weight: 500;
+}
+
+.color-1 .time { color: #00946f; }
+.color-2 .time { color: #0096b8; }
+.color-3 .time { color: #c87a00; }
+.color-4 .time { color: #c84545; }
+.color-5 .time { color: #7c5cc8; }
+.color-6 .time { color: #3a9e4e; }
+
+.aviso {
+    background: #fafafa;
+    border-left: 3px solid #00946f;
+    padding: 9px 14px;
+    font-size: 9pt;
+    color: #444;
+    line-height: 1.45;
+    margin-bottom: 9px;
+}
+.aviso strong { color: #111; }
+
+.footer {
+    padding-top: 7px;
+    border-top: 1px solid #ddd;
+    font-size: 8pt;
+    color: #888;
+    display: flex;
+    justify-content: space-between;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+    <header class="header">
+        <div class="eyebrow">Cronograma da xornada</div>
+        <h1>Visita pedagóxica<br><span class="accent">CEIP Coirón Dena</span></h1>
+        <p class="sub">Anticipación da secuencia da visita guiada con alumnado embaixador e da charla informal posterior. Tempos aproximados.</p>
+    </header>
+
+    <div class="meta">
+        <span><strong>Inicio</strong> · 8:35 (entrada con familias)</span>
+        <span><strong>Fin</strong> · 13:00 (despedida)</span>
+        <span><strong>Duración</strong> · 4 h 25 min</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-time">Hora</th>
+                <th>Parada</th>
+                <th class="col-loc">Espazo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="color-1">
+                <td class="time">8:35 — 8:45</td>
+                <td>
+                    <div class="parada">Alborada</div>
+                    <div class="parada-desc">Entrada libre e escalonada. Familias acompañan ata o porche.</div>
+                </td>
+                <td class="loc">Porche · aulas</td>
+            </tr>
+            <tr class="color-6">
+                <td class="time">8:45 — 8:50</td>
+                <td>
+                    <div class="parada">Despertar Máxico</div>
+                    <div class="parada-desc">5' activadores en cada aula (PAFHS · método HERVAT).</div>
+                </td>
+                <td class="loc">Aulas</td>
+            </tr>
+            <tr class="color-2">
+                <td class="time">8:50 — 9:30</td>
+                <td>
+                    <div class="parada">Asemblea en 1.º</div>
+                    <div class="parada-desc">Rutina de mañá como continuidade metodolóxica con Infantil.</div>
+                </td>
+                <td class="loc">Aula de 1.º</td>
+            </tr>
+            <tr class="color-6">
+                <td class="time">9:30 — 10:00</td>
+                <td>
+                    <div class="parada">Educación Infantil · horto escolar</div>
+                    <div class="parada-desc">Visita ao horto, recantos da aula, programa Voz Natura.</div>
+                </td>
+                <td class="loc">Aula de Infantil · horto</td>
+            </tr>
+            <tr class="color-3">
+                <td class="time">10:00 — 10:30</td>
+                <td>
+                    <div class="parada">Superliga Saudable + Tenda Sostible</div>
+                    <div class="parada-desc">Alumnado de 5.º B explica o sistema de puntos e lites.</div>
+                </td>
+                <td class="loc">Aula de 5.º B</td>
+            </tr>
+            <tr class="color-3">
+                <td class="time">10:30 — 11:30</td>
+                <td>
+                    <div class="parada">Datos da Superliga + mates con Brais</div>
+                    <div class="parada-desc">Matemáticas manipulativas vinculadas á SdA <em>Xogos na rúa</em>.</div>
+                </td>
+                <td class="loc">Aula de 2.º</td>
+            </tr>
+            <tr class="color-5">
+                <td class="time">11:30 — 12:00</td>
+                <td>
+                    <div class="parada">Recreo · Patios DINS + Tenda Sostible</div>
+                    <div class="parada-desc">Tarxetas rotativas, contratos de responsabilidade, Tenda en acción.</div>
+                </td>
+                <td class="loc">Patio</td>
+            </tr>
+            <tr class="color-1">
+                <td class="time">12:00 — 12:30</td>
+                <td>
+                    <div class="parada">Charla informal con café + presentación</div>
+                    <div class="parada-desc">Conversación aberta arredor das propostas vistas durante a mañá.</div>
+                </td>
+                <td class="loc">Sala de profesorado</td>
+            </tr>
+            <tr class="color-2">
+                <td class="time">12:30 — 13:00</td>
+                <td>
+                    <div class="parada">PDI de Arte · segundo ciclo</div>
+                    <div class="parada-desc">Presentación elaborada polo alumnado dentro das horas de Contextos.</div>
+                </td>
+                <td class="loc">Salón de actos</td>
+            </tr>
+            <tr class="color-1">
+                <td class="time">13:00</td>
+                <td>
+                    <div class="parada">Despedida</div>
+                    <div class="parada-desc">Agradecemento, intercambio de contactos e materiais.</div>
+                </td>
+                <td class="loc">Vestíbulo</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="aviso">
+        <strong>Suxestión de chegada</strong> · arredor das <strong>8:25</strong> para acompañar a Alborada desde o inicio. Calzado cómodo recomendable (visita a aulas, horto e patio). Tempos orientativos — pequenos axustes posibles segundo o ritmo da xornada.
+    </div>
+
+    <div class="footer">
+        <span>CEIP Coirón Dena · Visita pedagóxica</span>
+        <span>Cronograma orientativo</span>
+    </div>
+
+</div>
+</body>
+</html>

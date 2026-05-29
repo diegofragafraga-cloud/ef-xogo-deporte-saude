@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guión dos Embaixadores · 5.º B · CEIP Coirón Dena</title>
+
+  <!-- Tipografía: DM Sans (lexible, moderna, imprime ben) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       VARIABLES E RESET
+    ============================================================ */
+    :root {
+      --cor-primaria:   #1a6b3c;   /* verde institucional, imprime en B/N como gris escuro */
+      --cor-secundaria: #f0a500;   /* ámbar para destacados */
+      --cor-acento:     #2e86c1;   /* azul para cronograma */
+      --cor-bg-frase:   #f4f8f2;   /* fondo leve para caixas de frases */
+      --cor-bg-nota:    #fff8e1;   /* fondo para avisos */
+      --cor-texto:      #1a1a1a;
+      --cor-suave:      #555555;
+      --cor-liña:       #d0d0d0;
+      --fonte-base:     'DM Sans', sans-serif;
+      --tamaño-base:    11.5pt;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--fonte-base);
+      font-size: var(--tamaño-base);
+      color: var(--cor-texto);
+      background: #ffffff;
+      line-height: 1.55;
+    }
+
+    /* ============================================================
+       CONFIGURACIÓN DE IMPRESIÓN A4
+    ============================================================ */
+    @page {
+      size: A4;
+      margin: 1.5cm;
+    }
+
+    /* Cabeceira e pé de páxina en impresión */
+    @page {
+      @bottom-center {
+        content: "CEIP Coirón Dena · Visita Pedagóxica";
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8pt;
+        color: #888;
+      }
+      @bottom-right {
+        content: counter(page);
+        font-family: 'DM Sans', sans-serif;
+        font-size: 8pt;
+        color: #888;
+      }
+    }
+
+    /* Evitar cortes de páxina dentro de seccións importantes */
+    .seccion {
+      break-inside: avoid-page;
+      page-break-inside: avoid;
+      margin-bottom: 0.9cm;
+    }
+
+    /* Salto de páxina explícito para seccións longas */
+    .salto-paxina {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    /* ============================================================
+       CONTEDOR PRINCIPAL
+    ============================================================ */
+    .contedor {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1.2cm 1cm;
+    }
+
+    /* ============================================================
+       PORTADA / CABECEIRA
+    ============================================================ */
+    .portada {
+      border: 2.5px solid var(--cor-primaria);
+      border-radius: 6px;
+      padding: 0.8cm 1cm;
+      margin-bottom: 0.9cm;
+      position: relative;
+      background: #ffffff;
+    }
+
+    .portada-etiqueta {
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cor-primaria);
+      margin-bottom: 0.25cm;
+    }
+
+    .portada-titulo {
+      font-size: 20pt;
+      font-weight: 700;
+      color: var(--cor-primaria);
+      line-height: 1.2;
+      margin-bottom: 0.2cm;
+    }
+
+    .portada-subtitulo {
+      font-size: 10.5pt;
+      color: var(--cor-suave);
+      margin-bottom: 0.55cm;
+    }
+
+    /* Campo de nome en branco para cubrir a man */
+    .campo-nome {
+      display: flex;
+      align-items: center;
+      gap: 0.4cm;
+      margin-top: 0.4cm;
+    }
+
+    .campo-nome label {
+      font-size: 10pt;
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--cor-texto);
+    }
+
+    .liña-nome {
+      flex: 1;
+      border-bottom: 1.5px solid var(--cor-texto);
+      height: 1.1em;
+    }
+
+    /* ============================================================
+       TITULARES DE SECCIÓN
+    ============================================================ */
+    .titulo-seccion {
+      font-size: 12.5pt;
+      font-weight: 700;
+      color: #ffffff;
+      background: var(--cor-primaria);
+      padding: 0.2cm 0.45cm;
+      border-radius: 4px;
+      margin-bottom: 0.4cm;
+      display: flex;
+      align-items: center;
+      gap: 0.3cm;
+    }
+
+    .titulo-seccion .num {
+      background: rgba(255,255,255,0.25);
+      border-radius: 3px;
+      padding: 0.05cm 0.2cm;
+      font-size: 10pt;
+    }
+
+    /* ============================================================
+       TEXTO XERAL
+    ============================================================ */
+    p { margin-bottom: 0.3cm; }
+
+    ul, ol {
+      padding-left: 1.4em;
+      margin-bottom: 0.3cm;
+    }
+
+    li { margin-bottom: 0.18cm; }
+
+    strong { font-weight: 700; }
+
+    /* ============================================================
+       TÁBOA CRONOGRAMA
+    ============================================================ */
+    .cronograma {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 0.35cm;
+      font-size: 10.5pt;
+    }
+
+    .cronograma thead tr {
+      background: var(--cor-acento);
+      color: #ffffff;
+    }
+
+    .cronograma th {
+      padding: 0.18cm 0.3cm;
+      text-align: left;
+      font-weight: 600;
+      font-size: 9.5pt;
+      letter-spacing: 0.04em;
+    }
+
+    .cronograma td {
+      padding: 0.18cm 0.3cm;
+      vertical-align: top;
+      border-bottom: 1px solid var(--cor-liña);
+    }
+
+    .cronograma tbody tr:nth-child(even) {
+      background: #f7f9fb;
+    }
+
+    /* Filas onde son protagonistas — destaque visual */
+    .cronograma tr.protagonistas td {
+      background: #eaf4ee;
+      font-weight: 600;
+    }
+
+    .cronograma tr.protagonistas td:first-child {
+      border-left: 3px solid var(--cor-primaria);
+    }
+
+    /* Etiqueta "VOS!" dentro da táboa */
+    .badge-vos {
+      display: inline-block;
+      background: var(--cor-primaria);
+      color: #fff;
+      font-size: 7pt;
+      font-weight: 700;
+      padding: 0.04cm 0.18cm;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-left: 0.15cm;
+      letter-spacing: 0.06em;
+    }
+
+    /* ============================================================
+       CAIXAS DE FRASES PARA MEMORIZAR
+    ============================================================ */
+    .caixa-frases {
+      background: var(--cor-bg-frase);
+      border-left: 3px solid var(--cor-primaria);
+      border-radius: 0 4px 4px 0;
+      padding: 0.35cm 0.55cm;
+      margin-bottom: 0.4cm;
+    }
+
+    .caixa-frases .etiqueta-caixa {
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cor-primaria);
+      margin-bottom: 0.25cm;
+    }
+
+    .caixa-frases ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+
+    .caixa-frases li {
+      padding: 0.12cm 0;
+      border-bottom: 1px dashed #c8dcc0;
+      font-size: 10.5pt;
+      line-height: 1.5;
+    }
+
+    .caixa-frases li:last-child { border-bottom: none; }
+
+    /* Símbolo de frase antes de cada ítem */
+    .caixa-frases li::before {
+      content: '"';
+      color: var(--cor-primaria);
+      font-size: 13pt;
+      font-weight: 700;
+      line-height: 1;
+      margin-right: 0.15cm;
+    }
+
+    /* ============================================================
+       CAIXA DE PALABRAS CLAVE
+    ============================================================ */
+    .palabras-clave {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.2cm;
+      margin-bottom: 0.35cm;
+    }
+
+    .tag {
+      background: var(--cor-secundaria);
+      color: #1a1a1a;
+      font-size: 9.5pt;
+      font-weight: 600;
+      padding: 0.05cm 0.3cm;
+      border-radius: 20px;
+    }
+
+    /* ============================================================
+       CAIXA DE AVISO / RECORDATORIO
+    ============================================================ */
+    .aviso {
+      background: var(--cor-bg-nota);
+      border: 1px solid #e6c870;
+      border-radius: 4px;
+      padding: 0.3cm 0.45cm;
+      margin-bottom: 0.4cm;
+      font-size: 10.5pt;
+    }
+
+    .aviso strong { color: #7a5900; }
+
+    /* ============================================================
+       SEPARADOR
+    ============================================================ */
+    .separador {
+      border: none;
+      border-top: 1px solid var(--cor-liña);
+      margin: 0.6cm 0;
+    }
+
+    /* ============================================================
+       SECCIÓN DE ANOTACIÓNS
+    ============================================================ */
+    .anotacions-zona {
+      border: 1.5px solid var(--cor-liña);
+      border-radius: 5px;
+      padding: 0.4cm 0.5cm;
+      min-height: 5cm;
+    }
+
+    .anotacions-etiqueta {
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: var(--cor-suave);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.35cm;
+    }
+
+    /* Liñas de escritura simuladas */
+    .liñas-escritura {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6cm;
+    }
+
+    .liña-escritura {
+      border-bottom: 1px solid #d8d8d8;
+      height: 0;
+    }
+
+    /* ============================================================
+       PÉ DE PÁXINA VISIBLE EN PANTALLA
+    ============================================================ */
+    .pe-paxina {
+      margin-top: 1cm;
+      text-align: center;
+      font-size: 8.5pt;
+      color: #aaaaaa;
+    }
+
+    /* ============================================================
+       BOTÓN IMPRIMIR (só en pantalla)
+    ============================================================ */
+    .btn-imprimir {
+      position: fixed;
+      bottom: 1.2cm;
+      right: 1.2cm;
+      background: var(--cor-primaria);
+      color: #ffffff;
+      border: none;
+      padding: 0.45cm 0.8cm;
+      border-radius: 6px;
+      font-family: var(--fonte-base);
+      font-size: 11pt;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      z-index: 100;
+    }
+
+    .btn-imprimir:hover { background: #145530; }
+
+    /* ============================================================
+       MEDIA PRINT — ocultar elementos non imprimibles
+    ============================================================ */
+    @media print {
+      .btn-imprimir { display: none !important; }
+      .pe-paxina { display: none; }
+
+      body { font-size: 10.5pt; }
+
+      .contedor { max-width: 100%; padding: 0; }
+
+      /* Garante que a táboa non se corte a metade dunha fila */
+      .cronograma tr { page-break-inside: avoid; }
+    }
+
+    /* ============================================================
+       RESPONSIVE BÁSICO (pantalla pequena)
+    ============================================================ */
+    @media screen and (max-width: 600px) {
+      .contedor { padding: 0.5cm; }
+      .cronograma { font-size: 9.5pt; }
+      .portada-titulo { font-size: 16pt; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Botón só visible en pantalla -->
+<button class="btn-imprimir" onclick="window.print()">Imprimir</button>
+
+<div class="contedor">
+
+  <!-- ============================================================
+       1. PORTADA
+  ============================================================ -->
+  <div class="portada seccion">
+    <div class="portada-etiqueta">CEIP Coirón Dena · Visita Pedagóxica</div>
+    <div class="portada-titulo">Guión dos Embaixadores<br>5.º B</div>
+    <div class="portada-subtitulo">Documento de traballo · Gardar durante toda a xornada</div>
+    <div class="campo-nome">
+      <label>Nome:</label>
+      <div class="liña-nome"></div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       2. QUE PASA HOI?
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">2</span> Que pasa hoxe?</div>
+    <p>Hoxe vén outro colexio a visitarnos. Non veñen os nenos e nenas: veñen os <strong>profes doutro cole</strong> para ver como traballamos nós.</p>
+    <p>Veñen porque queren aprender do que facemos aquí no Coirón Dena. Iso significa que <strong>vós sodes os que sabedes</strong> e eles os que aprenden.</p>
+    <p>Durante toda a mañá ides ser os <strong>anfitriones</strong>: os que guían, explican e acompañan. É unha responsabilidade real, e estades preparados para facela ben.</p>
+  </div>
+
+
+  <!-- ============================================================
+       3. A VOSA MISIÓN
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">3</span> A vosa misión</div>
+    <ul>
+      <li><strong>Acompañar</strong> aos visitantes durante toda a mañá.</li>
+      <li><strong>Explicar</strong> o que facemos: a Superliga, a Tenda, o recreo.</li>
+      <li><strong>Ser amables</strong>: saudar, mirar, falar con calma.</li>
+      <li><strong>Contestar con honestidade</strong>: se non sabes algo, di "non o sei, pero pregúntolle a alguén".</li>
+      <li>Pasalo ben. <strong>Non é un exame</strong>, é unha visita.</li>
+    </ul>
+  </div>
+
+
+  <!-- ============================================================
+       4. CRONOGRAMA DO DÍA
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">4</span> Cronograma do día</div>
+
+    <table class="cronograma">
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Onde</th>
+          <th>Que pasa · A vosa parte</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>8:35–8:45</td>
+          <td>Porche / entrada</td>
+          <td>Alborada. As familias acompañan ata o porche. Vós chegades como sempre.</td>
+        </tr>
+        <tr>
+          <td>8:45–8:50</td>
+          <td>Patio / zona común</td>
+          <td>Despertar Máxico: 5 minutos de activadores. Participades co resto do cole.</td>
+        </tr>
+        <tr>
+          <td>8:50–9:30</td>
+          <td>Aula de 1.º</td>
+          <td>Asemblea con 1.º. Observades e estades tranquilos — os máis pequenos necesitan calma.</td>
+        </tr>
+        <tr>
+          <td>9:30–10:00</td>
+          <td>Infantil + horto</td>
+          <td>Visita a Infantil e ao horto escolar. Podedes explicar brevemente o que vexades.</td>
+        </tr>
+        <!-- Filas protagonistas destacadas -->
+        <tr class="protagonistas">
+          <td>10:00–10:30</td>
+          <td>Aula 5.º B</td>
+          <td>
+            <strong>Superliga Saudable + Tenda Sostible</strong>
+            <span class="badge-vos">VOSOUTROS</span><br>
+            Aquí explicades vós. Usade o guión das seccións 5 e 6.
+          </td>
+        </tr>
+        <tr class="protagonistas">
+          <td>10:30–11:30</td>
+          <td>Aula de 2.º</td>
+          <td>
+            <strong>Datos da Superliga + mates con Brais</strong>
+            <span class="badge-vos">ACOMPAÑADES</span><br>
+            Entrades con calma, presentades o espazo, observades a clase (sección 7).
+          </td>
+        </tr>
+        <tr class="protagonistas">
+          <td>11:30–12:00</td>
+          <td>Patio</td>
+          <td>
+            <strong>Recreo · Patios DINS + Tenda en acción</strong>
+            <span class="badge-vos">PODEDES EXPLICAR</span><br>
+            Podedes acompañar os visitantes polo patio e mostrar como funciona a Tenda (sección 8).
+          </td>
+        </tr>
+        <tr>
+          <td>12:00–12:30</td>
+          <td>Sala de profesores</td>
+          <td>Café dos profes visitantes + presentación. Vós tedes tempo libre ou clase normal.</td>
+        </tr>
+        <tr>
+          <td>12:30–13:00</td>
+          <td>Salón de actos</td>
+          <td>PDI Arte con segundo ciclo. Podedes participar se o titor o indica.</td>
+        </tr>
+        <tr>
+          <td>13:00</td>
+          <td>Entrada / porche</td>
+          <td>Despedida. Saúdo final aos visitantes (sección 11).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="aviso">
+      <strong>Nota:</strong> As filas con fondo verde son as paradas onde tendes un papel activo. Nesas hai que estar atentos e preparados.
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       5. QUE DICIR NA SUPERLIGA (páxina nova para facilitar lectura)
+  ============================================================ -->
+  <div class="seccion salto-paxina">
+    <div class="titulo-seccion"><span class="num">5</span> Que dicir na Superliga (10:00–10:30) · ESTUDAR</div>
+
+    <p>Esta é a parte máis importante. Os profes visitantes queren entender como funciona a Superliga Saudable. Usade estas frases como base e adaptalas co que xa sabedes:</p>
+
+    <div class="caixa-frases">
+      <div class="etiqueta-caixa">Frases para usar</div>
+      <ul>
+        <li>A Superliga Saudable é a nosa competición de cole. Xogamos todos, non hai equipos de fóra.</li>
+        <li>Hai tres xeitos de gañar puntos: o Froitómetro, os minutos de actividade física na semana, e os simulacros de mochilas saudables.</li>
+        <li>O Froitómetro rexistra cantas porcións de froita ou verdura comemos cada día. Anotámolo na clase.</li>
+        <li>Cada semana contamos cantos minutos facemos de actividade física fóra do cole: deporte, paseos, bici...</li>
+        <li>Nos simulacros de mochila saudable revisamos que levamos na mochila de almorzar.</li>
+        <li>Os puntos que gañamos transfórmanse en lites, que son a moeda do cole.</li>
+        <li>Os equipos chámanse Bolboreta, Mundial, Drakis, Fantasma, Xirasois, A Tribo... cada clase ten o seu equipo.</li>
+        <li>Cos lites podemos alugar xogos na Tenda Sostible durante o recreo.</li>
+      </ul>
+    </div>
+
+    <p><strong>Palabras clave que tedes que saber explicar:</strong></p>
+    <div class="palabras-clave">
+      <span class="tag">Lite</span>
+      <span class="tag">Froitómetro</span>
+      <span class="tag">Superliga</span>
+      <span class="tag">Equipo</span>
+      <span class="tag">Tarxeta</span>
+      <span class="tag">Tenda Sostible</span>
+      <span class="tag">Simulacro de mochila</span>
+      <span class="tag">Actividade física</span>
+    </div>
+
+    <div class="aviso">
+      <strong>Consello:</strong> Non fai falta memorizalo todo de golpe. Se te trabucan, podes mirar esta folla discretamente. O normal é que os visitantes pregunten cousas — contestade o mellor que poidades.
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       6. QUE DICIR DA TENDA SOSTIBLE
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">6</span> Que dicir da Tenda Sostible</div>
+
+    <div class="caixa-frases">
+      <div class="etiqueta-caixa">Frases para usar</div>
+      <ul>
+        <li>A Tenda Sostible está aberta durante o recreo. Aquí alugan xogos cos lites que gañan na Superliga.</li>
+        <li>Non se compra nin se vende: todo é en préstamo. Os xogos volven á Tenda ao remate do recreo.</li>
+        <li>Hai xogos de patio, xogos de mesa, e material deportivo.</li>
+        <li>Os encargados da Tenda somos nós, os de 5.º, por quendas.</li>
+        <li>Tamén se pode alugar xogos para levar a casa durante un fin de semana, pero hai que devolvelos o luns.</li>
+        <li>O obxectivo é reutilizar e coidar o material — por iso se chama Sostible.</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       7. LEVAMOS AOS VISITANTES A 2.º (10:30–11:30)
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">7</span> Levamos aos visitantes a 2.º (10:30–11:30)</div>
+
+    <p>Cando rematedes en 5.º B, acompañades o grupo ata a aula de 2.º. Alí verán os datos da Superliga e unha clase de mates con Brais.</p>
+
+    <ul>
+      <li>Entrade con calma. Non hai que falar alto nin correr.</li>
+      <li>Ao entrar podedes dicir: <em>"Esta é a aula de 2.º. Aquí teñen os datos da Superliga en pantalla e van ver como é unha clase de mates."</em></li>
+      <li>En 2.º hai nenos e nenas máis pequenos. Respectade o seu espazo e non os distraedes.</li>
+      <li>Se un visitante vos fai preguntas, respondede en voz baixa para non interromper a clase.</li>
+      <li>O titor indicaravos onde colocarvos para ver sen molestar.</li>
+    </ul>
+  </div>
+
+
+  <!-- ============================================================
+       8. RECREO (11:30–12:00)
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">8</span> Recreo · Patios DINS (11:30–12:00)</div>
+
+    <p>Durante o recreo os visitantes pasean polo patio para ver os Patios Dinámicos (DINS) en funcionamento. A Tenda tamén está aberta.</p>
+
+    <ul>
+      <li>O titor avisaravos se tedes que acompañar aos visitantes ou se podedes descansar.</li>
+      <li>Se estades co grupo, podedes mostrar as diferentes zonas do patio e explicar como se organiza o xogo.</li>
+      <li>Se a Tenda está en marcha, podedes ensinar como funciona en directo — é o mellor exemplo.</li>
+      <li>Non estades obrigados a falar todo o tempo: tamén está ben que os visitantes observen sen explicación.</li>
+    </ul>
+  </div>
+
+
+  <!-- ============================================================
+       9. 5 COUSAS QUE AXUDAN A FACELO BEN
+  ============================================================ -->
+  <div class="seccion salto-paxina">
+    <div class="titulo-seccion"><span class="num">9</span> 5 cousas que axudan a facelo ben</div>
+
+    <ol>
+      <li><strong>Saudar ao chegar:</strong> man, mirada e un sorriso. O primeiro contacto importa.</li>
+      <li><strong>Falar claro e mirando:</strong> non cara ao chan, non moi rápido. Se falas claro, enténdese todo.</li>
+      <li><strong>Se non sabes algo:</strong> di "non o sei, pero pregúntollelo á directora ou ao titor". Iso tamén é honestidade.</li>
+      <li><strong>Ser amable cos máis pequenos</strong> cando estades en 1.º ou Infantil: voz suave, sen correr, sen berrar.</li>
+      <li><strong>Pasalo ben.</strong> Non é un exame. Os visitantes non veñen buscarvos os fallos — veñen aprender de vós.</li>
+    </ol>
+  </div>
+
+
+  <!-- ============================================================
+       10. QUE NON FACER
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">10</span> Que non facer</div>
+
+    <ul>
+      <li>Non discutir entre vós diante dos visitantes.</li>
+      <li>Non dicir "non me apetece" se alguén vos pide algo razoable.</li>
+      <li>Non levar o móbil durante a visita.</li>
+      <li>Non quedar atrás separados do grupo.</li>
+      <li>Non interromper cando alguén fala — nin profe, nin visitante, nin compañeiro.</li>
+    </ul>
+  </div>
+
+
+  <!-- ============================================================
+       11. DESPEDIDA (13:00)
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">11</span> Despedida (13:00)</div>
+
+    <p>Ao final da xornada, os visitantes marchan. Se estades preto, este é o momento de despedirse.</p>
+    <ul>
+      <li>Un "adeus, moitas grazas por vir" xa é suficiente.</li>
+      <li>Se queren facer foto convosco, podedes dicir que si (sempre que o titor o autorice).</li>
+      <li>Despois do recreo ou ao final do día, contádelle ao titor como foi: que saíu ben, se houbo algo raro.</li>
+    </ul>
+  </div>
+
+
+  <!-- ============================================================
+       12. ESPAZO PARA ANOTACIÓNS
+  ============================================================ -->
+  <div class="seccion">
+    <div class="titulo-seccion"><span class="num">12</span> Anotacións</div>
+
+    <p style="font-size:10pt; color: var(--cor-suave); margin-bottom: 0.4cm;">Escribe aquí o que queiras: preguntas que che fixeron, cousas que recordar, como te sentiste...</p>
+
+    <div class="anotacions-zona">
+      <div class="anotacions-etiqueta">As miñas notas</div>
+      <div class="liñas-escritura">
+        <div class="liña-escritura"></div>
+        <div class="liña-escritura"></div>
+        <div class="liña-escritura"></div>
+        <div class="liña-escritura"></div>
+        <div class="liña-escritura"></div>
+        <div class="liña-escritura"></div>
+        <div class="liña-escritura"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pé visible en pantalla -->
+  <div class="pe-paxina">
+    CEIP Coirón Dena · Visita Pedagóxica · 5.º B
+  </div>
+
+</div><!-- /contedor -->
+
+</body>
+</html>

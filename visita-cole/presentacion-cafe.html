@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visita pedagóxica · CEIP Coirón Dena · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   VARIABLES GLOBAIS · PALETA CREMA/PERGAMINO
+   ============================================================ */
+:root {
+    /* Fondo único e consistente en todos os slides */
+    --bg: #f4ede0;
+    --bg-card: #ede3d1;
+    --bg-card2: #e8dbc6;
+
+    /* Tipografía */
+    --font-title: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'Space Mono', monospace;
+
+    /* Cores de texto */
+    --text: #2c2418;
+    --text2: #5a4d3a;
+    --text3: #8a7a65;
+    --border: rgba(44,36,24,0.12);
+
+    /* Acentos por sección */
+    --ac-portada:   #2d6a4f;
+    --ac-xornada:   #e76f51;
+    --ac-alborada:  #2d6a4f;
+    --ac-despertar: #e76f51;
+    --ac-asemblea:  #2196f3;
+    --ac-horto:     #2d6a4f;
+    --ac-superliga: #f4a261;
+    --ac-tenda:     #e76f51;
+    --ac-mates:     #9c27b0;
+    --ac-patios:    #2196f3;
+    --ac-pdi:       #e91e63;
+    --ac-peche:     #2d6a4f;
+
+    /* Tipografía con clamp() */
+    --title-size: clamp(1.8rem, 5vw, 4.2rem);
+    --h2-size:    clamp(1.3rem, 3.2vw, 2.6rem);
+    --h3-size:    clamp(1rem,   2.2vw, 1.6rem);
+    --body-size:  clamp(0.9rem, 1.55vw, 1.25rem);
+    --small-size: clamp(0.78rem, 1.15vw, 1rem);
+
+    /* Espaciado */
+    --slide-padding: clamp(1.5rem, 4vw, 4rem);
+    --content-gap:   clamp(0.6rem, 1.8vw, 1.8rem);
+    --elem-gap:      clamp(0.3rem, 0.8vw, 0.8rem);
+
+    /* Animación */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur: 0.65s;
+}
+
+/* ============================================================
+   RESET E BASE
+   ============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    height: 100%;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   VIEWPORT FITTING — cada slide = pantalla exacta
+   ============================================================ */
+.slide {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: var(--bg);
+}
+
+.slide-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--slide-padding);
+    max-height: 100%;
+    overflow: hidden;
+    gap: var(--content-gap);
+}
+
+/* ============================================================
+   ANIMACIÓNS REVEAL
+   ============================================================ */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--dur) var(--ease-out),
+                transform var(--dur) var(--ease-out);
+}
+.slide.visible .reveal { opacity: 1; transform: none; }
+.slide.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
+.slide.visible .reveal:nth-child(2) { transition-delay: 0.15s; }
+.slide.visible .reveal:nth-child(3) { transition-delay: 0.25s; }
+.slide.visible .reveal:nth-child(4) { transition-delay: 0.35s; }
+.slide.visible .reveal:nth-child(5) { transition-delay: 0.42s; }
+.slide.visible .reveal:nth-child(6) { transition-delay: 0.49s; }
+.slide.visible .reveal:nth-child(7) { transition-delay: 0.56s; }
+
+/* ============================================================
+   BARRA DE PROGRESO CENTRADA · estilo cápsula con porcentaxe
+   ============================================================ */
+.progress-wrap {
+    position: fixed;
+    bottom: 16px; left: 50%;
+    transform: translateX(-50%);
+    width: min(420px, 62vw);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(28, 24, 16, 0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(28, 24, 16, 0.1);
+    border-radius: 50px;
+    padding: 7px 16px;
+    box-shadow: 0 2px 8px rgba(28, 24, 16, 0.06);
+}
+.progress-track {
+    flex: 1;
+    height: 5px;
+    background: rgba(28, 24, 16, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: var(--ac-xornada);
+    border-radius: 50px;
+    transition: width 0.4s ease, background 0.4s ease;
+    width: 0;
+}
+.progress-pct {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text2);
+    min-width: 36px;
+    text-align: right;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.progress-num {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text3);
+    letter-spacing: 0.5px;
+}
+/* Cronómetro · iniciado ao abrir o HTML */
+.progress-time {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.progress-time::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    flex-shrink: 0;
+}
+/* Slide-counter antigo: oculto (a porcentaxe vive no progress-wrap) */
+.slide-counter { display: none; }
+
+/* ============================================================
+   NAVEGACIÓN LATERAL (puntos)
+   ============================================================ */
+.nav-dots {
+    position: fixed;
+    right: clamp(0.6rem, 2vw, 1.2rem);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 200;
+}
+.nav-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--text3);
+    opacity: 0.35;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.3s;
+    border: none;
+}
+.nav-dot.active {
+    opacity: 1;
+    transform: scale(1.4);
+}
+
+/* ============================================================
+   VISTA GLOBAL (tecla G ou ESC)
+   ============================================================ */
+.overview {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(244,237,224,0.97);
+    z-index: 500;
+    overflow-y: auto;
+    padding: 3rem 2rem;
+}
+.overview.active { display: block; }
+.overview-title {
+    text-align: center;
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    color: var(--text2);
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+}
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.overview-thumb {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+.overview-thumb:hover { border-color: var(--text3); transform: translateY(-2px); }
+.overview-thumb-num {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text3);
+    margin-bottom: 0.4rem;
+}
+.overview-thumb-title {
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.3;
+}
+.overview-thumb-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    width: 100%;
+}
+.overview-hint {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* ============================================================
+   MODO PRESENTADOR (tecla P)
+   ============================================================ */
+.presenter-bar {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(44,36,24,0.93);
+    color: #f4ede0;
+    padding: 0.65rem var(--slide-padding);
+    font-family: var(--font-body);
+    font-size: var(--small-size);
+    line-height: 1.5;
+    z-index: 300;
+    border-top: 1px solid rgba(244,237,224,0.15);
+}
+.presenter-bar.active { display: block; }
+.presenter-bar strong { color: #f4a261; font-weight: 600; margin-right: 0.5rem; }
+
+/* ============================================================
+   COMPONENTES COMÚNS
+   ============================================================ */
+
+/* Eyebrow */
+.eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--small-size);
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--accent, #2d6a4f);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.eyebrow::before {
+    content: '';
+    width: 26px; height: 1px;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+/* Título principal */
+.big-title {
+    font-family: var(--font-title);
+    font-size: var(--title-size);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--text);
+}
+.big-title .ac { color: var(--accent, #2d6a4f); }
+
+/* H2 sección */
+.section-title {
+    font-family: var(--font-title);
+    font-size: var(--h2-size);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+}
+.section-title .ac { color: var(--accent, #2d6a4f); }
+
+/* Subtítulo */
+.sub {
+    font-size: var(--body-size);
+    color: var(--text2);
+    line-height: 1.65;
+    max-width: 64ch;
+}
+
+/* Lista de puntos */
+.bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--elem-gap);
+}
+.bullet-list li {
+    font-size: var(--body-size);
+    color: var(--text2);
+    line-height: 1.55;
+    padding-left: 1.2em;
+    position: relative;
+}
+.bullet-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.65em;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent, #2d6a4f);
+}
+.bullet-list li strong { color: var(--text); font-weight: 600; }
+.bullet-list li em { font-style: normal; color: var(--text3); font-size: 0.9em; }
+
+/* Bloque de cita */
+.quote-block {
+    border-left: 3px solid var(--accent, #2d6a4f);
+    padding: clamp(0.5rem, 1.2vw, 0.9rem) clamp(0.7rem, 1.8vw, 1.2rem);
+    background: var(--bg-card);
+    border-radius: 0 8px 8px 0;
+}
+.quote-text {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-size: clamp(0.82rem, 1.5vw, 1.1rem);
+    color: var(--text);
+    line-height: 1.55;
+}
+.quote-author {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--accent, #2d6a4f);
+    margin-top: 0.45rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+/* Tag / etiqueta */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: color-mix(in srgb, var(--accent, #2d6a4f) 12%, transparent);
+    color: var(--accent, #2d6a4f);
+    border: 1px solid color-mix(in srgb, var(--accent, #2d6a4f) 28%, transparent);
+    padding: 3px 11px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: var(--small-size);
+    letter-spacing: 0.3px;
+}
+
+/* Grid de cards */
+.cards-grid {
+    display: grid;
+    gap: clamp(0.5rem, 1.2vw, 1rem);
+}
+.cards-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* Layout split (SVG + texto) */
+.slide-split {
+    flex-direction: row !important;
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    padding: var(--slide-padding);
+    overflow: hidden;
+}
+.split-svg {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(140px, 20vw, 240px);
+}
+.split-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--content-gap);
+    overflow: hidden;
+    min-width: 0;
+}
+
+/* Liña de tempo */
+.timeline-h {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.28rem, 0.7vw, 0.6rem);
+}
+.tl-row {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(0.5rem, 1.2vw, 1rem);
+}
+.tl-time {
+    font-family: var(--font-mono);
+    font-size: clamp(0.6rem, 1vw, 0.8rem);
+    min-width: 8rem;
+    letter-spacing: 0.4px;
+    flex-shrink: 0;
+}
+.tl-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.tl-label {
+    font-size: var(--body-size);
+    color: var(--text2);
+    line-height: 1.3;
+}
+
+/* ============================================================
+   IMPRESIÓN
+   ============================================================ */
+@media print {
+    html { scroll-snap-type: none; }
+    .slide { height: auto; min-height: 100vh; page-break-after: always; overflow: visible; }
+    .progress-wrap, .slide-counter, .nav-dots, .overview, .presenter-bar { display: none !important; }
+    .reveal { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-height: 700px) {
+    :root {
+        --slide-padding: clamp(1rem, 3vw, 2.5rem);
+        --content-gap: clamp(0.4rem, 1.2vw, 1rem);
+        --title-size: clamp(1.5rem, 4.5vw, 2.8rem);
+        --h2-size: clamp(1.1rem, 2.8vw, 2rem);
+    }
+}
+@media (max-height: 600px) {
+    :root {
+        --slide-padding: clamp(0.6rem, 2.5vw, 1.5rem);
+        --content-gap: clamp(0.3rem, 0.8vw, 0.7rem);
+        --title-size: clamp(1.2rem, 4vw, 2rem);
+        --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+    }
+    .nav-dots { display: none; }
+}
+@media (max-width: 700px) {
+    .slide-split { flex-direction: column !important; }
+    .split-svg { width: clamp(100px, 30vw, 150px); }
+    .cards-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+    .cards-grid.cols-2 { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .reveal { transition: none; opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+}
+
+/* ============================================================
+   ESTILOS ESPECÍFICOS POR SLIDE
+   ============================================================ */
+
+/* --- SLIDE 1: PORTADA --- */
+#slide-1 { --accent: var(--ac-portada); }
+#slide-1 .portada-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+    height: 100%;
+    padding: var(--slide-padding);
+    overflow: hidden;
+}
+#slide-1 .portada-text { flex: 1; display: flex; flex-direction: column; gap: var(--content-gap); }
+#slide-1 .portada-svg { flex-shrink: 0; width: clamp(160px, 24vw, 280px); }
+#slide-1 .date-tag {
+    font-family: var(--font-mono);
+    font-size: var(--small-size);
+    color: var(--text3);
+    letter-spacing: 2px;
+}
+
+/* --- SLIDE 2: XORNADA --- */
+#slide-2 { --accent: var(--ac-xornada); }
+
+/* --- SLIDE 3: ALBORADA --- */
+#slide-3 { --accent: var(--ac-alborada); }
+
+/* --- SLIDE 4: DESPERTAR MÁXICO --- */
+#slide-4 { --accent: var(--ac-despertar); }
+#slide-4 .hervat-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: clamp(0.4rem, 1vw, 0.8rem);
+}
+#slide-4 .hervat-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: clamp(0.5rem, 1vw, 0.85rem) clamp(0.3rem, 0.7vw, 0.5rem);
+    text-align: center;
+}
+#slide-4 .hervat-letter {
+    font-family: var(--font-title);
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+}
+#slide-4 .hervat-word {
+    font-size: clamp(0.56rem, 0.85vw, 0.72rem);
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+/* --- SLIDE 5: ASEMBLEA --- */
+#slide-5 { --accent: var(--ac-asemblea); }
+
+/* --- SLIDE 6: HORTO --- */
+#slide-6 { --accent: var(--ac-horto); }
+
+/* --- SLIDE 7: SUPERLIGA --- */
+#slide-7 { --accent: var(--ac-superliga); }
+#slide-7 .puntos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(0.5rem, 1.2vw, 1rem);
+}
+#slide-7 .punto-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: clamp(0.7rem, 1.5vw, 1.2rem);
+    border-top: 3px solid var(--accent);
+}
+#slide-7 .punto-num {
+    font-family: var(--font-mono);
+    font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+}
+#slide-7 .punto-label {
+    font-size: var(--small-size);
+    color: var(--text2);
+    margin-top: 0.35rem;
+    line-height: 1.4;
+}
+
+/* --- SLIDE 8: TENDA --- */
+#slide-8 { --accent: var(--ac-tenda); }
+
+/* --- SLIDE 9: MATES --- */
+#slide-9 { --accent: var(--ac-mates); }
+
+/* --- SLIDE 10: PATIOS DINS --- */
+#slide-10 { --accent: var(--ac-patios); }
+#slide-10 .dins-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(0.5rem, 1.2vw, 1rem);
+}
+#slide-10 .dins-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: clamp(0.8rem, 1.5vw, 1.3rem);
+    border-top: 3px solid var(--accent);
+}
+#slide-10 .dins-letter {
+    font-family: var(--font-title);
+    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+}
+#slide-10 .dins-word {
+    font-family: var(--font-mono);
+    font-size: var(--small-size);
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+}
+#slide-10 .dins-desc {
+    font-size: var(--small-size);
+    color: var(--text2);
+    margin-top: 0.55rem;
+    line-height: 1.5;
+}
+
+/* --- SLIDE 11: HORARIO · CONTEXTOS DE APRENDIZAXE --- */
+#slide-11 { --accent: var(--ac-pdi); }
+#slide-11 .sched-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.35rem, 0.9vw, 0.8rem);
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+    max-width: clamp(720px, 94%, 1100px);
+    margin: 0 auto;
+}
+/* Grella horario: 6 columnas (hora + luns..ven) — celas grandes e ben respiradas */
+#slide-11 .sched-grid {
+    display: grid;
+    grid-template-columns: minmax(8rem, auto) repeat(5, 1fr);
+    gap: clamp(5px, 0.6vw, 8px);
+    flex: 1;
+    align-content: stretch;
+}
+#slide-11 .sched-cell {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: clamp(0.18rem, 0.45vw, 0.42rem) clamp(0.4rem, 0.78vw, 0.78rem);
+    font-size: clamp(0.74rem, 1.12vw, 0.94rem);
+    color: var(--text2);
+    line-height: 1.35;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Cabeceira de columnas (días) */
+#slide-11 .sched-cell.col-head {
+    background: var(--bg-card2);
+    font-family: var(--font-mono);
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text3);
+}
+/* Cela de hora (columna esquerda) */
+#slide-11 .sched-cell.time-cell {
+    text-align: left;
+    justify-content: flex-start;
+    font-family: var(--font-mono);
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    color: var(--text3);
+    background: transparent;
+    border-color: transparent;
+    padding-left: 0;
+    line-height: 1.6;
+}
+/* Cela de recreo */
+#slide-11 .sched-cell.recreo {
+    background: var(--bg-card2);
+    color: var(--text3);
+    font-style: italic;
+}
+/* Cela de Contextos — acento rosa-fucsia do PDI */
+#slide-11 .sched-cell.contextos {
+    background: color-mix(in srgb, #e91e63 14%, transparent);
+    border-color: color-mix(in srgb, #e91e63 35%, transparent);
+    color: #b5124f;
+    font-weight: 600;
+}
+/* Nota de pé */
+#slide-11 .sched-note {
+    font-family: var(--font-mono);
+    font-size: clamp(0.82rem, 1.2vw, 1rem);
+    color: var(--text3);
+    border-top: 1px solid var(--border);
+    padding-top: clamp(0.5rem, 0.9vw, 0.8rem);
+    line-height: 1.65;
+    text-align: center;
+}
+#slide-11 .sched-note strong { color: #b5124f; }
+
+/* --- SLIDE 12: PDI ARTE --- */
+#slide-12 { --accent: var(--ac-pdi); }
+#slide-12 .pdi-steps {
+    display: flex;
+    align-items: stretch;
+    gap: clamp(0.5rem, 1.5vw, 1.2rem);
+}
+#slide-12 .pdi-step {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: clamp(0.7rem, 1.5vw, 1.2rem);
+    border-top: 3px solid var(--accent);
+    min-width: 0;
+}
+#slide-12 .pdi-step-num {
+    font-family: var(--font-mono);
+    font-size: var(--small-size);
+    color: var(--accent);
+    letter-spacing: 2px;
+}
+#slide-12 .pdi-step-label {
+    font-family: var(--font-title);
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    color: var(--text);
+    margin-top: 0.3rem;
+    line-height: 1.2;
+}
+#slide-12 .pdi-step-desc {
+    font-size: var(--small-size);
+    color: var(--text2);
+    margin-top: 0.45rem;
+    line-height: 1.45;
+}
+#slide-12 .pdi-arrow {
+    color: var(--accent);
+    font-size: 1.3rem;
+    align-self: center;
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+}
+
+/* --- SLIDE 13: PECHE --- */
+#slide-13 { --accent: var(--ac-peche); }
+#slide-13 .peche-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    padding: var(--slide-padding);
+    gap: clamp(0.6rem, 1.5vw, 1.2rem);
+    overflow: hidden;
+}
+#slide-13 .quote-mark {
+    font-family: var(--font-title);
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    color: var(--accent);
+    line-height: 0.55;
+    opacity: 0.28;
+    align-self: flex-start;
+}
+#slide-13 .big-quote {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-size: clamp(0.95rem, 2vw, 1.5rem);
+    color: var(--text);
+    line-height: 1.6;
+    max-width: 66ch;
+}
+#slide-13 .quote-source {
+    font-family: var(--font-mono);
+    font-size: var(--small-size);
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+#slide-13 .agradecemento {
+    font-size: var(--body-size);
+    color: var(--text2);
+    line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<!-- Barra de progreso centrada con cronómetro + porcentaxe (estilo cápsula) -->
+<div class="progress-wrap" aria-label="Avance da presentación">
+    <div class="progress-time" id="progress-time" title="Tempo desde que se abriu a presentación">00:00</div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-pct" id="progress-pct">8%</div>
+    <div class="progress-num" id="progress-num">1/13</div>
+</div>
+
+<!-- Puntos de navegación lateral -->
+<nav class="nav-dots" id="nav-dots" aria-label="Navegación por slides"></nav>
+
+<!-- Vista global (G ou ESC) -->
+<div class="overview" id="overview">
+    <div class="overview-title">Visita pedagóxica · CEIP Coirón Dena · 2026</div>
+    <div class="overview-hint">Preme ESC ou G para pechar · fai clic nun slide para ir a el</div>
+    <div class="overview-grid" id="overview-grid"></div>
+</div>
+
+<!-- Barra de notas (P) -->
+<div class="presenter-bar" id="presenter-bar"></div>
+
+
+<!-- ============================================================
+     SLIDE 1 · PORTADA
+     ============================================================ -->
+<section class="slide" id="slide-1" role="region" aria-label="Portada">
+    <div class="portada-layout">
+        <div class="portada-text">
+            <div class="eyebrow reveal">CEIP Coirón Dena</div>
+            <h1 class="big-title reveal">Visita<br><span class="ac">pedagóxica</span></h1>
+            <p class="sub reveal">Benvidas e benvidos. Hoxe compartimos con vós o que facemos cada día: as rutinas, os proxectos e as persoas que os sosteñen.</p>
+            <div class="date-tag reveal">2026 · Sala de profesorado · 12:00 h</div>
+        </div>
+        <div class="portada-svg reveal">
+            <!-- SVG hand-drawn: porta aberta cunha luz dentro -->
+            <svg viewBox="0 0 220 280" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+                <!-- Marco exterior -->
+                <rect x="28" y="16" width="164" height="248" rx="4"
+                      fill="rgba(45,106,79,0.07)" stroke="#2c2418" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Batente lateral dereito (porta aberta) -->
+                <path d="M168 52 L168 258" stroke="#2c2418" stroke-width="2"
+                      stroke-linecap="round" opacity="0.3"/>
+                <!-- Porta aberta cara á dereita: perspectiva -->
+                <path d="M40 26 L155 35 L162 52 L162 252 L40 258 Z"
+                      fill="rgba(45,106,79,0.12)" stroke="#2c2418" stroke-width="2.2"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Luz interior cálida -->
+                <ellipse cx="155" cy="150" rx="40" ry="65"
+                         fill="rgba(244,162,97,0.22)"/>
+                <ellipse cx="150" cy="148" rx="24" ry="42"
+                         fill="rgba(244,162,97,0.32)"/>
+                <!-- Pomal -->
+                <circle cx="138" cy="152" r="6"
+                        fill="rgba(231,111,81,0.45)" stroke="#2c2418" stroke-width="2"/>
+                <!-- Soleira -->
+                <path d="M20 258 L200 258" stroke="#2c2418" stroke-width="2.5"
+                      stroke-linecap="round"/>
+                <!-- Raios de luz -->
+                <path d="M168 90 L196 68"  stroke="#f4a261" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+                <path d="M168 125 L205 116" stroke="#f4a261" stroke-width="1.5" stroke-linecap="round" opacity="0.38"/>
+                <path d="M168 155 L203 162" stroke="#f4a261" stroke-width="1.5" stroke-linecap="round" opacity="0.32"/>
+                <path d="M168 185 L198 198" stroke="#f4a261" stroke-width="1.5" stroke-linecap="round" opacity="0.28"/>
+                <!-- Panel superior da porta -->
+                <rect x="56" y="40" width="82" height="44" rx="3"
+                      fill="rgba(45,106,79,0.07)" stroke="#2c2418" stroke-width="1.5"
+                      stroke-linecap="round"/>
+                <!-- Paneis inferiores (2) -->
+                <rect x="56" y="100" width="36" height="72" rx="3"
+                      fill="rgba(45,106,79,0.06)" stroke="#2c2418" stroke-width="1.5"
+                      stroke-linecap="round"/>
+                <rect x="100" y="100" width="36" height="72" rx="3"
+                      fill="rgba(45,106,79,0.06)" stroke="#2c2418" stroke-width="1.5"
+                      stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 2 · A XORNADA NUN VISTAZO
+     ============================================================ -->
+<section class="slide" id="slide-2" role="region" aria-label="A xornada nun vistazo">
+    <div class="slide-content" style="gap: var(--content-gap); justify-content:space-between; padding-top:clamp(1.2rem,4vh,2.8rem); padding-bottom:clamp(1.4rem,4vh,2.8rem);">
+        <div class="reveal">
+            <div class="eyebrow" style="--accent:var(--ac-xornada);">Cronograma</div>
+            <h2 class="section-title" style="--accent:var(--ac-xornada); margin-top:0.4rem;">
+                A xornada<br><span class="ac" style="color:var(--ac-xornada);">nun vistazo</span>
+            </h2>
+        </div>
+        <!-- Dúas columnas de liña de tempo -->
+        <div class="reveal" style="display:flex; gap:clamp(1.2rem,3vw,3rem); overflow:hidden; align-items:start;">
+            <div class="timeline-h" style="flex:1;">
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#2d6a4f;">8:35 — 8:45</span>
+                    <span class="tl-dot" style="background:#2d6a4f;"></span>
+                    <span class="tl-label"><strong>Alborada</strong> · entrada libre con familias</span>
+                </div>
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#e76f51;">8:45 — 8:50</span>
+                    <span class="tl-dot" style="background:#e76f51;"></span>
+                    <span class="tl-label"><strong>Despertar Máxico</strong> · 5 minutos activadores</span>
+                </div>
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#2196f3;">8:50 — 9:30</span>
+                    <span class="tl-dot" style="background:#2196f3;"></span>
+                    <span class="tl-label"><strong>Asemblea</strong> en 1.º · transición Infantil → Primaria</span>
+                </div>
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#2d6a4f;">9:30 — 10:00</span>
+                    <span class="tl-dot" style="background:#2d6a4f;"></span>
+                    <span class="tl-label"><strong>Horto</strong> · Infantil · contacto coa natureza</span>
+                </div>
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#f4a261;">10:00 — 10:30</span>
+                    <span class="tl-dot" style="background:#f4a261;"></span>
+                    <span class="tl-label"><strong>Superliga Saudable</strong> · 5.º B explica o sistema</span>
+                </div>
+            </div>
+            <div class="timeline-h" style="flex:1;">
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#f4a261;">10:30 — 11:30</span>
+                    <span class="tl-dot" style="background:#f4a261;"></span>
+                    <span class="tl-label"><strong>Mates en transición</strong> · aula de 2.º (con Brais)</span>
+                </div>
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#2196f3;">11:30 — 12:00</span>
+                    <span class="tl-dot" style="background:#2196f3;"></span>
+                    <span class="tl-label"><strong>Recreo</strong> · Patios DINS en acción</span>
+                </div>
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#2d6a4f;">12:00 — 12:30</span>
+                    <span class="tl-dot" style="background:#2d6a4f;"></span>
+                    <span class="tl-label"><strong>Café</strong> · charla informal + esta presentación</span>
+                </div>
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#e91e63;">12:30 — 13:00</span>
+                    <span class="tl-dot" style="background:#e91e63;"></span>
+                    <span class="tl-label"><strong>PDI de Arte</strong> · segundo ciclo · salón de actos</span>
+                </div>
+                <div class="tl-row">
+                    <span class="tl-time" style="color:#2d6a4f;">13:00</span>
+                    <span class="tl-dot" style="background:#2d6a4f;"></span>
+                    <span class="tl-label"><strong>Despedida</strong></span>
+                </div>
+            </div>
+        </div>
+        <!-- Frase aclaratoria · razón desta presentación -->
+        <div class="reveal" style="display:flex; align-items:center; justify-content:center; gap:clamp(1rem,2.5vw,2rem);">
+            <!-- Interrogación hand-drawn -->
+            <svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg"
+                 style="width:clamp(55px, 6.5vw, 80px); height:auto; flex-shrink:0;"
+                 aria-hidden="true">
+                <!-- Curva do interrogante (trazo sketch) -->
+                <path d="M18 30 Q18 10 40 10 Q62 10 62 30 Q62 44 50 50 Q40 56 40 70"
+                      stroke="var(--ac-xornada)" stroke-width="5" stroke-linecap="round"
+                      stroke-linejoin="round" fill="none"/>
+                <!-- Punto inferior -->
+                <circle cx="40" cy="88" r="5" fill="var(--ac-xornada)"
+                        stroke="var(--ac-xornada)" stroke-width="1.5"/>
+                <!-- Brillo decorativo -->
+                <path d="M70 22 L78 18" stroke="var(--ac-xornada)" stroke-width="2"
+                      stroke-linecap="round" opacity="0.55"/>
+                <path d="M8 22 L0 18" stroke="var(--ac-xornada)" stroke-width="2"
+                      stroke-linecap="round" opacity="0.55"/>
+            </svg>
+            <div style="text-align:left; font-size:clamp(1.1rem, 1.7vw, 1.4rem); color:var(--text2); line-height:1.5; max-width:min(720px, 85%);">
+                Nas próximas diapositivas <strong style="color:var(--ac-xornada);">explicámosvos o porqué</strong> de cada cousa que vistedes durante a visita.
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 3 · ALBORADA
+     ============================================================ -->
+<section class="slide slide-split" id="slide-3" role="region" aria-label="Alborada">
+    <div class="split-svg reveal">
+        <!-- SVG hand-drawn: neno con mochila, sol baixo no horizonte -->
+        <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <!-- Sol baixo -->
+            <circle cx="100" cy="212" r="46"
+                    fill="rgba(244,162,97,0.18)" stroke="#f4a261" stroke-width="2"
+                    stroke-dasharray="5 3" stroke-linecap="round"/>
+            <!-- Raios -->
+            <path d="M100 160 L100 148" stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M124 168 L133 159" stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M76 168 L67 159"  stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M138 192 L150 188" stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M62 192 L50 188"  stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <!-- Porta do cole (simplificada, ao fondo) -->
+            <rect x="128" y="118" width="52" height="82" rx="2"
+                  fill="rgba(45,106,79,0.08)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <rect x="142" y="134" width="13" height="28" rx="1"
+                  fill="rgba(45,106,79,0.14)" stroke="#2c2418" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Camiño -->
+            <path d="M20 245 Q100 228 180 245" stroke="#2c2418" stroke-width="1.2"
+                  stroke-linecap="round" opacity="0.15"/>
+            <!-- Personaxe: cabeza -->
+            <circle cx="72" cy="112" r="12"
+                    fill="rgba(45,106,79,0.15)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <!-- Corpo -->
+            <path d="M72 124 L72 165" stroke="#2c2418" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Brazos (un alzado cara á porta) -->
+            <path d="M72 135 L56 148"  stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <path d="M72 135 L90 142"  stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <!-- Pernas (paso) -->
+            <path d="M72 165 L62 192" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <path d="M72 165 L84 192" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <!-- Mochila -->
+            <rect x="75" y="127" width="17" height="23" rx="3"
+                  fill="rgba(231,111,81,0.3)" stroke="#2c2418" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+    </div>
+    <div class="split-text">
+        <div class="eyebrow reveal">8:35 — 8:45 · Porche da entrada</div>
+        <h2 class="section-title reveal">Tempo de<br><span class="ac">Alborada</span></h2>
+        <ul class="bullet-list reveal">
+            <li><strong>Sen filas.</strong> Entrada escalonada, en ritmo propio.</li>
+            <li>Familias acompañan <strong>ata o porche</strong> — transición tranquila.</li>
+            <li>Alumnado con autonomía: deixa a mochila, sauda, entra.</li>
+            <li>Cada titoría recibe con presenza e sen présa.</li>
+        </ul>
+        <div class="quote-block reveal">
+            <div class="quote-text">Comezamos a xornada deixando que os nenos e nenas regulen o ritmo de entrada. É a forma de pasar do bus ou do coche á aula con presenza.</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 4 · DESPERTAR MÁXICO
+     ============================================================ -->
+<section class="slide" id="slide-4" role="region" aria-label="Despertar Máxico">
+    <div class="slide-content">
+        <div class="reveal">
+            <div class="eyebrow">8:45 — 8:50 · Aulas</div>
+            <h2 class="section-title" style="margin-top:0.4rem;">Despertar<br><span class="ac">Máxico</span></h2>
+        </div>
+        <p class="sub reveal">5 minutos de rutina activa en cada aula antes de comezar. Motor do <strong style="color:var(--text)">PAFHS</strong>. Cando se usa o método HERVAT:</p>
+        <div class="hervat-grid reveal">
+            <div class="hervat-item"><div class="hervat-letter">H</div><div class="hervat-word">Hidratación</div></div>
+            <div class="hervat-item"><div class="hervat-letter">E</div><div class="hervat-word">Equilibrio</div></div>
+            <div class="hervat-item"><div class="hervat-letter">R</div><div class="hervat-word">Respiración</div></div>
+            <div class="hervat-item"><div class="hervat-letter">V</div><div class="hervat-word">Visión</div></div>
+            <div class="hervat-item"><div class="hervat-letter">A</div><div class="hervat-word">Audición</div></div>
+            <div class="hervat-item"><div class="hervat-letter">T</div><div class="hervat-word">Tacto</div></div>
+        </div>
+        <div class="cards-grid cols-2 reveal" style="align-items:stretch;">
+            <!-- Tarxeta E · Equilibrio -->
+            <div class="quote-block" style="display:flex; flex-direction:column; gap:0.55rem;">
+                <!-- SVG hand-drawn: persoa en equilibrio sobre unha perna -->
+                <svg viewBox="0 0 130 110" fill="none" xmlns="http://www.w3.org/2000/svg"
+                     style="width:100%; max-height:clamp(70px, 9.5vw, 115px); flex-shrink:0;">
+                    <!-- Cabeza -->
+                    <circle cx="65" cy="22" r="9" fill="rgba(231,111,81,0.25)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <!-- Tronco -->
+                    <line x1="65" y1="31" x2="65" y2="62" stroke="#2c2418" stroke-width="2.2" stroke-linecap="round"/>
+                    <!-- Brazos abertos para equilibrar -->
+                    <line x1="65" y1="40" x2="98" y2="34" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="65" y1="40" x2="32" y2="34" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <!-- Perna apoiada -->
+                    <line x1="65" y1="62" x2="62" y2="92" stroke="#2c2418" stroke-width="2.2" stroke-linecap="round"/>
+                    <!-- Pé apoiado -->
+                    <line x1="55" y1="92" x2="70" y2="92" stroke="#2c2418" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- Perna dobrada levantada -->
+                    <path d="M 65 62 Q 80 72 90 58" stroke="#2c2418" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <!-- Chan -->
+                    <line x1="22" y1="98" x2="108" y2="98" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <div>
+                    <div class="quote-text">"Un estado óptimo que favorece os procesos atencionais e cognitivos."</div>
+                    <div class="quote-author">Ortiz, 2018 · HERVAT — E · Equilibrio</div>
+                </div>
+            </div>
+            <!-- Tarxeta T · Tacto: escribir na espalda doutra persoa -->
+            <div class="quote-block" style="display:flex; flex-direction:column; gap:0.55rem;">
+                <!-- SVG hand-drawn: tacto · escribir letra na espalda dun compañeiro -->
+                <svg viewBox="0 0 150 110" fill="none" xmlns="http://www.w3.org/2000/svg"
+                     style="width:100%; max-height:clamp(70px, 9.5vw, 115px); flex-shrink:0;">
+                    <!-- Persoa 1 (esquerda · de costas) -->
+                    <circle cx="55" cy="22" r="9" fill="rgba(231,111,81,0.2)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <rect x="44" y="32" width="22" height="44" rx="6" fill="rgba(231,111,81,0.13)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="50" y1="76" x2="48" y2="98" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="60" y1="76" x2="62" y2="98" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <!-- Letra "A" trazada na espalda -->
+                    <text x="48.5" y="58" font-family="serif" font-size="15" fill="#e76f51" opacity="0.85" font-style="italic" font-weight="700">A</text>
+                    <!-- Persoa 2 (dereita · escribindo) -->
+                    <circle cx="106" cy="20" r="9" fill="rgba(231,111,81,0.25)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="106" y1="29" x2="106" y2="68" stroke="#2c2418" stroke-width="2.2" stroke-linecap="round"/>
+                    <!-- Brazo extendido cara á espalda da persoa 1 -->
+                    <path d="M 106 42 Q 90 48 73 52" stroke="#2c2418" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <!-- Dedo (punto pequeno tocando a espalda) -->
+                    <circle cx="71" cy="52" r="2" fill="#2c2418"/>
+                    <!-- Pernas persoa 2 -->
+                    <line x1="101" y1="68" x2="99" y2="98" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="111" y1="68" x2="113" y2="98" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                    <!-- Chan -->
+                    <line x1="22" y1="100" x2="130" y2="100" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <div>
+                    <div class="quote-text">"Beneficios sobre control inhibitorio, memoria de traballo e flexibilidade cognitiva."</div>
+                    <div class="quote-author">Guillén, 2018 · HERVAT — T · Tacto (escribir na espalda)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 5 · ASEMBLEA EN 1.º
+     ============================================================ -->
+<section class="slide slide-split" id="slide-5" role="region" aria-label="Asemblea en 1.º">
+    <div class="split-svg reveal">
+        <!-- SVG hand-drawn: círculo de cabezas (asemblea visto desde arriba) -->
+        <svg viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <!-- Mesa circular -->
+            <circle cx="100" cy="110" r="50"
+                    fill="rgba(33,150,243,0.07)" stroke="#2c2418" stroke-width="2"
+                    stroke-dasharray="6 4" stroke-linecap="round"/>
+            <!-- 8 cabezas ao redor (posicionar en circunferencia r=72) -->
+            <circle cx="100" cy="38"  r="13" fill="rgba(33,150,243,0.18)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="151" cy="59"  r="11" fill="rgba(33,150,243,0.12)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="172" cy="110" r="12" fill="rgba(33,150,243,0.18)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="151" cy="161" r="11" fill="rgba(33,150,243,0.12)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="100" cy="182" r="13" fill="rgba(33,150,243,0.18)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="49"  cy="161" r="11" fill="rgba(33,150,243,0.12)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="28"  cy="110" r="12" fill="rgba(33,150,243,0.18)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="49"  cy="59"  r="11" fill="rgba(33,150,243,0.12)" stroke="#2c2418" stroke-width="2" stroke-linecap="round"/>
+            <!-- Centro (quen ten a palabra) -->
+            <circle cx="100" cy="110" r="9"
+                    fill="rgba(33,150,243,0.3)" stroke="#2196f3" stroke-width="2"/>
+            <!-- Liñas de oralidade -->
+            <line x1="100" y1="110" x2="100" y2="51"  stroke="#2196f3" stroke-width="1" opacity="0.28" stroke-dasharray="3 3"/>
+            <line x1="100" y1="110" x2="150" y2="70"  stroke="#2196f3" stroke-width="1" opacity="0.28" stroke-dasharray="3 3"/>
+            <line x1="100" y1="110" x2="160" y2="110" stroke="#2196f3" stroke-width="1" opacity="0.28" stroke-dasharray="3 3"/>
+        </svg>
+    </div>
+    <div class="split-text">
+        <div class="eyebrow reveal">8:50 — 9:30 · Aula de 1.º</div>
+        <h2 class="section-title reveal">Asemblea · transición<br><span class="ac">Infantil → Primaria</span></h2>
+        <ul class="bullet-list reveal">
+            <li>Alumnado xestionando a <strong>quenda de palabra</strong>.</li>
+            <li>Organizan o día, comparten estado de ánimo e planifican.</li>
+            <li><strong>Sen ruptura brusca</strong> co que facían en 5 anos.</li>
+            <li>Conexión con Superliga, biblioteca e Patios DINS.</li>
+        </ul>
+        <div class="quote-block reveal">
+            <div class="quote-text">"La planificación del primer ciclo se basará en metodologías que no supongan una ruptura abrupta respecto de las empleadas durante la etapa de educación infantil."</div>
+            <div class="quote-author">DOG · Resolución 5 xuño 2025, p. 33093 · + Bassedas · Freinet · Vygotsky</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 6 · HORTO EN INFANTIL
+     ============================================================ -->
+<section class="slide slide-split" id="slide-6" role="region" aria-label="Horto en Infantil">
+    <div class="split-svg reveal">
+        <!-- SVG hand-drawn: planta nun maceto co sol -->
+        <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <!-- Sol -->
+            <circle cx="152" cy="52" r="26"
+                    fill="rgba(244,162,97,0.2)" stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M152 18 L152 8"   stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M175 28 L181 22"  stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M188 52 L198 52"  stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M128 28 L122 22"  stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <path d="M116 52 L106 52"  stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+            <!-- Talo principal -->
+            <path d="M94 218 Q92 185 90 158 Q88 130 92 100"
+                  stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Folla esquerda 1 -->
+            <path d="M91 140 Q68 122 55 132 Q72 148 91 140Z"
+                  fill="rgba(45,106,79,0.25)" stroke="#2d6a4f" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Folla dereita 1 -->
+            <path d="M90 160 Q116 144 128 154 Q110 170 90 160Z"
+                  fill="rgba(45,106,79,0.2)" stroke="#2d6a4f" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Folla esquerda 2 -->
+            <path d="M92 108 Q72 92 62 99 Q76 115 92 108Z"
+                  fill="rgba(45,106,79,0.18)" stroke="#2d6a4f" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Floriña no cume -->
+            <circle cx="92" cy="95" r="9"
+                    fill="rgba(231,111,81,0.3)" stroke="#e76f51" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="92" cy="95" r="4" fill="rgba(231,111,81,0.5)"/>
+            <!-- Maceto -->
+            <path d="M64 218 L67 204 L122 204 L125 218 Z"
+                  fill="rgba(244,162,97,0.22)" stroke="#2c2418" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M60 218 L129 218" stroke="#2c2418" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Terra -->
+            <path d="M68 204 Q94 198 121 204" stroke="#2c2418" stroke-width="1.5"
+                  stroke-linecap="round" opacity="0.28"/>
+            <!-- Gotas de rega -->
+            <path d="M36 88 Q34 93 38 96"  stroke="#2196f3" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+            <path d="M46 100 Q44 106 48 109" stroke="#2196f3" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+            <path d="M30 106 Q28 112 32 115" stroke="#2196f3" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
+        </svg>
+    </div>
+    <div class="split-text">
+        <div class="eyebrow reveal">9:30 — 10:00 · Infantil · Horto</div>
+        <h2 class="section-title reveal">Contacto<br><span class="ac">coa natureza</span></h2>
+        <ul class="bullet-list reveal">
+            <li>Tocan, observan, plantan, regan. <strong>Aprendizaxe sensorial.</strong></li>
+            <li><strong>Voz Natura</strong> — programa de educación ambiental que reforza o vínculo co medio.</li>
+            <li>Os equipos de Infantil tamén <strong>suman puntos na Superliga</strong>.</li>
+            <li>Recantos e ambientes de aprendizaxe na aula.</li>
+            <li>Continuidade Infantil → Primaria sen rupturas.</li>
+        </ul>
+        <div class="reveal" style="margin:0.9rem 0 0.6rem;padding:0.75rem 1rem;background:rgba(46,196,182,0.10);border-left:3px solid var(--ac);border-radius:0 8px 8px 0;">
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ac);margin-bottom:0.3rem;">Reto a longo prazo · a nivel de centro</div>
+            <div style="font-size:0.92rem;line-height:1.45;">Transformar o patio nun espazo máis verde. A idea: substituír o <strong>campo de fútbol</strong> por unha zona de <strong>céspede natural</strong> e trasladar a zona deportiva ao outro lado.</div>
+        </div>
+        <div class="quote-block reveal">
+            <div class="quote-text">"20 minutos en contorna verde melloran a atención e a concentración." <em>· Kuo &amp; Faber Taylor</em> · Louv (déficit de natureza) · Freire (educar en verde)</div>
+            <div class="quote-author">Decreto 150/2022 · LOMLOE · "Descubrimento e exploración do contorno"</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 7 · SUPERLIGA SAUDABLE
+     ============================================================ -->
+<section class="slide" id="slide-7" role="region" aria-label="Superliga Saudable">
+    <div class="slide-content">
+        <div class="reveal">
+            <div class="eyebrow">10:00 — 10:30 · Aula 5.º B</div>
+            <h2 class="section-title" style="margin-top:0.4rem;">Superliga<br><span class="ac">Saudable</span></h2>
+        </div>
+        <p class="sub reveal">Motor do PAFHS. O alumnado de 5.º B explica o sistema. Tres xeitos de gañar <strong style="color:var(--text)">lites</strong>, a moeda do centro:</p>
+        <div class="puntos-grid reveal">
+            <div class="punto-card">
+                <div class="punto-num">01</div>
+                <div class="punto-label"><strong>Froitómetro</strong> — Rexistro diario de froita e alimento saudable na mochila. Equipos por curso.</div>
+            </div>
+            <div class="punto-card">
+                <div class="punto-num">02</div>
+                <div class="punto-label"><strong>AF lectiva</strong> — Actividade física en horario de clase e no recreo. Coordinación PAFHS.</div>
+            </div>
+            <div class="punto-card">
+                <div class="punto-num">03</div>
+                <div class="punto-label"><strong>Mochilas saudables</strong> — Simulacros de revisión con criterios acordados polo propio alumnado.</div>
+            </div>
+        </div>
+        <div class="reveal" style="margin:0.9rem 0 0.6rem;padding:0.75rem 1rem;background:rgba(46,196,182,0.10);border-left:3px solid var(--ac);border-radius:0 8px 8px 0;">
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ac);margin-bottom:0.3rem;">Conexión coa aula · Matemáticas</div>
+            <div style="font-size:0.92rem;line-height:1.45;"><strong>2.º</strong> · datos reais do patio en mates manipulativas (SdA <em>Xogos na rúa</em>) · &nbsp;<strong>5.º</strong> · SdA <strong>Mochilas saudables</strong> · UD Decimais · regra do <strong>10%</strong> (OMS) · fracción ↔ decimal ↔ porcentaxe.</div>
+        </div>
+        <div class="reveal" style="display:flex; gap:var(--elem-gap); flex-wrap:wrap;">
+            <span class="tag">Tarxeta QR por clase</span>
+            <span class="tag">Bolboreta · Mundial · Drakis · Fantasma · Xirasois…</span>
+            <span class="tag">O lite = moeda da Tenda Sostible</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 8 · TENDA SOSTIBLE
+     ============================================================ -->
+<section class="slide slide-split" id="slide-8" role="region" aria-label="Tenda Sostible">
+    <div class="split-svg reveal">
+        <!-- SVG hand-drawn: trofeo cun lite (moeda) -->
+        <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <!-- Copa do trofeo -->
+            <path d="M65 44 L135 44 L125 128 Q100 142 75 128 Z"
+                  fill="rgba(231,111,81,0.13)" stroke="#e76f51" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Asas do trofeo -->
+            <path d="M65 55 Q50 55 48 72 Q44 95 65 108"
+                  stroke="#e76f51" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M135 55 Q150 55 152 72 Q156 95 135 108"
+                  stroke="#e76f51" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <!-- Estrela interior -->
+            <path d="M100 68 L104 80 L118 80 L107 88 L111 100 L100 92 L89 100 L93 88 L82 80 L96 80 Z"
+                  fill="rgba(244,162,97,0.5)" stroke="#f4a261" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Pescozo -->
+            <path d="M88 128 L88 155 M112 128 L112 155" stroke="#e76f51" stroke-width="2"
+                  stroke-linecap="round"/>
+            <!-- Base -->
+            <rect x="80" y="155" width="40" height="10" rx="3"
+                  fill="rgba(231,111,81,0.18)" stroke="#e76f51" stroke-width="2" stroke-linecap="round"/>
+            <rect x="68" y="165" width="64" height="13" rx="4"
+                  fill="rgba(231,111,81,0.15)" stroke="#e76f51" stroke-width="2" stroke-linecap="round"/>
+            <!-- Lites (moedas) ao redor -->
+            <circle cx="38" cy="118" r="13"
+                    fill="rgba(244,162,97,0.18)" stroke="#f4a261" stroke-width="1.8"
+                    stroke-dasharray="3 2" stroke-linecap="round"/>
+            <text x="32" y="122" font-family="monospace" font-size="11" fill="#f4a261">L</text>
+            <circle cx="162" cy="100" r="11"
+                    fill="rgba(244,162,97,0.18)" stroke="#f4a261" stroke-width="1.8"
+                    stroke-dasharray="3 2" stroke-linecap="round"/>
+            <text x="157" y="104" font-family="monospace" font-size="11" fill="#f4a261">L</text>
+            <circle cx="150" cy="145" r="10"
+                    fill="rgba(244,162,97,0.18)" stroke="#f4a261" stroke-width="1.8"
+                    stroke-dasharray="3 2" stroke-linecap="round"/>
+            <text x="145" y="149" font-family="monospace" font-size="11" fill="#f4a261">L</text>
+        </svg>
+    </div>
+    <div class="split-text">
+        <div class="eyebrow reveal">Recreo · Patio</div>
+        <h2 class="section-title reveal">Tenda<br><span class="ac">Sostible</span></h2>
+        <ul class="bullet-list reveal">
+            <li>Os <strong>lites</strong> acumulados serven para comprar ou alugar na Tenda.</li>
+            <li><strong>Alugueres para levar a casa</strong> — economía circular real.</li>
+            <li>Aberta no recreo con alumnado responsable como xestor.</li>
+            <li>O gasto en lites convértese en <strong>datos para as clases de matemáticas</strong>.</li>
+        </ul>
+        <div class="reveal" style="margin:0.9rem 0 0.6rem;padding:0.75rem 1rem;background:rgba(46,196,182,0.10);border-left:3px solid var(--ac);border-radius:0 8px 8px 0;">
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ac);margin-bottom:0.3rem;">Conexión coa aula · Ciencias Sociais</div>
+            <div style="font-size:0.92rem;line-height:1.45;">Consumo responsable, <strong>3R</strong> e <strong>economía circular</strong>. O alumnado pesa o material reutilizado nos xogos (cartón, tapóns, madeira) · aliñado co <strong>ODS 12</strong> · Produción e consumo responsables.</div>
+        </div>
+        <div class="reveal" style="display:flex; gap:var(--elem-gap); flex-wrap:wrap;">
+            <span class="tag">Moeda interna: o lite</span>
+            <span class="tag">Economía circular</span>
+            <span class="tag">Alumnado como xestor</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 9 · MATES CON BRAIS
+     ============================================================ -->
+<section class="slide slide-split" id="slide-9" role="region" aria-label="Mates en transición">
+    <div class="split-svg reveal">
+        <!-- SVG hand-drawn: regretas Cuisenaire (material manipulativo clásico) -->
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <!-- Mesa / liña base -->
+            <line x1="20" y1="210" x2="180" y2="210" stroke="#2c2418" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Regreta 1 · branca · valor 1 -->
+            <rect x="40" y="60" width="24" height="22" rx="3"
+                  fill="rgba(255,255,255,0.85)" stroke="#2c2418" stroke-width="2"
+                  stroke-linecap="round"/>
+            <!-- Regreta 2 · vermella · valor 2 -->
+            <rect x="40" y="86" width="48" height="22" rx="3"
+                  fill="rgba(231,111,81,0.55)" stroke="#2c2418" stroke-width="2"
+                  stroke-linecap="round"/>
+            <line x1="64" y1="86" x2="64" y2="108" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <!-- Regreta 3 · verde · valor 3 -->
+            <rect x="40" y="112" width="72" height="22" rx="3"
+                  fill="rgba(45,106,79,0.45)" stroke="#2c2418" stroke-width="2"
+                  stroke-linecap="round"/>
+            <line x1="64" y1="112" x2="64" y2="134" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <line x1="88" y1="112" x2="88" y2="134" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <!-- Regreta 4 · rosa-lila · valor 4 (cor de acento do slide) -->
+            <rect x="40" y="138" width="96" height="22" rx="3"
+                  fill="rgba(156,39,176,0.45)" stroke="#2c2418" stroke-width="2"
+                  stroke-linecap="round"/>
+            <line x1="64"  y1="138" x2="64"  y2="160" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <line x1="88"  y1="138" x2="88"  y2="160" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <line x1="112" y1="138" x2="112" y2="160" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <!-- Regreta 5 · amarela · valor 5 -->
+            <rect x="40" y="164" width="120" height="22" rx="3"
+                  fill="rgba(244,162,97,0.55)" stroke="#2c2418" stroke-width="2"
+                  stroke-linecap="round"/>
+            <line x1="64"  y1="164" x2="64"  y2="186" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <line x1="88"  y1="164" x2="88"  y2="186" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <line x1="112" y1="164" x2="112" y2="186" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <line x1="136" y1="164" x2="136" y2="186" stroke="#2c2418" stroke-width="1.2" opacity="0.55"/>
+            <!-- Etiqueta "1+2+3+4+5" · suxire que se está manipulando -->
+            <text x="40" y="38" font-family="monospace" font-size="14" fill="#9c27b0" opacity="0.55" letter-spacing="2">1 + 2 + 3 + 4 + 5</text>
+        </svg>
+    </div>
+    <div class="split-text">
+        <div class="eyebrow reveal">10:30 — 11:30 · Aula de 2.º</div>
+        <h2 class="section-title reveal">Mates en<br><span class="ac">transición</span></h2>
+        <ul class="bullet-list reveal">
+            <li>Aposta polo aspecto <strong>manipulativo</strong>: medida, conteo, comparación con material concreto.</li>
+            <li>Traballo por <strong>proxectos</strong> con datos reais do patio (SdA <em>Xogos na rúa</em>).</li>
+            <li>O exemplo que vedes é a aula de <strong>Brais (2.º)</strong>: un xeito concreto de aterrar esta liña.</li>
+            <li>Embaixadores de 5.º recollen os datos e pásanos a 2.º · "o que rexistramos onte, hoxe contámolo e representámolo".</li>
+        </ul>
+        <div class="quote-block reveal">
+            <div class="quote-text">Resolución de problemas con situacións reais e significativas para o alumnado.</div>
+            <div class="quote-author">Decreto 155/2022 · currículo galego de Primaria · área Matemáticas</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 10 · PATIOS DINS
+     ============================================================ -->
+<section class="slide" id="slide-10" role="region" aria-label="Patios DINS">
+    <div class="slide-content">
+        <div class="reveal">
+            <div class="eyebrow">11:30 — 12:00 · Patio</div>
+            <h2 class="section-title" style="margin-top:0.4rem;">Patios<br><span class="ac">DINS</span></h2>
+        </div>
+        <div class="dins-grid reveal">
+            <div class="dins-card">
+                <div class="dins-letter">D</div>
+                <div class="dins-word">Dinámicos</div>
+                <div class="dins-desc">Tarxetas rotativas con xogos distintos cada día por equipo. O movemento como dereito, non como premio.</div>
+            </div>
+            <div class="dins-card">
+                <div class="dins-letter">IN</div>
+                <div class="dins-word">Inclusivos</div>
+                <div class="dins-desc">Contratos de responsabilidade asinados: responsable de material, de seguridade, secretario, ecopatrulla.</div>
+            </div>
+            <div class="dins-card">
+                <div class="dins-letter">S</div>
+                <div class="dins-word">Sostibles</div>
+                <div class="dins-desc">Materiais propios, Tenda aberta, equipos con identidade: Bolboreta, Fantasma, Dragones, Cochinillxs…</div>
+            </div>
+        </div>
+        <div class="reveal" style="margin:0.9rem 0 0.6rem;padding:0.75rem 1rem;background:rgba(46,196,182,0.10);border-left:3px solid var(--ac);border-radius:0 8px 8px 0;">
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ac);margin-bottom:0.3rem;">Conexión · Tenda Sostible + Ciencias Sociais</div>
+            <div style="font-size:0.92rem;line-height:1.45;">A <strong>Tenda presta o material</strong> para os xogos do patio (rotación, coidado, devolución). Convivencia, normas e responsabilidade compartida → <strong>desenvolvemento sostible</strong> · ODS <strong>12</strong> (consumo), <strong>4</strong> (educación) e <strong>3</strong> (saúde).</div>
+        </div>
+        <div class="reveal" style="display:flex; gap:var(--elem-gap); flex-wrap:wrap;">
+            <span class="tag">Zonas rotativas por curso</span>
+            <span class="tag">Contratos asinados polo alumnado</span>
+            <span class="tag">Tenda Sostible operativa no recreo</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 11 · HORARIO · CONTEXTOS DE APRENDIZAXE
+     ============================================================ -->
+<section class="slide" id="slide-11" role="region" aria-label="Horario · Contextos de aprendizaxe">
+    <div class="slide-content" style="padding-top: clamp(0.7rem, 1.6vw, 1.2rem); padding-bottom: clamp(3.2rem, 6vh, 4.8rem);">
+        <div class="reveal" style="margin-bottom: clamp(0.4rem, 0.9vw, 0.7rem);">
+            <div class="eyebrow" style="--accent:#e91e63;">Horario · Contextos de aprendizaxe</div>
+            <h2 class="section-title" style="--accent:#e91e63; margin-top:0.25rem; font-size: clamp(1.4rem, 3vw, 2.2rem);">
+                O PDI vive <span class="ac" style="color:#e91e63;">en Contextos</span>
+            </h2>
+        </div>
+        <!-- Grella semanal: 9 filas (cabeceira + alborada + 6 sesións + recreo) × 6 columnas (hora + lun…ven) -->
+        <div class="sched-wrap reveal">
+            <div class="sched-grid">
+                <!-- Cabeceira de columnas -->
+                <div class="sched-cell col-head" style="text-align:left;">Hora</div>
+                <div class="sched-cell col-head">Luns</div>
+                <div class="sched-cell col-head">Martes</div>
+                <div class="sched-cell col-head">Mércores</div>
+                <div class="sched-cell col-head">Xoves</div>
+                <div class="sched-cell col-head">Venres</div>
+                <!-- Alborada — ocupa as 5 columnas de días -->
+                <div class="sched-cell time-cell" style="font-style:italic;">8:35 — 8:45<br>Alborada</div>
+                <div class="sched-cell recreo" style="grid-column: span 5;">Alborada · entrada libre</div>
+                <!-- Sesión 1 -->
+                <div class="sched-cell time-cell">8:45 — 9:30<br>Sesión 1</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Sesión 2 -->
+                <div class="sched-cell time-cell">9:30 — 10:15<br>Sesión 2</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Sesión 3 -->
+                <div class="sched-cell time-cell">10:15 — 11:00<br>Sesión 3</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Xoves S3: Contextos -->
+                <div class="sched-cell contextos">Contextos</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Sesión 4 -->
+                <div class="sched-cell time-cell">11:00 — 11:45<br>Sesión 4</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Xoves S4: Contextos -->
+                <div class="sched-cell contextos">Contextos</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Recreo — ocupa as 5 columnas de días -->
+                <div class="sched-cell time-cell" style="font-style:italic;">11:45 — 12:15<br>Recreo</div>
+                <div class="sched-cell recreo" style="grid-column: span 5;">Recreo</div>
+                <!-- Sesión 5 -->
+                <div class="sched-cell time-cell">12:15 — 13:00<br>Sesión 5</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Mércores S5: Contextos -->
+                <div class="sched-cell contextos">Contextos</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Sesión 6 -->
+                <div class="sched-cell time-cell">13:00 — 13:45<br>Sesión 6</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+                <!-- Mércores S6: Contextos -->
+                <div class="sched-cell contextos">Contextos</div>
+                <div class="sched-cell">Ordinaria</div>
+                <div class="sched-cell">Ordinaria</div>
+            </div>
+            <!-- Nota de pé -->
+            <div class="sched-note">
+                <strong>Contextos de aprendizaxe:</strong> Mércores sesións 5–6 (12:15–13:45) · Xoves sesións 3–4 (10:15–11:45). O PDI vai íntegro aquí. Non é actividade engadida: é o tempo lectivo ordinario dos Contextos.
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 12 · PDI DE ARTE
+     ============================================================ -->
+<section class="slide" id="slide-12" role="region" aria-label="PDI de Arte">
+    <div class="slide-content">
+        <div class="reveal">
+            <div class="eyebrow">12:30 — 13:00 · Salón de actos</div>
+            <h2 class="section-title" style="margin-top:0.4rem;">PDI de<br><span class="ac">Arte</span></h2>
+        </div>
+        <p class="sub reveal"><strong>Proxecto Documental Integrado xeral para todo o cole</strong>. Cada ciclo traballa, <strong>de xeito internivel</strong>, en <strong>contextos de aprendizaxe</strong> sobre aspectos da arte: biblioteca → aula → escenario. <strong style="color:var(--accent);">Vai íntegro dentro das horas de Contextos</strong> — non é actividade engadida. <em>A continuación veredes a presentación do <strong>segundo ciclo</strong>.</em></p>
+        <div class="pdi-steps reveal">
+            <div class="pdi-step">
+                <div class="pdi-step-num">01</div>
+                <div class="pdi-step-label">Investigar</div>
+                <div class="pdi-step-desc">Biblioteca como punto de partida. Tesouros viaxeiros. Retos de museos. Pintura como contexto.</div>
+            </div>
+            <div class="pdi-arrow">→</div>
+            <div class="pdi-step">
+                <div class="pdi-step-num">02</div>
+                <div class="pdi-step-label">Crear</div>
+                <div class="pdi-step-desc">Pintura como linguaxe. Producir, non só mirar. Retos para o profesorado. Obra propia.</div>
+            </div>
+            <div class="pdi-arrow">→</div>
+            <div class="pdi-step">
+                <div class="pdi-step-num">03</div>
+                <div class="pdi-step-label">Compartir</div>
+                <div class="pdi-step-desc">Socialización ante a comunidade educativa. O salón de actos como escenario común de toda a etapa.</div>
+            </div>
+        </div>
+        <div class="quote-block reveal">
+            <div class="quote-text">O PDI de Arte é, literalmente, o que une: arranca na biblioteca, atravesa as aulas e remata socializándose nun escenario común.</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SLIDE 13 · PECHE
+     ============================================================ -->
+<section class="slide" id="slide-13" role="region" aria-label="Peche">
+    <div class="peche-layout">
+        <div class="quote-mark reveal">"</div>
+        <div class="big-quote reveal">
+            O segredo da educación é ensinar de tal maneira que non se dean conta de que están aprendendo ata que é demasiado tarde.
+        </div>
+        <div class="quote-source reveal">Harold Edgerton</div>
+        <div style="height:1px; background:var(--border); width:55%; max-width:380px;" class="reveal"></div>
+        <p class="agradecemento reveal">
+            Grazas por vir.<br>
+            Este é o noso cole, estas son as nosas persoas.
+        </p>
+        <!-- SVG decorativo: tres puntos unidos cunha liña curva -->
+        <div class="reveal">
+            <svg viewBox="0 0 260 55" fill="none" xmlns="http://www.w3.org/2000/svg"
+                 style="width:clamp(180px,38vw,260px);height:auto;opacity:0.45;">
+                <circle cx="30"  cy="28" r="7" fill="rgba(45,106,79,0.3)" stroke="#2d6a4f" stroke-width="1.8"/>
+                <circle cx="130" cy="28" r="7" fill="rgba(45,106,79,0.3)" stroke="#2d6a4f" stroke-width="1.8"/>
+                <circle cx="230" cy="28" r="7" fill="rgba(45,106,79,0.3)" stroke="#2d6a4f" stroke-width="1.8"/>
+                <path d="M37 28 Q80 10 123 28"  stroke="#2d6a4f" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M137 28 Q180 46 223 28" stroke="#2d6a4f" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="reveal" style="display:flex;gap:var(--elem-gap);flex-wrap:wrap;justify-content:center;">
+            <span class="tag">Alborada · PAFHS</span>
+            <span class="tag">Superliga · Tenda</span>
+            <span class="tag">Patios DINS · PDI Arte</span>
+        </div>
+    </div>
+</section>
+
+
+<script>
+/* ============================================================
+   SlidePresentation: navegación, animacións, UI, atajos
+   ============================================================ */
+class SlidePresentation {
+    constructor() {
+        this.slides  = Array.from(document.querySelectorAll('.slide'));
+        this.total   = this.slides.length;
+        this.current = 0;
+        this.overviewOpen  = false;
+        this.presenterOpen = false;
+
+        /* Notas para o modo presentador (P) */
+        this.notes = [
+            "Portada. Benvida cálida. Presentar brevemente o equipo. Deixar o ambiente relaxado antes de comezar.",
+            "Cronograma. Percorrido verbal rápido — non ler cada ítem. Sinalar que isto é o que xa viron esta mañá.",
+            "Alborada. A entrada sen filas non é un capricho: é metodoloxía. As familias sosteñen este ritual de transición.",
+            "Despertar Máxico. HERVAT é un método posible, non obrigatorio. O esencial: 5 minutos de activación consciente antes da primeira tarefa cognitiva.",
+            "Asemblea. O DOG esíxeo explicitamente. Bassedas, Freinet e Vygotsky dan a base teórica. A asemblea non é de Infantil: é de calquera etapa.",
+            "Horto. Falar do impacto emocional de ver aos máis pequenos coas mans na terra. Kuo e Faber Taylor: 20 minutos verdes = mellora atencional demostrada.",
+            "Superliga. Deixar que quen coordina explique desde a súa experiencia. Esta diapositiva é un pé de conversa.",
+            "Tenda Sostible. O lite circula: gañase no Froitómetro e gástase na Tenda. Economía circular real, xestionada polo alumnado.",
+            "Mates en transición. Aposta manipulativa e por proxectos. A aula de Brais (2.º) é o exemplo: o dato real do patio de onte é o problema de hoxe. Decreto 155/2022 como ancoraxe normativa.",
+            "Patios DINS. O patio non é caos: cada equipo sabe o que lle toca hoxe e quen ten cada función. Mostrar a rotación.",
+            "Horario Contextos. A clave desta diapositiva: o PDI non lle quita tempo a nada. Mércores sesións 5-6 (12:15-13:45) e Xoves sesións 3-4 (10:15-11:45) — ese é o tempo dos Contextos. Sinalar as celas destacadas na grella.",
+            "PDI Arte. PDI XERAL para todo o cole: cada ciclo traballa internivelarmente sobre aspectos da arte dentro dos seus Contextos de aprendizaxe. A presentación que veredes a continuación é a do segundo ciclo. Arranca na biblioteca, atravesa as aulas e remata no escenario. Insistir: vai íntegro nas horas de Contextos, non é tempo extra.",
+            "Peche. Deixar a cita en silencio uns segundos. Despois, abrir a conversa: preguntas, intercambio, contacto."
+        ];
+
+        this.slideData = [
+            { title: 'Portada',                color: '#2d6a4f' },
+            { title: 'A xornada',              color: '#e76f51' },
+            { title: 'Alborada',               color: '#2d6a4f' },
+            { title: 'Despertar Máxico',       color: '#e76f51' },
+            { title: 'Asemblea en 1.º',        color: '#2196f3' },
+            { title: 'Horto · Infantil',       color: '#2d6a4f' },
+            { title: 'Superliga',              color: '#f4a261' },
+            { title: 'Tenda Sostible',         color: '#e76f51' },
+            { title: 'Mates en transición',    color: '#9c27b0' },
+            { title: 'Patios DINS',            color: '#2196f3' },
+            { title: 'Horario · Contextos',    color: '#e91e63' },
+            { title: 'PDI de Arte',            color: '#e91e63' },
+            { title: 'Peche',                  color: '#2d6a4f' }
+        ];
+
+        this.initNavDots();
+        this.initOverview();
+        this.initKeyboard();
+        this.initTouch();
+        this.initObserver();
+        this.goTo(0, false);
+    }
+
+    /* Ir a un slide concreto */
+    goTo(index, animate = true) {
+        if (index < 0 || index >= this.total) return;
+        this.current = index;
+        this.slides[index].scrollIntoView({ behavior: animate ? 'smooth' : 'instant' });
+        this.updateUI();
+        this.updatePresenterBar();
+    }
+
+    move(dir) { this.goTo(this.current + dir); }
+
+    /* Actualizar barra, contador e puntos */
+    updateUI() {
+        const pct  = ((this.current + 1) / this.total) * 100;
+        const fill = document.getElementById('progress-fill');
+        const pctEl = document.getElementById('progress-pct');
+        const numEl = document.getElementById('progress-num');
+        const dots = document.querySelectorAll('.nav-dot');
+        const color = this.slideData[this.current]?.color || '#2d6a4f';
+
+        if (fill) {
+            fill.style.width = pct + '%';
+            fill.style.background = color;
+        }
+        if (pctEl) {
+            pctEl.textContent = Math.round(pct) + '%';
+            pctEl.style.color = color;
+        }
+        if (numEl) numEl.textContent = (this.current + 1) + '/' + this.total;
+        dots.forEach((d, i) => {
+            d.classList.toggle('active', i === this.current);
+            if (i === this.current) d.style.background = this.slideData[i]?.color || '#2d6a4f';
+        });
+    }
+
+    /* Actualizar barra de presentador */
+    updatePresenterBar() {
+        const bar = document.getElementById('presenter-bar');
+        if (!bar) return;
+        bar.innerHTML = '<strong>Nota ' + (this.current + 1) + ':</strong> ' + (this.notes[this.current] || '');
+    }
+
+    /* Puntos laterais de navegación */
+    initNavDots() {
+        const nav = document.getElementById('nav-dots');
+        if (!nav) return;
+        this.slideData.forEach((d, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'nav-dot';
+            dot.setAttribute('aria-label', 'Ir ao slide ' + (i + 1) + ': ' + d.title);
+            dot.title = d.title;
+            dot.addEventListener('click', () => this.goTo(i));
+            nav.appendChild(dot);
+        });
+    }
+
+    /* Vista global de miniaturas */
+    initOverview() {
+        const grid = document.getElementById('overview-grid');
+        if (!grid) return;
+        this.slideData.forEach((d, i) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'overview-thumb';
+            thumb.innerHTML =
+                '<div class="overview-thumb-num">0' + (i < 9 ? '' : '') + (i + 1) + '</div>' +
+                '<div class="overview-thumb-title">' + d.title + '</div>' +
+                '<div class="overview-thumb-bar" style="background:' + d.color + ';"></div>';
+            thumb.addEventListener('click', () => {
+                this.toggleOverview(false);
+                setTimeout(() => this.goTo(i), 60);
+            });
+            grid.appendChild(thumb);
+        });
+    }
+
+    toggleOverview(force) {
+        const ov = document.getElementById('overview');
+        if (!ov) return;
+        this.overviewOpen = force !== undefined ? force : !this.overviewOpen;
+        ov.classList.toggle('active', this.overviewOpen);
+    }
+
+    /* Modo presentador */
+    togglePresenter() {
+        const bar = document.getElementById('presenter-bar');
+        if (!bar) return;
+        this.presenterOpen = !this.presenterOpen;
+        bar.classList.toggle('active', this.presenterOpen);
+    }
+
+    /* Navegación por teclado */
+    initKeyboard() {
+        document.addEventListener('keydown', e => {
+            if (this.overviewOpen) {
+                if (e.key === 'Escape' || e.key.toLowerCase() === 'g') {
+                    e.preventDefault();
+                    this.toggleOverview(false);
+                }
+                return;
+            }
+            switch (e.key) {
+                case 'ArrowRight':
+                case ' ':
+                case 'PageDown':
+                case 'Enter':
+                    e.preventDefault(); this.move(1); break;
+                case 'ArrowLeft':
+                case 'PageUp':
+                    e.preventDefault(); this.move(-1); break;
+                case 'Escape':
+                case 'g':
+                case 'G':
+                    e.preventDefault(); this.toggleOverview(); break;
+                case 'p':
+                case 'P':
+                    e.preventDefault(); this.togglePresenter(); break;
+            }
+        });
+    }
+
+    /* Navegación táctil (swipe) */
+    initTouch() {
+        let sx = 0, sy = 0;
+        document.addEventListener('touchstart', e => {
+            sx = e.changedTouches[0].screenX;
+            sy = e.changedTouches[0].screenY;
+        }, { passive: true });
+        document.addEventListener('touchend', e => {
+            const dx = sx - e.changedTouches[0].screenX;
+            const dy = Math.abs(sy - e.changedTouches[0].screenY);
+            if (Math.abs(dx) > 50 && dy < 80) this.move(dx > 0 ? 1 : -1);
+        }, { passive: true });
+    }
+
+    /* IntersectionObserver para animacións fade-up */
+    initObserver() {
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    this.current = this.slides.indexOf(entry.target);
+                    this.updateUI();
+                    this.updatePresenterBar();
+                }
+            });
+        }, { threshold: 0.5 });
+        this.slides.forEach(s => obs.observe(s));
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+
+/* ============================================================
+   CRONÓMETRO · iníciase ao cargar o HTML
+   ============================================================ */
+(function () {
+    const startTime = Date.now();
+    function tick() {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        const s = String(elapsed % 60).padStart(2, '0');
+        const el = document.getElementById('progress-time');
+        // textContent non afecta ao pseudo-element ::before (puro CSS)
+        if (el) el.textContent = m + ':' + s;
+    }
+    tick();
+    setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>

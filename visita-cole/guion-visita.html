@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guión da visita · CEIP Coirón Dena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #050505;
+    --bg2: #0d0d0d;
+    --card: #131313;
+    --elev: #1a1a1a;
+    --text: #ffffff;
+    --text2: #9aa0aa;
+    --text3: #5a5f6a;
+    --border: rgba(255,255,255,0.08);
+
+    --c-1: #00d4aa;
+    --c-2: #00d4ff;
+    --c-3: #f5a623;
+    --c-4: #ff6b6b;
+    --c-5: #a78bfa;
+    --c-6: #4ade80;
+
+    --pad: clamp(1rem, 3vw, 2.5rem);
+}
+body.light {
+    --bg: #f4f4f4;
+    --bg2: #eaeaea;
+    --card: #ffffff;
+    --elev: #f8f8f8;
+    --text: #111111;
+    --text2: #555555;
+    --text3: #999999;
+    --border: rgba(0,0,0,0.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background 0.3s, color 0.3s;
+    min-height: 100vh;
+}
+@media print {
+    body { background: white; color: black; font-size: 10pt; }
+    .no-print { display: none !important; }
+    .stop { page-break-inside: avoid; box-shadow: none !important; border: 1px solid #ddd !important; }
+    .header { padding: 1cm 0 0.5cm 0 !important; border-bottom: 2px solid #333 !important; }
+    .header-title { color: black !important; font-size: 22pt !important; }
+    .stop-time, .stop-num { color: black !important; }
+    h1, h2, h3 { color: black !important; }
+    .container { max-width: 100%; padding: 0; }
+}
+
+.container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: var(--pad);
+}
+
+.header {
+    padding: clamp(2rem, 5vw, 4rem) 0 clamp(1.25rem, 3vw, 2rem);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: clamp(1.75rem, 4vw, 3rem);
+    position: relative;
+}
+.header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--c-1);
+    margin-bottom: 0.85rem;
+}
+.header-eyebrow::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--c-1);
+}
+.header-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 0.5rem;
+}
+.header-title .accent { color: var(--c-1); }
+.header-sub {
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    color: var(--text2);
+    max-width: 65ch;
+    margin-top: 0.5rem;
+}
+
+.toolbar {
+    position: fixed;
+    top: clamp(0.75rem, 2vw, 1.5rem);
+    right: clamp(0.75rem, 2vw, 1.5rem);
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+}
+.tbtn {
+    width: 40px; height: 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.tbtn:hover { border-color: var(--text2); }
+.tbtn svg { width: 18px; height: 18px; }
+.tbtn .icon-sun { display: block; }
+.tbtn .icon-moon { display: none; }
+body.light .tbtn .icon-sun { display: none; }
+body.light .tbtn .icon-moon { display: block; }
+
+.summary {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+    margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+.summary-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text3);
+    margin-bottom: 0.85rem;
+}
+.summary-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 0.92rem;
+}
+.summary-row:last-child { border-bottom: 0; }
+.summary-time {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--c-1);
+    min-width: 8.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+.summary-label { color: var(--text); font-weight: 500; flex: 1; }
+.summary-row[data-c="2"] .summary-time { color: var(--c-2); }
+.summary-row[data-c="3"] .summary-time { color: var(--c-3); }
+.summary-row[data-c="4"] .summary-time { color: var(--c-4); }
+.summary-row[data-c="5"] .summary-time { color: var(--c-5); }
+.summary-row[data-c="6"] .summary-time { color: var(--c-6); }
+
+.timeline { position: relative; }
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 1.4rem;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    width: 2px;
+    background: linear-gradient(to bottom,
+        var(--c-1) 0%, var(--c-1) 12%,
+        var(--c-2) 12%, var(--c-2) 24%,
+        var(--c-3) 24%, var(--c-3) 38%,
+        var(--c-3) 38%, var(--c-3) 52%,
+        var(--c-5) 52%, var(--c-5) 65%,
+        var(--c-4) 65%, var(--c-4) 80%,
+        var(--c-2) 80%, var(--c-2) 92%,
+        var(--c-1) 92%, var(--c-1) 100%);
+    opacity: 0.35;
+    border-radius: 2px;
+}
+@media print { .timeline::before { display: none; } }
+
+.stop {
+    position: relative;
+    padding-left: clamp(2.75rem, 7vw, 3.5rem);
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+    padding-right: clamp(1rem, 2.5vw, 1.75rem);
+    padding-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+    transition: border-color 0.3s, transform 0.3s;
+}
+.stop:hover { border-color: var(--stop-c); transform: translateY(-1px); }
+.stop-num {
+    position: absolute;
+    left: clamp(0.9rem, 2vw, 1.1rem);
+    top: clamp(1.15rem, 2.5vw, 1.6rem);
+    width: clamp(1.85rem, 3.5vw, 2.25rem);
+    height: clamp(1.85rem, 3.5vw, 2.25rem);
+    border-radius: 50%;
+    background: var(--bg2);
+    border: 2px solid var(--stop-c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: var(--stop-c);
+    font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+    z-index: 1;
+}
+
+.stop-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.85rem;
+}
+.stop-time {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--stop-c);
+    font-size: clamp(0.78rem, 1.25vw, 0.92rem);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--stop-c) 12%, transparent);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+.stop-loc {
+    font-size: 0.78rem;
+    color: var(--text3);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+.stop-title {
+    font-size: clamp(1.15rem, 2.25vw, 1.55rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.85rem;
+}
+.stop-title .accent { color: var(--stop-c); }
+.stop-desc {
+    font-size: clamp(0.88rem, 1.4vw, 1rem);
+    color: var(--text2);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+.stop-desc strong { color: var(--text); font-weight: 600; }
+
+.stop-section {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed var(--border);
+}
+.stop-section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--stop-c);
+    margin-bottom: 0.55rem;
+}
+.stop-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.stop-section ul li {
+    padding: 0.3rem 0 0.3rem 1.1rem;
+    position: relative;
+    font-size: clamp(0.82rem, 1.3vw, 0.95rem);
+    color: var(--text);
+    line-height: 1.5;
+}
+.stop-section ul li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.85em;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--stop-c);
+}
+.stop-section ul li strong { font-weight: 600; }
+.stop-section ul li em {
+    font-style: normal;
+    color: var(--text2);
+    font-size: 0.92em;
+    margin-left: 0.35rem;
+}
+
+.players {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+.player {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    color: var(--text2);
+    font-weight: 500;
+}
+.player svg { width: 12px; height: 12px; stroke: var(--stop-c); }
+
+.script {
+    background: var(--bg2);
+    border-left: 3px solid var(--stop-c);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    margin-top: 0.85rem;
+    font-size: clamp(0.82rem, 1.3vw, 0.95rem);
+    color: var(--text);
+    line-height: 1.6;
+    font-style: italic;
+}
+.script::before {
+    content: 'Que dicimos';
+    display: block;
+    font-style: normal;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--stop-c);
+    margin-bottom: 0.35rem;
+}
+
+.note {
+    background: color-mix(in srgb, var(--c-3) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c-3) 30%, transparent);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    margin-top: 0.85rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+}
+.note svg {
+    width: 16px; height: 16px;
+    stroke: var(--c-3);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.footer {
+    margin-top: clamp(2rem, 4vw, 3.5rem);
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.6;
+}
+.footer-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--c-1);
+    margin-bottom: 0.65rem;
+}
+.footer ul { list-style: none; padding: 0; }
+.footer ul li { padding: 0.25rem 0 0.25rem 1.1rem; position: relative; }
+.footer ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0; top: 0.25rem;
+    color: var(--c-1);
+    font-weight: 700;
+}
+
+@media (max-width: 600px) {
+    .summary-row { flex-direction: column; gap: 0.15rem; align-items: flex-start; }
+    .summary-time { min-width: auto; }
+}
+</style>
+</head>
+<body class="light">
+
+<div class="toolbar no-print">
+    <button class="tbtn" onclick="window.print()" aria-label="Imprimir">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    </button>
+    <button class="tbtn" onclick="document.body.classList.toggle('light')" aria-label="Cambiar tema">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+</div>
+
+<div class="container">
+
+    <header class="header">
+        <div class="header-eyebrow">Guión interno</div>
+        <h1 class="header-title">Visita pedagóxica<br><span class="accent">CEIP Coirón Dena</span></h1>
+        <p class="header-sub">Cronograma detallado da visita guiada con alumnado e da charla informal posterior. Secuencia, espazos, persoas e mensaxes clave en cada parada.</p>
+    </header>
+
+    <section class="summary">
+        <div class="summary-title">Resumo da xornada</div>
+        <div class="summary-row" data-c="1"><div class="summary-time">8:35 — 8:45</div><div class="summary-label">Alborada · entrada libre con familias</div></div>
+        <div class="summary-row" data-c="6"><div class="summary-time">8:45 — 8:50</div><div class="summary-label">Despertar Máxico · 5' activadores (PAFHS)</div></div>
+        <div class="summary-row" data-c="2"><div class="summary-time">8:50 — 9:30</div><div class="summary-label">Asemblea en 1.º curso</div></div>
+        <div class="summary-row" data-c="6"><div class="summary-time">9:30 — 10:00</div><div class="summary-label">Visita á aula de Educación Infantil</div></div>
+        <div class="summary-row" data-c="3"><div class="summary-time">10:00 — 10:30</div><div class="summary-label">Aula 5.º B · Superliga Saudable + introducción á Tenda</div></div>
+        <div class="summary-row" data-c="3"><div class="summary-time">10:30 — 11:30</div><div class="summary-label">Aula 2.º · recollida datos Superliga + clase mates manipulativas con Brais</div></div>
+        <div class="summary-row" data-c="5"><div class="summary-time">11:30 — 12:00</div><div class="summary-label">Recreo · Patios DINS e Tenda Sostible en acción</div></div>
+        <div class="summary-row" data-c="1"><div class="summary-time">12:00 — 12:30</div><div class="summary-label">Charla informal con café + presentación de propostas</div></div>
+        <div class="summary-row" data-c="2"><div class="summary-time">12:30 — 13:00</div><div class="summary-label">Salón de actos · presentación PDI Arte (segundo ciclo)</div></div>
+        <div class="summary-row" data-c="1"><div class="summary-time">13:00</div><div class="summary-label">Despedida</div></div>
+    </section>
+
+    <main class="timeline">
+
+        <!-- Parada 1: Alborada (8:35–8:45) -->
+        <article class="stop" style="--stop-c: var(--c-1);">
+            <div class="stop-num">1</div>
+            <div class="stop-head">
+                <span class="stop-time">8:35 — 8:45</span>
+                <span class="stop-loc">Porche da entrada · aulas</span>
+            </div>
+            <h2 class="stop-title">Tempo de <span class="accent">Alborada</span></h2>
+            <p class="stop-desc">O alumnado entra libremente durante 10 minutos. Sen filas. Cada quen vai chegando á súa aula, deixa a mochila e atópase coa aula con calma. As familias <strong>acompañan aos máis pequenos ata o porche</strong>, onde quedan e entregan ao alumnado ao centro. Entrada escalonada, sen ruído, en ritmo propio.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">Que ven os visitantes</div>
+                <ul>
+                    <li>Entrada amable e escalonada · sen aglomeracións.</li>
+                    <li>Familias presentes ata o porche · transición tranquila do exterior á aula.</li>
+                    <li>Alumnado con autonomía: deixa a mochila, sauda, vai entrando ao seu ritmo.</li>
+                </ul>
+            </div>
+            <div class="script">"Comezamos a xornada deixando que os nenos e nenas regulen o ritmo de entrada. As familias acompañan ata o porche e desde aí o alumnado entra ao seu ritmo. É a forma de pasar do bus ou do coche á aula con presenza."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Titoras/es de cada aula</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Familias acompañantes</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Alumnado de toda a etapa</span>
+            </div>
+        </article>
+
+        <!-- Parada 2: Despertar Máxico (8:45–8:50) -->
+        <article class="stop" style="--stop-c: var(--c-6);">
+            <div class="stop-num">2</div>
+            <div class="stop-head">
+                <span class="stop-time">8:45 — 8:50</span>
+                <span class="stop-loc">Aulas · 5 minutos tras a campá</span>
+            </div>
+            <h2 class="stop-title">Despertar Máxico · <span class="accent">5 minutos activadores</span></h2>
+            <p class="stop-desc">Tras a campá, <strong>5 minutos</strong> de rutina activa en cada aula que prepara corpo e mente antes de comezar. Cada titoría organiza o seu Despertar Máxico ao seu xeito: <strong>ás veces séguese o método HERVAT</strong> e outras adoptan formatos máis libres (movemento, respiración, atención). Está integrado no <strong>Plan de Actividade Física e Hábitos Saudables (PAFHS)</strong> do centro.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">Que ven os visitantes</div>
+                <ul>
+                    <li>Activación dos sentidos antes de calquera tarefa cognitiva: respiración, movemento, atención.</li>
+                    <li>Cando se segue o método HERVAT: <strong>H</strong>idratación · <strong>E</strong>quilibrio · <strong>R</strong>espiración · <strong>V</strong>isión · <strong>A</strong>udición · <strong>T</strong>acto.</li>
+                    <li>Transición consciente desde a Alborada á primeira sesión.</li>
+                </ul>
+            </div>
+            <div class="stop-section">
+                <div class="stop-section-title">Por que o facemos · marco teórico</div>
+                <ul>
+                    <li><strong>Ortiz (2018)</strong> · Método HERVAT · "é un estado óptimo do organismo que favorece os procesos atencionais básicos e, consecuentemente, os procesos cognitivos".</li>
+                    <li><strong>Guillén (2018)</strong> · <em>Cerebro y educación. Propuestas para una escuela afectiva</em> · "os beneficios estenderíanse cara ao desenvolvemento do control inhibitorio, memoria de traballo ou á flexibilidade cognitiva".</li>
+                </ul>
+            </div>
+            <div class="script">"Tras a campá, cinco minutos. Non son cinco minutos calquera: respondemos a Ortiz e a Guillén. Ás veces facémolo seguindo o método HERVAT, outras con formato libre, pero o obxectivo é sempre o mesmo: activar control inhibitorio, memoria de traballo e atención. Despois da Alborada, é o paso á aula consciente."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Titoras/es</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Coordinación PAFHS</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Alumnado da aula</span>
+            </div>
+        </article>
+
+        <article class="stop" style="--stop-c: var(--c-2);">
+            <div class="stop-num">3</div>
+            <div class="stop-head">
+                <span class="stop-time">8:50 — 9:30</span>
+                <span class="stop-loc">Aula de 1.º curso</span>
+            </div>
+            <h2 class="stop-title">Asemblea en <span class="accent">1.º</span></h2>
+            <p class="stop-desc">Os visitantes entran na aula de primeiro a ver como se desenvolve a asemblea de mañá. É un dos espazos máis representativos do papel activo do alumnado: organizan o día, comparten estado de ánimo e introducen o traballo da xornada. <strong>Mantemos a asemblea como rutina diaria en 1.º para dar continuidade metodolóxica ao traballo de Infantil e evitar unha ruptura brusca entre etapas</strong>.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">A destacar</div>
+                <ul>
+                    <li>Alumnado xestionando a quenda de palabra.</li>
+                    <li>Presentación do día e dos retos da semana.</li>
+                    <li>Conexión con outros proxectos do centro (biblioteca, Superliga, patios).</li>
+                    <li>Continuidade real co que xa facían en 5 anos: rutina de encontro, oralidade en grupo, planificación cooperativa.</li>
+                </ul>
+            </div>
+            <div class="stop-section">
+                <div class="stop-section-title">Por que o facemos · marco normativo e teórico</div>
+                <ul>
+                    <li><strong>Resolución do 5 de xuño de 2025</strong> · DOG n.º 112, 13/06/2025, p. 33093 · "La planificación del primer ciclo de educación primaria se basará en metodologías que no supongan una ruptura abrupta respecto de las empleadas durante la etapa de educación infantil".</li>
+                    <li><strong>Bassedas, Huguet e Solé</strong> · <em>Aprender y enseñar en Educación Infantil</em> (Graó) · a asemblea como rutina estruturante que constrúe cohesión de grupo, dá seguridade e organiza tempo e espazo.</li>
+                    <li><strong>Freinet</strong> · técnicas MCEP · a asemblea como institución democrática para presentar problemas, planificar proxectos e revisar a vida do grupo — coherente en calquera etapa, non só en Infantil.</li>
+                    <li><strong>Vygotsky</strong> · a linguaxe oral en grupo activa a zona de desenvolvemento próximo: as funcións superiores aparecen primeiro no plano interpersoal antes de interiorizarse.</li>
+                </ul>
+            </div>
+            <div class="script">"En primeiro xa son eles os que abren o día. A asemblea non é un trámite: é onde se decide e se acorda. E mantémola precisamente porque acaban de chegar de Infantil — a normativa galega pídenos non romper bruscamente coa metodoloxía da etapa anterior, e nós tomámolo en serio. Aquí Bassedas, Freinet e Vygotsky danse a man."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Titoría 1.º</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Alumnado de 1.º</span>
+            </div>
+        </article>
+
+        <article class="stop" style="--stop-c: var(--c-6);">
+            <div class="stop-num">4</div>
+            <div class="stop-head">
+                <span class="stop-time">9:30 — 10:00</span>
+                <span class="stop-loc">Aula de Infantil · horto escolar</span>
+            </div>
+            <h2 class="stop-title">Infantil · visita ao <span class="accent">horto</span></h2>
+            <p class="stop-desc">Os visitantes acompañan ao alumnado de Infantil ao <strong>horto escolar</strong>. Os máis pequenos do cole son os protagonistas dese contacto directo coa natureza: <strong>tocan, observan, plantan, regan</strong>. Antes ou despois do horto, vese tamén como funciona a aula (recantos, xogo simbólico, materiais manipulativos) e a continuidade metodolóxica coa primaria.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">A destacar</div>
+                <ul>
+                    <li>Horto escolar · plantado, observación, coidado, recollida.</li>
+                    <li><strong>Voz Natura</strong> · programa de educación ambiental no que participa o centro · reforza o vínculo co medio.</li>
+                    <li>Aprendizaxe a través do corpo e dos sentidos: tocar, oler, comparar.</li>
+                    <li>Recantos e ambientes de aprendizaxe na aula.</li>
+                    <li>Equipo da Superliga "EI 3 anos / 4 anos / 5 anos" tamén suma puntos.</li>
+                    <li>Continuidade infantil → primaria sen rupturas bruscas.</li>
+                </ul>
+            </div>
+            <div class="stop-section">
+                <div class="stop-section-title">Reto a longo prazo · a nivel de centro</div>
+                <p>Como claustro, temos a idea de <strong>transformar o patio nun espazo máis verde</strong>. Unha proposta concreta que manexamos: <strong>eliminar a zona do campo de fútbol</strong> actual e convertela nun espazo verde con <strong>céspede natural</strong>, trasladando a zona deportiva ao outro lado. É unha aspiración a longo prazo, alineada coa filosofía que se ve aquí no horto.</p>
+            </div>
+            <div class="stop-section">
+                <div class="stop-section-title">Por que o facemos · marco normativo e teórico</div>
+                <ul>
+                    <li><strong>Decreto 150/2022</strong> · currículo galego de Infantil · área "Descubrimento e exploración do contorno": o desenvolvemento require interaccións espontáneas co medio.</li>
+                    <li><strong>LOMLOE</strong> · áreas "Crecemento en harmonía" e "Descubrimento e exploración do contorno": a aprendizaxe na etapa ocorre a través de interaccións co medio físico e natural.</li>
+                    <li><strong>Louv (2005)</strong> · <em>Last Child in the Woods</em> · concepto de "trastorno por déficit de natureza": a desconexión do medio natural impacta atención, estrés e ánimo na infancia.</li>
+                    <li><strong>Freire (2011)</strong> · <em>Educar en verde</em> (Graó) · o contacto coa natureza favorece regulación emocional, empatía e vínculo social, sobre todo nas idades temperás.</li>
+                    <li><strong>Kuo &amp; Faber Taylor</strong> · Universidade de Illinois · 20 minutos en contorna verde melloran atención e concentración en nenos e nenas.</li>
+                </ul>
+            </div>
+            <div class="script">"Cos máis pequenos do cole imos ao horto. Non é un complemento decorativo: é unha aposta consciente. Louv, Freire, Kuo e a propia normativa galega coinciden en que o contacto co vivo non é opcional na infancia. E en Infantil a Superliga tamén se adapta: contan con tarxeta propia e os equipos son por aula. Igual de importantes que primaria."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Titoría infantil</span>
+            </div>
+        </article>
+
+        <article class="stop" style="--stop-c: var(--c-3);">
+            <div class="stop-num">5</div>
+            <div class="stop-head">
+                <span class="stop-time">10:00 — 10:30</span>
+                <span class="stop-loc">Aula de 5.º B</span>
+            </div>
+            <h2 class="stop-title">Superliga Saudable + <span class="accent">Tenda Sostible</span></h2>
+            <p class="stop-desc">Os alumnos de 5.º explican aos visitantes en que consiste a Superliga: os <strong>tres xeitos de gañar puntos</strong> (Froitómetro, AF en horario lectivo e simulacros de mochila) e como se traducen en <strong>lites</strong>. A continuación introducen a Tenda Sostible que verán despois durante o recreo.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">A destacar</div>
+                <ul>
+                    <li>Equipos por curso: Bolboreta, Mundial, Drakis, Fantasma, Xirasois, A Tribo…</li>
+                    <li>Tarxeta de crédito virtual con QR por clase.</li>
+                    <li>Conexión Superliga ↔ Tenda: o lite é a moeda.</li>
+                </ul>
+            </div>
+            <div class="stop-section">
+                <div class="stop-section-title">Conexión coa aula · Matemáticas</div>
+                <p>Os datos da Superliga non quedan no patio: aterran nas clases de mates con sentido en dous niveis.</p>
+                <ul>
+                    <li><strong>2.º</strong> · mates manipulativas con datos reais do patio (SdA <em>Xogos na rúa</em>): conteo, comparación, medida.</li>
+                    <li><strong>5.º</strong> · SdA <strong>Mochilas saudables</strong> · UD <em>Decimais</em> (8 sesións): regra do <strong>10%</strong> (recomendación OMS para o peso da mochila), conversión <strong>fracción ↔ decimal ↔ porcentaxe</strong>, suma e resta de decimais aplicadas a peso real.</li>
+                </ul>
+                <p style="margin-top:8px;font-size:0.92em;color:var(--cor-suave,#555);"><em>Criterios de avaliación LOMLOE (5.º · Matemáticas)</em>: CA1.2 · CA2.2 · CA2.7 · CA2.8.</p>
+            </div>
+            <div class="script">"5.º B vai contarvos como funciona a liga. Despois acompañan á aula de 2.º. Na aula de Brais falarán da situación de aprendizaxe <em>Xogo e Pantalla</em>, e farán problemas ou razoamentos matemáticos en base aos datos reais, dando resposta así ás liñas de actuación do Decreto 155/2022."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Titoría 5.º B</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Coordinación Superliga</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Alumnado embaixador 5.º B</span>
+            </div>
+        </article>
+
+        <article class="stop" style="--stop-c: var(--c-3);">
+            <div class="stop-num">6</div>
+            <div class="stop-head">
+                <span class="stop-time">10:30 — 11:30</span>
+                <span class="stop-loc">Aula de 2.º curso</span>
+            </div>
+            <h2 class="stop-title">Datos da Superliga + <span class="accent">mates con Brais</span></h2>
+            <p class="stop-desc">O alumnado embaixador de 5.º acompaña aos visitantes á aula de 2.º para a recollida de datos da Superliga (froitas, minutos, simulacros). Despois quedan na clase de matemáticas manipulativas con Brais, vinculada á situación de aprendizaxe <strong>Xogos na rúa</strong>.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">Que se ve</div>
+                <ul>
+                    <li>Recollida real de datos por equipos: como se traducen en puntos.</li>
+                    <li>Mates manipulativas: medida, conteo, comparación con material concreto.</li>
+                    <li>Cabra á SdA <em>Xogos na rúa</em> · matemáticas con xogos do patio.</li>
+                </ul>
+            </div>
+            <div class="script">"Aquí pechamos un círculo: o que se rexistrou no patio onte é o que hoxe se conta, se compara e se representa nesta aula."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Brais (mestre)</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Alumnado 2.º</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Embaixadores 5.º B</span>
+            </div>
+            <div class="note">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div>Os visitantes poden quedar nesta aula ou desprazarse antes para non perder o inicio do recreo. Decidir antes do día.</div>
+            </div>
+            <div class="note">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div><strong>Pendente · proposta competencial a desenvolver</strong> — produto final da SdA: deseño dun xogo interactivo a modo de ruta de orientación con xogos populares por estacións, no que o alumnado de 2.º traballa co alumnado de Infantil o <em>control do tempo</em>. Concretar a partir do currículo de 2.º (Decreto 155/2022). A valorar máis adiante.</div>
+            </div>
+        </article>
+
+        <article class="stop" style="--stop-c: var(--c-5);">
+            <div class="stop-num">7</div>
+            <div class="stop-head">
+                <span class="stop-time">11:30 — 12:00</span>
+                <span class="stop-loc">Patio · zonas DINS e Tenda</span>
+            </div>
+            <h2 class="stop-title">Recreo · <span class="accent">Patios DINS</span> + Tenda Sostible</h2>
+            <p class="stop-desc">Tempo de descanso para os visitantes e oportunidade de ver o recreo en marcha: <strong>tarxetas rotativas con xogos por equipo</strong>, alumnado con contratos de responsabilidade (material, seguridade, secretario, ecopatrulla) e a <strong>Tenda Sostible</strong> aberta para préstamos.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">A destacar</div>
+                <ul>
+                    <li>Zonas e tarxetas rotativas por curso. <em>(D, IN, S)</em></li>
+                    <li>Equipos con identidade: Bolboreta, Fantasma, Dragones, Cochinillxs…</li>
+                    <li>Alumnado responsable: contratos asinados con funcións claras.</li>
+                    <li>Tenda Sostible operativa con cobro en lites.</li>
+                    <li><strong>Patios DINS ↔ Tenda</strong>: a Tenda <strong>presta material</strong> para os xogos do patio (rotación, coidado, devolución).</li>
+                </ul>
+            </div>
+            <div class="stop-section">
+                <div class="stop-section-title">Conexión coa aula · Ciencias Sociais e desenvolvemento sostible</div>
+                <p>A Tenda non é só un xogo económico: é o vehículo para traballar <strong>consumo responsable</strong>, <strong>economía circular e as 3R</strong>. O alumnado pesa o material reutilizado nos xogos (cartón, tapóns, madeira, latas) e calcula os <strong>kg de residuos evitados</strong> pola aula.</p>
+                <p>Os <strong>Patios DINS</strong> entran aquí: a Tenda presta o material aos xogos do patio, e os contratos do recreo traballan <strong>convivencia, normas e responsabilidade compartida</strong>. Patio e Tenda son dúas caras do mesmo proxecto.</p>
+                <p>Aliñado cos ODS <strong>12</strong> · consumo responsable, <strong>4</strong> · educación de calidade e <strong>3</strong> · saúde e benestar. Competencias clave: <em>CE</em>, <em>CPSAA</em>, <em>STEM</em>, <em>CC</em>.</p>
+            </div>
+            <div class="script">"Mentres tomamos algo, podedes mirarlles xogar. O patio non é caos: cada equipo sabe cal é a súa tarxeta hoxe e quen ten cada función."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Coordinación Patios DINS</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Coordinación Tenda</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Alumnado de toda a etapa</span>
+            </div>
+        </article>
+
+        <article class="stop" style="--stop-c: var(--c-1);">
+            <div class="stop-num">8</div>
+            <div class="stop-head">
+                <span class="stop-time">12:00 — 12:30</span>
+                <span class="stop-loc">Sala de profesorado · café</span>
+            </div>
+            <h2 class="stop-title">Charla informal con <span class="accent">café</span></h2>
+            <p class="stop-desc">Volvemos á sala. Mentres os visitantes toman algo, a directora e os coordinadores presentan as propostas que viron co apoio da <strong>presentación HTML</strong> (<code>presentacion-cafe.html</code>). Conversación aberta, preguntas, intercambio.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">Estrutura sugerida (10 slides · 30')</div>
+                <ul>
+                    <li>1. Portada · benvida.</li>
+                    <li>2. Visión de centro: biblioteca · transversalidade · alumnado.</li>
+                    <li>3. Alborada + HERVAT.</li>
+                    <li>4. DENA Activa (paraugas).</li>
+                    <li>5. Superliga Saudable.</li>
+                    <li>6. Tenda Sostible.</li>
+                    <li>7. Patios DINS.</li>
+                    <li>8. SdAs competenciais (xogos na rúa, mochilas).</li>
+                    <li>9. PDI de Arte (segundo ciclo).</li>
+                    <li>10. Peche · liña común + alumnado protagonista.</li>
+                </ul>
+            </div>
+            <div class="script">"A presentación non é para ler en voz alta: serve de apoio mentres conversamos. Cada slide é un pé para que calquera de nós comente o seu proxecto desde a súa experiencia."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Dirección</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Coordinadores: Superliga · Patios · Tenda · PDI</span>
+            </div>
+            <div class="note">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div>Comprobar antes que o portátil ten o ficheiro <code>presentacion-cafe.html</code> aberto e en pantalla completa (tecla F11). Navega con frechas ou espazo.</div>
+            </div>
+        </article>
+
+        <article class="stop" style="--stop-c: var(--c-2);">
+            <div class="stop-num">9</div>
+            <div class="stop-head">
+                <span class="stop-time">12:30 — 13:00</span>
+                <span class="stop-loc">Salón de actos</span>
+            </div>
+            <h2 class="stop-title">PDI de <span class="accent">Arte</span> · segundo ciclo</h2>
+            <p class="stop-desc">Os visitantes asisten á presentación que prepararon o segundo ciclo no marco do <strong>Proxecto Documental Integrado de Arte</strong>: investigación dende a biblioteca, produción propia e socialización ante a comunidade. <strong>O PDI vai íntegro dentro das horas de Contextos de aprendizaxe</strong> — non é unha actividade engadida, é horario lectivo.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">A destacar</div>
+                <ul>
+                    <li>Biblioteca como punto de partida da investigación.</li>
+                    <li>Tesouros viaxeiros, retos de museos, retos para profes.</li>
+                    <li>Pintura como linguaxe: producir, non só mirar.</li>
+                </ul>
+            </div>
+            <div class="stop-section">
+                <div class="stop-section-title">Onde encaixa no horario · Contextos de aprendizaxe</div>
+                <ul>
+                    <li>Alborada de 8:35 a 8:45 · A xornada lectiva organízase en <strong>6 sesións de 45 minutos</strong> (4 antes do recreo + 2 despois) · saída ás 13:45.</li>
+                    <li><strong>Mércores</strong> · sesións 5 e 6 (despois do recreo) · 12:15 — 13:45 · Contextos.</li>
+                    <li><strong>Xoves</strong> · sesións 3 e 4 (antes do recreo) · 10:15 — 11:45 · Contextos.</li>
+                    <li>Ese é o tempo no que se traballa o PDI ao longo do curso.</li>
+                </ul>
+            </div>
+            <div class="script">"Pechamos a visita aquí porque o PDI de Arte é, literalmente, o que une: arranca na biblioteca, atravesa as aulas e remata socializándose nun escenario común. E algo importante: o PDI non é un engadido. Vai íntegro dentro das horas de Contextos de aprendizaxe — mércores despois do recreo e xoves antes. Iso é o que lle dá continuidade durante todo o curso."</div>
+            <div class="players">
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Coordinación PDI</span>
+                <span class="player"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Alumnado segundo ciclo</span>
+            </div>
+        </article>
+
+        <article class="stop" style="--stop-c: var(--c-1);">
+            <div class="stop-num">10</div>
+            <div class="stop-head">
+                <span class="stop-time">13:00</span>
+                <span class="stop-loc">Vestíbulo</span>
+            </div>
+            <h2 class="stop-title"><span class="accent">Despedida</span></h2>
+            <p class="stop-desc">Agradecemento, intercambio de contactos, ofrecemento de continuar o intercambio (visitas cruzadas, formación, materiais compartidos). Entrega opcional de algún recordo do centro.</p>
+            <div class="stop-section">
+                <div class="stop-section-title">Para ofrecer</div>
+                <ul>
+                    <li>URL do espazo educativo común con materiais.</li>
+                    <li>Posibilidade de visita cruzada (que vaiamos ao seu cole).</li>
+                    <li>Contacto directo da dirección e dos coordinadores.</li>
+                </ul>
+            </div>
+        </article>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-title">Checklist previo · véspera da visita</div>
+        <ul>
+            <li>Aula 5.º B preparada con tarxetas, ranking e tarxeta de crédito visible.</li>
+            <li>Alumnado embaixador de 5.º B avisado das súas funcións.</li>
+            <li>Brais informado da hora exacta de chegada do grupo a 2.º.</li>
+            <li>Tenda Sostible aberta no recreo, con xogos á vista.</li>
+            <li>Portátil da sala de profes con <code>presentacion-cafe.html</code> e <code>guion-visita.html</code> abertos.</li>
+            <li>Café preparado para 12:00 na sala de profesorado.</li>
+            <li>Salón de actos reservado para o PDI ás 12:30 e ensaiado.</li>
+            <li>Persoas de referencia: dirección, coordinador/a Superliga, Patios DINS, Tenda, PDI.</li>
+        </ul>
+    </footer>
+
+</div>
+
+</body>
+</html>
