@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circuito de Educación Vial · Día del Medio Ambiente · CEIP Coirón Dena</title>
+<style>
+  :root{
+    --tinta:#1f2937; --suave:#6b7280; --linea:#e5e7eb;
+    --verde:#16a34a; --verde-osc:#065f46; --crema:#f8fafc;
+    --azul:#2563eb; --azul-bg:#dbeafe; --rojo:#dc2626;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);background:#eef2f6;padding:24px;line-height:1.45}
+  .hoja{max-width:1240px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.08);overflow:hidden}
+  header{background:linear-gradient(120deg,#065f46,#16a34a);color:#fff;padding:22px 30px;display:flex;align-items:center;gap:16px}
+  header h1{font-size:22px;font-weight:700;letter-spacing:.2px}
+  header p{font-size:13px;opacity:.92;margin-top:2px}
+  .cuerpo{display:grid;grid-template-columns:1.6fr 1fr;gap:0}
+  .mapa{padding:18px}
+  /* contenedor de foto + marcadores */
+  .foto{position:relative;width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--linea);line-height:0}
+  .foto img{width:100%;display:block}
+  /* trazo de refuerzo del recorrido (sutil, la foto ya trae la línea roja) */
+  .marca{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;z-index:3}
+  .pin{width:30px;height:30px;border-radius:50%;background:var(--verde);color:#fff;border:3px solid #fff;
+       box-shadow:0 2px 6px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;line-height:1}
+  .pin.alt{background:var(--azul)}
+  .pin.stop{background:var(--rojo)}
+  .etq{background:rgba(255,255,255,.92);color:#111;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+  .flujo{position:absolute;z-index:2;color:#fff;font-size:22px;font-weight:900;transform:translate(-50%,-50%);text-shadow:0 0 4px rgba(0,0,0,.8)}
+  /* panel lateral */
+  .panel{padding:18px 24px 18px 14px;border-left:1px solid var(--linea)}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--verde);margin:14px 0 8px}
+  h2:first-child{margin-top:0}
+  ol.estaciones{list-style:none}
+  ol.estaciones li{position:relative;padding:7px 0 7px 36px;font-size:12.7px;border-bottom:1px dashed var(--linea)}
+  ol.estaciones li:last-child{border-bottom:none}
+  ol.estaciones li .n{position:absolute;left:0;top:6px;width:24px;height:24px;border-radius:50%;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;background:var(--verde)}
+  ol.estaciones li .n.alt{background:var(--azul)} ol.estaciones li .n.stop{background:var(--rojo)}
+  ol.estaciones b{color:var(--tinta)}
+  .bloque{font-size:12.3px;background:var(--crema);border:1px solid var(--linea);border-radius:8px;padding:10px 12px;margin-top:6px}
+  .bloque b{color:var(--verde)}
+  .roles span{display:inline-block;background:var(--azul-bg);color:var(--azul);border-radius:20px;padding:3px 10px;font-size:11.5px;margin:3px 4px 0 0;font-weight:600}
+  footer{padding:12px 30px 18px;font-size:11px;color:var(--suave);border-top:1px solid var(--linea);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+  @media print{
+    @page{size:A4 landscape;margin:8mm}
+    body{background:#fff;padding:0}
+    .hoja{box-shadow:none;border-radius:0;max-width:none}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+  @media(max-width:860px){.cuerpo{grid-template-columns:1fr}.panel{border-left:none;border-top:1px solid var(--linea)}}
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <header>
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/>
+      <circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>
+    </svg>
+    <div>
+      <h1>Circuito de Educación Vial sobre Ruedas</h1>
+      <p>Día del Medio Ambiente · Movilidad sostenible · CEIP Coirón Dena (Meaño) · Recorrido marcado en rojo</p>
+    </div>
+  </header>
+
+  <div class="cuerpo">
+
+    <!-- ============ FOTO AÉREA + ESTACIONES ============ -->
+    <div class="mapa">
+      <div class="foto">
+        <img src="patio-aereo.jpg" alt="Vista aérea del patio con el recorrido en rojo">
+
+        <!-- marcadores de estación (posición en % sobre la foto) -->
+        <div class="marca" style="left:31%;top:57%"><div class="pin">1</div><div class="etq">Salida · Aparcabicis</div></div>
+        <div class="marca" style="left:45%;top:9.5%"><div class="pin">2</div><div class="etq">Recta · slalom</div></div>
+        <div class="marca" style="left:64%;top:21%"><div class="pin alt">3</div><div class="etq">Curva amplia</div></div>
+        <div class="marca" style="left:40%;top:36%"><div class="pin alt">4</div><div class="etq">Lazo · destreza</div></div>
+        <div class="marca" style="left:47.5%;top:57%"><div class="pin">5</div><div class="etq">Paso cebra · semáforo</div></div>
+        <div class="marca" style="left:28.5%;top:41%"><div class="pin stop">6</div><div class="etq">Cruce · STOP</div></div>
+
+        <!-- flechas de sentido sobre el trazado -->
+        <div class="flujo" style="left:52%;top:8%">›</div>
+        <div class="flujo" style="left:65%;top:30%">›</div>
+        <div class="flujo" style="left:34%;top:62%">‹</div>
+        <div class="flujo" style="left:25%;top:48%">‹</div>
+      </div>
+    </div>
+
+    <!-- ============ PANEL LATERAL ============ -->
+    <div class="panel">
+
+      <h2>Estaciones (orden del recorrido)</h2>
+      <ol class="estaciones">
+        <li><span class="n">1</span><b>Salida · Aparcabicis.</b> Junto a la pista. Salen de uno en uno; revisan casco y bici.</li>
+        <li><span class="n">2</span><b>Recta + slalom.</b> Tramo largo de arriba: conos en zigzag y control de velocidad.</li>
+        <li><span class="n alt">3</span><b>Curva amplia.</b> La gran U del fondo: girar sin frenar de golpe ni cortar.</li>
+        <li><span class="n alt">4</span><b>Lazo de destreza.</b> El bucle cerrado interior: giro lento manteniendo el equilibrio.</li>
+        <li><span class="n">5</span><b>Paso de cebra + semáforo.</b> Parar en rojo y ceder al peatón antes de seguir.</li>
+        <li><span class="n stop">6</span><b>Cruce con STOP.</b> Detención total y mirar antes de incorporarse.</li>
+      </ol>
+
+      <h2>Material</h2>
+      <div class="bloque">
+        Conos (slalom, curvas y bordes del trazado) · tiza o cinta (paso de cebra y flechas de sentido) · aros (lazo y paradas) · señales imprimibles (STOP, ceda, semáforo, paso de peatones, aparcabicis) · cascos.
+      </div>
+
+      <h2>Roles (rotan cada 5-7 min)</h2>
+      <div class="roles">
+        <span>Conductor/a</span><span>Peatón</span><span>Semáforo humano</span><span>Guardia del cruce</span>
+      </div>
+
+      <h2>Sentido y seguridad</h2>
+      <div class="bloque">
+        Un <b>único sentido</b> de circulación (flechas blancas) para evitar choques. La <b>pista roja queda libre</b> como zona de espera/descanso. Adaptación Infantil: mismo trazado <b>sin el cruce</b>, con triciclos y un adulto en el paso de cebra.
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <span>CEIP Coirón Dena · Meaño · Día del Medio Ambiente</span>
+    <span>Movilidad sostenible: al cole sobre ruedas, sin emisiones</span>
+  </footer>
+</div>
+</body>
+</html>

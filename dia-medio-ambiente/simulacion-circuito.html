@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulación do Circuíto Vial · Gardas e Policía Local · CEIP Coirón Dena</title>
+<style>
+  :root{
+    --tinta:#1f2937; --suave:#6b7280; --linea:#e5e7eb; --crema:#f8fafc;
+    --verde:#16a34a; --gc:#15803d; --pl:#1d4ed8; --azul-bg:#dbeafe;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--tinta);background:#eef2f6;padding:24px;line-height:1.45}
+  .hoja{max-width:1280px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.08);overflow:hidden}
+  header{background:linear-gradient(120deg,#065f46,#16a34a);color:#fff;padding:22px 30px;display:flex;align-items:center;gap:16px}
+  header h1{font-size:21px;font-weight:700}
+  header p{font-size:13px;opacity:.92;margin-top:2px}
+  .cuerpo{display:grid;grid-template-columns:1.6fr 1fr;gap:0}
+  .mapa{padding:16px}
+  .foto{position:relative;width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--linea);line-height:0}
+  .foto img{width:100%;display:block}
+  /* marcador de axente (figura + etiqueta) */
+  .marca{position:absolute;transform:translate(-50%,-60%);display:flex;flex-direction:column;align-items:center;z-index:4}
+  .marca::before{content:"";position:absolute;top:18%;left:50%;width:62px;height:62px;transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(255,255,255,.85) 30%, rgba(255,255,255,0) 72%);z-index:-1}
+  .fig{filter:drop-shadow(0 1px 2px rgba(0,0,0,.55))}
+  .etq{margin-top:-2px;font-size:10px;font-weight:800;padding:1px 6px;border-radius:5px;white-space:nowrap;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+  .etq.gc{background:var(--gc)} .etq.pl{background:var(--pl)}
+  .etq small{display:block;font-weight:600;font-size:8.5px;opacity:.95}
+  .flujo{position:absolute;z-index:3;color:#fff;font-size:24px;font-weight:900;transform:translate(-50%,-50%);text-shadow:0 0 5px rgba(0,0,0,.9)}
+  /* panel */
+  .panel{padding:18px 24px 18px 14px;border-left:1px solid var(--linea)}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--verde);margin:14px 0 8px}
+  h2:first-child{margin-top:0}
+  .postos{list-style:none}
+  .postos li{position:relative;padding:8px 0 8px 30px;font-size:12.5px;border-bottom:1px dashed var(--linea)}
+  .postos li:last-child{border-bottom:none}
+  .postos li::before{content:"";position:absolute;left:4px;top:12px;width:13px;height:13px;border-radius:50%}
+  .postos li.gc::before{background:var(--gc)} .postos li.pl::before{background:var(--pl)}
+  .postos b{color:var(--tinta)}
+  .corpo{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;color:#fff;vertical-align:middle}
+  .corpo.gc{background:var(--gc)} .corpo.pl{background:var(--pl)}
+  .bloque{font-size:12.2px;background:var(--crema);border:1px solid var(--linea);border-radius:8px;padding:10px 12px;margin-top:6px}
+  .bloque b{color:var(--verde)}
+  .senais{list-style:none;font-size:12.2px}
+  .senais li{display:flex;align-items:center;gap:9px;padding:4px 0}
+  .senais .disco{flex:0 0 auto;width:18px;height:18px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #cbd5e1}
+  .roles span{display:inline-block;background:var(--azul-bg);color:var(--pl);border-radius:20px;padding:3px 10px;font-size:11.5px;margin:3px 4px 0 0;font-weight:600}
+  footer{padding:12px 30px 18px;font-size:11px;color:var(--suave);border-top:1px solid var(--linea);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+  @media print{@page{size:A4 landscape;margin:8mm}body{background:#fff;padding:0}.hoja{box-shadow:none;border-radius:0;max-width:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  @media(max-width:860px){.cuerpo{grid-template-columns:1fr}.panel{border-left:none;border-top:1px solid var(--linea)}}
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <header>
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>
+    </svg>
+    <div>
+      <h1>Simulación do Circuíto Vial · Día do Medio Ambiente</h1>
+      <p>CEIP Coirón Dena (Meaño) · Os nenos fan de Garda Civil e Policía Local sobre o patio real</p>
+    </div>
+  </header>
+
+  <div class="cuerpo">
+
+    <!-- ============ FOTO AÉREA + AXENTES ============ -->
+    <div class="mapa">
+      <div class="foto">
+        <img src="patio-aereo.jpg" alt="Vista aérea do colexio co recorrido vial">
+
+        <!-- frechas de sentido sobre o recorrido -->
+        <div class="flujo" style="left:52%;top:8%">›</div>
+        <div class="flujo" style="left:65%;top:30%">›</div>
+        <div class="flujo" style="left:34%;top:62%">‹</div>
+        <div class="flujo" style="left:24%;top:48%">‹</div>
+
+        <!-- ===== AXENTES (en pavimento libre, fóra do edificio) ===== -->
+
+        <!-- POSTO 1 · GARDA CIVIL · Cruce (patio central, diante do edificio) -->
+        <div class="marca" style="left:32%;top:46%">
+          <svg class="fig" viewBox="-30 -66 80 72" width="56" height="52">
+            <rect x="-6" y="-15" width="5" height="15" rx="1.5" fill="#374151"/><rect x="1" y="-15" width="5" height="15" rx="1.5" fill="#374151"/>
+            <rect x="-12" y="-40" width="24" height="26" rx="5" fill="#facc15" stroke="#ca8a04"/><rect x="-12" y="-29" width="24" height="3.5" fill="#fff" opacity=".85"/>
+            <rect x="-12" y="-40" width="24" height="7" rx="3.5" fill="#15803d"/><rect x="-16" y="-39" width="5" height="18" rx="2.5" fill="#15803d"/>
+            <rect x="9" y="-45" width="22" height="5" rx="2.5" fill="#15803d" transform="rotate(-20 9 -42)"/>
+            <circle cx="35" cy="-52" r="8" fill="#dc2626" stroke="#fff" stroke-width="2"/>
+            <circle cx="0" cy="-49" r="7.5" fill="#fcd9b6"/><path d="M-9,-51 a9,8 0 0 1 18,0 Z" fill="#15803d"/>
+            <rect x="-10" y="-52" width="20" height="3" rx="1.5" fill="#166534"/><path d="M-10,-51 L-16,-49 L-10,-47 Z" fill="#0f172a"/>
+          </svg>
+          <span class="etq gc">POSTO 1 · Garda Civil<small>Cruce</small></span>
+        </div>
+
+        <!-- POSTO 2 · GARDA CIVIL · Paso de cebra (parte baixa do patio) -->
+        <div class="marca" style="left:47%;top:66%">
+          <svg class="fig" viewBox="-30 -66 80 72" width="56" height="52">
+            <rect x="-6" y="-15" width="5" height="15" rx="1.5" fill="#374151"/><rect x="1" y="-15" width="5" height="15" rx="1.5" fill="#374151"/>
+            <rect x="-12" y="-40" width="24" height="26" rx="5" fill="#facc15" stroke="#ca8a04"/><rect x="-12" y="-29" width="24" height="3.5" fill="#fff" opacity=".85"/>
+            <rect x="-12" y="-40" width="24" height="7" rx="3.5" fill="#15803d"/><rect x="-16" y="-39" width="5" height="18" rx="2.5" fill="#15803d"/>
+            <rect x="9" y="-45" width="22" height="5" rx="2.5" fill="#15803d" transform="rotate(-20 9 -42)"/>
+            <circle cx="35" cy="-52" r="8" fill="#dc2626" stroke="#fff" stroke-width="2"/>
+            <circle cx="0" cy="-49" r="7.5" fill="#fcd9b6"/><path d="M-9,-51 a9,8 0 0 1 18,0 Z" fill="#15803d"/>
+            <rect x="-10" y="-52" width="20" height="3" rx="1.5" fill="#166534"/><path d="M-10,-51 L-16,-49 L-10,-47 Z" fill="#0f172a"/>
+          </svg>
+          <span class="etq gc">POSTO 2 · Garda Civil<small>Paso de cebra</small></span>
+        </div>
+
+        <!-- POSTO 3 · POLICÍA LOCAL · Rotonda / curva (zona alta) -->
+        <div class="marca" style="left:58%;top:14%">
+          <svg class="fig" viewBox="-30 -66 80 72" width="56" height="52">
+            <rect x="-6" y="-15" width="5" height="15" rx="1.5" fill="#1f2937"/><rect x="1" y="-15" width="5" height="15" rx="1.5" fill="#1f2937"/>
+            <rect x="-12" y="-40" width="24" height="26" rx="5" fill="#facc15" stroke="#ca8a04"/><rect x="-12" y="-29" width="24" height="3.5" fill="#fff" opacity=".85"/>
+            <rect x="-12" y="-40" width="24" height="7" rx="3.5" fill="#1d4ed8"/><rect x="-16" y="-39" width="5" height="18" rx="2.5" fill="#1d4ed8"/>
+            <rect x="9" y="-45" width="22" height="5" rx="2.5" fill="#1d4ed8" transform="rotate(-20 9 -42)"/>
+            <circle cx="35" cy="-52" r="8" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+            <circle cx="0" cy="-49" r="7.5" fill="#fcd9b6"/><path d="M-9,-51 a9,8 0 0 1 18,0 Z" fill="#1d4ed8"/>
+            <rect x="-10" y="-52" width="20" height="3" rx="1.5" fill="#1e3a8a"/><path d="M-10,-51 L-16,-49 L-10,-47 Z" fill="#0f172a"/>
+          </svg>
+          <span class="etq pl">POSTO 3 · Policía Local<small>Rotonda</small></span>
+        </div>
+
+        <!-- POSTO 4 · POLICÍA LOCAL · Saída / Aparcabicis (preto da pista) -->
+        <div class="marca" style="left:26%;top:59%">
+          <svg class="fig" viewBox="-30 -66 80 72" width="56" height="52">
+            <rect x="-6" y="-15" width="5" height="15" rx="1.5" fill="#1f2937"/><rect x="1" y="-15" width="5" height="15" rx="1.5" fill="#1f2937"/>
+            <rect x="-12" y="-40" width="24" height="26" rx="5" fill="#facc15" stroke="#ca8a04"/><rect x="-12" y="-29" width="24" height="3.5" fill="#fff" opacity=".85"/>
+            <rect x="-12" y="-40" width="24" height="7" rx="3.5" fill="#1d4ed8"/><rect x="-16" y="-39" width="5" height="18" rx="2.5" fill="#1d4ed8"/>
+            <rect x="9" y="-45" width="22" height="5" rx="2.5" fill="#1d4ed8" transform="rotate(-20 9 -42)"/>
+            <circle cx="35" cy="-52" r="8" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+            <circle cx="0" cy="-49" r="7.5" fill="#fcd9b6"/><path d="M-9,-51 a9,8 0 0 1 18,0 Z" fill="#1d4ed8"/>
+            <rect x="-10" y="-52" width="20" height="3" rx="1.5" fill="#1e3a8a"/><path d="M-10,-51 L-16,-49 L-10,-47 Z" fill="#0f172a"/>
+          </svg>
+          <span class="etq pl">POSTO 4 · Policía Local<small>Saída · Aparcabicis</small></span>
+        </div>
+
+      </div>
+      <p class="nota" style="font-size:11px;color:var(--suave);margin:8px 4px 0;text-align:center">A estrada é o teu recorrido (liña vermella sobre o patio). Os axentes están en pavimento libre, lonxe do edificio central. Sentido <b>único</b> (frechas brancas).</p>
+    </div>
+
+    <!-- ============ PANEL ============ -->
+    <div class="panel">
+
+      <h2>Postos de control (fanos os nenos)</h2>
+      <ul class="postos">
+        <li class="gc"><span class="corpo gc">G. Civil</span> <b>Posto 1 · Cruce.</b> No patio central, diante do edificio. Detén un sentido e dá paso ao outro coa paleta.</li>
+        <li class="gc"><span class="corpo gc">G. Civil</span> <b>Posto 2 · Paso de cebra.</b> Na parte baixa. Para os vehículos cando un peón vai cruzar.</li>
+        <li class="pl"><span class="corpo pl">P. Local</span> <b>Posto 3 · Rotonda.</b> Na zona alta. Ordena a entrada á rotonda, sempre pola dereita.</li>
+        <li class="pl"><span class="corpo pl">P. Local</span> <b>Posto 4 · Saída.</b> Xunto á pista. Deixa saír do aparcabicis de un en un.</li>
+      </ul>
+
+      <h2>Como dirixir o tráfico (paleta/brazos)</h2>
+      <ul class="senais">
+        <li><span class="disco" style="background:#dc2626"></span> <b>Brazo en alto / paleta vermella:</b> ALTO, parar.</li>
+        <li><span class="disco" style="background:#16a34a"></span> <b>Brazo ao lado / paleta verde:</b> pode pasar.</li>
+        <li><span class="disco" style="background:#facc15"></span> <b>Brazo movéndose adiante:</b> avanza con precaución.</li>
+      </ul>
+
+      <h2>Rotación e organización</h2>
+      <div class="bloque">
+        Quendas de <b>5-7 min</b>: os axentes pasan a conducir e outros nenos ocupan os postos. Así todos fan de <b>Garda Civil</b>, <b>Policía Local</b>, condutor e peón. Cada axente leva chaleco reflectante e paleta (cartolina vermella/verde).
+      </div>
+
+      <h2>Material</h2>
+      <div class="bloque">
+        Tiza ou cinta (estrada, liñas, paso de cebra, frechas) · conos (slalom e bordos) · aros (rotonda) · chalecos reflectantes · paletas vermella/verde · gorras/distintivos de Garda Civil e Policía Local · cascos para condutores.
+      </div>
+
+      <h2>Roles que rotan</h2>
+      <div class="roles">
+        <span>Garda Civil</span><span>Policía Local</span><span>Condutor/a</span><span>Peón</span>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <span>CEIP Coirón Dena · Meaño · Día do Medio Ambiente</span>
+    <span>Educación vial e mobilidade sostible</span>
+  </footer>
+</div>
+</body>
+</html>
