@@ -1,0 +1,10 @@
+# Configuración do proxecto Cloudflare Pages "brais-e-diego".
+# Necesario para que as Pages Functions (functions/api/*) accedan ao KV das entregas.
+name = "brais-e-diego"
+pages_build_output_dir = "."
+compatibility_date = "2025-10-01"
+
+# Mesmo namespace KV que usa o worker buzon-fichas (panel/CSV len de aquí).
+[[kv_namespaces]]
+binding = "ENTREGAS"
+id = "30a5d5a876bc4caebd2c97450e6bb02c"

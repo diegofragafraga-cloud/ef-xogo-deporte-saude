@@ -207,6 +207,21 @@
     background: var(--panel); border: 1px solid var(--border);
     padding: 4px 10px; border-radius: 999px;
   }
+  /* Botón "Edixgal": copia a ligazón desta proposta (Sentido + Nivel) para subila a EdixGal */
+  .btn-edixgal {
+    flex-shrink: 0; background: transparent; border: 1px solid var(--border);
+    color: var(--text-dim); border-radius: 8px; padding: 5px 9px; cursor: pointer;
+    font-family: inherit; font-size: .74rem; font-weight: 600; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 5px; transition: all .15s;
+  }
+  .btn-edixgal svg { width: 13px; height: 13px; }
+  .btn-edixgal:hover { border-color: var(--accent); color: var(--accent-2); }
+  .btn-edixgal.ok { border-color: var(--n1); color: #4ade80; }
+  .nivel.flash { animation: flashNivel 1.8s ease; }
+  @keyframes flashNivel {
+    0%, 100% { box-shadow: 0 0 0 0 transparent; }
+    15%, 45% { box-shadow: 0 0 0 3px var(--accent-bg), 0 0 0 1px var(--accent); }
+  }
   .nivel-body { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 14px; }
 
   .act {
@@ -478,7 +493,7 @@
 <div class="container">
 
   <header class="top">
-    <a class="back-btn" href="index.html" title="Volver">
+    <a class="back-btn" href="../index.html" title="Volver">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
     </a>
     <div class="avatar">D</div>
@@ -531,7 +546,9 @@
 // ============================================================
 // CONFIGURACIÓN
 // ============================================================
-const BUZON_ENDPOINT = 'https://buzon-fichas.diegofragafraga.workers.dev/enviar';
+// Mesmo dominio (pages.dev) → a rede do cole non o bloquea (a diferenza de *.workers.dev)
+const BUZON_ENDPOINT = '/api/enviar';
+const PENDENTES_KEY = 'buzon_pendentes_sociais5';
 const CURSO = '5º B · Propostas Sociais';
 
 const ALUMNADO = [
@@ -1017,6 +1034,7 @@ function renderContido() {
   SENTIDOS.forEach(s => {
     const section = document.createElement('section');
     section.className = 'sentido';
+    section.id = 'sec-' + s.id;
     section.innerHTML = `
       <div class="sec-head">
         <div class="sec-icon">${s.icon}</div>
@@ -1077,6 +1095,10 @@ function renderContido() {
             <div class="niv-tag">Nivel ${niv.nivel} · ${niv.tag}</div>
           </div>
           <span class="niv-count">${feitas} / ${total} feitas</span>
+          <button class="btn-edixgal" data-sentido="${s.id}" data-nivel="${niv.nivel}" title="Copiar a ligazón desta proposta para subila a EdixGal" onclick="copiarEdixgal(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Edixgal
+          </button>
         </div>
         <div class="nivel-body"></div>
       `;
@@ -1089,6 +1111,7 @@ function renderContido() {
     });
   });
   actualizarProgreso();
+  abrirDeepLink();
 }
 
 // ============================================================
@@ -1702,24 +1725,69 @@ async function marcarFeita(sentidoId, nivel, idx) {
   const ficha = `Propostas 5º Sociais · ${nomeSentido(sentidoId)} · N${nivel} · ${act.t}`;
   const detalleCompleto = `${detalle}\n\nTipo: ${act.tipo}. CA: ${(act.cas || []).join(', ')}. Nivel: ${nivel}.\nModo: autoavaliación interactiva.`;
 
+  const payload = {
+    nome: estado.alumno,
+    curso: CURSO,
+    ficha,
+    nota,
+    correctas,
+    total,
+    detalle: detalleCompleto
+  };
+  const ok = await postEntrega(payload);
+  mostrarToast(ok ? '📩 Enviada ao profe ✓' : '⚠ Gardada en local: reenviarase soa cando haxa conexión', ok);
+}
+
+// ============================================================
+// ENVÍO + COLA DE REINTENTO (para que NADA se perda)
+// Se o envío falla, gárdase a entrega completa en localStorage e
+// reenvíase soa ao recargar a páxina ou ao recuperar conexión.
+// ============================================================
+function lerPendentes() {
+  try { return JSON.parse(localStorage.getItem(PENDENTES_KEY)) || []; }
+  catch (e) { return []; }
+}
+function gardarPendentes(arr) {
+  try { localStorage.setItem(PENDENTES_KEY, JSON.stringify(arr)); } catch (e) {}
+}
+function encolar(payload) {
+  const arr = lerPendentes();
+  arr.push({ ...payload, _ts: Date.now() });
+  gardarPendentes(arr);
+}
+async function postEntrega(payload) {
   try {
     const r = await fetch(BUZON_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nome: estado.alumno,
-        curso: CURSO,
-        ficha,
-        nota,
-        correctas,
-        total,
-        detalle: detalleCompleto
-      })
+      body: JSON.stringify(payload)
     });
     const j = await r.json();
-    mostrarToast(j && j.ok ? '📩 Enviada ao profe ✓' : '⚠ Gardada en local, non chegou ao profe', j && j.ok);
-  } catch (e) {
-    mostrarToast('⚠ Sen conexión: gardada en local', false);
+    if (j && j.ok) return true;
+  } catch (e) { /* cae abaixo */ }
+  encolar(payload);
+  return false;
+}
+async function flushPendentes() {
+  let arr = lerPendentes();
+  if (!arr.length) return;
+  const quedan = [];
+  for (const p of arr) {
+    let ok = false;
+    try {
+      const r = await fetch(BUZON_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(p)
+      });
+      const j = await r.json();
+      ok = !!(j && j.ok);
+    } catch (e) { ok = false; }
+    if (!ok) quedan.push(p);
+  }
+  gardarPendentes(quedan);
+  if (arr.length && quedan.length < arr.length) {
+    mostrarToast(`📩 Reenviadas ${arr.length - quedan.length} entrega(s) pendente(s) ✓`, true);
   }
 }
 
@@ -1754,6 +1822,56 @@ function mostrarNivel(sentidoId, nivel) {
   }, 50);
 }
 
+// ============================================================
+// EDIXGAL: copiar a ligazón dunha proposta (Sentido + Nivel)
+// para pegala como recurso URL en EdixGal e compartila cos nenos.
+// ============================================================
+function copiarEdixgal(btn) {
+  const s = btn.dataset.sentido, n = btn.dataset.nivel;
+  const u = new URL(location.href);
+  u.hash = ''; u.search = '';
+  u.searchParams.set('s', s);
+  u.searchParams.set('n', n);
+  const url = u.href;
+  const feito = () => {
+    btn.classList.add('ok');
+    const prev = btn.innerHTML;
+    btn.innerHTML = '✓ Copiada';
+    setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = prev; }, 1600);
+    mostrarToast('✓ Ligazón copiada para EdixGal', true);
+  };
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(feito).catch(() => copiarFallback(url, feito));
+    } else { copiarFallback(url, feito); }
+  } catch (e) { copiarFallback(url, feito); }
+}
+function copiarFallback(url, feito) {
+  const ta = document.createElement('textarea');
+  ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); feito(); }
+  catch (e) { prompt('Copia a ligazón:', url); }
+  ta.remove();
+}
+
+// Deep-link: se a URL trae ?s=<sentido>&n=<nivel>, abre esa proposta,
+// fai scroll ata ela e resáltaa. Só unha vez por carga.
+var _deepLinkFeito = false;
+function abrirDeepLink() {
+  if (_deepLinkFeito || !estado.alumno) return;
+  const p = new URLSearchParams(location.search);
+  const s = p.get('s'), n = p.get('n');
+  if (!s || !n) return;
+  const sec = document.getElementById('sec-' + s);
+  if (!sec) return;
+  _deepLinkFeito = true;
+  mostrarNivel(s, parseInt(n, 10));
+  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const niv = document.getElementById(`nivel-${s}-${n}`);
+  if (niv) { niv.classList.add('flash'); setTimeout(() => niv.classList.remove('flash'), 1800); }
+}
+
 function seleccionarAlumno() {
   estado.alumno = document.getElementById('quen').value;
   gardar();
@@ -1778,6 +1896,10 @@ function toggleTheme() {
 if (localStorage.getItem(KEY_THEME) === 'light') document.documentElement.classList.add('light');
 popularAlumnos();
 renderContido();
+
+// Reintentar envíos que quedaran pendentes (rede do cole, sen conexión...)
+flushPendentes();
+window.addEventListener('online', flushPendentes);
 </script>
 </body>
 </html>
