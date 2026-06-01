@@ -41,9 +41,16 @@ const FICHAS_XOGAMOS = [
   { id: "integracion",  titulo: "Integración de magnitudes · Problemas mixtos",        curta: "Mat S7 · Integración",   sesion: "S16", grupo: "xogamos" }
 ];
 
-// 18 propostas competenciais 5º · 3º trimestre (Escalas · Polígonos · Estatística)
+// 24 propostas competenciais 5º · 3º trimestre (Lites · Escalas · Polígonos · Estatística)
 // Cada actividade ten 3 niveis (N1=Básico, N2=Medio, N3=Avanzado) e 2 actividades por nivel
 const FICHAS_PROPOSTAS5 = [
+  // Sentido numérico · Lites (economía do recreo)
+  { id: "prop-l1-1", titulo: "Propostas 5º · Lites · N1 · A semana da tarxeta",             curta: "A semana da tarxeta",          sesion: "L·N1", grupo: "propostas5" },
+  { id: "prop-l1-2", titulo: "Propostas 5º · Lites · N1 · ¿Que podemos coller hoxe?",       curta: "Que podemos coller",           sesion: "L·N1", grupo: "propostas5" },
+  { id: "prop-l2-1", titulo: "Propostas 5º · Lites · N2 · ¿Cantos recreos de parchís?",     curta: "Cantos recreos parchis",       sesion: "L·N2", grupo: "propostas5" },
+  { id: "prop-l2-2", titulo: "Propostas 5º · Lites · N2 · Cambio de lites a euros",          curta: "Cambio lites euros",           sesion: "L·N2", grupo: "propostas5" },
+  { id: "prop-l3-1", titulo: "Propostas 5º · Lites · N3 · Plan da quincena",                 curta: "Plan da quincena",             sesion: "L·N3", grupo: "propostas5" },
+  { id: "prop-l3-2", titulo: "Propostas 5º · Lites · N3 · Desconto da Semana das Letras",    curta: "Desconto Semana Letras",       sesion: "L·N3", grupo: "propostas5" },
   // Sentido da medida · Escalas
   { id: "prop-e1-1", titulo: "Propostas 5º · Escalas · N1 · Ler unha escala numérica",      curta: "Ler escala numérica",          sesion: "E·N1", grupo: "propostas5" },
   { id: "prop-e1-2", titulo: "Propostas 5º · Escalas · N1 · Escoller a escala adecuada",    curta: "Escoller escala",              sesion: "E·N1", grupo: "propostas5" },
