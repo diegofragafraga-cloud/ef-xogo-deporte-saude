@@ -34,6 +34,11 @@ header .sub{color:var(--muted);font-size:.82rem;margin-top:2px}
 .btn.primary:hover{filter:brightness(1.08)}
 .btn svg{width:16px;height:16px}
 .icon-btn{padding:8px;border-radius:9px}
+.timer{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;padding:8px 13px;font-size:.92rem;font-weight:700;color:var(--muted);
+  font-variant-numeric:tabular-nums}
+.timer svg{width:16px;height:16px}
+.timer.done{color:var(--ok);border-color:var(--ok)}
 .layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);gap:0;
   align-items:start}
 .mapwrap{position:sticky;top:74px;padding:14px;background:var(--bg);
@@ -164,9 +169,9 @@ svg.map.grabbing{cursor:grabbing}
     <h1>Mapa interactivo de Europa</h1>
     <div class="sub">Pulsa nun país, escribe o seu <b>nome</b> e a súa <b>capital</b> · Avaliación automática (CCSS 5º)</div>
   </div>
+  <div class="timer" id="timer" title="Tempo de resolución"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="timerVal">00:00</span></div>
   <div class="spacer"></div>
   <button class="btn primary" id="bCorrixir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Corrixir</button>
-  <button class="btn" id="bSol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>Solucións</button>
   <button class="btn" id="bLimpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Limpar</button>
   <button class="btn icon-btn" id="bPrint" title="Imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg></button>
   <button class="btn icon-btn" id="bTheme" title="Tema"><svg id="ico-theme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
@@ -346,11 +351,38 @@ function corrixir(){
 
 // ---- Envío de resultados ao formulario do profe ----
 const FORM_POST='https://docs.google.com/forms/d/e/1FAIpQLSeHtCVY11rp1oRcR8urRW1iFVITdht-uYAN5Iq6nkhWAdeXwQ/formResponse';
-const ENTRY={alumno:'entry.716445707',paises:'entry.1258670720',capitais:'entry.989786384',nivelP:'entry.9296495',nivelC:'entry.442312243'};
+const ENTRY={alumno:'entry.716445707',paises:'entry.1258670720',capitais:'entry.989786384',nivelP:'entry.9296495',nivelC:'entry.442312243',tempo:'entry.1645434711'};
+
+// ---- Cronómetro ----
+let tStart=null, tInt=null, finalTime=null;
+function fmtT(s){const m=Math.floor(s/60),ss=s%60;return String(m).padStart(2,'0')+':'+String(ss).padStart(2,'0');}
+function startTimer(){
+  if(tStart!=null||finalTime!=null)return; // xa iniciado ou xa rematado
+  tStart=Date.now();
+  tInt=setInterval(()=>{document.getElementById('timerVal').textContent=fmtT(Math.floor((Date.now()-tStart)/1000));},1000);
+}
+function stopTimer(){
+  if(tStart==null)return finalTime||'00:00';
+  if(finalTime!=null)return finalTime; // só se conxela unha vez
+  clearInterval(tInt); tInt=null;
+  finalTime=fmtT(Math.floor((Date.now()-tStart)/1000));
+  document.getElementById('timerVal').textContent=finalTime;
+  document.getElementById('timer').classList.add('done');
+  return finalTime;
+}
+function resetTimer(){
+  clearInterval(tInt); tStart=null; tInt=null; finalTime=null;
+  document.getElementById('timerVal').textContent='00:00';
+  document.getElementById('timer').classList.remove('done');
+}
+// O cronómetro arranca cando o alumno escolle o seu nome
+document.getElementById('selAlumno').addEventListener('change',startTimer);
+
 async function enviar(){
   const sel=document.getElementById('selAlumno');
   const msg=document.getElementById('sentMsg');
   if(!sel.value){msg.className='sent err';msg.textContent='⚠ Escolle o teu nome primeiro.';sel.focus();return;}
+  const tempo=stopTimer();   // remate: conxélase o tempo
   const r=corrixir();
   msg.className='sent wait';msg.textContent='Enviando…';
   const fd=new URLSearchParams();
@@ -359,24 +391,17 @@ async function enviar(){
   fd.append(ENTRY.capitais,r.okC);
   fd.append(ENTRY.nivelP,r.nivelP);
   fd.append(ENTRY.nivelC,r.nivelC);
+  fd.append(ENTRY.tempo,tempo);
   try{
     await fetch(FORM_POST,{method:'POST',mode:'no-cors',
       headers:{'Content-Type':'application/x-www-form-urlencoded'},body:fd.toString()});
     msg.className='sent ok';
-    msg.textContent='✓ Enviado: '+sel.value+' · '+r.okP+' países, '+r.okC+' capitais.';
+    msg.textContent='✓ Enviado: '+sel.value+' · '+r.okP+' países, '+r.okC+' capitais · tempo '+tempo+'.';
   }catch(e){
     msg.className='sent err';msg.textContent='✗ Non se puido enviar (sen conexión?). Téntao de novo.';
   }
 }
 document.getElementById('bEnviar').addEventListener('click',enviar);
-function solucions(){
-  C.forEach(c=>{
-    const r=rows[c.n];
-    r.querySelector('input[data-k=pais]').value=c.name;
-    r.querySelector('input[data-k=cap]').value=c.capital;
-  });
-  corrixir();
-}
 function limpar(){
   C.forEach(c=>{
     const r=rows[c.n];
@@ -386,11 +411,14 @@ function limpar(){
   document.getElementById('scPais').textContent='–';
   document.getElementById('scCap').textContent='–';
   ['bdPais','bdCap'].forEach(id=>{const b=document.getElementById(id);b.textContent='Sen corrixir';b.className='badge b-nov'});
+  document.getElementById('sentMsg').textContent='';
+  resetTimer();
+  // se xa hai nome escollido, reiníciase a conta dende cero
+  if(document.getElementById('selAlumno').value)startTimer();
 }
 
 // ---- Botóns ----
 document.getElementById('bCorrixir').addEventListener('click',corrixir);
-document.getElementById('bSol').addEventListener('click',solucions);
 document.getElementById('bLimpar').addEventListener('click',limpar);
 document.getElementById('bPrint').addEventListener('click',()=>window.print());
 
