@@ -96,6 +96,7 @@
   .res-badge-xogo { background:rgba(16,185,129,.15); color:#34d399; }
   .res-badge-marco { background:rgba(225,29,72,.15); color:#fb7185; }
   .res-badge-tabla { background:rgba(236,72,153,.15); color:#f9a8d4; }
+  .res-badge-ficha { background:rgba(34,197,94,.15); color:#4ade80; }
 
   .sidebar-hamburger {
     display:none; background:var(--bg3); border:1px solid var(--border);
@@ -185,6 +186,18 @@
         ¿Que escoito? (sons)
       </a>
     </div>
+
+    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      Lingua
+      <span class="st-badge">1</span>
+    </button>
+    <div class="sidebar-items open">
+      <a class="sidebar-item" href="lectoescritura-shrek/index.html">
+        <span class="si-dot" style="background:#22c55e"></span>
+        Ler con Shrek (ficha)
+      </a>
+    </div>
   </nav>
 
   <main class="main">
@@ -264,6 +277,17 @@
         <div class="res-info">
           <div class="res-title">¿Que escoito? · Sons <span class="res-badge res-badge-xogo">Xogo</span> <span class="res-badge res-badge-priv">Privado</span></div>
           <div class="res-desc">Discriminación auditiva · Infantil/Primaria · 4 xogos (Que escoito?, Memoria sonora, Intruso auditivo, Bingo sonoro) · 10 categorías × 8 sons · Trilingüe gl/es/en</div>
+        </div>
+        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+      </a>
+
+      <a class="res-card" href="lectoescritura-shrek/index.html">
+        <div class="res-icon" style="background:linear-gradient(135deg,#166534,#22c55e)">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="res-info">
+          <div class="res-title">Ler con Shrek <span class="res-badge res-badge-ficha">Ficha</span></div>
+          <div class="res-desc">Lectoescritura · Completa a frase elixindo a palabra correcta · 12 frases en maiúsculas con apoio visual · Imprimible A4 · Adaptada para alumnado TEA</div>
         </div>
         <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
       </a>
