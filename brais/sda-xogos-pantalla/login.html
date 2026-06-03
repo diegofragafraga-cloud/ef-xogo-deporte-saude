@@ -86,7 +86,7 @@
 <body>
 <script>
 // Se xa hai sesión activa, saltar directamente á SdA
-if (sessionStorage.getItem('brais_auth') === 'true') location.replace('./index.html');
+if (sessionStorage.getItem('sda_xogos_auth') === 'true') location.replace('./index.html');
 </script>
 
 <button class="theme-toggle" onclick="document.body.classList.toggle('light');localStorage.setItem('ef_theme',document.body.classList.contains('light')?'light':'dark');document.getElementById('m').classList.toggle('hidden');document.getElementById('s').classList.toggle('hidden')">
@@ -118,12 +118,12 @@ if (sessionStorage.getItem('brais_auth') === 'true') location.replace('./index.h
 </div>
 
 <script>
-const PASSWORD = 'brais2026';
+const PASSWORD = 'sda2026';
 
 function login() {
   const input = document.getElementById('pwd').value;
   if (input === PASSWORD) {
-    sessionStorage.setItem('brais_auth', 'true');
+    sessionStorage.setItem('sda_xogos_auth', 'true');
     location.replace('./index.html');
   } else {
     document.getElementById('loginError').textContent = 'Contrasinal incorrecta';
