@@ -1,0 +1,105 @@
+{
+  "_comentario": "Estrutura mínima: id (clave i18n), audio (ruta en assets/audio/), imaxe (ruta en assets/img/sons/). Os ficheiros reais aínda non existen — son placeholders para probar a mecánica.",
+  "sons": {
+    "corpo": [
+      { "id": "estornudo",  "audio": "corpo/estornudo.mp3",  "imaxe": "corpo/estornudo.webp" },
+      { "id": "tose",       "audio": "corpo/tose.mp3",       "imaxe": "corpo/tose.webp" },
+      { "id": "risa",       "audio": "corpo/risa.mp3",       "imaxe": "corpo/risa.webp" },
+      { "id": "choro",      "audio": "corpo/choro.mp3",      "imaxe": "corpo/choro.webp" },
+      { "id": "ronco",      "audio": "corpo/ronco.mp3",      "imaxe": "corpo/ronco.webp" },
+      { "id": "asubio",     "audio": "corpo/asubio.mp3",     "imaxe": "corpo/asubio.webp" },
+      { "id": "aplauso",    "audio": "corpo/aplauso.mp3",    "imaxe": "corpo/aplauso.webp" },
+      { "id": "bico",       "audio": "corpo/bico.mp3",       "imaxe": "corpo/bico.webp" }
+    ],
+    "fogar": [
+      { "id": "timbre",     "audio": "fogar/timbre.mp3",     "imaxe": "fogar/timbre.webp" },
+      { "id": "telefono",   "audio": "fogar/telefono.mp3",   "imaxe": "fogar/telefono.webp" },
+      { "id": "espertador", "audio": "fogar/espertador.mp3", "imaxe": "fogar/espertador.webp" },
+      { "id": "ducha",      "audio": "fogar/ducha.mp3",      "imaxe": "fogar/ducha.webp" },
+      { "id": "microondas", "audio": "fogar/microondas.mp3", "imaxe": "fogar/microondas.webp" },
+      { "id": "aspiradora", "audio": "fogar/aspiradora.mp3", "imaxe": "fogar/aspiradora.webp" },
+      { "id": "porta",      "audio": "fogar/porta.mp3",      "imaxe": "fogar/porta.webp" },
+      { "id": "auga_billa", "audio": "fogar/auga_billa.mp3", "imaxe": "fogar/auga_billa.webp" }
+    ],
+    "animais": [
+      { "id": "can",     "audio": "animais/can.mp3",     "imaxe": "animais/can.webp" },
+      { "id": "gato",    "audio": "animais/gato.mp3",    "imaxe": "animais/gato.webp" },
+      { "id": "vaca",    "audio": "animais/vaca.mp3",    "imaxe": "animais/vaca.webp" },
+      { "id": "porco",   "audio": "animais/porco.mp3",   "imaxe": "animais/porco.webp" },
+      { "id": "ovella",  "audio": "animais/ovella.mp3",  "imaxe": "animais/ovella.webp" },
+      { "id": "galo",    "audio": "animais/galo.mp3",    "imaxe": "animais/galo.webp" },
+      { "id": "ra",     "audio": "animais/ra.mp3",     "imaxe": "animais/ra.webp" },
+      { "id": "corvo",  "audio": "animais/corvo.mp3",  "imaxe": "animais/corvo.webp" }
+    ],
+    "natureza": [
+      { "id": "choiva",  "audio": "natureza/choiva.mp3",  "imaxe": "natureza/choiva.webp" },
+      { "id": "trono",   "audio": "natureza/trono.mp3",   "imaxe": "natureza/trono.webp" },
+      { "id": "vento",   "audio": "natureza/vento.mp3",   "imaxe": "natureza/vento.webp" },
+      { "id": "rio",     "audio": "natureza/rio.mp3",     "imaxe": "natureza/rio.webp" },
+      { "id": "mar",     "audio": "natureza/mar.mp3",     "imaxe": "natureza/mar.webp" },
+      { "id": "fogo",    "audio": "natureza/fogo.mp3",    "imaxe": "natureza/fogo.webp" },
+      { "id": "paxaros", "audio": "natureza/paxaros.mp3", "imaxe": "natureza/paxaros.webp" },
+      { "id": "follas",  "audio": "natureza/follas.mp3",  "imaxe": "natureza/follas.webp" }
+    ],
+    "cidade": [
+      { "id": "coche",       "audio": "cidade/coche.mp3",       "imaxe": "cidade/coche.webp" },
+      { "id": "buguina",     "audio": "cidade/buguina.mp3",     "imaxe": "cidade/buguina.webp" },
+      { "id": "moto",        "audio": "cidade/moto.mp3",        "imaxe": "cidade/moto.webp" },
+      { "id": "ambulancia",  "audio": "cidade/ambulancia.mp3",  "imaxe": "cidade/ambulancia.webp" },
+      { "id": "tren",        "audio": "cidade/tren.mp3",        "imaxe": "cidade/tren.webp" },
+      { "id": "obra",        "audio": "cidade/obra.mp3",        "imaxe": "cidade/obra.webp" },
+      { "id": "xente",       "audio": "cidade/xente.mp3",       "imaxe": "cidade/xente.webp" },
+      { "id": "campas",      "audio": "cidade/campas.mp3",      "imaxe": "cidade/campas.webp" }
+    ],
+    "colexio": [
+      { "id": "timbre_recreo", "audio": "colexio/timbre_recreo.mp3", "imaxe": "colexio/timbre_recreo.webp" },
+      { "id": "tesoiras",      "audio": "colexio/tesoiras.mp3",      "imaxe": "colexio/tesoiras.webp" },
+      { "id": "lapis",         "audio": "colexio/lapis.mp3",         "imaxe": "colexio/lapis.webp" },
+      { "id": "papel",         "audio": "colexio/papel.mp3",         "imaxe": "colexio/papel.webp" },
+      { "id": "borrador",      "audio": "colexio/borrador.mp3",      "imaxe": "colexio/borrador.webp" },
+      { "id": "cadeira",       "audio": "colexio/cadeira.mp3",       "imaxe": "colexio/cadeira.webp" },
+      { "id": "mochila",       "audio": "colexio/mochila.mp3",       "imaxe": "colexio/mochila.webp" },
+      { "id": "voces_clase",   "audio": "colexio/voces_clase.mp3",   "imaxe": "colexio/voces_clase.webp" }
+    ],
+    "instrumentos": [
+      { "id": "guitarra",  "audio": "instrumentos/guitarra.mp3",  "imaxe": "instrumentos/guitarra.webp" },
+      { "id": "piano",     "audio": "instrumentos/piano.mp3",     "imaxe": "instrumentos/piano.webp" },
+      { "id": "tambor",    "audio": "instrumentos/tambor.mp3",    "imaxe": "instrumentos/tambor.webp" },
+      { "id": "frauta",    "audio": "instrumentos/frauta.mp3",    "imaxe": "instrumentos/frauta.webp" },
+      { "id": "trompeta",  "audio": "instrumentos/trompeta.mp3",  "imaxe": "instrumentos/trompeta.webp" },
+      { "id": "violin",    "audio": "instrumentos/violin.mp3",    "imaxe": "instrumentos/violin.webp" },
+      { "id": "gaita",     "audio": "instrumentos/gaita.mp3",     "imaxe": "instrumentos/gaita.webp" },
+      { "id": "pandeireta","audio": "instrumentos/pandeireta.mp3","imaxe": "instrumentos/pandeireta.webp" }
+    ],
+    "obxectos": [
+      { "id": "tesoiras_obx", "audio": "obxectos/tesoiras.mp3", "imaxe": "obxectos/tesoiras.webp" },
+      { "id": "chaves",       "audio": "obxectos/chaves.mp3",   "imaxe": "obxectos/chaves.webp" },
+      { "id": "moedas",       "audio": "obxectos/moedas.mp3",   "imaxe": "obxectos/moedas.webp" },
+      { "id": "reloxo",       "audio": "obxectos/reloxo.mp3",   "imaxe": "obxectos/reloxo.webp" },
+      { "id": "papel_arrugado","audio": "obxectos/papel_arrugado.mp3","imaxe": "obxectos/papel_arrugado.webp" },
+      { "id": "cremalleira",  "audio": "obxectos/cremalleira.mp3","imaxe": "obxectos/cremalleira.webp" },
+      { "id": "vidro",        "audio": "obxectos/vidro.mp3",    "imaxe": "obxectos/vidro.webp" },
+      { "id": "boligrafo",    "audio": "obxectos/boligrafo.mp3","imaxe": "obxectos/boligrafo.webp" }
+    ],
+    "emocionais": [
+      { "id": "risa_grupo",  "audio": "emocionais/risa_grupo.mp3",  "imaxe": "emocionais/risa_grupo.webp" },
+      { "id": "aplausos_xt", "audio": "emocionais/aplausos.mp3",    "imaxe": "emocionais/aplausos.webp" },
+      { "id": "vivas",       "audio": "emocionais/vivas.mp3",       "imaxe": "emocionais/vivas.webp" },
+      { "id": "abucheo",     "audio": "emocionais/abucheo.mp3",     "imaxe": "emocionais/abucheo.webp" },
+      { "id": "suspiro",     "audio": "emocionais/suspiro.mp3",     "imaxe": "emocionais/suspiro.webp" },
+      { "id": "berrar",      "audio": "emocionais/berrar.mp3",      "imaxe": "emocionais/berrar.webp" },
+      { "id": "murmurio",    "audio": "emocionais/murmurio.mp3",    "imaxe": "emocionais/murmurio.webp" },
+      { "id": "asubio_admir","audio": "emocionais/asubio_admir.mp3","imaxe": "emocionais/asubio_admir.webp" }
+    ],
+    "abstractos": [
+      { "id": "agudo",   "audio": "abstractos/agudo.mp3",   "imaxe": "abstractos/agudo.webp" },
+      { "id": "grave",   "audio": "abstractos/grave.mp3",   "imaxe": "abstractos/grave.webp" },
+      { "id": "rapido",  "audio": "abstractos/rapido.mp3",  "imaxe": "abstractos/rapido.webp" },
+      { "id": "lento",   "audio": "abstractos/lento.mp3",   "imaxe": "abstractos/lento.webp" },
+      { "id": "forte",   "audio": "abstractos/forte.mp3",   "imaxe": "abstractos/forte.webp" },
+      { "id": "frouxo",  "audio": "abstractos/frouxo.mp3",  "imaxe": "abstractos/frouxo.webp" },
+      { "id": "longo",   "audio": "abstractos/longo.mp3",   "imaxe": "abstractos/longo.webp" },
+      { "id": "curto",   "audio": "abstractos/curto.mp3",   "imaxe": "abstractos/curto.webp" }
+    ]
+  }
+}

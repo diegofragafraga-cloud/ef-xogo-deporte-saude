@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>¿Suma o resta? · Tarjetas imprimibles · 2º Primaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1f2937;
+    --ink-soft: #4b5563;
+    --suma: #10b981;
+    --resta: #f43f5e;
+
+    --cat-minecraft: #16a34a;  --cat-minecraft-bg: #ecfdf5;
+    --cat-arte: #db2777;       --cat-arte-bg: #fdf2f8;
+    --cat-gimnasia: #7c3aed;   --cat-gimnasia-bg: #f5f3ff;
+    --cat-arquitectura: #b45309; --cat-arquitectura-bg: #fffbeb;
+    --cat-cromos: #0284c7;     --cat-cromos-bg: #f0f9ff;
+    --cat-trenes: #ea580c;     --cat-trenes-bg: #fff7ed;
+
+    --lvl-1: #16a34a; --lvl-1-bg: #dcfce7;
+    --lvl-2: #0284c7; --lvl-2-bg: #e0f2fe;
+    --lvl-3: #db2777; --lvl-3-bg: #fce7f3;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+    background: #f3f4f6;
+    color: var(--ink);
+  }
+
+  .toolbar {
+    position: sticky; top: 0;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; z-index: 10;
+  }
+  .toolbar h1 { font-size: 18px; margin: 0; font-weight: 800; }
+  .toolbar button, .toolbar a {
+    font-family: inherit; font-weight: 800; font-size: 14px;
+    padding: 10px 18px;
+    background: var(--ink); color: white;
+    border: none; border-radius: 10px;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .toolbar a.alt { background: white; color: var(--ink); border: 1.5px solid #e5e7eb; }
+
+  @page { size: A4 portrait; margin: 12mm; }
+
+  .sheet {
+    width: 210mm; min-height: 297mm;
+    padding: 12mm; margin: 16px auto;
+    background: white;
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 8mm;
+    page-break-after: always;
+  }
+  .sheet:last-child { page-break-after: auto; }
+
+  .card {
+    --accent: var(--suma);
+    --accent-bg: #d1fae5;
+    --lvl-color: var(--lvl-1);
+    --lvl-bg: var(--lvl-1-bg);
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 10mm;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    background:
+      linear-gradient(var(--accent-bg), var(--accent-bg)) padding-box,
+      repeating-linear-gradient(0deg, transparent, transparent 7mm, rgba(148,163,184,.18) 7mm, rgba(148,163,184,.18) 7.3mm),
+      repeating-linear-gradient(90deg, transparent, transparent 7mm, rgba(148,163,184,.18) 7mm, rgba(148,163,184,.18) 7.3mm);
+    position: relative;
+  }
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6mm;
+  }
+  .head-left { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: white;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    border: 2px solid;
+  }
+  .badge-cat { color: var(--accent); border-color: var(--accent); }
+  .badge-lvl { color: var(--lvl-color); border-color: var(--lvl-color); }
+  .badge svg { width: 12px; height: 12px; }
+  .num {
+    background: white; color: var(--ink-soft);
+    font-weight: 800; font-size: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+
+  .problem {
+    font-size: 14pt;
+    line-height: 1.5;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 6mm;
+    background: rgba(255,255,255,.7);
+    padding: 4mm 5mm;
+    border-radius: 8px;
+  }
+  .problem b { font-weight: 900; color: var(--accent); }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+  }
+  .opt {
+    background: white;
+    border: 3px solid;
+    border-radius: 10px;
+    padding: 6mm 4mm;
+    text-align: center;
+    font-weight: 900;
+    font-size: 22pt;
+    letter-spacing: .06em;
+    display: flex;
+    align-items: center; justify-content: center;
+    gap: 10px;
+  }
+  .opt-suma { color: var(--suma); border-color: var(--suma); }
+  .opt-resta { color: var(--resta); border-color: var(--resta); }
+  .opt svg { width: 24px; height: 24px; }
+
+  @media print {
+    body { background: white; }
+    .toolbar { display: none; }
+    .sheet { box-shadow: none; margin: 0; padding: 0; min-height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+      <path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+    </symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+    </symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+      <path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>
+    </symbol>
+    <symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+      <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+      <path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
+    </symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+      <path d="M4 22h16"/>
+      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+    </symbol>
+    <symbol id="i-train" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/>
+      <path d="m9 15-1-1"/><path d="m15 15 1-1"/>
+      <path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/>
+      <path d="m8 19-2 3"/><path d="m16 19 2 3"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/><path d="M12 5v14"/>
+    </symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+    </symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 6 2 18 2 18 9"/>
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+      <rect width="12" height="8" x="6" y="14"/>
+    </symbol>
+    <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="toolbar">
+  <h1>¿Suma o resta? — Tarjetas imprimibles</h1>
+  <div>
+    <a href="index.html" class="alt">
+      <svg width="14" height="14"><use href="#i-back"/></svg> Versión interactiva
+    </a>
+    <button onclick="window.print()">
+      <svg width="14" height="14"><use href="#i-printer"/></svg> Imprimir
+    </button>
+  </div>
+</div>
+
+<div id="sheets"></div>
+
+<script>
+  const niveles = {
+    1: { label: "Fácil", color: "var(--lvl-1)", bg: "var(--lvl-1-bg)" },
+    2: { label: "Medio", color: "var(--lvl-2)", bg: "var(--lvl-2-bg)" },
+    3: { label: "Reto",  color: "var(--lvl-3)", bg: "var(--lvl-3-bg)" }
+  };
+
+  const categorias = {
+    minecraft:    { label: "Minecraft",        icon: "i-box",      color: "var(--cat-minecraft)",    bg: "var(--cat-minecraft-bg)" },
+    arte:         { label: "Arte y pintura",   icon: "i-palette",  color: "var(--cat-arte)",         bg: "var(--cat-arte-bg)" },
+    gimnasia:     { label: "Gimnasia rítmica", icon: "i-sparkles", color: "var(--cat-gimnasia)",     bg: "var(--cat-gimnasia-bg)" },
+    arquitectura: { label: "Arquitectura",     icon: "i-building", color: "var(--cat-arquitectura)", bg: "var(--cat-arquitectura-bg)" },
+    cromos:       { label: "Cromos de fútbol", icon: "i-trophy",   color: "var(--cat-cromos)",       bg: "var(--cat-cromos-bg)" },
+    trenes:       { label: "Trenes",           icon: "i-train",    color: "var(--cat-trenes)",       bg: "var(--cat-trenes-bg)" }
+  };
+
+  // Mismos problemas que index.html, ordenados Nivel 1 → 2 → 3
+  const problemas = [
+    { level:1, cat:"arte", parts:[{txt:"En la clase de plástica había "},{txt:"78 lápices", bold:true},{txt:" de colores. La profe trajo "},{txt:"45 lápices", bold:true},{txt:" nuevos. ¿Cuántos lápices hay ahora en clase?"}]},
+    { level:1, cat:"gimnasia", parts:[{txt:"Un equipo de gimnasia rítmica tenía "},{txt:"85 mazas", bold:true},{txt:" guardadas. Durante una competición se rompieron "},{txt:"27 mazas", bold:true},{txt:". ¿Cuántas mazas quedan en buen estado?"}]},
+    { level:1, cat:"minecraft", parts:[{txt:"En tu mundo de Minecraft había "},{txt:"95 ovejas", bold:true},{txt:" pastando en un prado. Por la noche nacieron "},{txt:"36 corderitos", bold:true},{txt:" más. ¿Cuántas ovejas hay ahora?"}]},
+    { level:1, cat:"cromos", parts:[{txt:"Sara tenía "},{txt:"73 cromos", bold:true},{txt:" de su equipo favorito guardados en una caja. Su madre le compró "},{txt:"89 cromos", bold:true},{txt:" más. ¿Cuántos cromos tiene en total?"}]},
+    { level:1, cat:"arquitectura", parts:[{txt:"Un arquitecto dibujó "},{txt:"84 planos", bold:true},{txt:" para una casa nueva. Por la tarde dibujó "},{txt:"57 planos", bold:true},{txt:" más para el jardín. ¿Cuántos planos dibujó en total?"}]},
+    { level:1, cat:"trenes", parts:[{txt:"En el vagón de un tren viajaban "},{txt:"92 pasajeros", bold:true},{txt:". En la siguiente parada se bajaron "},{txt:"47 personas", bold:true},{txt:". ¿Cuántos pasajeros quedan en el vagón?"}]},
+    { level:1, cat:"gimnasia", parts:[{txt:"En el polideportivo había "},{txt:"92 cintas", bold:true},{txt:" de gimnasia rítmica. Llegaron "},{txt:"58 cintas", bold:true},{txt:" nuevas de colores para la próxima actuación. ¿Cuántas cintas hay ahora?"}]},
+
+    { level:2, cat:"minecraft", parts:[{txt:"Mateo construyó una casa en Minecraft con "},{txt:"156 bloques", bold:true},{txt:" de piedra. Su hermana le añadió "},{txt:"67 bloques", bold:true},{txt:" más para hacer el tejado. ¿Cuántos bloques tiene la construcción ahora?"}]},
+    { level:2, cat:"cromos", parts:[{txt:"Lucas tenía "},{txt:"145 cromos", bold:true},{txt:" pegados en su álbum de fútbol. Su tío le regaló "},{txt:"68 cromos", bold:true},{txt:" nuevos sin repetir. ¿Cuántos cromos tiene ahora?"}]},
+    { level:2, cat:"arquitectura", parts:[{txt:"Una arquitecta diseñó un edificio con "},{txt:"175 ventanas", bold:true},{txt:". En la siguiente planta añadió "},{txt:"48 ventanas", bold:true},{txt:" más para que entrara mucha luz. ¿Cuántas ventanas tiene el edificio?"}]},
+    { level:2, cat:"minecraft", parts:[{txt:"En tu inventario de Minecraft tenías "},{txt:"120 diamantes", bold:true},{txt:" guardados. Usaste "},{txt:"48 diamantes", bold:true},{txt:" para fabricar herramientas. ¿Cuántos diamantes te quedan?"}]},
+    { level:2, cat:"trenes", parts:[{txt:"Un tren de mercancías llevaba "},{txt:"165 contenedores", bold:true},{txt:". En una estación cargaron "},{txt:"58 contenedores", bold:true},{txt:" más. ¿Cuántos contenedores lleva ahora?"}]},
+    { level:2, cat:"trenes", parts:[{txt:"En una estación había "},{txt:"130 trenes", bold:true},{txt:" aparcados durante la noche. A primera hora salieron "},{txt:"75 trenes", bold:true},{txt:" hacia distintas ciudades. ¿Cuántos trenes quedan en la estación?"}]},
+    { level:2, cat:"arte", parts:[{txt:"En una exposición había "},{txt:"150 cuadros", bold:true},{txt:" colgados en las paredes. Durante la inauguración se vendieron "},{txt:"78 cuadros", bold:true},{txt:". ¿Cuántos cuadros quedan en la exposición?"}]},
+    { level:2, cat:"gimnasia", parts:[{txt:"En el club de gimnasia rítmica había "},{txt:"110 pelotas", bold:true},{txt:". La entrenadora compró "},{txt:"65 pelotas", bold:true},{txt:" más para las principiantes. ¿Cuántas pelotas hay en total?"}]},
+    { level:2, cat:"trenes", parts:[{txt:"En un tren turístico viajaban "},{txt:"145 pasajeros", bold:true},{txt:". En una parada se bajaron "},{txt:"78 turistas", bold:true},{txt:" para visitar un castillo. ¿Cuántos pasajeros siguen en el tren?"}]},
+
+    { level:3, cat:"cromos", parts:[{txt:"En el patio del colegio cinco amigos juntaron "},{txt:"180 cromos", bold:true},{txt:". Al final del recreo intercambiaron "},{txt:"45 cromos", bold:true},{txt:" con otros niños y se los llevaron. ¿Cuántos cromos les quedan ahora?"}]},
+    { level:3, cat:"arte", parts:[{txt:"Un pintor tenía "},{txt:"130 pinceles", bold:true},{txt:" en su taller. Después de un curso prestó "},{txt:"67 pinceles", bold:true},{txt:" a otros artistas. ¿Cuántos pinceles le quedan?"}]},
+    { level:3, cat:"arquitectura", parts:[{txt:"En una obra había "},{txt:"160 ladrillos", bold:true},{txt:" preparados. Los albañiles colocaron "},{txt:"95 ladrillos", bold:true},{txt:" en el muro durante la mañana. ¿Cuántos ladrillos quedan sin colocar?"}]},
+    { level:3, cat:"cromos", parts:[{txt:"En una tienda había "},{txt:"200 sobres", bold:true},{txt:" de cromos. Durante el día se vendieron "},{txt:"124 sobres", bold:true},{txt:". ¿Cuántos sobres quedan en la tienda?"}]}
+  ];
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  function makeSvgUse(iconId, size) {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    if (size) { svg.setAttribute("width", size); svg.setAttribute("height", size); }
+    const use = document.createElementNS(SVG_NS, "use");
+    use.setAttribute("href", "#" + iconId);
+    svg.appendChild(use);
+    return svg;
+  }
+
+  function makeCard(problema, index) {
+    const cat = categorias[problema.cat];
+    const lvl = niveles[problema.level];
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.setProperty("--accent", cat.color);
+    card.style.setProperty("--accent-bg", cat.bg);
+    card.style.setProperty("--lvl-color", lvl.color);
+    card.style.setProperty("--lvl-bg", lvl.bg);
+
+    const head = document.createElement("div");
+    head.className = "card-head";
+
+    const headLeft = document.createElement("div");
+    headLeft.className = "head-left";
+
+    const badgeCat = document.createElement("span");
+    badgeCat.className = "badge badge-cat";
+    badgeCat.appendChild(makeSvgUse(cat.icon));
+    badgeCat.appendChild(document.createTextNode(" " + cat.label));
+
+    const badgeLvl = document.createElement("span");
+    badgeLvl.className = "badge badge-lvl";
+    badgeLvl.appendChild(makeSvgUse("i-star"));
+    badgeLvl.appendChild(document.createTextNode(" Nivel " + problema.level + " · " + lvl.label));
+
+    headLeft.appendChild(badgeCat);
+    headLeft.appendChild(badgeLvl);
+
+    const num = document.createElement("span");
+    num.className = "num";
+    num.textContent = String(index + 1).padStart(2, "0");
+
+    head.appendChild(headLeft);
+    head.appendChild(num);
+
+    const p = document.createElement("p");
+    p.className = "problem";
+    problema.parts.forEach(part => {
+      if (part.bold) {
+        const b = document.createElement("b");
+        b.textContent = part.txt;
+        p.appendChild(b);
+      } else {
+        p.appendChild(document.createTextNode(part.txt));
+      }
+    });
+
+    const opts = document.createElement("div");
+    opts.className = "options";
+    ["suma", "resta"].forEach(t => {
+      const o = document.createElement("div");
+      o.className = "opt opt-" + t;
+      o.appendChild(makeSvgUse(t === "suma" ? "i-plus" : "i-minus"));
+      const lbl = document.createElement("span");
+      lbl.textContent = t === "suma" ? "SUMAR" : "RESTAR";
+      o.appendChild(lbl);
+      opts.appendChild(o);
+    });
+
+    card.appendChild(head);
+    card.appendChild(p);
+    card.appendChild(opts);
+    return card;
+  }
+
+  const container = document.getElementById("sheets");
+  for (let i = 0; i < problemas.length; i += 2) {
+    const sheet = document.createElement("div");
+    sheet.className = "sheet";
+    sheet.appendChild(makeCard(problemas[i], i));
+    if (problemas[i+1]) sheet.appendChild(makeCard(problemas[i+1], i+1));
+    container.appendChild(sheet);
+  }
+</script>
+
+</body>
+</html>

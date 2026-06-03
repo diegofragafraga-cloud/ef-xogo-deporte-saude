@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Tabla criterios e indicadores · Matemáticas · 2.º Primaria</title>
+<script>if(localStorage.getItem("marco_eval_auth")!=="true"){location.replace("./login.html")}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Tabla consultable de los 49 criterios de evaluación de Matemáticas (2.º EP) con sus indicadores de logro graduados (G1/G2/G3) y eje fundamental." />
+<style>
+  /* ===== Paleta y reset ===== */
+  :root {
+    --rojo: #C8102E;
+    --rojo-oscuro: #8B0A1F;
+    --salmon: #F8DDD7;
+    --salmon-claro: #FCEDE9;
+    --crema: #FAF7F4;
+    --texto: #2A2A2A;
+    --texto-suave: #555;
+    --borde: #E0D6D2;
+    --bg: #FFFFFF;
+    --bg-side: #FAF7F4;
+    --acento: #5B7FBF;
+    --aviso-bg: #FFF8E1;
+    --aviso-borde: #E6C76A;
+
+    --g1-bg: #DCEDC8;
+    --g1-fg: #2D5016;
+    --g1-bd: #A5C97A;
+    --g2-bg: #FFE9B3;
+    --g2-fg: #6E4A00;
+    --g2-bd: #E6C76A;
+    --g3-bg: #FAD0CC;
+    --g3-fg: #8B0A1F;
+    --g3-bd: #E89A93;
+
+    --bloque-1: #5B7FBF;
+    --bloque-2: #E07A5F;
+    --bloque-3: #81B29A;
+    --bloque-4: #9C6B9E;
+    --bloque-5: #C9A227;
+    --bloque-6: #C8102E;
+
+    --max-w: 1400px;
+  }
+  html.dark {
+    --rojo: #E83A56;
+    --rojo-oscuro: #B82A45;
+    --salmon: #3A2A2C;
+    --salmon-claro: #2A1E20;
+    --crema: #18141A;
+    --texto: #E8E4DE;
+    --texto-suave: #A8A29B;
+    --borde: #3A3439;
+    --bg: #0F0D11;
+    --bg-side: #15121A;
+    --aviso-bg: #2C2515;
+    --aviso-borde: #6E5A2A;
+
+    --g1-bg: #1F3A1A;
+    --g1-fg: #B6D89C;
+    --g1-bd: #3F6A35;
+    --g2-bg: #3A2E14;
+    --g2-fg: #E6C76A;
+    --g2-bd: #6E5A2A;
+    --g3-bg: #3A1E22;
+    --g3-fg: #F4A6A0;
+    --g3-bd: #7A3038;
+
+    --bloque-1: #7A99D6;
+    --bloque-2: #F0967D;
+    --bloque-3: #9CCAB2;
+    --bloque-4: #B58AB7;
+    --bloque-5: #DDB940;
+    --bloque-6: #E83A56;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+    color: var(--texto);
+    background: var(--bg);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Cabecera ===== */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    border-bottom: 1px solid var(--borde);
+    padding: 14px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+  .topbar .brand {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 320px;
+    min-width: 220px;
+  }
+  .topbar .eyebrow {
+    color: var(--rojo);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+  }
+  .topbar h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .topbar .actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    background: var(--bg);
+    border: 1px solid var(--borde);
+    color: var(--texto);
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    line-height: 1;
+  }
+  .btn:hover { background: var(--salmon); color: var(--rojo-oscuro); border-color: var(--salmon); }
+  .btn svg { width: 14px; height: 14px; }
+
+  .toggle-group {
+    display: inline-flex;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .toggle-group button {
+    background: var(--bg);
+    border: none;
+    border-right: 1px solid var(--borde);
+    color: var(--texto);
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .toggle-group button:last-child { border-right: none; }
+  .toggle-group button:hover { background: var(--salmon); color: var(--rojo-oscuro); }
+  .toggle-group button.active {
+    background: var(--rojo);
+    color: white;
+  }
+
+  .theme-toggle {
+    background: var(--bg);
+    border: 1px solid var(--borde);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--texto);
+  }
+  .theme-toggle:hover { background: var(--salmon); }
+  .theme-toggle svg { width: 16px; height: 16px; }
+  .theme-toggle .icon-sun { display: none; }
+  html.dark .theme-toggle .icon-moon { display: none; }
+  html.dark .theme-toggle .icon-sun { display: block; }
+
+  /* ===== Contenedor principal ===== */
+  main {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 22px 24px 60px 24px;
+  }
+
+  .intro {
+    color: var(--texto-suave);
+    font-size: 13.5px;
+    margin: 0 0 18px 0;
+  }
+  .intro strong { color: var(--texto); }
+
+  /* ===== Tabla ===== */
+  table.t {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 22px;
+    font-size: 14px;
+  }
+  table.t thead th {
+    background: var(--rojo);
+    color: white;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 700;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-right: 1px solid var(--rojo-oscuro);
+    position: sticky;
+    top: 64px;
+    z-index: 10;
+  }
+  table.t thead th:last-child { border-right: none; }
+  table.t tbody td {
+    background: var(--salmon-claro);
+    border: 1px solid var(--borde);
+    padding: 10px 12px;
+    vertical-align: top;
+  }
+  table.t tbody td.col-bloque { width: 130px; }
+  table.t tbody td.col-cod {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-weight: 700;
+    color: var(--rojo-oscuro);
+    white-space: nowrap;
+    width: 70px;
+  }
+  table.t tbody td.col-criterio { line-height: 1.45; }
+  table.t tbody td.col-obj {
+    width: 70px;
+    text-align: center;
+  }
+  table.t tbody td.col-grados { width: 90px; text-align: center; }
+  table.t tbody td.col-indicadores { line-height: 1.4; min-width: 360px; }
+
+  /* Cabecera de bloque / grado */
+  tr.bloque-head td {
+    background: var(--rojo);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-size: 13px;
+    padding: 10px 14px;
+    border: 1px solid var(--rojo-oscuro);
+  }
+  tr.grado-head td {
+    background: var(--rojo-oscuro);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-size: 13px;
+    padding: 10px 14px;
+    border: 1px solid var(--rojo);
+  }
+
+  /* Badges de bloque */
+  .badge-bloque {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: white;
+    white-space: nowrap;
+  }
+  .b-1 { background: var(--bloque-1); }
+  .b-2 { background: var(--bloque-2); }
+  .b-3 { background: var(--bloque-3); }
+  .b-4 { background: var(--bloque-4); }
+  .b-5 { background: var(--bloque-5); }
+  .b-6 { background: var(--bloque-6); }
+
+  /* Chip OBJ */
+  .chip-obj {
+    display: inline-block;
+    background: var(--salmon);
+    color: var(--rojo-oscuro);
+    border: 1px solid var(--borde);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Chips de grados (resumen por criterio) */
+  .grados-chips { display: inline-flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+  .chip-grado {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: 1px solid;
+  }
+  .chip-grado.g1 { background: var(--g1-bg); color: var(--g1-fg); border-color: var(--g1-bd); }
+  .chip-grado.g2 { background: var(--g2-bg); color: var(--g2-fg); border-color: var(--g2-bd); }
+  .chip-grado.g3 { background: var(--g3-bg); color: var(--g3-fg); border-color: var(--g3-bd); }
+  .chip-grado.empty {
+    background: transparent;
+    color: var(--texto-suave);
+    border-color: var(--borde);
+    border-style: dashed;
+    font-weight: 600;
+  }
+
+  /* Lista de indicadores asociados */
+  ul.ind-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  ul.ind-list li {
+    margin: 0 0 8px 0;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--borde);
+    border-left: 3px solid var(--borde);
+    border-radius: 4px;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  ul.ind-list li:last-child { margin-bottom: 0; }
+  ul.ind-list li.g1 { border-left-color: var(--g1-bd); }
+  ul.ind-list li.g2 { border-left-color: var(--g2-bd); }
+  ul.ind-list li.g3 { border-left-color: var(--g3-bd); }
+
+  .ind-meta {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .ind-eje {
+    font-size: 11px;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+  }
+  .ind-pers {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: var(--salmon);
+    color: var(--rojo-oscuro);
+    border: 1px solid var(--borde);
+  }
+  .ind-pers.social { background: var(--salmon-claro); }
+  .ind-text { color: var(--texto); }
+  .ind-empty {
+    color: var(--texto-suave);
+    font-style: italic;
+    font-size: 13px;
+  }
+
+  /* Leyenda */
+  .leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 0 0 18px 0;
+    padding: 10px 14px;
+    background: var(--bg-side);
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    font-size: 12.5px;
+  }
+  .leyenda .item { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    table.t thead { display: none; }
+    table.t tbody tr { display: block; margin-bottom: 18px; border: 1px solid var(--borde); border-radius: 6px; overflow: hidden; }
+    table.t tbody td { display: block; border: none; border-bottom: 1px solid var(--borde); }
+    table.t tbody td:last-child { border-bottom: none; }
+    table.t tbody td.col-bloque,
+    table.t tbody td.col-cod,
+    table.t tbody td.col-obj,
+    table.t tbody td.col-grados {
+      width: auto;
+      display: inline-block;
+      border-bottom: none;
+      padding: 8px 12px;
+    }
+    table.t tbody td.col-criterio { padding-top: 4px; }
+    tr.bloque-head td, tr.grado-head td { display: block; }
+    table.t thead th { position: static; }
+  }
+
+  /* Print */
+  @media print {
+    .topbar { position: static; box-shadow: none; }
+    .actions { display: none !important; }
+    table.t thead th { position: static; background: #444 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    tbody td { background: #f8f8f8 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    tr { page-break-inside: avoid; }
+    ul.ind-list li { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="eyebrow">Marco de avaliación</div>
+    <h1>Criterios de avaliación · Matemáticas · 2.º Primaria</h1>
+  </div>
+  <div class="actions">
+    <div class="toggle-group" role="tablist" aria-label="Modo de organización">
+      <button id="btn-bloques" class="active" type="button">Por bloques</button>
+      <button id="btn-grado" type="button">Por grao</button>
+    </div>
+    <a class="btn" href="./index.html" title="Volver ao marco">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Volver ao marco
+    </a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema oscuro/claro" title="Alternar tema">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <p class="intro">
+    Consulta dos <strong>49 criterios de avaliación</strong> de 2.º curso (Decreto 155/2022) cos seus
+    <strong>indicadores de logro graduados</strong> (G1 identificar · G2 aplicar · G3 xustificar/crear),
+    organizados por <strong>bloque</strong> (sentido matemático) ou por <strong>grao</strong> de complexidade.
+    Cada indicador mostra tamén o seu <strong>eixe fundamental</strong> (resolución, razoamento, conexións,
+    comunicación ou socioafectivo).
+  </p>
+
+  <div class="leyenda">
+    <span class="item"><span class="chip-grado g1">G1</span> Identifica / recoñece</span>
+    <span class="item"><span class="chip-grado g2">G2</span> Aplica / emprega</span>
+    <span class="item"><span class="chip-grado g3">G3</span> Xustifica / crea</span>
+  </div>
+
+  <div id="tabla-host"></div>
+</main>
+
+<script>
+  // ===== Datos: criterios =====
+  const BLOQUES = [
+    { num: 1, nome: "Sentido numérico", clase: "b-1" },
+    { num: 2, nome: "Sentido da medida", clase: "b-2" },
+    { num: 3, nome: "Sentido espacial", clase: "b-3" },
+    { num: 4, nome: "Sentido alxébrico", clase: "b-4" },
+    { num: 5, nome: "Sentido estocástico", clase: "b-5" },
+    { num: 6, nome: "Sentido socioemocional", clase: "b-6" }
+  ];
+
+  const CRITERIOS = [
+    // Bloque 1 · Sentido numérico
+    { code: "CE1.1", bloque: 1, obj: "OBJ8", text: "Participar respetuosamente en el trabajo en equipo, estableciendo relaciones saludables basadas en el respeto, la igualdad y la resolución pacífica de conflictos." },
+    { code: "CE1.2", bloque: 1, obj: "OBJ1", text: "Comprender las preguntas formuladas a través de diferentes estrategias o herramientas, reconociendo la información contenida en problemas de la vida cotidiana." },
+    { code: "CE1.3", bloque: 1, obj: "OBJ1", text: "Proporcionar ejemplos de representaciones de situaciones problematizadas sencillas con recursos manipulativos y gráficos que ayuden en la resolución." },
+    { code: "CE1.4", bloque: 1, obj: "OBJ2", text: "Emplear algunas estrategias adecuadas en la resolución de problemas." },
+    { code: "CE1.5", bloque: 1, obj: "OBJ2", text: "Obtener posibles soluciones a problemas, de forma guiada, aplicando estrategias básicas de resolución." },
+    { code: "CE1.6", bloque: 1, obj: "OBJ3", text: "Realizar conjeturas matemáticas sencillas, investigando patrones, propiedades y relaciones de forma guiada." },
+    { code: "CE1.7", bloque: 1, obj: "OBJ4", text: "Emplear herramientas tecnológicas adecuadas, de forma guiada, en el proceso de resolución de problemas." },
+    { code: "CE1.8", bloque: 1, obj: "OBJ5", text: "Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas." },
+    { code: "CE1.9", bloque: 1, obj: "OBJ6", text: "Explicar ideas y procesos matemáticos sencillos, los pasos seguidos en la resolución de un problema o los resultados de forma verbal o gráfica." },
+    // Bloque 2 · Sentido da medida
+    { code: "CE2.1", bloque: 2, obj: "OBJ8", text: "Aceptar la tarea y el rol asignado en el trabajo en equipo, cumpliendo con las responsabilidades individuales y contribuyendo a la consecución de los objetivos del grupo." },
+    { code: "CE2.2", bloque: 2, obj: "OBJ2", text: "Obtener posibles soluciones a problemas, de forma guiada, aplicando estrategias básicas de resolución." },
+    { code: "CE2.3", bloque: 2, obj: "OBJ2", text: "Describir verbalmente la idoneidad de las soluciones de un problema a partir de las preguntas previamente formuladas." },
+    { code: "CE2.4", bloque: 2, obj: "OBJ3", text: "Dar ejemplos de problemas a partir de situaciones cotidianas que se resuelven matemáticamente." },
+    { code: "CE2.5", bloque: 2, obj: "OBJ5", text: "Reconocer conexiones entre los diferentes elementos matemáticos aplicando conocimientos y experiencias propios." },
+    { code: "CE2.6", bloque: 2, obj: "OBJ5", text: "Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas." },
+    { code: "CE2.7", bloque: 2, obj: "OBJ6", text: "Reconocer el lenguaje matemático sencillo presente en la vida cotidiana, adquiriendo un vocabulario específico básico." },
+    { code: "CE2.8", bloque: 2, obj: "OBJ6", text: "Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica." },
+    // Bloque 3 · Sentido espacial
+    { code: "CE3.1", bloque: 3, obj: "OBJ8", text: "Participar respetuosamente en el trabajo en equipo, estableciendo relaciones saludables basadas en el respeto, la igualdad y la resolución pacífica de conflictos." },
+    { code: "CE3.2", bloque: 3, obj: "OBJ2", text: "Emplear algunas estrategias adecuadas en la resolución de problemas." },
+    { code: "CE3.3", bloque: 3, obj: "OBJ3", text: "Realizar conjeturas matemáticas sencillas, investigando patrones, propiedades y relaciones de forma guiada." },
+    { code: "CE3.4", bloque: 3, obj: "OBJ4", text: "Describir rutinas y actividades sencillas de la vida cotidiana que se realicen paso a paso, utilizando principios básicos del pensamiento computacional de forma guiada." },
+    { code: "CE3.5", bloque: 3, obj: "OBJ5", text: "Reconocer conexiones entre los diferentes elementos matemáticos, aplicando conocimientos y experiencias propios." },
+    { code: "CE3.6", bloque: 3, obj: "OBJ5", text: "Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas." },
+    { code: "CE3.7", bloque: 3, obj: "OBJ6", text: "Reconocer el lenguaje matemático sencillo presente en la vida cotidiana, adquiriendo un vocabulario específico básico." },
+    { code: "CE3.8", bloque: 3, obj: "OBJ6", text: "Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica." },
+    // Bloque 4 · Sentido alxébrico e pensamento computacional
+    { code: "CE4.1", bloque: 4, obj: "OBJ7", text: "Reconocer las emociones básicas propias al abordar nuevos retos matemáticos, pidiendo ayuda solo cuando sea necesario." },
+    { code: "CE4.2", bloque: 4, obj: "OBJ1", text: "Proporcionar ejemplos de representaciones de situaciones problematizadas sencillas con recursos manipulativos y gráficos." },
+    { code: "CE4.3", bloque: 4, obj: "OBJ2", text: "Emplear algunas estrategias adecuadas en la resolución de problemas." },
+    { code: "CE4.4", bloque: 4, obj: "OBJ2", text: "Obtener posibles soluciones a problemas, de forma guiada, aplicando estrategias básicas de resolución." },
+    { code: "CE4.5", bloque: 4, obj: "OBJ3", text: "Realizar conjeturas matemáticas sencillas, investigando patrones, propiedades y relaciones de forma guiada." },
+    { code: "CE4.6", bloque: 4, obj: "OBJ4", text: "Describir rutinas y actividades sencillas de la vida cotidiana que se realicen paso a paso, utilizando principios básicos del pensamiento computacional de forma guiada." },
+    { code: "CE4.7", bloque: 4, obj: "OBJ4", text: "Emplear herramientas tecnológicas adecuadas, de forma guiada, en el proceso de resolución de problemas." },
+    { code: "CE4.8", bloque: 4, obj: "OBJ5", text: "Reconocer conexiones entre los diferentes elementos matemáticos aplicando conocimientos y experiencias propios." },
+    { code: "CE4.9", bloque: 4, obj: "OBJ6", text: "Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica." },
+    // Bloque 5 · Sentido estocástico
+    { code: "CE5.1", bloque: 5, obj: "OBJ7", text: "Expresar actitudes positivas ante nuevos retos matemáticos, valorando el error como una oportunidad de aprendizaje." },
+    { code: "CE5.2", bloque: 5, obj: "OBJ1", text: "Comprender las preguntas formuladas a través de diferentes estrategias o herramientas, reconociendo la información contenida en problemas de la vida cotidiana." },
+    { code: "CE5.3", bloque: 5, obj: "OBJ2", text: "Emplear algunas estrategias adecuadas en la resolución de problemas." },
+    { code: "CE5.4", bloque: 5, obj: "OBJ2", text: "Obtener posibles soluciones a problemas, de forma guiada, aplicando estrategias básicas de resolución." },
+    { code: "CE5.5", bloque: 5, obj: "OBJ5", text: "Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas." },
+    { code: "CE5.6", bloque: 5, obj: "OBJ6", text: "Reconocer el lenguaje matemático sencillo presente en la vida cotidiana, adquiriendo un vocabulario específico básico." },
+    { code: "CE5.7", bloque: 5, obj: "OBJ6", text: "Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica." },
+    // Bloque 6 · Sentido socioemocional
+    { code: "CE6.1", bloque: 6, obj: "OBJ7", text: "Reconocer las emociones básicas propias al abordar nuevos retos matemáticos, pidiendo ayuda solo cuando sea necesario." },
+    { code: "CE6.2", bloque: 6, obj: "OBJ7", text: "Expresar actitudes positivas ante nuevos retos matemáticos, valorando el error como una oportunidad de aprendizaje." },
+    { code: "CE6.3", bloque: 6, obj: "OBJ8", text: "Participar respetuosamente en el trabajo en equipo, estableciendo relaciones saludables basadas en el respeto, la igualdad y la resolución pacífica de conflictos." },
+    { code: "CE6.4", bloque: 6, obj: "OBJ8", text: "Aceptar la tarea y rol asignados en el trabajo en equipo, cumpliendo con las responsabilidades individuales y contribuyendo a la consecución de los objetivos del grupo." },
+    { code: "CE6.5", bloque: 6, obj: "OBJ3", text: "Realizar conjeturas matemáticas sencillas, investigando patrones, propiedades y relaciones de forma guiada." },
+    { code: "CE6.6", bloque: 6, obj: "OBJ5", text: "Reconocer conexiones entre los diferentes elementos matemáticos aplicando conocimientos y experiencias propios." },
+    { code: "CE6.7", bloque: 6, obj: "OBJ5", text: "Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas." },
+    { code: "CE6.8", bloque: 6, obj: "OBJ6", text: "Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica." }
+  ];
+
+  // ===== Datos: indicadores =====
+  // Cada indicador: eje, ejeNome, grado (1/2/3), text, ces (códigos asociados),
+  // y opcionalmente pers ("Personal" | "Social") para socioafectivo.
+  const INDICADORES = [
+    // ===== Eje 1 · Resolución de problemas (Tabla 4) =====
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 1, text: "Identifica situaciones cotidianas que se pueden resolver con matemáticas (contar, medir, comparar, repartir).", ces: ["CE1.2"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 1, text: "Reconoce los datos relevantes en un problema sencillo con apoyo gráfico o manipulable.", ces: ["CE1.3"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 1, text: "Reconoce qué se pregunta en un problema oral o leído por el adulto.", ces: ["CE5.2"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 1, text: "Identifica si para resolver un problema necesita sumar o restar, en problemas de una sola operación.", ces: ["CE1.4"] },
+
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 2, text: "Representa un problema con un dibujo, esquema o material manipulable (regletas, fichas, dedos).", ces: ["CE1.3"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 2, text: "Aplica una estrategia conocida (suma, resta, conteo, descomposición) para llegar a una solución.", ces: ["CE3.2"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 2, text: "Ejecuta los pasos del proceso de resolución en el orden adecuado, con apoyo guiado.", ces: ["CE1.5", "CE2.2"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 2, text: "Comprueba si la solución obtenida tiene sentido en el contexto del problema.", ces: ["CE2.3"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 2, text: "Usa la calculadora, de forma guiada, para verificar un resultado obtenido a mano.", ces: ["CE1.7", "CE4.7"] },
+
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 3, text: "Elige entre dos estrategias conocidas la que considera más adecuada para un problema dado, y explica oralmente por qué.", ces: ["CE4.3", "CE5.3"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 3, text: "Inventa un problema parecido a uno ya resuelto, cambiando los datos o el contexto.", ces: ["CE2.4"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 3, text: "Detecta un error en su propia solución y la corrige.", ces: ["CE4.4", "CE5.4"] },
+    { eje: "resolucion", ejeNome: "Resolución de problemas", grado: 3, text: "Explica oralmente o con un dibujo el camino seguido para resolver el problema.", ces: ["CE3.8"] },
+
+    // ===== Eje 2 · Razonamiento y prueba (Tabla 5) =====
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 1, text: "Identifica regularidades sencillas en colecciones de números, figuras o imágenes (par/impar, secuencias visuales, repeticiones).", ces: ["CE4.5"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 1, text: "Reconoce algoritmos cotidianos paso a paso (lavarse las manos, vestirse, una receta sencilla).", ces: ["CE4.6"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 1, text: "Identifica el orden correcto de los pasos de una rutina diaria.", ces: ["CE3.4"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 1, text: "Distingue, en un ámbito lúdico, entre suceso posible e imposible.", ces: ["CE5.6"] },
+
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 2, text: "Continúa una secuencia o patrón sencillo (numérico, gráfico o manipulable) cuando se le da el inicio.", ces: ["CE3.3"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 2, text: "Sigue un algoritmo paso a paso para realizar una tarea (sumar con llevada, construir una figura, copiar un dibujo).", ces: ["CE4.6"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 2, text: "Compara dos soluciones a un mismo problema y dice cuál es correcta y por qué.", ces: ["CE2.3"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 2, text: "Usa = y ≠ para expresar relaciones de igualdad y desigualdad entre objetos, números u operaciones sencillas.", ces: ["CE6.5"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 2, text: "Comprueba una conjetura sencilla (“todos los pares acaban en 0, 2, 4, 6 u 8”) con varios ejemplos guiados.", ces: ["CE1.6"] },
+
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 3, text: "Crea su propia secuencia siguiendo un patrón inventado y explica la regla.", ces: ["CE4.5"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 3, text: "Detecta y corrige un error en una secuencia o en un algoritmo cotidiano.", ces: ["CE4.6"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 3, text: "Inventa un problema que se resuelva con una operación dada (suma o resta) en un contexto cercano.", ces: ["CE2.4"] },
+    { eje: "razonamiento", ejeNome: "Razonamiento y prueba", grado: 3, text: "Generaliza una regularidad observada en varios ejemplos a un caso nuevo.", ces: ["CE4.5"] },
+
+    // ===== Eje 3 · Conexiones (Tabla 6) =====
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 1, text: "Identifica las matemáticas presentes en su entorno cotidiano (relojes, calendarios, monedas, juegos, deportes, recetas).", ces: ["CE1.8"] },
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 1, text: "Reconoce conceptos matemáticos en otras áreas: medir en Ciencias de la Naturaleza, contar páginas en Lengua, ordenar en Ciencias Sociales, simetrías en Educación Artística.", ces: ["CE2.6"] },
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 1, text: "Identifica conexiones entre dos ideas matemáticas que ya conoce (sumar y contar; medir y comparar).", ces: ["CE2.5"] },
+
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 2, text: "Relaciona el contenido matemático aprendido con situaciones de otras áreas (resolver un problema con datos de Ciencias).", ces: ["CE5.5"] },
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 2, text: "Emplea conocimientos matemáticos para interpretar información del entorno (leer un calendario, una balanza, una etiqueta de precio).", ces: ["CE1.8"] },
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 2, text: "Aplica una estrategia aprendida en un sentido matemático a otro (la descomposición numérica para componer una figura).", ces: ["CE3.5"] },
+
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 3, text: "Aplica conocimientos matemáticos del aula a una situación nueva del entorno cercano sin que se la presenten explícitamente como problema matemático.", ces: ["CE6.7"] },
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 3, text: "Justifica con un ejemplo por qué una idea matemática se puede usar en distintos contextos.", ces: ["CE4.8", "CE6.6"] },
+    { eje: "conexiones", ejeNome: "Conexiones", grado: 3, text: "Reconoce conexiones entre matemáticas y arte, juegos populares o efemérides locales.", ces: ["CE3.6"] },
+
+    // ===== Eje 4 · Comunicación y representación (Tabla 7) =====
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 1, text: "Reconoce y nombra el vocabulario matemático básico de 1.º ciclo (más/menos, mayor/menor, igual, mitad, doble, triángulo, cuadrado, círculo, kilo, litro, hora, minuto, par/impar).", ces: ["CE2.7"] },
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 1, text: "Identifica los signos +, −, =, ≠ y los lee correctamente.", ces: ["CE3.7"] },
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 1, text: "Interpreta una representación matemática sencilla dada (recta numérica, gráfica de barras, pictograma, dibujo de una situación).", ces: ["CE1.3"] },
+
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 2, text: "Usa el vocabulario matemático adecuado al describir oralmente una situación, un procedimiento o un resultado.", ces: ["CE5.6"] },
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 2, text: "Representa una cantidad de varias formas (manipulativa, gráfica, numérica) y elige la adecuada para cada situación.", ces: ["CE4.2"] },
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 2, text: "Elabora una representación gráfica sencilla (gráfico de barras o pictograma) de datos recogidos en clase.", ces: ["CE5.7"] },
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 2, text: "Explica oralmente, con apoyo, los pasos seguidos en la resolución de un problema.", ces: ["CE1.9"] },
+
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 3, text: "Justifica un resultado o un razonamiento con palabras y/o un dibujo.", ces: ["CE4.9"] },
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 3, text: "Comunica un proceso matemático ordenado de principio a fin sin necesitar preguntas guía.", ces: ["CE6.8"] },
+    { eje: "comunicacion", ejeNome: "Comunicación y representación", grado: 3, text: "Argumenta por qué una representación es más útil que otra para una situación concreta.", ces: ["CE2.8"] },
+
+    // ===== Eje 5 · Destrezas socioafectivas (Tabla 8) =====
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 1, pers: "Personal", text: "Reconoce sus emociones básicas ante un reto matemático (alegría, frustración, nervios, vergüenza).", ces: ["CE6.1"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 1, pers: "Personal", text: "Identifica cuándo necesita ayuda y la pide.", ces: ["CE4.1"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 1, pers: "Social", text: "Participa en el trabajo en equipo respetando los turnos y el material.", ces: ["CE6.3"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 1, pers: "Social", text: "Escucha las propuestas de sus compañeros y compañeras.", ces: ["CE1.1"] },
+
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 2, pers: "Personal", text: "Intenta de nuevo cuando falla, con apoyo del adulto o de un compañero.", ces: ["CE5.1"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 2, pers: "Personal", text: "Acepta el error como parte natural del aprendizaje cuando el adulto lo verbaliza.", ces: ["CE6.2"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 2, pers: "Social", text: "Acepta el rol asignado en el equipo y cumple con su responsabilidad individual.", ces: ["CE2.1"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 2, pers: "Social", text: "Contribuye a la resolución compartida del problema aportando ideas o material.", ces: ["CE6.4"] },
+
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 3, pers: "Personal", text: "Mantiene la perseverancia ante la dificultad sin necesidad de recordatorio.", ces: ["CE5.1"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 3, pers: "Personal", text: "Vuelve a intentarlo después de un error sin que se le pida.", ces: ["CE6.2"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 3, pers: "Social", text: "Ayuda a un compañero o compañera con dificultad sin desplazarlo del proceso.", ces: ["CE3.1"] },
+    { eje: "socioafectivo", ejeNome: "Destrezas socioafectivas", grado: 3, pers: "Social", text: "Reconoce y rechaza actitudes no inclusivas o discriminatorias en el grupo.", ces: ["CE1.1"] }
+  ];
+
+  // ===== Vinculación: por cada criterio, sus indicadores =====
+  CRITERIOS.forEach(c => {
+    c.indicadores = INDICADORES.filter(ind => ind.ces.includes(c.code));
+    c.gradosCubiertos = [...new Set(c.indicadores.map(i => i.grado))].sort();
+  });
+
+  // ===== Render con DOM API (sin asignación de innerHTML) =====
+  function el(tag, opts = {}, children = []) {
+    const node = document.createElement(tag);
+    if (opts.className) node.className = opts.className;
+    if (opts.text != null) node.textContent = opts.text;
+    if (opts.attrs) {
+      for (const k of Object.keys(opts.attrs)) node.setAttribute(k, opts.attrs[k]);
+    }
+    for (const ch of children) {
+      if (ch == null) continue;
+      node.appendChild(typeof ch === "string" ? document.createTextNode(ch) : ch);
+    }
+    return node;
+  }
+
+  function buildIndList(indicadores, filtroGrado) {
+    if (!indicadores.length) {
+      return el("span", { className: "ind-empty", text: "Sen indicadores asociados nesta táboa." });
+    }
+    const lista = filtroGrado
+      ? indicadores.filter(i => i.grado === filtroGrado)
+      : indicadores.slice().sort((a, b) => a.grado - b.grado);
+    if (!lista.length) {
+      return el("span", { className: "ind-empty", text: "Sen indicadores neste grao." });
+    }
+    const ul = el("ul", { className: "ind-list" });
+    for (const i of lista) {
+      const meta = el("div", { className: "ind-meta" }, [
+        el("span", { className: `chip-grado g${i.grado}`, text: `G${i.grado}` }),
+        i.pers ? el("span", { className: `ind-pers ${i.pers === "Social" ? "social" : ""}`, text: i.pers }) : null,
+        el("span", { className: "ind-eje", text: i.ejeNome })
+      ]);
+      const txt = el("div", { className: "ind-text", text: i.text });
+      ul.appendChild(el("li", { className: `g${i.grado}` }, [meta, txt]));
+    }
+    return ul;
+  }
+
+  function buildGradosChips(grados) {
+    const wrap = el("span", { className: "grados-chips" });
+    if (!grados.length) {
+      wrap.appendChild(el("span", { className: "chip-grado empty", text: "—" }));
+      return wrap;
+    }
+    for (const g of [1, 2, 3]) {
+      if (grados.includes(g)) {
+        wrap.appendChild(el("span", { className: `chip-grado g${g}`, text: `G${g}` }));
+      }
+    }
+    return wrap;
+  }
+
+  function buildCriterioRow(c, filtroGrado) {
+    const bloque = BLOQUES[c.bloque - 1];
+    const tr = el("tr");
+    // Bloque
+    tr.appendChild(el("td", { className: "col-bloque" }, [
+      el("span", { className: `badge-bloque ${bloque.clase}`, text: `B${bloque.num} · ${bloque.nome}` })
+    ]));
+    // Código
+    tr.appendChild(el("td", { className: "col-cod", text: c.code }));
+    // Criterio
+    tr.appendChild(el("td", { className: "col-criterio", text: c.text }));
+    // OBJ
+    tr.appendChild(el("td", { className: "col-obj" }, [
+      el("span", { className: "chip-obj", text: c.obj })
+    ]));
+    // Indicadores
+    tr.appendChild(el("td", { className: "col-indicadores" }, [buildIndList(c.indicadores, filtroGrado)]));
+    // Grados resumen
+    tr.appendChild(el("td", { className: "col-grados" }, [buildGradosChips(c.gradosCubiertos)]));
+    return tr;
+  }
+
+  function buildHeaderRow(label, cls) {
+    const tr = el("tr", { className: cls });
+    const td = el("td", { text: label, attrs: { colspan: "6" } });
+    tr.appendChild(td);
+    return tr;
+  }
+
+  function buildTableShell() {
+    const table = el("table", { className: "t" });
+    const thead = el("thead");
+    const trh = el("tr");
+    ["Bloque", "Cód.", "Criterio", "OBJ", "Indicadores asociados", "Graos"].forEach(t => {
+      trh.appendChild(el("th", { text: t }));
+    });
+    thead.appendChild(trh);
+    table.appendChild(thead);
+    table.appendChild(el("tbody"));
+    return table;
+  }
+
+  function buildPorBloques() {
+    const table = buildTableShell();
+    const tbody = table.querySelector("tbody");
+    BLOQUES.forEach(b => {
+      tbody.appendChild(buildHeaderRow(`Bloque ${b.num} · ${b.nome}`, "bloque-head"));
+      CRITERIOS.filter(c => c.bloque === b.num).forEach(c => tbody.appendChild(buildCriterioRow(c)));
+    });
+    return table;
+  }
+
+  function buildPorGrado() {
+    const table = buildTableShell();
+    const tbody = table.querySelector("tbody");
+    [1, 2, 3].forEach(g => {
+      const subtitulo = g === 1 ? "Identificar / recoñecer" : g === 2 ? "Aplicar / empregar" : "Xustificar / crear";
+      tbody.appendChild(buildHeaderRow(`Criterios con indicadores de Grao ${g} · ${subtitulo}`, "grado-head"));
+      const lista = CRITERIOS.filter(c => c.gradosCubiertos.includes(g));
+      if (!lista.length) {
+        const tr = el("tr");
+        tr.appendChild(el("td", {
+          text: "Ningún criterio neste grao.",
+          attrs: { colspan: "6", style: "text-align:center;padding:14px;color:var(--texto-suave);font-style:italic;" }
+        }));
+        tbody.appendChild(tr);
+      } else {
+        lista.forEach(c => tbody.appendChild(buildCriterioRow(c, g)));
+      }
+    });
+    return table;
+  }
+
+  // ===== Estado y wiring =====
+  const host = document.getElementById("tabla-host");
+  const btnB = document.getElementById("btn-bloques");
+  const btnG = document.getElementById("btn-grado");
+
+  function setMode(mode) {
+    while (host.firstChild) host.removeChild(host.firstChild);
+    if (mode === "grado") {
+      btnG.classList.add("active");
+      btnB.classList.remove("active");
+      host.appendChild(buildPorGrado());
+    } else {
+      btnB.classList.add("active");
+      btnG.classList.remove("active");
+      host.appendChild(buildPorBloques());
+    }
+  }
+  btnB.addEventListener("click", () => setMode("bloques"));
+  btnG.addEventListener("click", () => setMode("grado"));
+  setMode("bloques");
+
+  // ===== Tema oscuro/claro =====
+  (function () {
+    const root = document.documentElement;
+    const stored = localStorage.getItem("marco-mate-2ep-theme");
+    if (stored === "dark") root.classList.add("dark");
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      root.classList.toggle("dark");
+      localStorage.setItem("marco-mate-2ep-theme", root.classList.contains("dark") ? "dark" : "light");
+    });
+  })();
+</script>
+</body>
+</html>

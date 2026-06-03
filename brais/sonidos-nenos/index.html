@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sons</title>
+  <script>if(sessionStorage.getItem("sonidos_auth")!=="true"){location.replace("./login.html")}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Paleta pastel base */
+    :root {
+      --fondo: #FFF8F0;
+      --fondo-2: #FFEFE0;
+      --texto: #4A3F3F;
+      --texto-suave: #7A6B6B;
+      --sombra: 0 6px 20px rgba(120, 90, 70, 0.12);
+      --sombra-hover: 0 10px 28px rgba(120, 90, 70, 0.18);
+      --radio: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+      color: var(--texto);
+      background: linear-gradient(180deg, var(--fondo) 0%, var(--fondo-2) 100%);
+      min-height: 100vh;
+    }
+
+    /* ---------- Cabeceira ---------- */
+    header {
+      padding: 28px 24px 8px;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      margin: 0 0 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitulo {
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: var(--texto-suave);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Selector de idioma - esquina superior dereita */
+    .idiomas {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      display: flex;
+      gap: 6px;
+      background: white;
+      padding: 4px;
+      border-radius: 999px;
+      box-shadow: var(--sombra);
+    }
+
+    .idioma-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .idioma-btn:hover { color: var(--texto); }
+
+    .idioma-btn.activo {
+      background: var(--texto);
+      color: white;
+    }
+
+    /* ---------- Grid principal ---------- */
+    main {
+      padding: 28px 24px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .seccion-titulo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 10px 0 22px;
+      text-align: center;
+      color: var(--texto-suave);
+    }
+
+    .grid-categorias {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .tarxeta {
+      border: none;
+      font-family: inherit;
+      color: var(--texto);
+      background: var(--color-tarxeta, #FFD6D6);
+      border-radius: var(--radio);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      transition: transform .22s ease, box-shadow .22s ease;
+      text-align: center;
+    }
+
+    .tarxeta:hover,
+    .tarxeta:focus-visible {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: var(--sombra-hover);
+      outline: none;
+    }
+
+    .tarxeta:active { transform: translateY(-1px) scale(1.0); }
+
+    /* Zona superior (~70%): contedor da ilustración acuarela */
+    .tarxeta .portada {
+      flex: 1 1 auto;
+      min-height: 0;                 /* permite encoller dentro do flex */
+      display: grid;
+      place-items: center;           /* centra a inicial no fallback */
+      overflow: hidden;
+      /* Cor da categoría visible mentres carga ou se falla a imaxe */
+      background: var(--color-tarxeta, #FFD6D6);
+    }
+    .tarxeta .portada img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Fallback (enfoque B): inicial sobre a cor da categoría */
+    .tarxeta .portada.placeholder {
+      color: var(--texto-suave);
+      font-weight: 800;
+      font-size: 2.4rem;
+    }
+
+    /* Franxa inferior (~30%): nome sobre a cor da categoría */
+    .tarxeta .franxa {
+      flex: 0 0 30%;
+      display: grid;
+      place-items: center;
+      padding: 6px 12px;
+      background: var(--color-tarxeta, #FFD6D6);
+    }
+
+    .tarxeta .nome {
+      font-weight: 800;
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    /* Liña de aviso (só visible se fallan os datos en local) */
+    .nota {
+      margin-top: 34px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,.6);
+      border: 1px dashed rgba(120,90,70,.25);
+      border-radius: 14px;
+      color: var(--texto-suave);
+      text-align: center;
+      font-size: .92rem;
+    }
+    .nota:empty { display: none; }   /* sen texto -> non ocupa espazo */
+
+    footer {
+      text-align: center;
+      padding: 18px;
+      color: var(--texto-suave);
+      font-size: .85rem;
+    }
+
+    @media (max-width: 480px) {
+      .idiomas { top: 14px; right: 14px; }
+      header { padding-top: 72px; }
+      .grid-categorias { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .tarxeta .nome { font-size: .95rem; }
+    }
+
+    /* ---------- Vista de xogo ---------- */
+    .vista { display: none; }
+    .vista.activa { display: block; }
+
+    .barra-superior {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 24px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .btn-volver {
+      border: none;
+      background: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--texto);
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn-volver:hover { transform: translateX(-2px); box-shadow: var(--sombra-hover); }
+    .btn-volver svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+    .titulo-categoria {
+      flex: 1;
+      text-align: center;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .panel-xogo {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 24px 60px;
+      text-align: center;
+    }
+
+    .btn-play {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: none;
+      background: white;
+      box-shadow: var(--sombra);
+      cursor: pointer;
+      margin: 24px auto;
+      display: grid;
+      place-items: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .btn-play:hover { transform: scale(1.05); box-shadow: var(--sombra-hover); }
+    .btn-play:active { transform: scale(.98); }
+    .btn-play svg { width: 70px; height: 70px; fill: var(--accent-cat, #8a6a6a); }
+    .btn-play.reproducindo { animation: pulso 1s ease-in-out infinite; }
+    @keyframes pulso {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); box-shadow: var(--sombra-hover); }
+    }
+
+    .pregunta {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--texto-suave);
+      margin: 8px 0 24px;
+    }
+
+    .grid-opcions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .opcion {
+      border: 3px solid transparent;
+      background: white;
+      border-radius: var(--radio);
+      padding: 14px 12px;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      font-family: inherit;
+      color: var(--texto);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .2s ease, background .2s ease;
+    }
+    .opcion:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: var(--sombra-hover);
+    }
+    .opcion:disabled { cursor: default; }
+
+    .opcion .imaxe-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--fondo-2);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .opcion .imaxe-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .opcion .imaxe-wrap.placeholder {
+      background: linear-gradient(135deg, #FFF8F0 0%, #FFE0B2 100%);
+      color: var(--texto-suave);
+      font-weight: 800;
+      font-size: 2rem;
+    }
+    .opcion .nome-opcion {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .opcion.acerto {
+      border-color: #5fb86b;
+      background: #e8f5e9;
+    }
+    .opcion.fallo {
+      border-color: #e57373;
+      background: #ffebee;
+    }
+    .opcion.atenuada { opacity: .45; }
+
+    .feedback {
+      margin-top: 22px;
+      min-height: 40px;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .feedback.acerto { color: #4a9d57; }
+    .feedback.fallo  { color: #c95757; }
+
+    .btn-seguinte {
+      margin-top: 18px;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 999px;
+      background: var(--texto);
+      color: white;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn-seguinte:hover { transform: translateY(-2px); box-shadow: var(--sombra-hover); }
+    .btn-seguinte[hidden] { display: none; }
+
+    .aviso-audio {
+      margin-top: 14px;
+      color: var(--texto-suave);
+      font-size: .9rem;
+      min-height: 1.2em;
+    }
+
+    @media (max-width: 480px) {
+      .btn-play { width: 130px; height: 130px; }
+      .btn-play svg { width: 56px; height: 56px; }
+      .grid-opcions { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .opcion { padding: 10px 8px; }
+      .opcion .nome-opcion { font-size: .9rem; }
+    }
+
+    /* ---------- Menú de xogos ---------- */
+    .tarxeta-xogo {
+      border: none;
+      font-family: inherit;
+      color: var(--texto);
+      background: var(--color-tarxeta, #BBDEFB);
+      border-radius: var(--radio);
+      padding: 26px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      aspect-ratio: 1 / 1;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      transition: transform .22s ease, box-shadow .22s ease;
+      text-align: center;
+    }
+    .tarxeta-xogo:hover,
+    .tarxeta-xogo:focus-visible {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: var(--sombra-hover);
+      outline: none;
+    }
+    .tarxeta-xogo:active { transform: translateY(-1px) scale(1.0); }
+    .tarxeta-xogo .num {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--accent-tarxeta, #6FA5D6);
+      color: white;
+      display: grid; place-items: center;
+      font-weight: 800; font-size: 1.2rem;
+    }
+    .tarxeta-xogo .xogo-nome { font-weight: 800; font-size: 1.2rem; line-height: 1.2; }
+    .tarxeta-xogo .xogo-desc { font-size: .92rem; color: var(--texto-suave); line-height: 1.3; }
+
+    /* Barra superior tamén na vista de categorías (2º nivel) */
+    #vista-categorias .barra-superior { margin-bottom: 4px; }
+    #vista-categorias .seccion-titulo { margin-top: 8px; }
+
+    /* Pantalla de inicio: 4 xogos en 2x2, grandes e centrados (v + h).
+       Só afecta a #vista-xogos; a reixa de categorías non cambia. */
+    #vista-xogos.activa {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 240px);
+    }
+    #vista-xogos .seccion-titulo { margin-bottom: 26px; }
+    #grid-xogos {
+      grid-template-columns: repeat(2, 1fr);  /* 2x2 (id gaña a .grid-categorias) */
+      max-width: 640px;
+      width: 100%;
+      margin: 0 auto;
+      gap: 24px;
+    }
+    @media (max-width: 480px) {
+      #vista-xogos.activa { min-height: calc(100vh - 170px); }
+      #grid-xogos { max-width: 420px; gap: 14px; }
+    }
+
+    /* ---------- Memoria sonora ---------- */
+    .opcion.activa {
+      border-color: var(--accent-cat, #8a6a6a);
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: var(--sombra-hover);
+    }
+    .opcion.paso-ok { border-color: #5fb86b; background: #e8f5e9; }
+    .nivel-badge {
+      display: inline-block;
+      margin: 0 0 6px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: white;
+      box-shadow: var(--sombra);
+      font-weight: 800;
+      color: var(--texto);
+    }
+    .progreso-secuencia {
+      display: flex; justify-content: center; gap: 8px;
+      margin: 6px 0 14px; min-height: 16px;
+    }
+    .progreso-secuencia .punto {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: rgba(120,90,70,.2);
+      transition: background .2s ease, transform .2s ease;
+    }
+    .progreso-secuencia .punto.feito { background: var(--accent-cat, #7FB88A); transform: scale(1.15); }
+
+    /* ---------- Bingo sonoro ---------- */
+    .carton {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 560px;
+      margin: 18px auto 0;
+    }
+    .celda {
+      position: relative;
+      border: 3px solid transparent;
+      background: white;
+      border-radius: 16px;
+      padding: 8px;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .2s ease;
+      font-family: inherit;
+    }
+    .celda:hover:not(:disabled):not(.marcada) { transform: translateY(-3px); box-shadow: var(--sombra-hover); }
+    .celda img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; }
+    .celda.marcada { border-color: #5fb86b; }
+    /* O ✓ non se pon na casiña libre: alí mándase a ★ (espazo gratis) */
+    .celda.marcada:not(.libre)::after {
+      content: "✓";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 3rem;
+      font-weight: 900;
+      color: #4a9d57;
+      background: rgba(232,245,233,.78);
+    }
+    .celda.fallo-flash { border-color: #e57373; animation: sacudir .35s ease; }
+    @keyframes sacudir {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .celda.libre {
+      cursor: default;
+      background: linear-gradient(135deg, #FFF3D6 0%, #FFE0B2 100%);
+      border-color: #E8C06B;
+    }
+    .celda.libre .estrela { font-size: 2.6rem; color: #E0A53B; }
+
+    @media (max-width: 480px) {
+      .tarxeta-xogo { padding: 16px 12px; gap: 8px; }
+      .tarxeta-xogo .xogo-nome { font-size: 1.05rem; }
+      .tarxeta-xogo .xogo-desc { font-size: .82rem; }
+      .carton { gap: 8px; }
+      .celda.marcada::after { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="idiomas" role="group" aria-label="Selector de idioma">
+      <button class="idioma-btn" data-idioma="gl">GL</button>
+      <button class="idioma-btn" data-idioma="es">ES</button>
+      <button class="idioma-btn" data-idioma="en">EN</button>
+    </div>
+    <h1 data-i18n="titulo_app">Sons</h1>
+    <p class="subtitulo" data-i18n="subtitulo_app">Escoita, adiviña e xoga</p>
+  </header>
+
+  <main>
+    <!-- Vista 0: menú de xogos (inicial) -->
+    <section class="vista activa" id="vista-xogos">
+      <p class="seccion-titulo" data-i18n="ui.escolle_xogo">Escolle un xogo</p>
+      <div class="grid-categorias" id="grid-xogos"></div>
+      <p class="nota" id="nota-aviso"></p>
+    </section>
+
+    <!-- Vista 1: lista de categorías (2º nivel) -->
+    <section class="vista" id="vista-categorias">
+      <div class="barra-superior">
+        <button class="btn-volver" id="btn-volver-cat" type="button">
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+          <span data-i18n="volver">Volver</span>
+        </button>
+        <h2 class="titulo-categoria" id="titulo-xogo"></h2>
+        <div style="width:90px"></div>
+      </div>
+      <p class="seccion-titulo" data-i18n="escolle_categoria">Escolle unha categoría</p>
+      <div class="grid-categorias" id="grid-categorias"></div>
+    </section>
+
+    <!-- Vista 2: xogo (xenérico, o panel constrúese por modo en JS) -->
+    <section class="vista" id="vista-xogo">
+      <div class="barra-superior">
+        <button class="btn-volver" id="btn-volver" type="button">
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+          <span data-i18n="volver">Volver</span>
+        </button>
+        <h2 class="titulo-categoria" id="titulo-categoria"></h2>
+        <div style="width:90px"></div>
+      </div>
+      <div class="panel-xogo" id="panel-xogo"></div>
+      <audio id="audio-son" preload="auto"></audio>
+    </section>
+  </main>
+
+  <footer>Lucía Suárez</footer>
+
+  <script>
+    // ---------- Estado ----------
+    const estado = {
+      idioma: localStorage.getItem('sons_idioma') || 'gl',
+      i18n: null,
+      categorias: null,
+      sons: null,              // diccionario {idCategoria: [son, son, ...]}
+      modo: null,              // 'que_escoito' | 'memoria' | 'intruso' | 'bingo'
+      categoriaActiva: null,   // obxecto da categoría en curso
+      ronda: null,             // que_escoito: { obxectivo, opcions, resolta }
+      recentes: {},            // que_escoito: anti-repetición por categoría
+      memoria: null,           // { nivel, secuencia, pos }
+      intruso: null,           // { opcions, intrusoId, resolta }
+      bingo: null              // { carton, cola, idx, actual, marcados, total }
+    };
+    const NUM_OPCIONS = 4;     // 4 opcións por ronda (que escoito / intruso)
+    const VENTANA_RECENTES = 3;// non repetir obxectivo nas últimas N rondas
+    const MEM_NIVEL_MIN = 2;   // memoria: lonxitude mínima da secuencia
+    const MEM_NIVEL_MAX = 6;   // memoria: tope superior
+    // Versión de datos: súbea cando cambien os .json (rompe caché do navegador)
+    const APP_VER = '2';
+
+    // Catálogo de xogos (orde = número que ve o neno). Cores pastel da app.
+    const XOGOS = [
+      { modo: 'que_escoito', color: '#BBDEFB', accent: '#6FA5D6' },
+      { modo: 'memoria',     color: '#C8E6C9', accent: '#7FB88A' },
+      { modo: 'intruso',     color: '#FFE0B2', accent: '#D9A56B' },
+      { modo: 'bingo',       color: '#F8BBD0', accent: '#C77999' }
+    ];
+
+    // ---------- Utilidades ----------
+    // Lectura segura de claves anidadas tipo "actividad_descripciones.que_escoito"
+    function t (clave) {
+      const dic = estado.i18n[estado.idioma];
+      return clave.split('.').reduce((acc, k) => (acc && acc[k] != null) ? acc[k] : null, dic);
+    }
+    function nomeSon (id) {
+      const dic = estado.i18n[estado.idioma];
+      return (dic.sons && dic.sons[id]) || id;
+    }
+    function nomeCat (id) {
+      const dic = estado.i18n[estado.idioma];
+      return (dic.categorias && dic.categorias[id]) || id;
+    }
+    // Mestura un array (Fisher-Yates). Devolve un novo array, non muta o orixinal.
+    function mesturar (arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+    function panelEl () { return document.getElementById('panel-xogo'); }
+    function audioEl () { return document.getElementById('audio-son'); }
+
+    // Construtor de nodos sen innerHTML (evita calquera risco de XSS).
+    // el('div', {class:'x', id:'y', dataset:{i18n:'k'}}, hijo1, 'texto', ...)
+    function el (tag, attrs, ...kids) {
+      const e = document.createElement(tag);
+      if (attrs) {
+        for (const k in attrs) {
+          const v = attrs[k];
+          if (k === 'class') e.className = v;
+          else if (k === 'dataset') Object.assign(e.dataset, v);
+          else if (k in e) e[k] = v;
+          else e.setAttribute(k, v);
+        }
+      }
+      kids.flat().forEach(c => {
+        if (c == null) return;
+        e.append(c.nodeType ? c : document.createTextNode(String(c)));
+      });
+      return e;
+    }
+    // Icona SVG de "play" creada con DOM (sen cadeas HTML).
+    function svgPlay () {
+      const NS = 'http://www.w3.org/2000/svg';
+      const s = document.createElementNS(NS, 'svg');
+      s.setAttribute('viewBox', '0 0 24 24');
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', 'M8 5v14l11-7z');
+      s.appendChild(p);
+      return s;
+    }
+    function botonPlay () {
+      const b = el('button', { class: 'btn-play', id: 'btn-play', type: 'button', 'aria-label': 'play' });
+      b.appendChild(svgPlay());
+      return b;
+    }
+    function botonSeguinte (i18nKey) {
+      return el('button', { class: 'btn-seguinte', id: 'btn-seguinte', type: 'button', hidden: true },
+        el('span', { dataset: { i18n: i18nKey } }));
+    }
+    function feedbackP () { return el('p', { class: 'feedback', id: 'feedback' }); }
+    function avisoP () { return el('p', { class: 'aviso-audio', id: 'aviso-audio' }); }
+    function preguntaP (i18nKey) { return el('p', { class: 'pregunta', dataset: { i18n: i18nKey } }); }
+
+    // ---------- Carga de datos ----------
+    async function cargarDatos () {
+      try {
+        const v = `?v=${APP_VER}`;
+        const [i18n, cats, sons] = await Promise.all([
+          fetch('data/i18n.json' + v).then(r => r.json()),
+          fetch('data/categorias.json' + v).then(r => r.json()),
+          fetch('data/sons.json' + v).then(r => r.json())
+        ]);
+        estado.i18n = i18n;
+        estado.categorias = cats.categorias;
+        estado.sons = sons.sons;
+      } catch (err) {
+        console.error('Erro cargando datos:', err);
+      }
+    }
+
+    // ---------- Idioma ----------
+    function aplicarIdioma () {
+      const dic = estado.i18n[estado.idioma];
+      document.documentElement.lang = estado.idioma;
+
+      document.querySelectorAll('[data-i18n]').forEach(node => {
+        const valor = t(node.dataset.i18n);
+        if (valor) node.textContent = valor;
+      });
+
+      // Tarxetas do menú de xogos
+      document.querySelectorAll('.tarxeta-xogo').forEach(tx => {
+        const m = tx.dataset.modo;
+        const n = tx.querySelector('.xogo-nome');
+        const d = tx.querySelector('.xogo-desc');
+        if (n) n.textContent = t('actividades.' + m) || m;
+        if (d) d.textContent = t('actividad_descripciones.' + m) || '';
+      });
+
+      // Tarxetas de categoría
+      document.querySelectorAll('.tarxeta').forEach(tx => {
+        const id = tx.dataset.id;
+        const nome = tx.querySelector('.nome');
+        if (nome && dic.categorias[id]) nome.textContent = dic.categorias[id];
+      });
+
+      // Reetiqueta as fichas do xogo en curso
+      document.querySelectorAll('.opcion').forEach(op => {
+        const lbl = op.querySelector('.nome-opcion');
+        if (lbl && op.dataset.id) lbl.textContent = nomeSon(op.dataset.id);
+      });
+
+      // Títulos das barras superiores
+      if (estado.modo) {
+        const tx = document.getElementById('titulo-xogo');
+        if (tx) tx.textContent = t('actividades.' + estado.modo) || '';
+      }
+      if (estado.categoriaActiva) {
+        const tc = document.getElementById('titulo-categoria');
+        if (tc) tc.textContent = (dic.categorias[estado.categoriaActiva.id] || '');
+      }
+
+      document.querySelectorAll('.idioma-btn').forEach(b => {
+        b.classList.toggle('activo', b.dataset.idioma === estado.idioma);
+      });
+    }
+
+    // ---------- Navegación ----------
+    function cambiarVista (id) {
+      document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
+      document.getElementById(id).classList.add('activa');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function renderXogos () {
+      const grid = document.getElementById('grid-xogos');
+      grid.textContent = '';
+      XOGOS.forEach((x, i) => {
+        const btn = el('button', {
+          class: 'tarxeta-xogo', type: 'button', dataset: { modo: x.modo }
+        },
+          el('div', { class: 'num' }, i + 1),
+          el('div', { class: 'xogo-nome' }),
+          el('div', { class: 'xogo-desc' })
+        );
+        btn.style.setProperty('--color-tarxeta', x.color);
+        btn.style.setProperty('--accent-tarxeta', x.accent);
+        btn.addEventListener('click', () => escollerXogo(x.modo));
+        grid.appendChild(btn);
+      });
+    }
+
+    function crearTarxeta (cat) {
+      const portada = el('div', { class: 'portada' });
+      const img = el('img', { loading: 'lazy', alt: '', src: `assets/img/categorias/${cat.id}.webp` });
+      // Fallback (enfoque B): se a portada non carga, inicial sobre a cor.
+      img.addEventListener('error', () => {
+        portada.classList.add('placeholder');
+        portada.textContent = nomeCat(cat.id).charAt(0).toUpperCase();
+      });
+      portada.appendChild(img);
+
+      const btn = el('button', {
+        class: 'tarxeta', type: 'button', dataset: { id: cat.id }
+      },
+        portada,
+        el('div', { class: 'franxa' }, el('div', { class: 'nome' }))
+      );
+      btn.style.setProperty('--color-tarxeta', cat.color);
+      btn.style.setProperty('--accent-tarxeta', cat.accent);
+      btn.addEventListener('click', () => entrarCategoria(cat.id));
+      return btn;
+    }
+
+    function renderCategorias () {
+      const grid = document.getElementById('grid-categorias');
+      grid.textContent = '';
+      estado.categorias.forEach(cat => grid.appendChild(crearTarxeta(cat)));
+    }
+
+    function mostrarMenuXogos () {
+      pararAudio();
+      estado.modo = null;
+      estado.categoriaActiva = null;
+      estado.ronda = estado.memoria = estado.intruso = estado.bingo = null;
+      cambiarVista('vista-xogos');
+      aplicarIdioma();
+    }
+
+    function escollerXogo (modo) {
+      estado.modo = modo;
+      renderCategorias();
+      cambiarVista('vista-categorias');
+      aplicarIdioma();
+    }
+
+    function entrarCategoria (id) {
+      const cat = estado.categorias.find(c => c.id === id);
+      if (!cat) return;
+      estado.categoriaActiva = cat;
+      document.documentElement.style.setProperty('--accent-cat', cat.accent);
+      cambiarVista('vista-xogo');
+      aplicarIdioma();
+      iniciarModo();
+    }
+
+    function iniciarModo () {
+      pararAudio();
+      panelEl().textContent = '';
+      if (estado.modo === 'que_escoito') iniciarQueEscoito();
+      else if (estado.modo === 'memoria') iniciarMemoria();
+      else if (estado.modo === 'intruso') iniciarIntruso();
+      else if (estado.modo === 'bingo') iniciarBingo();
+    }
+
+    function volverDendeXogo () {
+      pararAudio();
+      estado.categoriaActiva = null;
+      estado.ronda = estado.memoria = estado.intruso = estado.bingo = null;
+      cambiarVista('vista-categorias');
+    }
+
+    // ---------- Audio ----------
+    function pararAudio () {
+      const a = audioEl();
+      if (!a) return;
+      a.pause();
+      a.onended = null;
+    }
+
+    // Reproduce un son; cb() ao rematar. Se o navegador bloquea o audio,
+    // amosa o aviso e NON continúa (evita avanzar a secuencia sen son).
+    function reproducirUno (son, cb) {
+      const a = audioEl();
+      a.onended = null;
+      try {
+        a.src = `assets/audio/${son.audio}`;
+        a.currentTime = 0;
+        const p = a.play();
+        if (p && p.catch) {
+          p.catch(() => {
+            const av = document.getElementById('aviso-audio');
+            if (av) av.textContent = t('audio_non_dispon');
+            const bp = document.getElementById('btn-play');
+            if (bp) bp.classList.remove('reproducindo');
+          });
+        }
+        a.onended = () => { a.onended = null; if (cb) cb(); };
+      } catch (err) {
+        console.error('Erro de audio:', err);
+        if (cb) cb();
+      }
+    }
+
+    // Reproduce sons[] en orde. onStep(i) ao empezar cada un; onEnd ao final.
+    function reproducirSecuencia (sons, onStep, onEnd) {
+      let i = 0;
+      (function paso () {
+        if (i >= sons.length) { if (onEnd) onEnd(); return; }
+        if (onStep) onStep(i);
+        reproducirUno(sons[i], () => { i++; setTimeout(paso, 380); });
+      })();
+    }
+
+    // Reproduce con animación do botón play e limpeza do aviso.
+    function tocarConBoton (sons, onStep, onEnd) {
+      const btn = document.getElementById('btn-play');
+      const av = document.getElementById('aviso-audio');
+      if (av) av.textContent = '';
+      if (btn) btn.classList.add('reproducindo');
+      reproducirSecuencia(sons, onStep, () => {
+        if (btn) btn.classList.remove('reproducindo');
+        if (onEnd) onEnd();
+      });
+    }
+
+    // Ficha imaxe+nome reutilizable por varios xogos. onClick(son, btn).
+    function crearOpcion (son, onClick) {
+      const wrap = el('div', { class: 'imaxe-wrap' });
+      const img = el('img', { alt: nomeSon(son.id), src: `assets/img/sons/${son.imaxe}` });
+      img.addEventListener('error', () => {
+        wrap.classList.add('placeholder');
+        wrap.textContent = nomeSon(son.id).charAt(0).toUpperCase();
+      });
+      wrap.appendChild(img);
+
+      const btn = el('button', {
+        class: 'opcion', type: 'button', dataset: { id: son.id }
+      },
+        wrap,
+        el('div', { class: 'nome-opcion' }, nomeSon(son.id))
+      );
+      btn.addEventListener('click', () => onClick(son, btn));
+      return btn;
+    }
+
+    function mostrarFeedback (tipo, texto) {
+      const fb = document.getElementById('feedback');
+      if (!fb) return;
+      fb.textContent = texto != null ? texto : t(tipo);
+      fb.className = `feedback ${tipo}`;
+    }
+    function limparFeedback () {
+      const fb = document.getElementById('feedback');
+      if (fb) { fb.textContent = ''; fb.className = 'feedback'; }
+      const bs = document.getElementById('btn-seguinte');
+      if (bs) bs.hidden = true;
+      const av = document.getElementById('aviso-audio');
+      if (av) av.textContent = '';
+    }
+
+    // ================================================================
+    //  XOGO 1 — Que escoito? (escoita un son, sinala a imaxe)
+    // ================================================================
+    function iniciarQueEscoito () {
+      const p = panelEl();
+      p.textContent = '';
+      const bp = botonPlay();
+      bp.addEventListener('click', () => {
+        if (estado.ronda) tocarConBoton([estado.ronda.obxectivo]);
+      });
+      const grid = el('div', { class: 'grid-opcions', id: 'grid-opcions' });
+      const bs = botonSeguinte('seguinte');
+      bs.addEventListener('click', rondaQueEscoito);
+      p.append(bp, preguntaP('actividad_descripciones.que_escoito'),
+               grid, feedbackP(), bs, avisoP());
+      aplicarIdioma();
+      rondaQueEscoito();
+    }
+
+    function actualizarRecentes (catId, sonId) {
+      if (!estado.recentes[catId]) estado.recentes[catId] = [];
+      estado.recentes[catId].unshift(sonId);
+      estado.recentes[catId] = estado.recentes[catId].slice(0, VENTANA_RECENTES);
+    }
+    function escollerObxectivo (sonsCat, catId) {
+      const recentes = estado.recentes[catId] || [];
+      const candidatos = sonsCat.filter(s => !recentes.includes(s.id));
+      const lista = candidatos.length > 0 ? candidatos : sonsCat;
+      return lista[Math.floor(Math.random() * lista.length)];
+    }
+    function seleccionarDistractores (sonObxectivo, sonsCategoria, n) {
+      const catId = estado.categoriaActiva.id;
+      const recentes = estado.recentes[catId] || [];
+      const dispon = sonsCategoria.filter(s => s.id !== sonObxectivo.id);
+      const preferidos = dispon.filter(s => !recentes.includes(s.id));
+      const restantes  = dispon.filter(s =>  recentes.includes(s.id));
+      const escolma = [...mesturar(preferidos), ...mesturar(restantes)];
+      return escolma.slice(0, n - 1);
+    }
+    function rondaQueEscoito () {
+      const cat = estado.categoriaActiva;
+      const sonsCat = estado.sons[cat.id] || [];
+      if (sonsCat.length === 0) return;
+      const obxectivo = escollerObxectivo(sonsCat, cat.id);
+      actualizarRecentes(cat.id, obxectivo.id);
+      const distractores = seleccionarDistractores(obxectivo, sonsCat, NUM_OPCIONS);
+      const opcions = mesturar([obxectivo, ...distractores]);
+      estado.ronda = { obxectivo, opcions, resolta: false };
+      const grid = document.getElementById('grid-opcions');
+      grid.textContent = '';
+      opcions.forEach(s => grid.appendChild(crearOpcion(s, elixirQueEscoito)));
+      limparFeedback();
+      tocarConBoton([obxectivo]);
+    }
+    function elixirQueEscoito (son, btn) {
+      if (!estado.ronda || estado.ronda.resolta) return;
+      const acerta = son.id === estado.ronda.obxectivo.id;
+      btn.classList.add(acerta ? 'acerto' : 'fallo');
+      if (acerta) {
+        estado.ronda.resolta = true;
+        document.querySelectorAll('.opcion').forEach(o => {
+          o.disabled = true;
+          if (o !== btn) o.classList.add('atenuada');
+        });
+        mostrarFeedback('acerto');
+        document.getElementById('btn-seguinte').hidden = false;
+      } else {
+        btn.disabled = true;
+        mostrarFeedback('fallo');
+      }
+    }
+
+    // ================================================================
+    //  XOGO 2 — Memoria sonora (secuencia progresiva 2 -> 6)
+    // ================================================================
+    function iniciarMemoria () {
+      estado.memoria = { nivel: MEM_NIVEL_MIN, secuencia: [], pos: 0 };
+      novaSecuenciaMemoria();
+    }
+
+    // Regra de progresión: acerto -> +1 (tope MAX); fallo -> -1 (piso MIN).
+    function progresarMemoria (acerto) {
+      const m = estado.memoria;
+      m.nivel = acerto
+        ? Math.min(MEM_NIVEL_MAX, m.nivel + 1)
+        : Math.max(MEM_NIVEL_MIN, m.nivel - 1);
+    }
+
+    function novaSecuenciaMemoria () {
+      const sonsCat = estado.sons[estado.categoriaActiva.id] || [];
+      const n = Math.min(estado.memoria.nivel, sonsCat.length);
+      estado.memoria.secuencia = mesturar(sonsCat).slice(0, n);
+      estado.memoria.pos = 0;
+      renderMemoria();
+    }
+
+    function renderMemoria () {
+      const m = estado.memoria;
+      const sonsCat = estado.sons[estado.categoriaActiva.id] || [];
+      const p = panelEl();
+      p.textContent = '';
+
+      const badge = el('div', { class: 'nivel-badge' },
+        el('span', { dataset: { i18n: 'ui.mem_nivel' } }), ' ', el('b', null, m.nivel));
+      const bp = botonPlay();
+      bp.addEventListener('click', reproducirMemoria);
+      const instru = el('p', { class: 'pregunta', id: 'mem-instru' });
+      const prog = el('div', { class: 'progreso-secuencia', id: 'mem-progreso' });
+      m.secuencia.forEach(() => prog.appendChild(el('div', { class: 'punto' })));
+      const grid = el('div', { class: 'grid-opcions', id: 'grid-opcions' });
+      mesturar(sonsCat).forEach(s => grid.appendChild(crearOpcion(s, pulsarMemoria)));
+      const bs = botonSeguinte('seguinte');
+      bs.addEventListener('click', novaSecuenciaMemoria);
+
+      p.append(badge, el('div', null, bp), instru, prog, grid,
+               feedbackP(), bs, avisoP());
+
+      aplicarIdioma();
+      setTecladoMemoria(false);
+      instru.textContent = t('ui.mem_escoita');
+      setTimeout(reproducirMemoria, 450);
+    }
+
+    function setTecladoMemoria (activo) {
+      document.querySelectorAll('#grid-opcions .opcion').forEach(o => {
+        o.disabled = !activo;
+        o.classList.toggle('atenuada', !activo);
+      });
+    }
+    function resaltarTeclaMemoria (sonId) {
+      const op = document.querySelector('#grid-opcions .opcion[data-id="' + sonId + '"]');
+      if (!op) return;
+      op.classList.add('activa');
+      setTimeout(() => op.classList.remove('activa'), 520);
+    }
+
+    function reproducirMemoria () {
+      if (estado.modo !== 'memoria' || !estado.memoria) return;
+      const m = estado.memoria;
+      m.pos = 0;
+      document.querySelectorAll('#mem-progreso .punto').forEach(pt => pt.classList.remove('feito'));
+      const instru = document.getElementById('mem-instru');
+      if (instru) instru.textContent = t('ui.mem_escoita');
+      setTecladoMemoria(false);
+      tocarConBoton(
+        m.secuencia,
+        i => resaltarTeclaMemoria(m.secuencia[i].id),
+        () => {
+          const ins = document.getElementById('mem-instru');
+          if (ins) ins.textContent = t('ui.mem_repite');
+          setTecladoMemoria(true);
+        }
+      );
+    }
+
+    function pulsarMemoria (son, btn) {
+      const m = estado.memoria;
+      if (!m || btn.disabled) return;
+      const esperado = m.secuencia[m.pos];
+      if (son.id === esperado.id) {
+        btn.classList.add('paso-ok');
+        const punto = document.querySelectorAll('#mem-progreso .punto')[m.pos];
+        if (punto) punto.classList.add('feito');
+        m.pos++;
+        if (m.pos >= m.secuencia.length) {
+          setTecladoMemoria(false);
+          mostrarFeedback('acerto');
+          progresarMemoria(true);
+          document.getElementById('btn-seguinte').hidden = false;
+        }
+      } else {
+        setTecladoMemoria(false);
+        mostrarFeedback('fallo');
+        progresarMemoria(false);
+        setTimeout(novaSecuenciaMemoria, 1300);
+      }
+    }
+
+    // ================================================================
+    //  XOGO 3 — Intruso auditivo (3 da categoría + 1 doutra)
+    // ================================================================
+    function iniciarIntruso () {
+      const cat = estado.categoriaActiva;
+      const sonsCat = estado.sons[cat.id] || [];
+      const tres = mesturar(sonsCat).slice(0, 3);
+      const outras = estado.categorias.filter(c => c.id !== cat.id);
+      const catIntrusa = outras[Math.floor(Math.random() * outras.length)];
+      const sonsOutra = estado.sons[catIntrusa.id] || [];
+      const intruso = sonsOutra[Math.floor(Math.random() * sonsOutra.length)];
+      estado.intruso = {
+        opcions: mesturar([...tres, intruso]),
+        intrusoId: intruso.id,
+        resolta: false
+      };
+      renderIntruso();
+    }
+
+    function renderIntruso () {
+      const p = panelEl();
+      p.textContent = '';
+      const bp = botonPlay();
+      bp.addEventListener('click', () => tocarConBoton(estado.intruso.opcions));
+      const grid = el('div', { class: 'grid-opcions', id: 'grid-opcions' });
+      estado.intruso.opcions.forEach(s => grid.appendChild(crearOpcion(s, elixirIntruso)));
+      const bs = botonSeguinte('seguinte');
+      bs.addEventListener('click', iniciarIntruso);
+      p.append(bp, preguntaP('actividad_descripciones.intruso'),
+               grid, feedbackP(), bs, avisoP());
+      aplicarIdioma();
+      tocarConBoton(estado.intruso.opcions);
+    }
+
+    function elixirIntruso (son, btn) {
+      const it = estado.intruso;
+      if (!it || it.resolta) return;
+      if (son.id === it.intrusoId) {
+        it.resolta = true;
+        btn.classList.add('acerto');
+        document.querySelectorAll('.opcion').forEach(o => {
+          o.disabled = true;
+          if (o !== btn) o.classList.add('atenuada');
+        });
+        mostrarFeedback('acerto');
+        document.getElementById('btn-seguinte').hidden = false;
+      } else {
+        btn.classList.add('fallo');
+        btn.disabled = true;
+        mostrarFeedback('fallo');
+      }
+    }
+
+    // ================================================================
+    //  XOGO 4 — Bingo sonoro (cartón 3x3, centro = estrela libre)
+    // ================================================================
+    function iniciarBingo () {
+      const sonsCat = estado.sons[estado.categoriaActiva.id] || [];
+      const oito = mesturar(sonsCat).slice(0, 8);
+      const carton = [];
+      let k = 0;
+      for (let i = 0; i < 9; i++) carton.push(i === 4 ? { libre: true } : oito[k++]);
+      estado.bingo = {
+        carton,
+        cola: mesturar(oito),
+        idx: 0,
+        actual: null,
+        marcados: new Set(),
+        total: oito.length
+      };
+      renderBingo();
+    }
+
+    function renderBingo () {
+      const p = panelEl();
+      p.textContent = '';
+      const bp = botonPlay();
+      bp.addEventListener('click', cantarBingo);
+      const cartonEl = el('div', { class: 'carton', id: 'bingo-carton' });
+      estado.bingo.carton.forEach(cel => {
+        if (cel.libre) {
+          cartonEl.appendChild(
+            el('div', { class: 'celda libre marcada' }, el('div', { class: 'estrela' }, '★')));
+        } else {
+          const img = el('img', { alt: nomeSon(cel.id), src: `assets/img/sons/${cel.imaxe}` });
+          const b = el('button', { class: 'celda', type: 'button', dataset: { id: cel.id } }, img);
+          img.addEventListener('error', () => {
+            b.textContent = nomeSon(cel.id).charAt(0).toUpperCase();
+          });
+          b.addEventListener('click', () => marcarBingo(cel, b));
+          cartonEl.appendChild(b);
+        }
+      });
+      const bs = botonSeguinte('ui.xogar_outra');
+      bs.addEventListener('click', iniciarBingo);
+      p.append(bp, preguntaP('actividad_descripciones.bingo'),
+               cartonEl, feedbackP(), bs, avisoP());
+      aplicarIdioma();
+      cantarBingo();
+    }
+
+    function cantarBingo () {
+      if (estado.modo !== 'bingo' || !estado.bingo) return;
+      const b = estado.bingo;
+      if (b.idx >= b.cola.length) return;          // xa cantados todos
+      b.actual = b.cola[b.idx];
+      const bp = document.getElementById('btn-play');
+      if (bp) bp.disabled = true;                  // bloqueado ata atopalo
+      tocarConBoton([b.actual]);
+    }
+
+    function marcarBingo (cel, btn) {
+      const b = estado.bingo;
+      if (!b || !b.actual || b.marcados.has(cel.id)) return;
+      if (cel.id === b.actual.id) {
+        btn.classList.add('marcada');
+        btn.disabled = true;
+        b.marcados.add(cel.id);
+        b.idx++;
+        b.actual = null;
+        if (b.marcados.size >= b.total) {
+          mostrarFeedback('acerto', t('ui.bingo_completo'));
+          document.getElementById('btn-seguinte').hidden = false;
+        } else {
+          const bp = document.getElementById('btn-play');
+          if (bp) bp.disabled = false;             // pode cantar o seguinte
+        }
+      } else {
+        btn.classList.add('fallo-flash');
+        setTimeout(() => btn.classList.remove('fallo-flash'), 360);
+      }
+    }
+
+    // ---------- Eventos globais ----------
+    document.querySelectorAll('.idioma-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        estado.idioma = b.dataset.idioma;
+        localStorage.setItem('sons_idioma', estado.idioma);
+        aplicarIdioma();
+      });
+    });
+    document.getElementById('btn-volver').addEventListener('click', volverDendeXogo);
+    document.getElementById('btn-volver-cat').addEventListener('click', mostrarMenuXogos);
+
+    // ---------- Arranque ----------
+    (async function () {
+      await cargarDatos();
+      if (!estado.i18n || !estado.categorias) {
+        document.querySelector('.nota').textContent =
+          'Para probar en local cómpre un servidor. Executa: python3 -m http.server 8080';
+        return;
+      }
+      renderXogos();
+      aplicarIdioma();
+    })();
+  </script>
+</body>
+</html>

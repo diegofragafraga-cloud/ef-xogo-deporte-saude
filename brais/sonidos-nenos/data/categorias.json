@@ -1,0 +1,14 @@
+{
+  "categorias": [
+    { "id": "corpo",        "color": "#FFD6D6", "accent": "#E89B9B" },
+    { "id": "fogar",        "color": "#FFE0B2", "accent": "#D9A56B" },
+    { "id": "animais",      "color": "#C8E6C9", "accent": "#7FB88A" },
+    { "id": "natureza",     "color": "#DCEDC8", "accent": "#8FAF6B" },
+    { "id": "cidade",       "color": "#BBDEFB", "accent": "#6FA5D6" },
+    { "id": "colexio",      "color": "#FFF9C4", "accent": "#D6C45C" },
+    { "id": "instrumentos", "color": "#E1BEE7", "accent": "#A06FB0" },
+    { "id": "obxectos",     "color": "#FFCCBC", "accent": "#D69080" },
+    { "id": "emocionais",   "color": "#F8BBD0", "accent": "#C77999" },
+    { "id": "abstractos",   "color": "#CFD8DC", "accent": "#7C8C92" }
+  ]
+}

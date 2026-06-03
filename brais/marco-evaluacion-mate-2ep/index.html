@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Marco de evaluación · Matemáticas · 2.º de Educación Primaria</title>
+<meta name="description" content="Marco de evaluación de las competencias específicas del área de Matemáticas para 2.º de Educación Primaria (1.er ciclo). Adaptación del marco INEE (4.º EP) al currículo gallego (Decreto 155/2022).">
+<script>if(localStorage.getItem("marco_eval_auth")!=="true"){location.replace("./login.html")}</script>
+<style>
+  /* ===== Paleta y reset ===== */
+  :root {
+    --rojo: #C8102E;
+    --rojo-oscuro: #8B0A1F;
+    --salmon: #F8DDD7;
+    --salmon-claro: #FCEDE9;
+    --crema: #FAF7F4;
+    --texto: #2A2A2A;
+    --texto-suave: #555;
+    --borde: #E0D6D2;
+    --bg: #FFFFFF;
+    --bg-side: #FAF7F4;
+    --acento: #5B7FBF;
+    --aviso-bg: #FFF8E1;
+    --aviso-borde: #E6C76A;
+    --max-w: 1100px;
+  }
+  html.dark {
+    --rojo: #E83A56;
+    --rojo-oscuro: #B82A45;
+    --salmon: #3A2A2C;
+    --salmon-claro: #2A1E20;
+    --crema: #18141A;
+    --texto: #E8E4DE;
+    --texto-suave: #A8A29B;
+    --borde: #3A3439;
+    --bg: #0F0D11;
+    --bg-side: #15121A;
+    --aviso-bg: #2C2515;
+    --aviso-borde: #6E5A2A;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+    color: var(--texto);
+    background: var(--bg);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Layout: sidebar + main ===== */
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  .toc {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 28px 22px 28px 28px;
+    background: var(--bg-side);
+    border-right: 1px solid var(--borde);
+    font-size: 14px;
+  }
+  .toc h2 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--rojo);
+    margin: 0 0 12px 0;
+    font-weight: 700;
+  }
+  .toc nav ul { list-style: none; padding: 0; margin: 0 0 18px 0; }
+  .toc nav li { margin: 0; padding: 0; }
+  .toc nav a {
+    display: block;
+    padding: 5px 8px;
+    color: var(--texto);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.35;
+  }
+  .toc nav a:hover { background: var(--salmon); color: var(--rojo-oscuro); }
+  .toc nav .nivel-2 { padding-left: 18px; font-size: 13px; color: var(--texto-suave); }
+  .toc nav .nivel-3 { padding-left: 32px; font-size: 12.5px; color: var(--texto-suave); }
+  .toc-meta { font-size: 12px; color: var(--texto-suave); padding: 12px 8px; border-top: 1px solid var(--borde); margin-top: 12px; }
+
+  main {
+    padding: 36px 56px 80px 56px;
+    max-width: 100%;
+  }
+  .container { max-width: var(--max-w); margin: 0 auto; }
+
+  /* ===== Cabecera/portada ===== */
+  .cover {
+    border-top: 6px solid var(--rojo);
+    padding: 32px 0 28px 0;
+    margin-bottom: 24px;
+  }
+  .cover .eyebrow {
+    color: var(--rojo);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .cover h1 {
+    margin: 0 0 8px 0;
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 700;
+    color: var(--texto);
+  }
+  .cover .sub {
+    font-size: 18px;
+    color: var(--texto-suave);
+    margin: 0;
+  }
+  .cover .meta {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--texto-suave);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .cover .meta span strong { color: var(--texto); }
+
+  /* ===== Tipografía secciones ===== */
+  h2 {
+    font-size: 24px;
+    color: var(--rojo);
+    border-bottom: 2px solid var(--salmon);
+    padding-bottom: 6px;
+    margin: 48px 0 18px 0;
+  }
+  h3 {
+    font-size: 19px;
+    color: var(--rojo-oscuro);
+    margin: 36px 0 12px 0;
+    font-weight: 700;
+  }
+  h4 {
+    font-size: 16px;
+    color: var(--texto);
+    margin: 24px 0 8px 0;
+    font-weight: 700;
+  }
+  p { margin: 0 0 14px 0; }
+  ul, ol { margin: 0 0 14px 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+
+  /* ===== Avisos ===== */
+  .aviso {
+    background: var(--aviso-bg);
+    border-left: 4px solid var(--aviso-borde);
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 14.5px;
+    border-radius: 0 6px 6px 0;
+  }
+  .aviso strong { color: var(--rojo-oscuro); }
+
+  /* ===== Ejemplo / caso práctico ===== */
+  .ejemplo {
+    background: var(--salmon-claro);
+    border-left: 4px solid var(--rojo);
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 14.5px;
+    border-radius: 0 6px 6px 0;
+  }
+  .ejemplo > p { margin: 0 0 10px 0; }
+  .ejemplo > p:last-child { margin-bottom: 0; }
+  .ejemplo strong { color: var(--rojo-oscuro); }
+  .ejemplo-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 12px 0;
+  }
+  .ejemplo-cols > div {
+    background: var(--bg);
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .ejemplo-cols > div p { margin: 0 0 8px 0; }
+  .ejemplo-cols > div p:last-child { margin-bottom: 0; }
+  @media (max-width: 720px) {
+    .ejemplo-cols { grid-template-columns: 1fr; }
+  }
+
+  /* ===== Tablas estilo INEE ===== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 22px 0;
+    font-size: 14.5px;
+    background: var(--bg);
+    border: 1px solid var(--borde);
+  }
+  thead th {
+    background: var(--rojo);
+    color: white;
+    font-weight: 700;
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1px solid var(--rojo);
+  }
+  tbody td {
+    background: var(--salmon-claro);
+    border: 1px solid var(--borde);
+    padding: 10px 14px;
+    vertical-align: top;
+  }
+  tbody td.codigo {
+    font-weight: 700;
+    color: var(--rojo-oscuro);
+    white-space: nowrap;
+    width: 70px;
+  }
+  tbody td.obj {
+    font-weight: 700;
+    color: var(--rojo-oscuro);
+    text-align: center;
+    width: 70px;
+    white-space: nowrap;
+  }
+  tbody td.head-cell {
+    background: var(--rojo);
+    color: white;
+    font-weight: 700;
+  }
+
+  /* tablas de indicadores 3 niveles */
+  .indicadores thead th {
+    text-align: center;
+    width: 33.33%;
+  }
+  .indicadores tbody td {
+    background: var(--salmon-claro);
+  }
+  .indicadores tbody td ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .indicadores tbody td li {
+    margin: 6px 0;
+  }
+  .indicadores tbody td li .ce-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    font-size: 0.78em;
+    font-weight: 700;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    color: var(--rojo-oscuro);
+    background: var(--salmon);
+    border: 1px solid var(--borde);
+    border-radius: 4px;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+  table caption {
+    caption-side: top;
+    text-align: left;
+    font-style: italic;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
+    padding: 0;
+    font-size: 13.5px;
+  }
+
+  /* matriz cruzada */
+  .matriz-cruzada td, .matriz-cruzada th {
+    text-align: center;
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+  .matriz-cruzada th.eje-head {
+    background: var(--rojo);
+    border-right: 2px solid var(--bg);
+  }
+  .matriz-cruzada th.grado {
+    background: var(--rojo-oscuro);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .matriz-cruzada td.celda { background: var(--salmon-claro); height: 26px; }
+  .matriz-cruzada td.total-fila { background: var(--salmon); font-weight: 700; }
+  .matriz-cruzada td.total-col { background: var(--salmon); font-weight: 700; }
+
+  /* ===== OBJ cards ===== */
+  .obj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    margin: 18px 0 24px 0;
+  }
+  .obj-card {
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--rojo);
+    background: var(--bg);
+    padding: 14px 16px;
+    border-radius: 4px;
+  }
+  .obj-card .obj-num {
+    color: var(--rojo);
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .obj-card .obj-eje {
+    color: var(--texto-suave);
+    font-size: 11.5px;
+    margin-top: 8px;
+    font-style: italic;
+    border-top: 1px dashed var(--borde);
+    padding-top: 6px;
+  }
+  .obj-card p { font-size: 14px; margin: 4px 0; line-height: 1.45; }
+
+  /* ===== Theme toggle ===== */
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 18px;
+    z-index: 100;
+    background: var(--bg);
+    border: 1px solid var(--borde);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--texto);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .theme-toggle:hover { background: var(--salmon); }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  .theme-toggle .icon-sun { display: none; }
+  html.dark .theme-toggle .icon-moon { display: none; }
+  html.dark .theme-toggle .icon-sun { display: block; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; }
+    .toc {
+      position: static;
+      height: auto;
+      max-height: none;
+      border-right: none;
+      border-bottom: 1px solid var(--borde);
+      padding: 18px 22px;
+    }
+    main { padding: 24px 22px 60px 22px; }
+    .cover h1 { font-size: 26px; }
+  }
+
+  /* ===== Print ===== */
+  @media print {
+    .toc, .theme-toggle { display: none !important; }
+    .layout { display: block; }
+    main { padding: 0; max-width: none; }
+    body { font-size: 11pt; }
+    h2 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+    .cover { border-top: 4px solid #000; }
+    thead th { background: #444 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    tbody td { background: #f4f4f4 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* ===== Pequeñas utilidades ===== */
+  .lead { font-size: 17px; color: var(--texto-suave); }
+  .small { font-size: 13px; color: var(--texto-suave); }
+  .muted { color: var(--texto-suave); }
+  .badge {
+    display: inline-block;
+    background: var(--salmon);
+    color: var(--rojo-oscuro);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    margin-right: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  hr.suave { border: none; border-top: 1px dashed var(--borde); margin: 28px 0; }
+
+  /* ===== Notas pedagógicas ===== */
+  .nota-pedagogica {
+    background: linear-gradient(0deg, var(--salmon-claro), var(--salmon-claro));
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 16px 0 22px 0;
+    font-size: 14.5px;
+  }
+  .nota-pedagogica .titulo {
+    color: var(--rojo);
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema oscuro/claro" title="Alternar tema">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+</button>
+
+<div class="layout">
+
+  <aside class="toc" aria-label="Índice de contenidos">
+    <h2>Índice</h2>
+    <nav>
+      <ul>
+        <li><a href="#presentacion">Presentación del área</a></li>
+        <li><a href="#socioafectivas">Evaluación de las destrezas socioafectivas</a></li>
+        <li><a href="#dimensiones">Dimensiones de evaluación</a>
+          <ul>
+            <li class="nivel-2"><a href="#ejes">Ejes fundamentales</a></li>
+            <li class="nivel-2"><a href="#sentidos">Sentidos matemáticos</a></li>
+            <li class="nivel-2"><a href="#contextos">Contextos</a></li>
+          </ul>
+        </li>
+        <li><a href="#objetivos">Objetivos del área (≈ competencias específicas)</a></li>
+        <li><a href="#criterios">Criterios de evaluación de 2.º curso</a>
+          <ul>
+            <li class="nivel-2"><a href="#criterios-numerico">Sentido numérico</a></li>
+            <li class="nivel-2"><a href="#criterios-medida">Sentido de la medida</a></li>
+            <li class="nivel-2"><a href="#criterios-espacial">Sentido espacial</a></li>
+            <li class="nivel-2"><a href="#criterios-algebraico">Sentido algebraico</a></li>
+            <li class="nivel-2"><a href="#criterios-estocastico">Sentido estocástico</a></li>
+            <li class="nivel-2"><a href="#criterios-socioemocional">Sentido socioemocional</a></li>
+          </ul>
+        </li>
+        <li><a href="#indicadores">Indicadores de logro graduados</a>
+          <ul>
+            <li class="nivel-2"><a href="#ind-resolucion">Resolución de problemas</a></li>
+            <li class="nivel-2"><a href="#ind-razonamiento">Razonamiento y prueba</a></li>
+            <li class="nivel-2"><a href="#ind-conexiones">Conexiones</a></li>
+            <li class="nivel-2"><a href="#ind-comunicacion">Comunicación y representación</a></li>
+            <li class="nivel-2"><a href="#ind-socioafectivo">Destrezas socioafectivas</a></li>
+          </ul>
+        </li>
+        <li><a href="#contenidos">Contenidos / saberes básicos</a></li>
+        <li><a href="#matrices">Matrices de especificaciones</a></li>
+        <li><a href="#fuentes">Fuentes y notas</a></li>
+      </ul>
+    </nav>
+    <div class="toc-meta">
+      Documento de trabajo. Adaptación a 2.º EP del Marco INEE (4.º EP, 2.ª ed., 2025) sobre el currículo del Decreto 155/2022 (Galicia).
+    </div>
+  </aside>
+
+  <main>
+    <div class="container">
+
+      <!-- ===== PORTADA ===== -->
+      <header class="cover">
+        <div class="eyebrow">Marco de evaluación · Capítulo C · Anexo II</div>
+        <h1>Marco de evaluación de las competencias específicas de Matemáticas</h1>
+        <p class="sub">2.º de Educación Primaria · Final de 1.<sup>er</sup> ciclo</p>
+        <div class="meta">
+          <span><strong>Etapa:</strong> Educación Primaria</span>
+          <span><strong>Curso:</strong> 2.º</span>
+          <span><strong>Currículo:</strong> Decreto 155/2022 (Galicia)</span>
+          <span><strong>Modelo de referencia:</strong> Marco INEE 4.º EP</span>
+        </div>
+      </header>
+
+      <div class="aviso">
+        <strong>Sobre este documento.</strong> El Ministerio publica un marco de evaluación de Matemáticas únicamente para 4.º EP y 2.º ESO, que son los cursos en los que se aplican las pruebas censales de diagnóstico. Este documento adapta su estructura a <strong>2.º EP</strong> (final del 1.<sup>er</sup> ciclo) tomando como base el currículo gallego del <em>Decreto 155/2022</em>, con el objeto de servir como instrumento de <strong>evaluación de aula</strong> (no censal) y guía para la programación didáctica. Donde el INEE habla de “competencias específicas”, el Decreto 155/2022 emplea “objetivos del área” (OBJ1–OBJ8): son nomenclaturas equivalentes.
+      </div>
+
+      <!-- ===== PRESENTACIÓN ===== -->
+      <section id="presentacion">
+        <h2>Presentación del área</h2>
+        <p class="lead">Las matemáticas son una herramienta para conocer y estructurar la realidad, y a la vez un cuerpo de ideas con valor propio. Su aprendizaje promueve el razonamiento, la argumentación, la comunicación, la perseverancia y la creatividad.</p>
+        <p>En el 1.<sup>er</sup> ciclo de Primaria el área se construye a partir de la <strong>vivencia, la manipulación y la representación</strong>. El alumnado de 2.º EP trabaja con cantidades hasta el 999, sumas y restas, primeras agrupaciones que anticipan la multiplicación, magnitudes con unidades convencionales y no convencionales, lectura básica del tiempo, figuras planas, patrones, recogida y representación de datos sencillos, y el reconocimiento de las propias emociones ante los retos matemáticos.</p>
+        <p>El currículo se vertebra en torno a <strong>ocho objetivos del área</strong> (equivalentes a las competencias específicas del RD 157/2022), que se organizan en cinco <strong>ejes fundamentales</strong> y se concretan en seis <strong>sentidos matemáticos</strong>, aplicados en distintos <strong>contextos</strong>.</p>
+
+        <p class="small muted">Los criterios de evaluación se secuencian por ciclo. Para 2.º EP se toman los del <em>final del 1.<sup>er</sup> ciclo</em> (2.º curso), igual que el INEE toma los del final del 2.º ciclo (4.º curso) para su marco.</p>
+      </section>
+
+      <!-- ===== SOCIOAFECTIVAS ===== -->
+      <section id="socioafectivas">
+        <h2>Evaluación de las destrezas socioafectivas</h2>
+        <p>Las destrezas socioafectivas (gestión de emociones, aceptación del error, perseverancia, trabajo cooperativo, respeto a la diversidad) están plenamente integradas en el currículo de Matemáticas como <strong>sentido socioemocional</strong> (bloque 6 del Decreto 155/2022) y como <strong>OBJ7 y OBJ8</strong>.</p>
+        <div class="nota-pedagogica">
+          <div class="titulo">Diferencia con el marco INEE</div>
+          <p>El INEE excluye las destrezas socioafectivas de la prueba escrita censal porque no se pueden observar en un test de papel; las deja para los cuestionarios de contexto. En este documento <strong>sí se incluyen indicadores graduados socioafectivos</strong>, porque está pensado para evaluación de aula, donde la observación directa es posible y deseable.</p>
+        </div>
+      </section>
+
+      <!-- ===== DIMENSIONES ===== -->
+      <section id="dimensiones">
+        <h2>Dimensiones de evaluación</h2>
+        <p>La evaluación cruza tres dimensiones: <strong>ejes fundamentales</strong> (qué tipo de proceso cognitivo se activa), <strong>sentidos matemáticos</strong> (qué contenido del área se moviliza) y <strong>contextos</strong> (en qué escenario se aplica).</p>
+
+        <h3 id="ejes">Ejes fundamentales / bloques competenciales</h3>
+        <table>
+          <caption>Tabla 1. Ejes fundamentales</caption>
+          <thead>
+            <tr><th style="width:200px">Eje fundamental</th><th>Descripción adaptada a 2.º EP</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="codigo">Resolución de problemas</td><td>Movilización de estrategias para interpretar una situación de la vida cotidiana, representarla con un dibujo, esquema o material manipulable, encontrar una solución y comprobar si tiene sentido en el contexto.</td></tr>
+            <tr><td class="codigo">Razonamiento y prueba</td><td>Detección de regularidades y patrones, formulación guiada de pequeñas conjeturas, uso de algoritmos cotidianos paso a paso, e iniciación al pensamiento computacional con descomposición de tareas.</td></tr>
+            <tr><td class="codigo">Conexiones</td><td>Identificación de las matemáticas en otras áreas (Ciencias, Lengua, Educación Artística) y en su entorno cotidiano (cocina, tiendas, calendario, juegos), reconociendo relaciones entre ideas matemáticas distintas.</td></tr>
+            <tr><td class="codigo">Comunicación y representación</td><td>Uso del lenguaje matemático sencillo (oral, escrito, gráfico, manipulativo) para describir cantidades, situaciones, procedimientos y resultados, y para explicar el camino seguido en una resolución.</td></tr>
+            <tr><td class="codigo">Destrezas socioafectivas</td><td>Identificación y gestión de las propias emociones ante los retos matemáticos, aceptación del error, perseverancia, y participación activa, respetuosa e inclusiva en el trabajo en equipo.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="sentidos">Sentidos matemáticos</h3>
+        <table>
+          <caption>Tabla 2. Sentidos matemáticos (1.<sup>er</sup> ciclo)</caption>
+          <thead>
+            <tr><th style="width:200px">Sentido</th><th>Descripción adaptada a 2.º EP</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="codigo">Numérico</td><td>Conteo, cantidad, valor posicional y operaciones (suma y resta) con números naturales hasta el 999. Iniciación a la multiplicación a través de agrupaciones repetidas. Educación financiera elemental (monedas y billetes).</td></tr>
+            <tr><td class="codigo">De la medida</td><td>Magnitudes (longitud, masa, capacidad, temperatura, tiempo) con unidades convencionales y no convencionales, lectura del reloj analógico y digital (en punto, medias y cuartos), y estimación.</td></tr>
+            <tr><td class="codigo">Espacial</td><td>Figuras planas (triángulo, cuadrado, rectángulo, rombo, círculo) y sus elementos, simetrías sencillas, orientación, descripción de itinerarios y croquis.</td></tr>
+            <tr><td class="codigo">Algebraico y computacional</td><td>Reconocimiento y extensión de patrones, igualdad y desigualdad (= y ≠), algoritmos cotidianos paso a paso, modelización guiada con dibujos y diagramas.</td></tr>
+            <tr><td class="codigo">Estocástico</td><td>Recogida, recuento, clasificación y representación de datos en gráficas sencillas (barras, pictogramas). Distinción entre suceso posible e imposible.</td></tr>
+            <tr><td class="codigo">Socioemocional</td><td>Identificación de emociones ante las matemáticas, valoración del error, perseverancia, y trabajo en equipos colaborativos heterogéneos con reparto de roles.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="contextos">Contextos</h3>
+        <table>
+          <caption>Tabla 3. Contextos</caption>
+          <thead>
+            <tr><th style="width:220px">Contexto</th><th>Descripción</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="codigo">Personal</td><td>Situaciones de la alumna o el alumno, su familia y personas cercanas: juegos, ocio, planificación de pequeñas compras, viajes, deportes, gestión emocional.</td></tr>
+            <tr><td class="codigo">Escolar</td><td>Actividades del aula y del centro: el grupo-clase, el patio, el comedor, biblioteca, proyectos del colegio.</td></tr>
+            <tr><td class="codigo">Social</td><td>Comunidad cercana del alumnado: el barrio, la villa, fiestas locales, mercado, transporte público, problemas de igualdad y sostenibilidad ajustados a la edad.</td></tr>
+            <tr><td class="codigo">Científico, humanístico y artístico</td><td>Aplicación de las matemáticas a las ciencias naturales, al arte (simetrías, mosaicos, ritmos), a la cultura y a las efemérides.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===== OBJETIVOS / COMPETENCIAS ESPECÍFICAS ===== -->
+      <section id="objetivos">
+        <h2>Objetivos del área (≈ competencias específicas)</h2>
+        <p>Los <strong>ocho objetivos del área</strong> son comunes a toda la etapa de Educación Primaria. En las pruebas de diagnóstico del INEE se denominan <em>competencias específicas</em>; en el Decreto 155/2022 reciben el nombre de <em>objetivos del área</em>. Cada uno se vincula a un eje fundamental.</p>
+
+        <div class="obj-grid">
+          <div class="obj-card">
+            <div class="obj-num">OBJ 1</div>
+            <p>Interpretar situaciones de la vida cotidiana proporcionando una representación matemática mediante conceptos, herramientas y estrategias, para analizar la información más relevante.</p>
+            <div class="obj-eje">Eje · Resolución de problemas</div>
+          </div>
+          <div class="obj-card">
+            <div class="obj-num">OBJ 2</div>
+            <p>Resolver situaciones problematizadas aplicando diferentes técnicas, estrategias y formas de razonamiento, para explorar distintas maneras de proceder, obtener soluciones y asegurar su validez.</p>
+            <div class="obj-eje">Eje · Resolución de problemas</div>
+          </div>
+          <div class="obj-card">
+            <div class="obj-num">OBJ 3</div>
+            <p>Explorar, formular y comprobar conjeturas sencillas o formular problemas de tipo matemático en situaciones cotidianas, de forma guiada, para contrastar su validez y adquirir nuevo conocimiento.</p>
+            <div class="obj-eje">Eje · Razonamiento y prueba</div>
+          </div>
+          <div class="obj-card">
+            <div class="obj-num">OBJ 4</div>
+            <p>Utilizar el pensamiento computacional, organizando datos, descomponiendo en partes, reconociendo patrones, generalizando, modificando y creando algoritmos de forma guiada, para modelizar y automatizar situaciones cotidianas.</p>
+            <div class="obj-eje">Eje · Razonamiento y prueba</div>
+          </div>
+          <div class="obj-card">
+            <div class="obj-num">OBJ 5</div>
+            <p>Reconocer y utilizar conexiones entre las diferentes ideas matemáticas, así como identificar las matemáticas en otras áreas y en la vida cotidiana, para interpretar situaciones y contextos diversos.</p>
+            <div class="obj-eje">Eje · Conexiones</div>
+          </div>
+          <div class="obj-card">
+            <div class="obj-num">OBJ 6</div>
+            <p>Comunicar y representar, de forma individual y colectiva, conceptos, procedimientos y resultados matemáticos, utilizando el lenguaje oral, escrito, gráfico, multimodal y la terminología matemática apropiada.</p>
+            <div class="obj-eje">Eje · Comunicación y representación</div>
+          </div>
+          <div class="obj-card">
+            <div class="obj-num">OBJ 7</div>
+            <p>Desarrollar destrezas personales que ayuden a identificar y gestionar emociones ante los retos matemáticos, fomentando la confianza, aceptando el error y adaptándose a la incertidumbre, para mejorar la perseverancia y disfrutar del aprendizaje.</p>
+            <div class="obj-eje">Eje · Destrezas socioafectivas (personal)</div>
+          </div>
+          <div class="obj-card">
+            <div class="obj-num">OBJ 8</div>
+            <p>Desarrollar destrezas sociales reconociendo y respetando las emociones de los demás y el valor de la diversidad, participando activamente en equipos heterogéneos con roles asignados, para construir una identidad positiva como estudiante de matemáticas.</p>
+            <div class="obj-eje">Eje · Destrezas socioafectivas (social)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CRITERIOS DE EVALUACIÓN 2º curso ===== -->
+      <section id="criterios">
+        <h2>Criterios de evaluación · 2.º curso</h2>
+        <p>Los criterios de evaluación se organizan, según el Decreto 155/2022, por <strong>bloque (sentido matemático)</strong>. La columna “OBJ” indica el objetivo de área asociado a cada criterio.</p>
+
+        <h3 id="criterios-numerico">Bloque 1 · Sentido numérico</h3>
+        <table>
+          <thead><tr><th style="width:80px">Cód.</th><th>Criterio</th><th style="width:80px">OBJ</th></tr></thead>
+          <tbody>
+            <tr><td class="codigo">CE1.1</td><td>Participar respetuosamente en el trabajo en equipo, estableciendo relaciones saludables basadas en el respeto, la igualdad y la resolución pacífica de conflictos.</td><td class="obj">OBJ8</td></tr>
+            <tr><td class="codigo">CE1.2</td><td>Comprender las preguntas formuladas a través de diferentes estrategias o herramientas, reconociendo la información contenida en problemas de la vida cotidiana.</td><td class="obj">OBJ1</td></tr>
+            <tr><td class="codigo">CE1.3</td><td>Proporcionar ejemplos de representaciones de situaciones problematizadas sencillas con recursos manipulativos y gráficos que ayuden en la resolución.</td><td class="obj">OBJ1</td></tr>
+            <tr><td class="codigo">CE1.4</td><td>Emplear algunas estrategias adecuadas en la resolución de problemas.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE1.5</td><td>Obtener posibles soluciones a problemas, de forma guiada, aplicando estrategias básicas de resolución.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE1.6</td><td>Realizar conjeturas matemáticas sencillas, investigando patrones, propiedades y relaciones de forma guiada.</td><td class="obj">OBJ3</td></tr>
+            <tr><td class="codigo">CE1.7</td><td>Emplear herramientas tecnológicas adecuadas, de forma guiada, en el proceso de resolución de problemas.</td><td class="obj">OBJ4</td></tr>
+            <tr><td class="codigo">CE1.8</td><td>Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE1.9</td><td>Explicar ideas y procesos matemáticos sencillos, los pasos seguidos en la resolución de un problema o los resultados de forma verbal o gráfica.</td><td class="obj">OBJ6</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="criterios-medida">Bloque 2 · Sentido de la medida</h3>
+        <table>
+          <thead><tr><th style="width:80px">Cód.</th><th>Criterio</th><th style="width:80px">OBJ</th></tr></thead>
+          <tbody>
+            <tr><td class="codigo">CE2.1</td><td>Aceptar la tarea y el rol asignado en el trabajo en equipo, cumpliendo con las responsabilidades individuales y contribuyendo a la consecución de los objetivos del grupo.</td><td class="obj">OBJ8</td></tr>
+            <tr><td class="codigo">CE2.2</td><td>Obtener posibles soluciones a problemas, de forma guiada, aplicando estrategias básicas de resolución.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE2.3</td><td>Describir verbalmente la idoneidad de las soluciones de un problema a partir de las preguntas previamente formuladas.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE2.4</td><td>Dar ejemplos de problemas a partir de situaciones cotidianas que se resuelven matemáticamente.</td><td class="obj">OBJ3</td></tr>
+            <tr><td class="codigo">CE2.5</td><td>Reconocer conexiones entre los diferentes elementos matemáticos aplicando conocimientos y experiencias propios.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE2.6</td><td>Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE2.7</td><td>Reconocer el lenguaje matemático sencillo presente en la vida cotidiana, adquiriendo un vocabulario específico básico.</td><td class="obj">OBJ6</td></tr>
+            <tr><td class="codigo">CE2.8</td><td>Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica.</td><td class="obj">OBJ6</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="criterios-espacial">Bloque 3 · Sentido espacial</h3>
+        <table>
+          <thead><tr><th style="width:80px">Cód.</th><th>Criterio</th><th style="width:80px">OBJ</th></tr></thead>
+          <tbody>
+            <tr><td class="codigo">CE3.1</td><td>Participar respetuosamente en el trabajo en equipo, estableciendo relaciones saludables basadas en el respeto, la igualdad y la resolución pacífica de conflictos.</td><td class="obj">OBJ8</td></tr>
+            <tr><td class="codigo">CE3.2</td><td>Emplear algunas estrategias adecuadas en la resolución de problemas.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE3.3</td><td>Realizar conjeturas matemáticas sencillas, investigando patrones, propiedades y relaciones de forma guiada.</td><td class="obj">OBJ3</td></tr>
+            <tr><td class="codigo">CE3.4</td><td>Describir rutinas y actividades sencillas de la vida cotidiana que se realicen paso a paso, utilizando principios básicos del pensamiento computacional de forma guiada.</td><td class="obj">OBJ4</td></tr>
+            <tr><td class="codigo">CE3.5</td><td>Reconocer conexiones entre los diferentes elementos matemáticos, aplicando conocimientos y experiencias propios.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE3.6</td><td>Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE3.7</td><td>Reconocer el lenguaje matemático sencillo presente en la vida cotidiana, adquiriendo un vocabulario específico básico.</td><td class="obj">OBJ6</td></tr>
+            <tr><td class="codigo">CE3.8</td><td>Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica.</td><td class="obj">OBJ6</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="criterios-algebraico">Bloque 4 · Sentido algebraico y pensamiento computacional</h3>
+        <table>
+          <thead><tr><th style="width:80px">Cód.</th><th>Criterio</th><th style="width:80px">OBJ</th></tr></thead>
+          <tbody>
+            <tr><td class="codigo">CE4.1</td><td>Reconocer las emociones básicas propias al abordar nuevos retos matemáticos, pidiendo ayuda solo cuando sea necesario.</td><td class="obj">OBJ7</td></tr>
+            <tr><td class="codigo">CE4.2</td><td>Proporcionar ejemplos de representaciones de situaciones problematizadas sencillas con recursos manipulativos y gráficos.</td><td class="obj">OBJ1</td></tr>
+            <tr><td class="codigo">CE4.3</td><td>Emplear algunas estrategias adecuadas en la resolución de problemas.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE4.4</td><td>Obtener posibles soluciones a problemas, de forma guiada, aplicando estrategias básicas de resolución.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE4.5</td><td>Realizar conjeturas matemáticas sencillas, investigando patrones, propiedades y relaciones de forma guiada.</td><td class="obj">OBJ3</td></tr>
+            <tr><td class="codigo">CE4.6</td><td>Describir rutinas y actividades sencillas de la vida cotidiana que se realicen paso a paso, utilizando principios básicos del pensamiento computacional de forma guiada.</td><td class="obj">OBJ4</td></tr>
+            <tr><td class="codigo">CE4.7</td><td>Emplear herramientas tecnológicas adecuadas, de forma guiada, en el proceso de resolución de problemas.</td><td class="obj">OBJ4</td></tr>
+            <tr><td class="codigo">CE4.8</td><td>Reconocer conexiones entre los diferentes elementos matemáticos aplicando conocimientos y experiencias propios.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE4.9</td><td>Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica.</td><td class="obj">OBJ6</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="criterios-estocastico">Bloque 5 · Sentido estocástico</h3>
+        <table>
+          <thead><tr><th style="width:80px">Cód.</th><th>Criterio</th><th style="width:80px">OBJ</th></tr></thead>
+          <tbody>
+            <tr><td class="codigo">CE5.1</td><td>Expresar actitudes positivas ante nuevos retos matemáticos, valorando el error como una oportunidad de aprendizaje.</td><td class="obj">OBJ7</td></tr>
+            <tr><td class="codigo">CE5.2</td><td>Comprender las preguntas formuladas a través de diferentes estrategias o herramientas, reconociendo la información contenida en problemas de la vida cotidiana.</td><td class="obj">OBJ1</td></tr>
+            <tr><td class="codigo">CE5.3</td><td>Emplear algunas estrategias adecuadas en la resolución de problemas.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE5.4</td><td>Obtener posibles soluciones a problemas, de forma guiada, aplicando estrategias básicas de resolución.</td><td class="obj">OBJ2</td></tr>
+            <tr><td class="codigo">CE5.5</td><td>Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE5.6</td><td>Reconocer el lenguaje matemático sencillo presente en la vida cotidiana, adquiriendo un vocabulario específico básico.</td><td class="obj">OBJ6</td></tr>
+            <tr><td class="codigo">CE5.7</td><td>Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica.</td><td class="obj">OBJ6</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="criterios-socioemocional">Bloque 6 · Sentido socioemocional</h3>
+        <table>
+          <thead><tr><th style="width:80px">Cód.</th><th>Criterio</th><th style="width:80px">OBJ</th></tr></thead>
+          <tbody>
+            <tr><td class="codigo">CE6.1</td><td>Reconocer las emociones básicas propias al abordar nuevos retos matemáticos, pidiendo ayuda solo cuando sea necesario.</td><td class="obj">OBJ7</td></tr>
+            <tr><td class="codigo">CE6.2</td><td>Expresar actitudes positivas ante nuevos retos matemáticos, valorando el error como una oportunidad de aprendizaje.</td><td class="obj">OBJ7</td></tr>
+            <tr><td class="codigo">CE6.3</td><td>Participar respetuosamente en el trabajo en equipo, estableciendo relaciones saludables basadas en el respeto, la igualdad y la resolución pacífica de conflictos.</td><td class="obj">OBJ8</td></tr>
+            <tr><td class="codigo">CE6.4</td><td>Aceptar la tarea y rol asignados en el trabajo en equipo, cumpliendo con las responsabilidades individuales y contribuyendo a la consecución de los objetivos del grupo.</td><td class="obj">OBJ8</td></tr>
+            <tr><td class="codigo">CE6.5</td><td>Realizar conjeturas matemáticas sencillas, investigando patrones, propiedades y relaciones de forma guiada.</td><td class="obj">OBJ3</td></tr>
+            <tr><td class="codigo">CE6.6</td><td>Reconocer conexiones entre los diferentes elementos matemáticos aplicando conocimientos y experiencias propios.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE6.7</td><td>Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo conexiones sencillas entre ellas.</td><td class="obj">OBJ5</td></tr>
+            <tr><td class="codigo">CE6.8</td><td>Explicar ideas y procesos matemáticos sencillos, los pasos seguidos o los resultados de forma verbal o gráfica.</td><td class="obj">OBJ6</td></tr>
+          </tbody>
+        </table>
+
+        <p class="small muted">Total: 49 criterios para 2.º curso (suma: 9 + 8 + 8 + 9 + 7 + 8). Muchos criterios se repiten textualmente entre bloques porque cada criterio se evalúa <em>en el contexto de cada sentido matemático</em>.</p>
+      </section>
+
+      <!-- ===== INDICADORES DE LOGRO ===== -->
+      <section id="indicadores">
+        <h2>Indicadores de logro graduados</h2>
+        <p>Los indicadores se gradúan en <strong>tres niveles de complejidad cognitiva</strong>:</p>
+        <ul>
+          <li><strong>Grado 1 · Identificar / reconocer</strong> — el alumnado identifica, reconoce o nombra elementos matemáticos en situaciones muy estructuradas.</li>
+          <li><strong>Grado 2 · Aplicar / emplear</strong> — el alumnado aplica una estrategia conocida con apoyo, ejecuta procedimientos pautados y comprueba resultados.</li>
+          <li><strong>Grado 3 · Justificar / crear</strong> — el alumnado justifica decisiones, crea pequeños ejemplos propios o modifica procedimientos para adaptarlos a una situación nueva.</li>
+        </ul>
+        <div class="aviso">
+          <strong>Adaptación a 2.º EP.</strong> El Grado 3 en 2.º EP no equivale al Grado 3 en 4.º EP. En 1.<sup>er</sup> ciclo, “justificar” significa <em>explicar oralmente con un dibujo o un ejemplo</em>; “crear” significa <em>inventar un caso parecido al que se acaba de resolver</em>. La graduación está calibrada para 6–7 años.
+        </div>
+
+        <p><strong>Vínculo con los criterios de evaluación.</strong> Al final de cada indicador aparece, mediante una etiqueta, el código del criterio de evaluación del Decreto 155/2022 al que se vincula (p. ej. <span class="ce-tag">CE1.4</span>). En algunos casos aparecen <strong>dos etiquetas seguidas</strong> (p. ej. <span class="ce-tag">CE1.4</span><span class="ce-tag">CE3.2</span>): esto sucede porque el decreto recoge criterios <em>textualmente idénticos</em> en varios bloques —un mismo proceso (resolver, conjeturar, explicar) que el currículo evalúa por separado dentro de cada sentido matemático—. El multietiquetado puntual evita duplicar indicadores artificialmente y asegura que los <strong>49 criterios de evaluación</strong> del 2.º curso queden cubiertos al menos una vez en estas tablas.</p>
+
+        <div class="ejemplo">
+          <p><strong>Ejemplo práctico.</strong> El indicador de la Tabla 4 «<em>Ejecuta los pasos del proceso de resolución en el orden adecuado, con apoyo guiado</em>» <span class="ce-tag">CE1.5</span><span class="ce-tag">CE2.2</span> describe un mismo procedimiento cognitivo, pero el sentido matemático cambia según el contexto del problema:</p>
+          <div class="ejemplo-cols">
+            <div>
+              <p><strong>Bloque 1 · Sentido numérico</strong> <span class="ce-tag">CE1.5</span></p>
+              <p><em>«Ana tiene 24 cromos y le regalan 18 más. ¿Cuántos cromos tiene ahora?»</em></p>
+              <p>Lo que se observa en el aula: identificar los datos numéricos, decidir que la operación es una suma, ejecutar el algoritmo con llevada y comprobar que el resultado tiene sentido como cantidad.</p>
+            </div>
+            <div>
+              <p><strong>Bloque 2 · Sentido de la medida</strong> <span class="ce-tag">CE2.2</span></p>
+              <p><em>«Una jarra contiene 24 ℓ de agua y se añaden 18 ℓ más. ¿Cuántos litros hay ahora?»</em></p>
+              <p>Lo que se observa en el aula: identificar magnitud y unidad de medida (litros), aplicar la suma respetando la unidad y comprobar la solución en términos del contexto físico (capacidad).</p>
+            </div>
+          </div>
+          <p>Los pasos del proceso de resolución son los mismos en ambos casos. Lo que cambia es <strong>la mirada evaluadora</strong>: la primera columna evalúa cómo el alumnado opera con <em>cantidades</em>; la segunda, cómo opera con <em>magnitudes</em>. Por eso el mismo indicador queda vinculado a dos criterios de evaluación distintos, uno por bloque.</p>
+        </div>
+
+        <!-- Eje 1: Resolución de problemas -->
+        <h3 id="ind-resolucion">Tabla 4 · Indicadores de logro · Resolución de problemas</h3>
+        <table class="indicadores">
+          <thead><tr><th>Grado 1 · Identifica</th><th>Grado 2 · Emplea</th><th>Grado 3 · Justifica / crea</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>
+                <ul>
+                  <li>Identifica situaciones cotidianas que se pueden resolver con matemáticas (contar, medir, comparar, repartir).<span class="ce-tag">CE1.2</span></li>
+                  <li>Reconoce los datos relevantes en un problema sencillo con apoyo gráfico o manipulable.<span class="ce-tag">CE1.3</span></li>
+                  <li>Reconoce qué se pregunta en un problema oral o leído por el adulto.<span class="ce-tag">CE5.2</span></li>
+                  <li>Identifica si para resolver un problema necesita sumar o restar, en problemas de una sola operación.<span class="ce-tag">CE1.4</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Representa un problema con un dibujo, esquema o material manipulable (regletas, fichas, dedos).<span class="ce-tag">CE1.3</span></li>
+                  <li>Aplica una estrategia conocida (suma, resta, conteo, descomposición) para llegar a una solución.<span class="ce-tag">CE3.2</span></li>
+                  <li>Ejecuta los pasos del proceso de resolución en el orden adecuado, con apoyo guiado.<span class="ce-tag">CE1.5</span><span class="ce-tag">CE2.2</span></li>
+                  <li>Comprueba si la solución obtenida tiene sentido en el contexto del problema.<span class="ce-tag">CE2.3</span></li>
+                  <li>Usa la calculadora, de forma guiada, para verificar un resultado obtenido a mano.<span class="ce-tag">CE1.7</span><span class="ce-tag">CE4.7</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Elige entre dos estrategias conocidas la que considera más adecuada para un problema dado, y explica oralmente por qué.<span class="ce-tag">CE4.3</span><span class="ce-tag">CE5.3</span></li>
+                  <li>Inventa un problema parecido a uno ya resuelto, cambiando los datos o el contexto.<span class="ce-tag">CE2.4</span></li>
+                  <li>Detecta un error en su propia solución y la corrige.<span class="ce-tag">CE4.4</span><span class="ce-tag">CE5.4</span></li>
+                  <li>Explica oralmente o con un dibujo el camino seguido para resolver el problema.<span class="ce-tag">CE3.8</span></li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Eje 2: Razonamiento y prueba -->
+        <h3 id="ind-razonamiento">Tabla 5 · Indicadores de logro · Razonamiento y prueba</h3>
+        <table class="indicadores">
+          <thead><tr><th>Grado 1 · Identifica</th><th>Grado 2 · Emplea</th><th>Grado 3 · Justifica / crea</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>
+                <ul>
+                  <li>Identifica regularidades sencillas en colecciones de números, figuras o imágenes (par/impar, secuencias visuales, repeticiones).<span class="ce-tag">CE4.5</span></li>
+                  <li>Reconoce algoritmos cotidianos paso a paso (lavarse las manos, vestirse, una receta sencilla).<span class="ce-tag">CE4.6</span></li>
+                  <li>Identifica el orden correcto de los pasos de una rutina diaria.<span class="ce-tag">CE3.4</span></li>
+                  <li>Distingue, en un ámbito lúdico, entre suceso posible e imposible.<span class="ce-tag">CE5.6</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Continúa una secuencia o patrón sencillo (numérico, gráfico o manipulable) cuando se le da el inicio.<span class="ce-tag">CE3.3</span></li>
+                  <li>Sigue un algoritmo paso a paso para realizar una tarea (sumar con llevada, construir una figura, copiar un dibujo).<span class="ce-tag">CE4.6</span></li>
+                  <li>Compara dos soluciones a un mismo problema y dice cuál es correcta y por qué.<span class="ce-tag">CE2.3</span></li>
+                  <li>Usa = y ≠ para expresar relaciones de igualdad y desigualdad entre objetos, números u operaciones sencillas.<span class="ce-tag">CE6.5</span></li>
+                  <li>Comprueba una conjetura sencilla (“todos los pares acaban en 0, 2, 4, 6 u 8”) con varios ejemplos guiados.<span class="ce-tag">CE1.6</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Crea su propia secuencia siguiendo un patrón inventado y explica la regla.<span class="ce-tag">CE4.5</span></li>
+                  <li>Detecta y corrige un error en una secuencia o en un algoritmo cotidiano.<span class="ce-tag">CE4.6</span></li>
+                  <li>Inventa un problema que se resuelva con una operación dada (suma o resta) en un contexto cercano.<span class="ce-tag">CE2.4</span></li>
+                  <li>Generaliza una regularidad observada en varios ejemplos a un caso nuevo.<span class="ce-tag">CE4.5</span></li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Eje 3: Conexiones -->
+        <h3 id="ind-conexiones">Tabla 6 · Indicadores de logro · Conexiones</h3>
+        <table class="indicadores">
+          <thead><tr><th>Grado 1 · Identifica</th><th>Grado 2 · Emplea</th><th>Grado 3 · Justifica / crea</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>
+                <ul>
+                  <li>Identifica las matemáticas presentes en su entorno cotidiano (relojes, calendarios, monedas, juegos, deportes, recetas).<span class="ce-tag">CE1.8</span></li>
+                  <li>Reconoce conceptos matemáticos en otras áreas: medir en Ciencias de la Naturaleza, contar páginas en Lengua, ordenar en Ciencias Sociales, simetrías en Educación Artística.<span class="ce-tag">CE2.6</span></li>
+                  <li>Identifica conexiones entre dos ideas matemáticas que ya conoce (sumar y contar; medir y comparar).<span class="ce-tag">CE2.5</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Relaciona el contenido matemático aprendido con situaciones de otras áreas (resolver un problema con datos de Ciencias).<span class="ce-tag">CE5.5</span></li>
+                  <li>Emplea conocimientos matemáticos para interpretar información del entorno (leer un calendario, una balanza, una etiqueta de precio).<span class="ce-tag">CE1.8</span></li>
+                  <li>Aplica una estrategia aprendida en un sentido matemático a otro (la descomposición numérica para componer una figura).<span class="ce-tag">CE3.5</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Aplica conocimientos matemáticos del aula a una situación nueva del entorno cercano sin que se la presenten explícitamente como problema matemático.<span class="ce-tag">CE6.7</span></li>
+                  <li>Justifica con un ejemplo por qué una idea matemática se puede usar en distintos contextos.<span class="ce-tag">CE4.8</span><span class="ce-tag">CE6.6</span></li>
+                  <li>Reconoce conexiones entre matemáticas y arte, juegos populares o efemérides locales.<span class="ce-tag">CE3.6</span></li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Eje 4: Comunicación y representación -->
+        <h3 id="ind-comunicacion">Tabla 7 · Indicadores de logro · Comunicación y representación</h3>
+        <table class="indicadores">
+          <thead><tr><th>Grado 1 · Identifica</th><th>Grado 2 · Emplea</th><th>Grado 3 · Justifica / crea</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>
+                <ul>
+                  <li>Reconoce y nombra el vocabulario matemático básico de 1.<sup>er</sup> ciclo (más/menos, mayor/menor, igual, mitad, doble, triángulo, cuadrado, círculo, kilo, litro, hora, minuto, par/impar).<span class="ce-tag">CE2.7</span></li>
+                  <li>Identifica los signos +, −, =, ≠ y los lee correctamente.<span class="ce-tag">CE3.7</span></li>
+                  <li>Interpreta una representación matemática sencilla dada (recta numérica, gráfica de barras, pictograma, dibujo de una situación).<span class="ce-tag">CE1.3</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Usa el vocabulario matemático adecuado al describir oralmente una situación, un procedimiento o un resultado.<span class="ce-tag">CE5.6</span></li>
+                  <li>Representa una cantidad de varias formas (manipulativa, gráfica, numérica) y elige la adecuada para cada situación.<span class="ce-tag">CE4.2</span></li>
+                  <li>Elabora una representación gráfica sencilla (gráfico de barras o pictograma) de datos recogidos en clase.<span class="ce-tag">CE5.7</span></li>
+                  <li>Explica oralmente, con apoyo, los pasos seguidos en la resolución de un problema.<span class="ce-tag">CE1.9</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Justifica un resultado o un razonamiento con palabras y/o un dibujo.<span class="ce-tag">CE4.9</span></li>
+                  <li>Comunica un proceso matemático ordenado de principio a fin sin necesitar preguntas guía.<span class="ce-tag">CE6.8</span></li>
+                  <li>Argumenta por qué una representación es más útil que otra para una situación concreta.<span class="ce-tag">CE2.8</span></li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Eje 5: Socioafectivo -->
+        <h3 id="ind-socioafectivo">Tabla 8 · Indicadores de logro · Destrezas socioafectivas</h3>
+        <p class="small muted">Indicadores destinados a observación directa en aula. Distinguen dimensión <strong>personal</strong> (OBJ7) y <strong>social</strong> (OBJ8).</p>
+        <table class="indicadores">
+          <thead><tr><th>Grado 1 · Reconoce</th><th>Grado 2 · Gestiona con apoyo</th><th>Grado 3 · Regula con autonomía</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>
+                <ul>
+                  <li><strong>Personal:</strong> reconoce sus emociones básicas ante un reto matemático (alegría, frustración, nervios, vergüenza).<span class="ce-tag">CE6.1</span></li>
+                  <li><strong>Personal:</strong> identifica cuándo necesita ayuda y la pide.<span class="ce-tag">CE4.1</span></li>
+                  <li><strong>Social:</strong> participa en el trabajo en equipo respetando los turnos y el material.<span class="ce-tag">CE6.3</span></li>
+                  <li><strong>Social:</strong> escucha las propuestas de sus compañeros y compañeras.<span class="ce-tag">CE1.1</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li><strong>Personal:</strong> intenta de nuevo cuando falla, con apoyo del adulto o de un compañero.<span class="ce-tag">CE5.1</span></li>
+                  <li><strong>Personal:</strong> acepta el error como parte natural del aprendizaje cuando el adulto lo verbaliza.<span class="ce-tag">CE6.2</span></li>
+                  <li><strong>Social:</strong> acepta el rol asignado en el equipo y cumple con su responsabilidad individual.<span class="ce-tag">CE2.1</span></li>
+                  <li><strong>Social:</strong> contribuye a la resolución compartida del problema aportando ideas o material.<span class="ce-tag">CE6.4</span></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li><strong>Personal:</strong> mantiene la perseverancia ante la dificultad sin necesidad de recordatorio.<span class="ce-tag">CE5.1</span></li>
+                  <li><strong>Personal:</strong> vuelve a intentarlo después de un error sin que se le pida.<span class="ce-tag">CE6.2</span></li>
+                  <li><strong>Social:</strong> ayuda a un compañero o compañera con dificultad sin desplazarlo del proceso.<span class="ce-tag">CE3.1</span></li>
+                  <li><strong>Social:</strong> reconoce y rechaza actitudes no inclusivas o discriminatorias en el grupo.<span class="ce-tag">CE1.1</span></li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===== CONTENIDOS / SABERES BÁSICOS ===== -->
+      <section id="contenidos">
+        <h2>Contenidos / saberes básicos · 2.º curso</h2>
+        <p>Tomados textualmente del Decreto 155/2022, organizados por bloque (sentido matemático).</p>
+
+        <h3>Bloque 1 · Sentido numérico</h3>
+        <h4>Conteo</h4>
+        <ul>
+          <li>Estrategias para contar y recontar a partir de la vivencia, manipulación y representación en situaciones cotidianas con cantidades hasta el 999, con explicación de los procesos.</li>
+          <li>Realización de series ascendentes y descendentes de números, de forma manipulativa, simbólica y tecnológica (calculadora) a partir de un número dado, como introducción al cálculo mental.</li>
+        </ul>
+        <h4>Cantidad</h4>
+        <ul>
+          <li>Identificación, lectura, escritura y representación (recta numérica, ábaco, bloques multibase y otros materiales manipulativos) de números naturales hasta el 999.</li>
+          <li>Composición, descomposición y recomposición de números naturales en contextos cotidianos hasta 999.</li>
+          <li>Representación de una misma cantidad hasta el 999 de forma manipulativa, gráfica y numérica según requiera cada situación.</li>
+          <li>Estimación razonada de cantidades hasta el 999 en problemas cotidianos.</li>
+        </ul>
+        <h4>Sentido de las operaciones</h4>
+        <ul>
+          <li>Estrategias de cálculo mental de sumas y restas con números naturales hasta el 999 en contextos significativos.</li>
+          <li>Agrupaciones manipulativas y gráficas de cantidades repetidas (2, 3, 4, 5 y 10), introduciendo la multiplicación.</li>
+          <li>Resolución de problemas de la vida cotidiana que impliquen suma y resta con uso guiado de los procesos.</li>
+          <li>Procesos para la resolución de problemas: interpretación, representación, datos, hipótesis, contraste, elaboración, expresión, verificación.</li>
+          <li>Planteamiento de problemas que se resuelvan con sumas y restas en situaciones habituales.</li>
+          <li>Uso de calculadora como recurso de verificación.</li>
+        </ul>
+        <h4>Relaciones</h4>
+        <ul>
+          <li>Identificación, representación y uso de los números pares e impares.</li>
+          <li>Sistema de numeración de base diez para comprender el valor posicional de las cifras hasta el 999.</li>
+          <li>Comparación y ordenación de cardinales (hasta 999) y ordinales (hasta 10.º).</li>
+          <li>Estrategias variadas (manipulativas, gráficas y con calculadora) para relacionar suma y resta.</li>
+        </ul>
+        <h4>Educación financiera</h4>
+        <ul>
+          <li>Resolución, individual y en equipo, de problemas sencillos en los que se manejen precios y se empleen monedas y billetes de euro y sus equivalencias.</li>
+          <li>Elaboración y representación de problemas en los que sea necesario emplear y administrar dinero.</li>
+          <li>Aproximaciones y estimaciones en situaciones simuladas de compra y venta.</li>
+        </ul>
+
+        <h3>Bloque 2 · Sentido de la medida</h3>
+        <h4>Magnitud</h4>
+        <ul>
+          <li>Identificación y ejemplificación de características mensurables de los objetos (longitud, masa, capacidad, temperatura), distancias y tiempos.</li>
+          <li>Reconocimiento de unidades no convencionales y convencionales (metro, centímetro, kilo, gramo, litro).</li>
+          <li>Identificación, ordenación, clasificación y uso de las unidades de medida del tiempo (año, estación, mes, semana, día, hora).</li>
+          <li>Construcción de un modelo de reloj analógico con materiales sencillos.</li>
+          <li>Lectura de la hora (en punto, medias y cuartos) en relojes analógicos y digitales en contexto.</li>
+          <li>Utilización de las medidas de tiempo (minutos y segundos) en gestión emocional, planificación escolar y relato de experiencias.</li>
+        </ul>
+        <h4>Medición</h4>
+        <ul>
+          <li>Experimentación, individual y en equipo, con unidades no convencionales del contexto cotidiano.</li>
+          <li>Medición con instrumentos no convencionales y convencionales (reglas, cintas métricas, balanzas, jarras graduadas, calendarios, relojes, termómetros) para resolver problemas cotidianos.</li>
+        </ul>
+        <h4>Estimación y relaciones</h4>
+        <ul>
+          <li>Equivalencias entre kilo, medio kilo y cuarto kilo; entre litro, medio litro y cuarto litro.</li>
+          <li>Estimación de medidas (distancias, alturas, masas, capacidades, tiempos, temperatura) por comparación directa.</li>
+        </ul>
+
+        <h3>Bloque 3 · Sentido espacial</h3>
+        <h4>Figuras geométricas de dos y tres dimensiones</h4>
+        <ul>
+          <li>Análisis, comparación y descripción de objetos cotidianos e imágenes con vocabulario geométrico básico (triángulo, cuadrado, rectángulo, rombo, círculo) y sus elementos (lados, ángulos, vértices) y propiedades.</li>
+          <li>Construcción individual y en equipo de figuras geométricas con recursos fungibles, no fungibles (piezas de construcción, bloques, mecanos, geoplanos, tangram, juegos de figuras) y herramientas digitales.</li>
+          <li>Composición y descomposición manipulativas de figuras planas para formar otras.</li>
+          <li>Identificación de simetrías y compleción de figuras simétricas.</li>
+        </ul>
+        <h4>Localización y sistemas de representación</h4>
+        <ul>
+          <li>Localización y posiciones en el espacio cotidiano a través del juego.</li>
+          <li>Interpretación, descripción y diseño de croquis relacionados con itinerarios habituales, con vocabulario de posición (arriba, abajo, delante, detrás, entre, cerca, lejos, próximo, alejado, al lado).</li>
+        </ul>
+        <h4>Visualización, razonamiento y modelización geométrica</h4>
+        <ul>
+          <li>Resolución, en equipo, de problemas de la vida cotidiana mediante modelos geométricos.</li>
+          <li>Reconocimiento de elementos, figuras y relaciones geométricas en el arte, el entorno físico, los juegos y los planos del contexto próximo.</li>
+        </ul>
+
+        <h3>Bloque 4 · Sentido algebraico y pensamiento computacional</h3>
+        <h4>Patrones</h4>
+        <ul>
+          <li>Estrategias para identificar regularidades en una colección o secuencia de números, figuras o imágenes, con descripción oral y extensión de la secuencia.</li>
+        </ul>
+        <h4>Modelo matemático</h4>
+        <ul>
+          <li>Modelización guiada de la resolución de problemas en equipo con dibujos, pictogramas, esquemas, diagramas, manipulables y dramatizaciones.</li>
+        </ul>
+        <h4>Relaciones y funciones</h4>
+        <ul>
+          <li>Comparación entre expresiones que incluyan objetos, números y operaciones, con uso de = y ≠.</li>
+          <li>Obtención de datos desconocidos en relaciones de equivalencia o igualdad sencillas, con explicación del proceso y comprobación.</li>
+        </ul>
+        <h4>Pensamiento computacional</h4>
+        <ul>
+          <li>Interpretación de algoritmos sencillos en situaciones cotidianas (rutinas diarias, instrucciones por pasos), con uso guiado de estrategias.</li>
+        </ul>
+
+        <h3>Bloque 5 · Sentido estocástico</h3>
+        <h4>Organización y análisis de datos</h4>
+        <ul>
+          <li>Lectura e interpretación de datos en representaciones gráficas sencillas para resolver problemas significativos.</li>
+          <li>Resolución, en equipo, de problemas próximos con recogida, clasificación y recuento de datos cualitativos y cuantitativos en muestras pequeñas.</li>
+          <li>Representación de datos cotidianos (temporales, meteorológicos, personales, físicos, escolares) con gráficas sencillas (barras, pictogramas) y recursos manipulables y tecnológicos.</li>
+        </ul>
+        <h4>Incertidumbre</h4>
+        <ul>
+          <li>Distinción entre suceso posible e imposible y uso adecuado de los términos en contexto lúdico y cotidiano.</li>
+        </ul>
+
+        <h3>Bloque 6 · Sentido socioemocional</h3>
+        <h4>Creencias, actitudes y emociones</h4>
+        <ul>
+          <li>Expresión oral, gráfica o escrita de las propias emociones ante las matemáticas.</li>
+          <li>Técnicas de gestión emocional: escenificación, autocontrol, entrenamiento positivo para regular la frustración.</li>
+          <li>Promoción de preguntas e investigaciones matemáticas como estrategias para fomentar curiosidad e iniciativa.</li>
+          <li>Juegos matemáticos individuales (digitales, impresos, manipulativos) como entrenamiento de la perseverancia.</li>
+          <li>Enigmas, adivinanzas y retos para estimular creatividad y gusto por las matemáticas.</li>
+          <li>Orden, claridad y limpieza como actitud en el trabajo matemático cotidiano.</li>
+        </ul>
+        <h4>Trabajo en equipos: inclusión, respeto y diversidad</h4>
+        <ul>
+          <li>Actitud crítica ante actitudes no inclusivas o discriminatorias durante las tareas matemáticas.</li>
+          <li>Equipos colaborativos con responsabilidad individual, interdependencia positiva y respeto a las contribuciones.</li>
+          <li>Estrategias guiadas de planificación, control y organización del trabajo en equipo, con reparto rotatorio de roles.</li>
+          <li>Contribución de las matemáticas al conocimiento humano desde una perspectiva de género.</li>
+          <li>Reconocimiento de mujeres y hombres en el ámbito matemático y su contribución, como mecanismo de identidad positiva.</li>
+        </ul>
+      </section>
+
+      <!-- ===== MATRICES DE ESPECIFICACIONES ===== -->
+      <section id="matrices">
+        <h2>Matrices de especificaciones</h2>
+        <p>Propuesta orientativa para distribuir los ítems de una prueba de aula. Las ponderaciones se ajustan al perfil de 1.<sup>er</sup> ciclo: se da más peso a la <strong>resolución de problemas</strong> y al <strong>sentido numérico</strong>, y se baja el peso del razonamiento formal y del sentido algebraico, que están menos desarrollados que en 4.º EP.</p>
+
+        <h3>Tabla 9 · Distribución de ítems por eje fundamental</h3>
+        <table>
+          <thead>
+            <tr><th>Resolución de problemas</th><th>Razonamiento y prueba</th><th>Conexiones</th><th>Comunicación y representación</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:center; font-weight:700; font-size:18px;">40 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">30 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">15 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">15 %</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="small muted">Se mantiene la ponderación del INEE de 4.º EP. Aunque la conjetura formal está poco desarrollada en 1.<sup>er</sup> ciclo, los criterios del Decreto 155/2022 incluyen reconocimiento de patrones, comprobación de regularidades y descripción de algoritmos cotidianos, lo que justifica preservar el 30 % de razonamiento.</p>
+
+        <h3>Tabla 10 · Distribución de ítems por sentido matemático</h3>
+        <table>
+          <thead>
+            <tr><th>Numérico</th><th>De la medida</th><th>Espacial</th><th>Algebraico/comp.</th><th>Estocástico</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:center; font-weight:700; font-size:18px;">35 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">25 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">20 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">10 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">10 %</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="small muted">Variación respecto al INEE de 4.º EP (25/20/20/10/25): el sentido numérico sube (+10) porque el dominio del 0–999 y de la suma/resta es el grueso del 1.<sup>er</sup> ciclo, y el estocástico baja (−15), pues en 2.º EP solo se trabajan recogida y representación elementales, no inferencia. El sentido algebraico se mantiene en el 10 % del INEE: aunque la simbología es mínima, sí se trabajan patrones, igualdad y desigualdad, y los primeros algoritmos cotidianos.</p>
+
+        <h3>Tabla 11 · Distribución de ítems por grado de complejidad</h3>
+        <table>
+          <thead>
+            <tr><th>Grado 1 · Identifica</th><th>Grado 2 · Emplea</th><th>Grado 3 · Justifica / crea</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:center; font-weight:700; font-size:18px;">40 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">45 %</td>
+              <td style="text-align:center; font-weight:700; font-size:18px;">15 %</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="small muted">Variación respecto al INEE de 4.º EP (30/45/25): el Grado 1 sube (+10) y el Grado 3 baja (−10) porque a los 6–7 años la mayoría del alumnado se ubica entre identificar y aplicar; el grado de “justificar/crear” aparece pero no debería ser dominante en una prueba calibrada para la edad.</p>
+
+        <h3>Tabla 12 · Matriz cruzada · sentidos × ejes × grados de complejidad</h3>
+        <p class="small muted">Cada celda representa el porcentaje aproximado de ítems combinando los tres ejes de la matriz. Suma global = 100 %.</p>
+        <table class="matriz-cruzada">
+          <thead>
+            <tr>
+              <th rowspan="2" style="background:var(--rojo); width:120px;">Sentidos</th>
+              <th colspan="3" class="eje-head">Resolución de problemas</th>
+              <th colspan="3" class="eje-head">Razonamiento y prueba</th>
+              <th colspan="3" class="eje-head">Conexiones</th>
+              <th colspan="3" class="eje-head">Comunicación</th>
+              <th rowspan="2" style="background:var(--rojo); width:60px;">Total</th>
+            </tr>
+            <tr>
+              <th class="grado">G1</th><th class="grado">G2</th><th class="grado">G3</th>
+              <th class="grado">G1</th><th class="grado">G2</th><th class="grado">G3</th>
+              <th class="grado">G1</th><th class="grado">G2</th><th class="grado">G3</th>
+              <th class="grado">G1</th><th class="grado">G2</th><th class="grado">G3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="head-cell">Numérico</td>
+              <td class="celda">6</td><td class="celda">6</td><td class="celda">2</td>
+              <td class="celda">4</td><td class="celda">5</td><td class="celda">2</td>
+              <td class="celda">2</td><td class="celda">2</td><td class="celda">1</td>
+              <td class="celda">2</td><td class="celda">2</td><td class="celda">1</td>
+              <td class="total-fila">35</td>
+            </tr>
+            <tr>
+              <td class="head-cell">De la medida</td>
+              <td class="celda">5</td><td class="celda">4</td><td class="celda">1</td>
+              <td class="celda">3</td><td class="celda">3</td><td class="celda">1</td>
+              <td class="celda">2</td><td class="celda">2</td><td class="celda">0</td>
+              <td class="celda">1</td><td class="celda">2</td><td class="celda">1</td>
+              <td class="total-fila">25</td>
+            </tr>
+            <tr>
+              <td class="head-cell">Espacial</td>
+              <td class="celda">3</td><td class="celda">3</td><td class="celda">2</td>
+              <td class="celda">2</td><td class="celda">3</td><td class="celda">1</td>
+              <td class="celda">1</td><td class="celda">1</td><td class="celda">1</td>
+              <td class="celda">1</td><td class="celda">2</td><td class="celda">0</td>
+              <td class="total-fila">20</td>
+            </tr>
+            <tr>
+              <td class="head-cell">Algebraico/comp.</td>
+              <td class="celda">2</td><td class="celda">2</td><td class="celda">0</td>
+              <td class="celda">1</td><td class="celda">1</td><td class="celda">1</td>
+              <td class="celda">1</td><td class="celda">1</td><td class="celda">0</td>
+              <td class="celda">0</td><td class="celda">1</td><td class="celda">0</td>
+              <td class="total-fila">10</td>
+            </tr>
+            <tr>
+              <td class="head-cell">Estocástico</td>
+              <td class="celda">2</td><td class="celda">2</td><td class="celda">0</td>
+              <td class="celda">1</td><td class="celda">1</td><td class="celda">1</td>
+              <td class="celda">0</td><td class="celda">1</td><td class="celda">0</td>
+              <td class="celda">1</td><td class="celda">1</td><td class="celda">0</td>
+              <td class="total-fila">10</td>
+            </tr>
+            <tr>
+              <td class="total-col">Total</td>
+              <td class="total-col">18</td><td class="total-col">17</td><td class="total-col">5</td>
+              <td class="total-col">11</td><td class="total-col">13</td><td class="total-col">6</td>
+              <td class="total-col">6</td><td class="total-col">7</td><td class="total-col">2</td>
+              <td class="total-col">5</td><td class="total-col">8</td><td class="total-col">2</td>
+              <td class="total-fila">100</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="small muted">Las cifras son orientativas y suman aproximadamente los porcentajes de las tablas 9–11. Se han redondeado para evitar decimales.</p>
+      </section>
+
+      <!-- ===== FUENTES ===== -->
+      <section id="fuentes">
+        <h2>Fuentes y notas</h2>
+        <h3>Documentos de referencia</h3>
+        <ul>
+          <li><strong>Marco general de las evaluaciones del sistema educativo (2.ª edición, 2025).</strong> INEE / Ministerio de Educación, Formación Profesional y Deportes. Capítulo C · Anexo II: Marco de evaluación de las competencias específicas de Matemáticas para 4.º EP y 2.º ESO.</li>
+          <li><strong>Decreto 155/2022, de 15 de septiembre,</strong> por el que se establecen la ordenación y el currículo de la Educación Primaria en la Comunidad Autónoma de Galicia. DOG núm. 183, 26 de septiembre de 2022.</li>
+          <li><strong>Real Decreto 157/2022, de 1 de marzo,</strong> por el que se establecen la ordenación y las enseñanzas mínimas de la Educación Primaria.</li>
+        </ul>
+
+        <h3>Notas de adaptación</h3>
+        <ul>
+          <li>El INEE no publica un marco de evaluación para 2.º EP; este documento adapta su estructura a partir del marco de 4.º EP.</li>
+          <li>Los textos de criterios de evaluación y de contenidos se reproducen del Decreto 155/2022.</li>
+          <li>Los indicadores de logro graduados (Tablas 4–8) son una propuesta de adaptación al desarrollo cognitivo de 6–7 años. No tienen carácter oficial.</li>
+          <li>Las matrices de especificaciones (Tablas 9–12) son orientativas para la planificación de pruebas de evaluación de aula.</li>
+        </ul>
+
+        <p class="small muted" style="margin-top:24px;">Documento de trabajo. Mayo de 2026. Centro: CEIP Coirón Dena. Autoría: Brais Prados González.</p>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  // Tema oscuro/claro con persistencia
+  (function () {
+    const root = document.documentElement;
+    const stored = localStorage.getItem('marco-mate-2ep-theme');
+    if (stored === 'dark') root.classList.add('dark');
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      root.classList.toggle('dark');
+      localStorage.setItem('marco-mate-2ep-theme', root.classList.contains('dark') ? 'dark' : 'light');
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Suma o resta? · 2º Primaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fef9f3;
+    --card: #ffffff;
+    --ink: #1f2937;
+    --ink-soft: #4b5563;
+    --line: #e5e7eb;
+    --suma: #10b981;
+    --suma-soft: #d1fae5;
+    --resta: #f43f5e;
+    --resta-soft: #ffe4e6;
+    --shadow: 0 10px 30px -10px rgba(31,41,55,.18), 0 2px 6px -2px rgba(31,41,55,.08);
+
+    --cat-minecraft: #16a34a;
+    --cat-minecraft-bg: #dcfce7;
+    --cat-arte: #db2777;
+    --cat-arte-bg: #fce7f3;
+    --cat-gimnasia: #7c3aed;
+    --cat-gimnasia-bg: #ede9fe;
+    --cat-arquitectura: #b45309;
+    --cat-arquitectura-bg: #fef3c7;
+    --cat-cromos: #0284c7;
+    --cat-cromos-bg: #e0f2fe;
+    --cat-trenes: #ea580c;
+    --cat-trenes-bg: #ffedd5;
+
+    --lvl-1: #16a34a; --lvl-1-bg: #dcfce7;
+    --lvl-2: #0284c7; --lvl-2-bg: #e0f2fe;
+    --lvl-3: #db2777; --lvl-3-bg: #fce7f3;
+    --lvl-all: #4b5563; --lvl-all-bg: #f3f4f6;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 24px clamp(16px, 4vw, 48px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 900;
+    font-size: clamp(20px, 2.5vw, 28px);
+  }
+  .title svg { color: var(--suma); }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .home-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    transition: background .15s ease, color .15s ease, transform .12s ease;
+  }
+  .home-btn:hover { background: var(--ink); color: white; }
+  .home-btn:active { transform: scale(.94); }
+  .home-btn svg { width: 20px; height: 20px; }
+
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .progress-bar {
+    width: clamp(120px, 25vw, 240px);
+    height: 10px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-bar > span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--suma), #34d399);
+    transition: width .4s ease;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 clamp(16px, 4vw, 48px) 32px;
+  }
+  .stage { width: 100%; max-width: 760px; }
+
+  /* === MENÚ DE NIVELES === */
+  .menu { text-align: center; }
+  .menu h2 {
+    font-size: clamp(22px, 3vw, 32px);
+    margin: 0 0 8px;
+    font-weight: 900;
+  }
+  .menu .sub {
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin: 0 0 28px;
+    font-size: 17px;
+  }
+  .levels {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .level-card {
+    background: var(--card);
+    border: 3px solid transparent;
+    border-radius: 22px;
+    padding: 22px 18px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    text-align: left;
+    font-family: inherit;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .level-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 5px;
+    background: var(--lvl-color);
+  }
+  .level-card:hover { transform: translateY(-3px); border-color: var(--lvl-color); }
+  .level-card .stars {
+    display: flex;
+    gap: 4px;
+    color: var(--lvl-color);
+  }
+  .level-card .stars svg { width: 22px; height: 22px; }
+  .level-card .stars .dim { color: var(--line); }
+  .level-card h3 { margin: 0; font-size: 22px; font-weight: 900; }
+  .level-card .desc { color: var(--ink-soft); font-weight: 600; font-size: 14px; line-height: 1.4; margin: 0; }
+  .level-card .count {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--lvl-bg);
+    color: var(--lvl-color);
+    font-weight: 800;
+    font-size: 12px;
+    align-self: flex-start;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  /* === TARJETA DE PROBLEMA === */
+  .card {
+    background: var(--card);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    padding: clamp(24px, 4vw, 40px);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 6px;
+    background: var(--accent, var(--suma));
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+  .badge-cat { background: var(--accent-bg); color: var(--accent); }
+  .badge-lvl { background: var(--lvl-bg); color: var(--lvl-color); }
+  .badge svg { width: 16px; height: 16px; }
+
+  .problem {
+    font-size: clamp(20px, 2.4vw, 26px);
+    line-height: 1.55;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 28px;
+  }
+  .problem b { font-weight: 900; color: var(--accent, var(--ink)); }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .btn {
+    font-family: inherit;
+    font-weight: 900;
+    font-size: clamp(22px, 3vw, 30px);
+    letter-spacing: .04em;
+    padding: 24px 12px;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .15s ease, background .15s ease;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-suma {
+    background: linear-gradient(180deg, #34d399, var(--suma));
+    box-shadow: 0 6px 0 #047857, 0 10px 20px -10px rgba(16,185,129,.5);
+  }
+  .btn-suma:hover { background: linear-gradient(180deg, #6ee7b7, var(--suma)); }
+  .btn-resta {
+    background: linear-gradient(180deg, #fb7185, var(--resta));
+    box-shadow: 0 6px 0 #be123c, 0 10px 20px -10px rgba(244,63,94,.5);
+  }
+  .btn-resta:hover { background: linear-gradient(180deg, #fda4af, var(--resta)); }
+  .btn:disabled { cursor: default; opacity: .5; }
+  .btn svg { width: 24px; height: 24px; }
+
+  .feedback {
+    margin-top: 24px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .feedback.show { opacity: 1; transform: none; }
+  .feedback.correct { background: var(--suma-soft); color: #065f46; }
+  .feedback.wrong { background: var(--resta-soft); color: #9f1239; }
+  .feedback .msg { display: flex; align-items: center; gap: 10px; }
+  .feedback .next {
+    border: none;
+    background: var(--ink);
+    color: white;
+    font-family: inherit;
+    font-weight: 800;
+    padding: 10px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .feedback .next:hover { background: #111827; }
+
+  .results {
+    background: var(--card);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    padding: clamp(28px, 5vw, 48px);
+    text-align: center;
+  }
+  .results h2 { font-size: clamp(26px, 4vw, 38px); margin: 0 0 8px; }
+  .results .score {
+    font-size: clamp(48px, 8vw, 72px);
+    font-weight: 900;
+    color: var(--suma);
+    margin: 16px 0 8px;
+    line-height: 1;
+  }
+  .results .total { color: var(--ink-soft); font-weight: 700; }
+  .results .stars {
+    margin: 18px 0 24px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    color: #f59e0b;
+  }
+  .results .stars svg { width: 36px; height: 36px; }
+  .results .stars .dim { color: var(--line); }
+  .results p { color: var(--ink-soft); font-weight: 600; font-size: 18px; margin: 0 0 24px; }
+  .results .result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .results button {
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 17px;
+    padding: 14px 24px;
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .results button.alt { background: white; color: var(--ink); border: 2px solid var(--line); }
+
+  footer {
+    text-align: center;
+    padding: 16px;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 540px) {
+    .actions { grid-template-columns: 1fr; }
+    .btn { padding: 20px 12px; }
+    .levels { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+      <path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+    </symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+    </symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+      <path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>
+    </symbol>
+    <symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+      <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+      <path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
+    </symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+      <path d="M4 22h16"/>
+      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+    </symbol>
+    <symbol id="i-train" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/>
+      <path d="m9 15-1-1"/><path d="m15 15 1-1"/>
+      <path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/>
+      <path d="m8 19-2 3"/><path d="m16 19 2 3"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/><path d="M12 5v14"/>
+    </symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5"/>
+    </symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+    </symbol>
+    <symbol id="i-restart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+      <path d="M3 3v5h5"/>
+    </symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
+      <path d="m22 12.18-9.17 4.16a2 2 0 0 1-1.66 0L2 12.18"/>
+      <path d="m22 17.18-9.17 4.16a2 2 0 0 1-1.66 0L2 17.18"/>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+    </symbol>
+    <symbol id="i-calc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect width="16" height="20" x="4" y="2" rx="2"/>
+      <line x1="8" x2="16" y1="6" y2="6"/>
+      <line x1="16" x2="16" y1="14" y2="18"/>
+      <path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/>
+      <path d="M12 14h.01"/><path d="M8 14h.01"/>
+      <path d="M12 18h.01"/><path d="M8 18h.01"/>
+    </symbol>
+    <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="title">
+    <svg width="28" height="28"><use href="#i-calc"/></svg>
+    <span>¿Suma o resta?</span>
+  </div>
+  <div class="header-right">
+    <div class="progress hidden" id="progress">
+      <span id="counter">1 / 7</span>
+      <div class="progress-bar"><span id="bar"></span></div>
+    </div>
+    <button class="home-btn hidden" id="home-btn" title="Volver al menú de niveles" aria-label="Volver al menú">
+      <svg><use href="#i-home"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="stage">
+
+    <!-- MENÚ DE NIVELES -->
+    <div class="menu" id="menu">
+      <h2>Elige nivel de dificultad</h2>
+      <p class="sub">Vas a clasificar problemas: ¿se resuelven sumando o restando?</p>
+      <div class="levels" id="levels"></div>
+    </div>
+
+    <!-- TARJETA DE PROBLEMA -->
+    <div class="card hidden" id="card">
+      <div class="badges">
+        <span class="badge badge-cat" id="badge-cat">
+          <svg><use href="#i-box" id="badge-icon"/></svg>
+          <span id="badge-label">Minecraft</span>
+        </span>
+        <span class="badge badge-lvl" id="badge-lvl">
+          <svg><use href="#i-star"/></svg>
+          <span id="badge-lvl-label">Fácil</span>
+        </span>
+      </div>
+      <p class="problem" id="problem"></p>
+      <div class="actions">
+        <button class="btn btn-suma" data-op="sumar">
+          <svg><use href="#i-plus"/></svg> SUMAR
+        </button>
+        <button class="btn btn-resta" data-op="restar">
+          <svg><use href="#i-minus"/></svg> RESTAR
+        </button>
+      </div>
+      <div class="feedback" id="feedback">
+        <span class="msg" id="feedback-msg"></span>
+        <button class="next" id="next-btn">
+          Siguiente <svg width="18" height="18"><use href="#i-arrow"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="results hidden" id="results">
+      <h2>¡Has terminado!</h2>
+      <div class="score"><span id="score">0</span><span class="total">/<span id="total">0</span></span></div>
+      <div class="stars" id="stars"></div>
+      <p id="message"></p>
+      <div class="result-actions">
+        <button id="restart">
+          <svg width="20" height="20"><use href="#i-restart"/></svg>
+          Repetir nivel
+        </button>
+        <button id="back-menu" class="alt">
+          <svg width="20" height="20"><use href="#i-home"/></svg>
+          Cambiar nivel
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>Material para 2º de Primaria · CEIP Coirón Dena</footer>
+
+<script>
+  // === Niveles ====================================================
+  const niveles = {
+    1:   { label: "Fácil", color: "var(--lvl-1)", bg: "var(--lvl-1-bg)", stars: 1, desc: "Números de 2 cifras. Verbos claros." },
+    2:   { label: "Medio", color: "var(--lvl-2)", bg: "var(--lvl-2-bg)", stars: 2, desc: "Un número de 3 cifras. Verbos claros." },
+    3:   { label: "Reto",  color: "var(--lvl-3)", bg: "var(--lvl-3-bg)", stars: 3, desc: "Números grandes o palabras tramposas." },
+    all: { label: "Todos", color: "var(--lvl-all)", bg: "var(--lvl-all-bg)", stars: 0, desc: "Los 20 problemas, de fácil a difícil." }
+  };
+
+  // === Categorías ==================================================
+  const categorias = {
+    minecraft:    { label: "Minecraft",        icon: "i-box",      color: "var(--cat-minecraft)",    bg: "var(--cat-minecraft-bg)" },
+    arte:         { label: "Arte y pintura",   icon: "i-palette",  color: "var(--cat-arte)",         bg: "var(--cat-arte-bg)" },
+    gimnasia:     { label: "Gimnasia rítmica", icon: "i-sparkles", color: "var(--cat-gimnasia)",     bg: "var(--cat-gimnasia-bg)" },
+    arquitectura: { label: "Arquitectura",     icon: "i-building", color: "var(--cat-arquitectura)", bg: "var(--cat-arquitectura-bg)" },
+    cromos:       { label: "Cromos de fútbol", icon: "i-trophy",   color: "var(--cat-cromos)",       bg: "var(--cat-cromos-bg)" },
+    trenes:       { label: "Trenes",           icon: "i-train",    color: "var(--cat-trenes)",       bg: "var(--cat-trenes-bg)" }
+  };
+
+  // === Problemas (ordenados Nivel 1 → 2 → 3) =======================
+  const problemas = [
+    // ------- NIVEL 1 (Fácil) -------
+    { level:1, cat:"arte", correct:"sumar", parts:[
+      {txt:"En la clase de plástica había "},
+      {txt:"78 lápices", bold:true},
+      {txt:" de colores. La profe trajo "},
+      {txt:"45 lápices", bold:true},
+      {txt:" nuevos. ¿Cuántos lápices hay ahora en clase?"}
+    ]},
+    { level:1, cat:"gimnasia", correct:"restar", parts:[
+      {txt:"Un equipo de gimnasia rítmica tenía "},
+      {txt:"85 mazas", bold:true},
+      {txt:" guardadas. Durante una competición se rompieron "},
+      {txt:"27 mazas", bold:true},
+      {txt:". ¿Cuántas mazas quedan en buen estado?"}
+    ]},
+    { level:1, cat:"minecraft", correct:"sumar", parts:[
+      {txt:"En tu mundo de Minecraft había "},
+      {txt:"95 ovejas", bold:true},
+      {txt:" pastando en un prado. Por la noche nacieron "},
+      {txt:"36 corderitos", bold:true},
+      {txt:" más. ¿Cuántas ovejas hay ahora?"}
+    ]},
+    { level:1, cat:"cromos", correct:"sumar", parts:[
+      {txt:"Sara tenía "},
+      {txt:"73 cromos", bold:true},
+      {txt:" de su equipo favorito guardados en una caja. Su madre le compró "},
+      {txt:"89 cromos", bold:true},
+      {txt:" más. ¿Cuántos cromos tiene en total?"}
+    ]},
+    { level:1, cat:"arquitectura", correct:"sumar", parts:[
+      {txt:"Un arquitecto dibujó "},
+      {txt:"84 planos", bold:true},
+      {txt:" para una casa nueva. Por la tarde dibujó "},
+      {txt:"57 planos", bold:true},
+      {txt:" más para el jardín. ¿Cuántos planos dibujó en total?"}
+    ]},
+    { level:1, cat:"trenes", correct:"restar", parts:[
+      {txt:"En el vagón de un tren viajaban "},
+      {txt:"92 pasajeros", bold:true},
+      {txt:". En la siguiente parada se bajaron "},
+      {txt:"47 personas", bold:true},
+      {txt:". ¿Cuántos pasajeros quedan en el vagón?"}
+    ]},
+    { level:1, cat:"gimnasia", correct:"sumar", parts:[
+      {txt:"En el polideportivo había "},
+      {txt:"92 cintas", bold:true},
+      {txt:" de gimnasia rítmica. Llegaron "},
+      {txt:"58 cintas", bold:true},
+      {txt:" nuevas de colores para la próxima actuación. ¿Cuántas cintas hay ahora?"}
+    ]},
+
+    // ------- NIVEL 2 (Medio) -------
+    { level:2, cat:"minecraft", correct:"sumar", parts:[
+      {txt:"Mateo construyó una casa en Minecraft con "},
+      {txt:"156 bloques", bold:true},
+      {txt:" de piedra. Su hermana le añadió "},
+      {txt:"67 bloques", bold:true},
+      {txt:" más para hacer el tejado. ¿Cuántos bloques tiene la construcción ahora?"}
+    ]},
+    { level:2, cat:"cromos", correct:"sumar", parts:[
+      {txt:"Lucas tenía "},
+      {txt:"145 cromos", bold:true},
+      {txt:" pegados en su álbum de fútbol. Su tío le regaló "},
+      {txt:"68 cromos", bold:true},
+      {txt:" nuevos sin repetir. ¿Cuántos cromos tiene ahora?"}
+    ]},
+    { level:2, cat:"arquitectura", correct:"sumar", parts:[
+      {txt:"Una arquitecta diseñó un edificio con "},
+      {txt:"175 ventanas", bold:true},
+      {txt:". En la siguiente planta añadió "},
+      {txt:"48 ventanas", bold:true},
+      {txt:" más para que entrara mucha luz. ¿Cuántas ventanas tiene el edificio?"}
+    ]},
+    { level:2, cat:"minecraft", correct:"restar", parts:[
+      {txt:"En tu inventario de Minecraft tenías "},
+      {txt:"120 diamantes", bold:true},
+      {txt:" guardados. Usaste "},
+      {txt:"48 diamantes", bold:true},
+      {txt:" para fabricar herramientas. ¿Cuántos diamantes te quedan?"}
+    ]},
+    { level:2, cat:"trenes", correct:"sumar", parts:[
+      {txt:"Un tren de mercancías llevaba "},
+      {txt:"165 contenedores", bold:true},
+      {txt:". En una estación cargaron "},
+      {txt:"58 contenedores", bold:true},
+      {txt:" más. ¿Cuántos contenedores lleva ahora?"}
+    ]},
+    { level:2, cat:"trenes", correct:"restar", parts:[
+      {txt:"En una estación había "},
+      {txt:"130 trenes", bold:true},
+      {txt:" aparcados durante la noche. A primera hora salieron "},
+      {txt:"75 trenes", bold:true},
+      {txt:" hacia distintas ciudades. ¿Cuántos trenes quedan en la estación?"}
+    ]},
+    { level:2, cat:"arte", correct:"restar", parts:[
+      {txt:"En una exposición había "},
+      {txt:"150 cuadros", bold:true},
+      {txt:" colgados en las paredes. Durante la inauguración se vendieron "},
+      {txt:"78 cuadros", bold:true},
+      {txt:". ¿Cuántos cuadros quedan en la exposición?"}
+    ]},
+    { level:2, cat:"gimnasia", correct:"sumar", parts:[
+      {txt:"En el club de gimnasia rítmica había "},
+      {txt:"110 pelotas", bold:true},
+      {txt:". La entrenadora compró "},
+      {txt:"65 pelotas", bold:true},
+      {txt:" más para las principiantes. ¿Cuántas pelotas hay en total?"}
+    ]},
+    { level:2, cat:"trenes", correct:"restar", parts:[
+      {txt:"En un tren turístico viajaban "},
+      {txt:"145 pasajeros", bold:true},
+      {txt:". En una parada se bajaron "},
+      {txt:"78 turistas", bold:true},
+      {txt:" para visitar un castillo. ¿Cuántos pasajeros siguen en el tren?"}
+    ]},
+
+    // ------- NIVEL 3 (Reto) -------
+    { level:3, cat:"cromos", correct:"restar", parts:[
+      {txt:"En el patio del colegio cinco amigos juntaron "},
+      {txt:"180 cromos", bold:true},
+      {txt:". Al final del recreo intercambiaron "},
+      {txt:"45 cromos", bold:true},
+      {txt:" con otros niños y se los llevaron. ¿Cuántos cromos les quedan ahora?"}
+    ]},
+    { level:3, cat:"arte", correct:"restar", parts:[
+      {txt:"Un pintor tenía "},
+      {txt:"130 pinceles", bold:true},
+      {txt:" en su taller. Después de un curso prestó "},
+      {txt:"67 pinceles", bold:true},
+      {txt:" a otros artistas. ¿Cuántos pinceles le quedan?"}
+    ]},
+    { level:3, cat:"arquitectura", correct:"restar", parts:[
+      {txt:"En una obra había "},
+      {txt:"160 ladrillos", bold:true},
+      {txt:" preparados. Los albañiles colocaron "},
+      {txt:"95 ladrillos", bold:true},
+      {txt:" en el muro durante la mañana. ¿Cuántos ladrillos quedan sin colocar?"}
+    ]},
+    { level:3, cat:"cromos", correct:"restar", parts:[
+      {txt:"En una tienda había "},
+      {txt:"200 sobres", bold:true},
+      {txt:" de cromos. Durante el día se vendieron "},
+      {txt:"124 sobres", bold:true},
+      {txt:". ¿Cuántos sobres quedan en la tienda?"}
+    ]}
+  ];
+
+  // === MENSAJES DE FEEDBACK ========================================
+  // TODO Brais: edita estos mensajes con tu voz/registro habitual.
+  const mensajesAcierto = [
+    "¡Genial! Lo has clavado.",
+    "¡Eso es! Buen trabajo.",
+    "¡Bien hecho! Sigue así.",
+    "¡Correcto! Vas como un cohete.",
+    "¡Súper! Lo tienes claro."
+  ];
+  const mensajesError = [
+    "Casi. Vuelve a leer despacio.",
+    "Ojo, fíjate bien en el enunciado.",
+    "No es esa. Mira las palabras clave.",
+    "Inténtalo otra vez, tú puedes.",
+    "Lee de nuevo: ¿añade o quita?"
+  ];
+
+  // === Estado ======================================================
+  const $ = (s) => document.querySelector(s);
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  let nivelActual = null;
+  let problemasActuales = [];
+  let idx = 0;
+  let aciertos = 0;
+  let respondida = false;
+
+  function makeSvgUse(iconId, size) {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    if (size) { svg.setAttribute("width", size); svg.setAttribute("height", size); }
+    const use = document.createElementNS(SVG_NS, "use");
+    use.setAttribute("href", "#" + iconId);
+    svg.appendChild(use);
+    return svg;
+  }
+
+  function pickMsg(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+  function filtraPorNivel(n) {
+    return n === "all" ? problemas.slice() : problemas.filter(p => p.level === n);
+  }
+
+  // === Menú ========================================================
+  function renderMenu() {
+    const menuEl = $("#levels");
+    menuEl.textContent = "";
+
+    [1, 2, 3, "all"].forEach(n => {
+      const info = niveles[n];
+      const count = filtraPorNivel(n).length;
+      const btn = document.createElement("button");
+      btn.className = "level-card";
+      btn.style.setProperty("--lvl-color", info.color);
+      btn.style.setProperty("--lvl-bg", info.bg);
+
+      const stars = document.createElement("div");
+      stars.className = "stars";
+      if (n === "all") {
+        const ic = makeSvgUse("i-layers");
+        stars.appendChild(ic);
+      } else {
+        for (let i = 0; i < 3; i++) {
+          const s = makeSvgUse("i-star");
+          if (i >= info.stars) s.classList.add("dim");
+          stars.appendChild(s);
+        }
+      }
+
+      const h = document.createElement("h3");
+      h.textContent = (n === "all" ? "Todos" : "Nivel " + n + " · " + info.label);
+
+      const cnt = document.createElement("span");
+      cnt.className = "count";
+      cnt.textContent = count + (count === 1 ? " problema" : " problemas");
+
+      const d = document.createElement("p");
+      d.className = "desc";
+      d.textContent = info.desc;
+
+      btn.appendChild(stars);
+      btn.appendChild(h);
+      btn.appendChild(cnt);
+      btn.appendChild(d);
+      btn.addEventListener("click", () => iniciar(n));
+      menuEl.appendChild(btn);
+    });
+  }
+
+  function mostrarMenu() {
+    $("#menu").classList.remove("hidden");
+    $("#card").classList.add("hidden");
+    $("#results").classList.add("hidden");
+    $("#progress").classList.add("hidden");
+    $("#home-btn").classList.add("hidden");
+  }
+
+  // === Juego =======================================================
+  function iniciar(n) {
+    nivelActual = n;
+    problemasActuales = filtraPorNivel(n);
+    idx = 0;
+    aciertos = 0;
+    $("#menu").classList.add("hidden");
+    $("#results").classList.add("hidden");
+    $("#card").classList.remove("hidden");
+    $("#progress").classList.remove("hidden");
+    $("#home-btn").classList.remove("hidden");
+    renderProblema();
+  }
+
+  function renderProblema() {
+    respondida = false;
+    const p = problemasActuales[idx];
+    const c = categorias[p.cat];
+    const lvl = niveles[p.level];
+
+    $("#card").style.setProperty("--accent", c.color);
+    $("#card").style.setProperty("--accent-bg", c.bg);
+    $("#card").style.setProperty("--lvl-color", lvl.color);
+    $("#card").style.setProperty("--lvl-bg", lvl.bg);
+
+    $("#badge-icon").setAttribute("href", "#" + c.icon);
+    $("#badge-label").textContent = c.label;
+    $("#badge-lvl-label").textContent = lvl.label;
+
+    const probEl = $("#problem");
+    probEl.textContent = "";
+    p.parts.forEach(part => {
+      if (part.bold) {
+        const b = document.createElement("b");
+        b.textContent = part.txt;
+        probEl.appendChild(b);
+      } else {
+        probEl.appendChild(document.createTextNode(part.txt));
+      }
+    });
+
+    $("#feedback").classList.remove("show", "correct", "wrong");
+    document.querySelectorAll(".btn").forEach(b => b.disabled = false);
+
+    $("#counter").textContent = `${idx+1} / ${problemasActuales.length}`;
+    $("#bar").style.width = `${(idx / problemasActuales.length) * 100}%`;
+  }
+
+  function responder(op) {
+    if (respondida) return;
+    respondida = true;
+    const p = problemasActuales[idx];
+    const correcto = (op === p.correct);
+    if (correcto) aciertos++;
+
+    document.querySelectorAll(".btn").forEach(b => b.disabled = true);
+    const fb = $("#feedback");
+    fb.classList.add("show");
+    fb.classList.add(correcto ? "correct" : "wrong");
+
+    const msgEl = $("#feedback-msg");
+    msgEl.textContent = "";
+    msgEl.appendChild(makeSvgUse(correcto ? "i-check" : "i-x", 22));
+    msgEl.appendChild(document.createTextNode(" " + (correcto ? pickMsg(mensajesAcierto) : pickMsg(mensajesError))));
+
+    $("#bar").style.width = `${((idx+1) / problemasActuales.length) * 100}%`;
+  }
+
+  function siguiente() {
+    if (idx < problemasActuales.length - 1) {
+      idx++;
+      renderProblema();
+    } else {
+      mostrarResultados();
+    }
+  }
+
+  function mostrarResultados() {
+    $("#card").classList.add("hidden");
+    $("#progress").classList.add("hidden");
+    const res = $("#results");
+    res.classList.remove("hidden");
+
+    const total = problemasActuales.length;
+    $("#score").textContent = aciertos;
+    $("#total").textContent = total;
+
+    const ratio = aciertos / total;
+    const estrellas = ratio >= 0.9 ? 3 : ratio >= 0.7 ? 2 : ratio >= 0.5 ? 1 : 0;
+
+    const starsEl = $("#stars");
+    starsEl.textContent = "";
+    for (let i = 0; i < 3; i++) {
+      const s = makeSvgUse("i-star");
+      if (i >= estrellas) s.classList.add("dim");
+      starsEl.appendChild(s);
+    }
+
+    let mensaje;
+    if (ratio === 1) mensaje = "¡Perfecto! No has fallado ninguna.";
+    else if (ratio >= 0.8) mensaje = "¡Muy bien! Casi todas correctas.";
+    else if (ratio >= 0.5) mensaje = "¡Bien! Puedes mejorar repasando las palabras clave.";
+    else mensaje = "Vamos a repasar despacio. ¡Tú puedes!";
+    $("#message").textContent = mensaje;
+  }
+
+  document.querySelectorAll(".btn[data-op]").forEach(b => {
+    b.addEventListener("click", () => responder(b.dataset.op));
+  });
+  $("#next-btn").addEventListener("click", siguiente);
+  $("#restart").addEventListener("click", () => iniciar(nivelActual));
+  $("#back-menu").addEventListener("click", mostrarMenu);
+  $("#home-btn").addEventListener("click", mostrarMenu);
+
+  renderMenu();
+  mostrarMenu();
+</script>
+
+</body>
+</html>
