@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="gl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Xtranoid Gramatical · Lingua Galega</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root {
+    --accent:#10b981; --warm:#d4a574; --bad:#ef4444; --bg:#0d130f;
+    --panel:rgba(255,255,255,.06); --line:rgba(255,255,255,.14);
+    --text:#f4f7f5; --muted:rgba(255,255,255,.6);
+  }
+  html[data-theme="light"] { --bg:#eef3ef; --panel:rgba(0,0,0,.04); --line:rgba(0,0,0,.14); --text:#16241c; --muted:rgba(0,0,0,.55); }
+  html, body { height:100%; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    overflow:hidden; user-select:none; touch-action:none; }
+  .wrap { display:flex; flex-direction:column; height:100vh; max-width:960px; margin:0 auto; }
+
+  .hud { display:flex; align-items:center; gap:10px; padding:10px 14px; flex-wrap:wrap; }
+  .hud .brand { font-weight:800; font-size:.95rem; }
+  .hud .brand b { color:var(--accent); }
+  .obx { margin-left:auto; display:flex; align-items:center; gap:8px; background:var(--panel);
+    border:1px solid var(--line); padding:6px 12px; border-radius:10px; }
+  .obx .lbl { color:var(--muted); text-transform:uppercase; letter-spacing:.6px; font-size:.6rem; font-weight:700; }
+  .obx .cat { color:var(--accent); font-weight:800; font-size:.92rem; }
+  .stats { display:flex; gap:14px; align-items:center; font-size:.82rem; }
+  .stat b { font-variant-numeric:tabular-nums; }
+  .hearts { font-size:.95rem; }
+  .iconbtn { background:var(--panel); border:1px solid var(--line); color:var(--text); width:34px; height:34px;
+    border-radius:9px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+  .iconbtn:hover { background:var(--line); }
+  .iconbtn svg { width:16px; height:16px; }
+
+  .stage { position:relative; flex:1; display:flex; align-items:center; justify-content:center; min-height:0; padding:0 10px 10px; }
+  canvas { display:block; border-radius:14px; background:
+      radial-gradient(circle at 80% 0%, rgba(16,185,129,.10) 0%, transparent 55%),
+      linear-gradient(170deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+      border:1px solid var(--line); box-shadow:0 20px 60px rgba(0,0,0,.35); width:100%; height:100%; }
+
+  .overlay { position:absolute; inset:10px; border-radius:14px; background:rgba(8,14,11,.88); backdrop-filter:blur(8px);
+    display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:26px; z-index:5; overflow:auto; }
+  html[data-theme="light"] .overlay { background:rgba(238,243,239,.92); }
+  .overlay.show { display:flex; }
+  .ov-badge { background:var(--accent); color:#04241a; font-weight:800; font-size:.7rem; text-transform:uppercase;
+    letter-spacing:1.4px; padding:5px 14px; border-radius:20px; margin-bottom:16px; }
+  .ov-title { font-size:clamp(1.5rem,5vw,2.5rem); font-weight:900; line-height:1.08; margin-bottom:12px; }
+  .ov-title span { color:var(--accent); }
+  .ov-text { font-size:clamp(.95rem,2vw,1.1rem); color:var(--muted); max-width:600px; line-height:1.55; }
+  .ov-text b { color:var(--text); }
+  .powers { display:grid; grid-template-columns:repeat(2,1fr); gap:8px 18px; margin:18px 0 22px; max-width:560px; text-align:left; }
+  .powers div { display:flex; align-items:center; gap:9px; font-size:.84rem; color:var(--muted); }
+  .cap { width:28px; height:18px; border-radius:5px; flex:none; display:flex; align-items:center; justify-content:center;
+    font-size:.8rem; font-weight:900; color:#04241a; }
+  .btn { background:var(--accent); color:#04241a; border:none; font-weight:800; font-size:1.02rem; padding:14px 30px;
+    border-radius:12px; cursor:pointer; transition:transform .12s, filter .15s; }
+  .btn:hover { filter:brightness(1.08); } .btn:active { transform:scale(.97); }
+  .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--text); margin-top:12px; font-size:.9rem; padding:11px 22px; }
+  .lvldots { display:flex; gap:7px; margin-top:18px; flex-wrap:wrap; justify-content:center; }
+  .lvldots span { width:10px; height:10px; border-radius:50%; background:var(--line); }
+  .lvldots span.done { background:var(--accent); } .lvldots span.cur { background:var(--warm); box-shadow:0 0 0 3px rgba(212,165,116,.25); }
+
+  .hint { position:absolute; bottom:18px; left:0; right:0; text-align:center; color:var(--muted); font-size:.78rem; z-index:4; pointer-events:none; }
+  .toast { position:absolute; top:14px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,.7);
+    border:1px solid var(--line); color:#fff; padding:8px 16px; border-radius:10px; font-size:.85rem; z-index:6;
+    opacity:0; transition:opacity .25s; pointer-events:none; white-space:nowrap; }
+  .toast.show { opacity:1; }
+  @media (max-width:520px){ .hud .brand span.full{ display:none; } .stats{ gap:9px; font-size:.74rem; } .powers{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hud">
+    <div class="brand">🧱 <b>Xtranoid</b> <span class="full">Gramatical</span></div>
+    <div class="obx"><span class="lbl">Categoría</span><span class="cat" id="obxCat">—</span></div>
+    <div class="stats">
+      <span class="stat">Nivel <b id="hudLevel">1</b>/<span id="hudTotal">7</span></span>
+      <span class="stat">Pts <b id="hudScore">0</b></span>
+      <span class="stat hearts" id="hudLives">❤❤❤</span>
+    </div>
+    <button class="iconbtn" id="pauseBtn" title="Pausa (P)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+    <button class="iconbtn" id="soundBtn" title="Son"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button>
+    <button class="iconbtn" id="themeBtn" title="Tema"><svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></button>
+  </div>
+
+  <div class="stage">
+    <canvas id="game"></canvas>
+    <div class="hint" id="hint">Move a pala co rato ou as frechas · pulsa para lanzar a bóla</div>
+    <div class="toast" id="toast"></div>
+
+    <div class="overlay" id="overlay">
+      <div class="ov-badge" id="ovBadge">Nivel 1</div>
+      <div class="ov-title" id="ovTitle">Título</div>
+      <div class="ov-text" id="ovText">Texto</div>
+      <div class="powers" id="ovPowers">
+        <div><span class="cap" style="background:#10b981">＋</span> Pala máis <b>grande</b></div>
+        <div><span class="cap" style="background:#ef4444">－</span> Pala máis <b>pequena</b></div>
+        <div><span class="cap" style="background:#3b82f6">«</span> Bóla máis <b>lenta</b></div>
+        <div><span class="cap" style="background:#f97316">»</span> Bóla máis <b>rápida</b></div>
+        <div><span class="cap" style="background:#cbd5e1">◎</span> <b>Multibóla</b> (2 máis)</div>
+        <div><span class="cap" style="background:#f472b6">♥</span> <b>Vida</b> extra</div>
+        <div><span class="cap" style="background:#a855f7">≡</span> <b>Pega</b> a bóla á pala</div>
+        <div><span class="cap" style="background:#fde047">↑</span> <b>Láser</b>: a pala dispara</div>
+        <div><span class="cap" style="background:#22d3ee">▬</span> <b>Rede</b> de seguridade</div>
+      </div>
+      <button class="btn" id="ovBtn">Comezar</button>
+      <button class="btn ghost" id="ovBtn2" style="display:none">Reintentar</button>
+      <div class="lvldots" id="ovDots"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   XTRANOID GRAMATICAL — Arkanoid para lingua galega
+   Cada nivel = unha soa categoría (familiarización).
+   Multi-bóla + cápsulas: grow, shrink, slow, fast, multiball,
+   life, sticky, laser, rede. Só se perde vida se caen TODAS as bólas.
+   ============================================================ */
+"use strict";
+
+/* ---------- Banco de palabras (galego normativo) ---------- */
+const CAT_LABEL = { sus:"Substantivos", adx:"Adxectivos", ver:"Verbos", adv:"Adverbios",
+  prep:"Preposicións", conx:"Conxuncións", inter:"Interxeccións" };
+const WORDS = {
+  sus:  ["mesa","casa","libro","auga","can","gato","mar","sol","neno","escola","pan","flor","río","man","ceo","árbore","praia","vento","paxaro","lapis"],
+  adx:  ["verde","grande","pequeno","bonito","alto","novo","vello","azul","forte","rápido","limpo","doce","frío","quente","lixeiro","valente","amable","fermoso"],
+  ver:  ["correr","saltar","comer","ler","xogar","cantar","falar","mirar","beber","escribir","durmir","vivir","soñar","rir","andar","pintar","bailar","nadar"],
+  adv:  ["onte","hoxe","mañá","sempre","nunca","xamais","axiña","ben","mal","aquí","alí","arriba","abaixo","diante","detrás","tamén","lonxe","preto","cedo","tarde","agora","despois","antes","aínda","quizais","abondo","devagar","amodo"],
+  prep: ["ante","baixo","con","contra","de","desde","dende","en","entre","cara","para","por","segundo","sen","sobre","tras"],
+  conx: ["e","nin","ou","pero","porque","senón","mentres","cando","xa que","aínda que","mais","ben que"],
+  inter:["ai","oh","eh","ah","ui","uf","bah","ola","adeus","caramba","hurra","ea"]
+};
+const LEVELS = [
+  { cat:"sus",   desc:"Nomean <b>persoas, animais, cousas, lugares</b> ou ideas." },
+  { cat:"adx",   desc:"Din <b>como é</b> algo: a súa calidade." },
+  { cat:"ver",   desc:"Expresan <b>accións</b> ou estados: o que se fai." },
+  { cat:"adv",   desc:"Invariables: din <b>como, cando ou onde</b>." },
+  { cat:"prep",  desc:"Invariables: <b>enlazan</b> e relacionan palabras." },
+  { cat:"conx",  desc:"Invariables: <b>unen</b> palabras ou frases." },
+  { cat:"inter", desc:"Invariables: expresan <b>emoción</b> (ai!, oh!)." }
+];
+const BASE_SPEED = 275, SPEED_STEP = 26;
+
+/* ---------- Cápsulas ---------- */
+const POWER = {
+  grow:  { color:"#10b981", glyph:"＋" },
+  shrink:{ color:"#ef4444", glyph:"－" },
+  slow:  { color:"#3b82f6", glyph:"«" },
+  fast:  { color:"#f97316", glyph:"»" },
+  multi: { color:"#cbd5e1", glyph:"◎" },
+  life:  { color:"#f472b6", glyph:"♥" },
+  sticky:{ color:"#a855f7", glyph:"≡" },
+  laser: { color:"#fde047", glyph:"↑" },
+  shield:{ color:"#22d3ee", glyph:"▬" }
+};
+// Pesos: os bos máis frecuentes; os molestos (shrink, fast) presentes pero menos.
+const POWER_BAG = ["grow","grow","grow","life","life","slow","slow","multi","multi","sticky","sticky","laser","laser","shield","shield","shrink","shrink","fast"];
+
+/* ---------- Estado ---------- */
+const cv=document.getElementById("game"), ctx=cv.getContext("2d");
+let W=0,H=0,DPR=1;
+let state="intro";
+let levelIdx=0, score=0, lives=3;
+let bricks=[], targetsLeft=0;
+let paddle, balls=[], powerups=[], lasers=[], particles=[];
+let speedMul=1, speedTimer=0, stickyTimer=0, laserTimer=0, laserCd=0, shieldTimer=0;
+let lastT=0, muted=false;
+const MAX_BALLS=6;
+
+/* ---------- Audio ---------- */
+let actx=null;
+function beep(f,d,t="square",v=.05){ if(muted) return; try{
+  if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)();
+  const o=actx.createOscillator(), g=actx.createGain();
+  o.type=t; o.frequency.value=f; g.gain.value=v; o.connect(g); g.connect(actx.destination);
+  o.start(); g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime+d); o.stop(actx.currentTime+d);
+}catch(e){} }
+
+/* ---------- Canvas ---------- */
+function resize(){
+  const r=cv.getBoundingClientRect();
+  DPR=Math.min(window.devicePixelRatio||1,2); W=r.width; H=r.height;
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);
+  if(paddle){ paddle.y=H-34; paddle.wBase=Math.max(86,W*0.18); paddle.x=Math.min(paddle.x,W-paddle.w); }
+}
+window.addEventListener("resize", ()=>{ resize(); if(state!=="playing") draw(); });
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function curSpeed(){ return (BASE_SPEED+levelIdx*SPEED_STEP)*speedMul; }
+
+/* ---------- Construír nivel ---------- */
+function buildLevel(){
+  const L=LEVELS[levelIdx];
+  const pool=shuffle(WORDS[L.cat].slice());
+  const count=Math.min(pool.length, W<520?15:18);
+  const items=pool.slice(0,count);
+  const cols=W<520?5:6, rows=Math.ceil(items.length/cols);
+  const padX=12, padTop=14, gap=7, bw=(W-padX*2-gap*(cols-1))/cols, bh=30;
+  bricks=[];
+  for(let i=0;i<items.length;i++){ const r=Math.floor(i/cols), c=i%cols;
+    bricks.push({ x:padX+c*(bw+gap), y:padTop+r*(bh+gap), w:bw, h:bh, word:items[i], st:"live" }); }
+  targetsLeft=bricks.length;
+  paddle={ wBase:Math.max(86,W*0.18), w:Math.max(86,W*0.18), h:13, x:W/2-55, y:H-34, speed:560, sizeMul:1, sizeTimer:0 };
+  powerups=[]; lasers=[]; particles=[];
+  speedMul=1; speedTimer=0; stickyTimer=0; laserTimer=0; laserCd=0; shieldTimer=0;
+  spawnBall();
+}
+function spawnBall(){
+  balls=[{ x:paddle.x+paddle.w/2, y:paddle.y-11, r:8, vx:0, vy:0, onPaddle:true, stuck:false, off:0 }];
+}
+function launch(){
+  let any=false;
+  for(const b of balls){
+    if(b.onPaddle||b.stuck){
+      const ang=(-Math.PI/2)+(Math.random()*0.5-0.25), sp=curSpeed();
+      b.vx=Math.cos(ang)*sp; b.vy=Math.sin(ang)*sp; b.onPaddle=false; b.stuck=false; any=true;
+    }
+  }
+  if(any){ document.getElementById("hint").style.opacity=0; beep(660,.08,"square"); }
+}
+
+/* ---------- Bucle ---------- */
+function loop(t){ const dt=Math.min((t-lastT)/1000,0.033)||0; lastT=t; if(state==="playing") update(dt); draw(); requestAnimationFrame(loop); }
+
+function update(dt){
+  // Pala
+  if(keys.left)  paddle.x-=paddle.speed*dt;
+  if(keys.right) paddle.x+=paddle.speed*dt;
+  if(paddle.sizeTimer>0){ paddle.sizeTimer-=dt; if(paddle.sizeTimer<=0) paddle.sizeMul=1; }
+  const cx=paddle.x+paddle.w/2; paddle.w=clamp(paddle.wBase*paddle.sizeMul,56,W*0.5); paddle.x=clamp(cx-paddle.w/2,0,W-paddle.w);
+
+  // Temporizadores de velocidade
+  if(speedTimer>0){ speedTimer-=dt; if(speedTimer<=0) setSpeedMul(1); }
+  if(shieldTimer>0) shieldTimer-=dt;
+  if(stickyTimer>0) stickyTimer-=dt;
+
+  // Láser
+  if(laserTimer>0){ laserTimer-=dt; laserCd-=dt;
+    if(laserCd<=0){ laserCd=0.5;
+      lasers.push({x:paddle.x+10,y:paddle.y}); lasers.push({x:paddle.x+paddle.w-10,y:paddle.y}); beep(900,.04,"square",.03);
+    }
+  }
+  for(const r of lasers){ r.y-=620*dt; }
+  for(const r of lasers){
+    if(r.dead) continue;
+    for(const b of bricks){ if(b.st==="dead") continue;
+      if(r.x>=b.x && r.x<=b.x+b.w && r.y<=b.y+b.h && r.y>=b.y){ r.dead=true; breakBrick(b); break; } }
+  }
+  lasers=lasers.filter(r=>!r.dead && r.y>-10);
+
+  // Bólas
+  for(const b of balls){
+    if(b.onPaddle||b.stuck){ b.x=clamp(paddle.x+paddle.w/2+b.off,b.r,W-b.r); b.y=paddle.y-11; continue; }
+    b.x+=b.vx*dt; b.y+=b.vy*dt;
+    if(b.x-b.r<0){ b.x=b.r; b.vx*=-1; beep(380,.04); }
+    if(b.x+b.r>W){ b.x=W-b.r; b.vx*=-1; beep(380,.04); }
+    if(b.y-b.r<0){ b.y=b.r; b.vy*=-1; beep(380,.04); }
+    if(shieldTimer>0 && b.vy>0 && b.y+b.r>=H-4){ b.y=H-4-b.r; b.vy*=-1; beep(300,.06,"sine",.06); }
+    if(b.y-b.r>H){ b.dead=true; continue; }
+    // Pala
+    if(b.vy>0 && b.y+b.r>=paddle.y && b.y-b.r<=paddle.y+paddle.h && b.x>=paddle.x-b.r && b.x<=paddle.x+paddle.w+b.r){
+      b.y=paddle.y-b.r;
+      if(stickyTimer>0){ b.stuck=true; b.off=clamp(b.x-(paddle.x+paddle.w/2),-paddle.w/2,paddle.w/2);
+        const h=document.getElementById("hint"); h.style.opacity=1; h.textContent="Pulsa para lanzar a bóla pegada"; beep(440,.05,"sine"); }
+      else { const hit=(b.x-(paddle.x+paddle.w/2))/(paddle.w/2), ang=(-Math.PI/2)+hit*(Math.PI/3), sp=curSpeed();
+        b.vx=Math.cos(ang)*sp; b.vy=Math.sin(ang)*sp; beep(520,.05); }
+    }
+    // Ladrillos
+    for(const br of bricks){ if(br.st==="dead") continue;
+      if(b.x+b.r>br.x && b.x-b.r<br.x+br.w && b.y+b.r>br.y && b.y-b.r<br.y+br.h){
+        const oL=(b.x+b.r)-br.x, oR=(br.x+br.w)-(b.x-b.r), oT=(b.y+b.r)-br.y, oB=(br.y+br.h)-(b.y-b.r);
+        if(Math.min(oL,oR)<Math.min(oT,oB)) b.vx*=-1; else b.vy*=-1;
+        breakBrick(br); break;
+      }
+    }
+  }
+  balls=balls.filter(b=>!b.dead);
+  if(balls.length===0){ loseLife(); }
+
+  // Cápsulas
+  for(const p of powerups){ if(p.taken) continue; p.y+=p.vy*dt;
+    if(p.y+9>=paddle.y && p.y<=paddle.y+paddle.h && p.x+15>=paddle.x && p.x-15<=paddle.x+paddle.w){ p.taken=true; applyPower(p.kind); } }
+  powerups=powerups.filter(p=>!p.taken && p.y<H+20);
+
+  // Partículas
+  for(const pt of particles){ pt.x+=pt.vx*dt; pt.y+=pt.vy*dt; pt.vy+=400*dt; pt.life-=dt; }
+  particles=particles.filter(pt=>pt.life>0);
+}
+
+function setSpeedMul(m){
+  const factor=m/speedMul;
+  for(const b of balls){ if(!b.onPaddle&&!b.stuck){ b.vx*=factor; b.vy*=factor; } }
+  speedMul=m;
+}
+
+function breakBrick(b){
+  b.st="dead"; score+=10; targetsLeft--;
+  spawnParticles(b,"#10b981"); beep(880,.07,"square");
+  if(Math.random()<0.22){ const kind=POWER_BAG[Math.floor(Math.random()*POWER_BAG.length)];
+    powerups.push({ x:b.x+b.w/2, y:b.y+b.h/2, vy:165, kind, taken:false }); }
+  updateHUD();
+  if(targetsLeft<=0) levelClear();
+}
+
+function applyPower(kind){
+  if(kind==="grow"){ paddle.sizeMul=1.5; paddle.sizeTimer=15; toast("Pala máis grande!"); beep(700,.1); }
+  else if(kind==="shrink"){ paddle.sizeMul=0.6; paddle.sizeTimer=12; toast("Pala máis pequena!"); beep(220,.12,"sawtooth"); }
+  else if(kind==="slow"){ setSpeedMul(0.65); speedTimer=10; toast("Bóla máis lenta"); beep(440,.1,"sine"); }
+  else if(kind==="fast"){ setSpeedMul(1.45); speedTimer=8; toast("Bóla máis rápida!"); beep(660,.1,"sawtooth"); }
+  else if(kind==="multi"){ multiBall(); toast("Multibóla!"); beep(880,.12); }
+  else if(kind==="life"){ lives=Math.min(5,lives+1); updateHUD(); toast("Vida extra!"); beep(990,.12); }
+  else if(kind==="sticky"){ stickyTimer=12; toast("Bóla pegañenta"); beep(520,.1,"sine"); }
+  else if(kind==="laser"){ laserTimer=9; laserCd=0; toast("Láser activado!"); beep(960,.1,"square"); }
+  else if(kind==="shield"){ shieldTimer=8; toast("Rede de seguridade!"); beep(520,.1,"sine"); }
+}
+
+function multiBall(){
+  let moving=balls.filter(b=>!b.onPaddle&&!b.stuck);
+  if(moving.length===0){ launch(); moving=balls.filter(b=>!b.onPaddle&&!b.stuck); }
+  const seed=moving[0]; if(!seed) return;
+  const sp=Math.hypot(seed.vx,seed.vy)||curSpeed();
+  const dirs=[0.5,-0.5];
+  for(const d of dirs){ if(balls.length>=MAX_BALLS) break;
+    const ang=Math.atan2(seed.vy,seed.vx)+d;
+    balls.push({ x:seed.x, y:seed.y, r:8, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, onPaddle:false, stuck:false, off:0 });
+  }
+}
+
+function spawnParticles(b,color){ for(let i=0;i<10;i++) particles.push({ x:b.x+b.w/2, y:b.y+b.h/2,
+  vx:(Math.random()-.5)*220, vy:(Math.random()-.5)*220-60, life:.5+Math.random()*.3, color }); }
+
+function loseLife(){
+  lives--; updateHUD(); beep(110,.25,"sawtooth",.07);
+  if(lives<=0){ gameOver(); return; }
+  // reiniciar efectos perigosos e nova bóla
+  speedMul=1; speedTimer=0; spawnBall();
+  const h=document.getElementById("hint"); h.style.opacity=1; h.textContent="Pulsa para lanzar a bóla";
+}
+
+/* ---------- Debuxo ---------- */
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const accent=(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#10b981').trim();
+  // Ladrillos
+  for(const b of bricks){ if(b.st==="dead") continue;
+    roundRect(b.x,b.y,b.w,b.h,6); const g=ctx.createLinearGradient(0,b.y,0,b.y+b.h);
+    g.addColorStop(0,accent); g.addColorStop(1,"#0b8a63"); ctx.fillStyle=g; ctx.fill();
+    ctx.fillStyle="#04241a"; let fs=14; ctx.font=`700 ${fs}px system-ui,sans-serif`;
+    while(ctx.measureText(b.word).width>b.w-10 && fs>8){ fs--; ctx.font=`700 ${fs}px system-ui,sans-serif`; }
+    ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(b.word,b.x+b.w/2,b.y+b.h/2+1); }
+  // Láseres
+  ctx.strokeStyle="#fde047"; ctx.lineWidth=3; ctx.lineCap="round";
+  for(const r of lasers){ ctx.beginPath(); ctx.moveTo(r.x,r.y); ctx.lineTo(r.x,r.y-14); ctx.stroke(); }
+  // Cápsulas
+  for(const p of powerups){ if(p.taken) continue; const def=POWER[p.kind];
+    roundRect(p.x-15,p.y-9,30,18,5); ctx.fillStyle=def.color; ctx.fill();
+    ctx.fillStyle="#04241a"; ctx.font="900 13px system-ui,sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(def.glyph,p.x,p.y+1); }
+  // Partículas
+  for(const pt of particles){ ctx.globalAlpha=Math.max(0,pt.life*2); ctx.fillStyle=pt.color; ctx.fillRect(pt.x,pt.y,3,3); }
+  ctx.globalAlpha=1;
+  // Rede
+  if(shieldTimer>0){ ctx.save(); ctx.globalAlpha=clamp(shieldTimer/1.2,.25,1)*0.9; ctx.strokeStyle="#22d3ee"; ctx.lineWidth=4; ctx.setLineDash([12,8]);
+    ctx.beginPath(); ctx.moveTo(0,H-2); ctx.lineTo(W,H-2); ctx.stroke(); ctx.restore();
+    ctx.fillStyle="#22d3ee"; ctx.font="700 12px system-ui"; ctx.textAlign="right"; ctx.textBaseline="bottom"; ctx.fillText("Rede "+Math.ceil(shieldTimer)+"s",W-8,H-8); }
+  // Pala
+  if(paddle){ roundRect(paddle.x,paddle.y,paddle.w,paddle.h,7); const g=ctx.createLinearGradient(0,paddle.y,0,paddle.y+paddle.h);
+    if(laserTimer>0){ g.addColorStop(0,"#fef08a"); g.addColorStop(1,"#eab308"); }
+    else if(stickyTimer>0){ g.addColorStop(0,"#d8b4fe"); g.addColorStop(1,"#a855f7"); }
+    else if(paddle.sizeTimer>0 && paddle.sizeMul>1){ g.addColorStop(0,"#6ee7b7"); g.addColorStop(1,"#10b981"); }
+    else if(paddle.sizeTimer>0 && paddle.sizeMul<1){ g.addColorStop(0,"#fca5a5"); g.addColorStop(1,"#ef4444"); }
+    else { g.addColorStop(0,"#f4f7f5"); g.addColorStop(1,"#9aa6a0"); }
+    ctx.fillStyle=g; ctx.fill();
+    if(laserTimer>0){ ctx.fillStyle="#eab308"; ctx.fillRect(paddle.x+8,paddle.y-4,3,4); ctx.fillRect(paddle.x+paddle.w-11,paddle.y-4,3,4); } }
+  // Bólas
+  for(const b of balls){ ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fillStyle=accent; ctx.fill();
+    ctx.lineWidth=2; ctx.strokeStyle="rgba(255,255,255,.6)"; ctx.stroke(); }
+}
+function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+
+/* ---------- HUD / overlays ---------- */
+function updateHUD(){
+  document.getElementById("hudLevel").textContent=levelIdx+1;
+  document.getElementById("hudTotal").textContent=LEVELS.length;
+  document.getElementById("hudScore").textContent=score;
+  document.getElementById("hudLives").textContent="❤".repeat(Math.max(0,lives));
+  document.getElementById("obxCat").textContent=CAT_LABEL[LEVELS[levelIdx].cat].toUpperCase();
+}
+let toastT=null;
+function toast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show");
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("show"),1500); }
+function renderDots(){ const d=document.getElementById("ovDots"); d.innerHTML="";
+  for(let i=0;i<LEVELS.length;i++){ const s=document.createElement("span"); if(i<levelIdx) s.className="done"; else if(i===levelIdx) s.className="cur"; d.appendChild(s); } }
+function showOverlay({badge,title,text,btn,btn2,onBtn,onBtn2,powers=false}){
+  state="ready"; const ov=document.getElementById("overlay");
+  document.getElementById("ovBadge").textContent=badge;
+  document.getElementById("ovTitle").innerHTML=title;
+  document.getElementById("ovText").innerHTML=text;
+  document.getElementById("ovPowers").style.display=powers?"grid":"none";
+  const b1=document.getElementById("ovBtn"), b2=document.getElementById("ovBtn2");
+  b1.textContent=btn; b1.onclick=onBtn;
+  if(btn2){ b2.style.display="inline-block"; b2.textContent=btn2; b2.onclick=onBtn2; } else b2.style.display="none";
+  renderDots(); ov.classList.add("show");
+}
+function hideOverlay(){ document.getElementById("overlay").classList.remove("show"); }
+
+/* ---------- Fluxo ---------- */
+function startLevel(){ hideOverlay(); buildLevel(); updateHUD(); state="playing";
+  const h=document.getElementById("hint"); h.style.opacity=1; h.textContent="Pulsa para lanzar a bóla"; }
+function intro(){ const L=LEVELS[levelIdx];
+  showOverlay({ badge:`Nivel ${levelIdx+1} / ${LEVELS.length}`, title:`<span>${CAT_LABEL[L.cat]}</span>`,
+    text:`${L.desc}<br><br>Rompe <b>todos os ladrillos</b> (todos da mesma clase: léeos!). Recolle as cápsulas que caen. Só perdes vida se caen <b>todas as bólas</b>.`,
+    btn:"Comezar nivel", onBtn:startLevel, powers:true }); }
+function levelClear(){ beep(990,.12,"square"); setTimeout(()=>beep(1320,.14,"square"),120);
+  if(levelIdx>=LEVELS.length-1){ winGame(); return; }
+  showOverlay({ badge:"Nivel superado ✓", title:`Moi ben!<br><span>+100 puntos</span>`,
+    text:`Completaches <b>${CAT_LABEL[LEVELS[levelIdx].cat]}</b>. A bóla irá <b>máis rápido</b> no seguinte nivel!`,
+    btn:"Seguinte nivel ▸", onBtn:()=>{ score+=100; levelIdx++; intro(); updateHUD(); } }); }
+function gameOver(){ showOverlay({ badge:"Fin da partida", title:`Sen vidas 😕`,
+    text:`Chegaches ao <b>nivel ${levelIdx+1}</b> (${CAT_LABEL[LEVELS[levelIdx].cat]}) con <b>${score}</b> puntos.`,
+    btn:"Reintentar nivel", onBtn:()=>{ lives=3; intro(); updateHUD(); },
+    btn2:"Desde o principio", onBtn2:()=>{ levelIdx=0; score=0; lives=3; intro(); updateHUD(); } }); }
+function winGame(){ showOverlay({ badge:"🏆 Xogo completado", title:`Parabéns!<br><span>Pasaches as ${LEVELS.length} clases</span>`,
+    text:`Familiarizácheste con <b>substantivos, adxectivos, verbos, adverbios, preposicións, conxuncións e interxeccións</b>. Puntuación final: <b>${score+100}</b>.`,
+    btn:"Xogar de novo", onBtn:()=>{ levelIdx=0; score=0; lives=3; intro(); updateHUD(); } }); }
+
+/* ---------- Controis ---------- */
+const keys={left:false,right:false};
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft"||e.key==="a"||e.key==="A") keys.left=true;
+  if(e.key==="ArrowRight"||e.key==="d"||e.key==="D") keys.right=true;
+  if(e.key===" "||e.key==="ArrowUp"){ e.preventDefault(); if(state==="playing") launch(); }
+  if(e.key==="p"||e.key==="P") togglePause();
+});
+document.addEventListener("keyup",e=>{
+  if(e.key==="ArrowLeft"||e.key==="a"||e.key==="A") keys.left=false;
+  if(e.key==="ArrowRight"||e.key==="d"||e.key==="D") keys.right=false;
+});
+function pointerMove(clientX){ if(!paddle) return; const r=cv.getBoundingClientRect(); paddle.x=clamp((clientX-r.left)-paddle.w/2,0,W-paddle.w); }
+cv.addEventListener("mousemove",e=>pointerMove(e.clientX));
+cv.addEventListener("mousedown",()=>{ if(state==="playing") launch(); });
+cv.addEventListener("touchmove",e=>{ e.preventDefault(); pointerMove(e.touches[0].clientX); },{passive:false});
+cv.addEventListener("touchstart",e=>{ e.preventDefault(); pointerMove(e.touches[0].clientX); if(state==="playing") launch(); },{passive:false});
+
+function togglePause(){ if(state==="playing"){ state="paused";
+    showOverlay({badge:"Pausa",title:"Xogo en <span>pausa</span>",text:"Respira e segue cando queiras.",btn:"Continuar",onBtn:()=>{ hideOverlay(); state="playing"; }});
+  } else if(state==="paused"){ hideOverlay(); state="playing"; } }
+document.getElementById("pauseBtn").onclick=togglePause;
+document.getElementById("soundBtn").onclick=function(){ muted=!muted; this.style.opacity=muted?.4:1; if(!muted) beep(660,.08); };
+
+/* Tema */
+const SUN='<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/><circle cx="12" cy="12" r="4"/>';
+const MOON='<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>';
+function applyTheme(t){ document.documentElement.setAttribute("data-theme",t); document.getElementById("themeIcon").innerHTML=t==="dark"?MOON:SUN; }
+document.getElementById("themeBtn").onclick=function(){ const t=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";
+  applyTheme(t); try{ localStorage.setItem("ef_theme",t); }catch(e){} if(state!=="playing") draw(); };
+try{ applyTheme(localStorage.getItem("ef_theme")||"dark"); }catch(e){ applyTheme("dark"); }
+
+/* ---------- Arranque ---------- */
+function boot(){ resize(); updateHUD();
+  showOverlay({ badge:"Xtranoid Gramatical", title:`Rompe ladrillos,<br><span>aprende gramática</span>`,
+    text:`${LEVELS.length} niveis, un por <b>clase de palabra</b>. Cada nivel a bóla vai <b>máis rápido</b>. Recolle as cápsulas!`,
+    btn:"Comezar a xogar", onBtn:()=>intro(), powers:true });
+  requestAnimationFrame(loop);
+}
+window.addEventListener("load", boot);
+setTimeout(()=>{ if(W===0) resize(); }, 60);
+</script>
+</body>
+</html>
