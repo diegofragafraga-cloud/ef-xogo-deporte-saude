@@ -82,6 +82,37 @@ function resolverComoNeno(c) {
   return { resolto, atascado: !resolto, pasos };
 }
 
+/*
+  Solucionador "só pensando en filas": como o anterior PERO sen usar nunca
+  a regra da columna. Só coloca ✓ cando unha FILA ten un só oco baleiro.
+  (A propagación de ✗ pola columna ao poñer un ✓ si está permitida: é a regra
+  do sudoku que se ensina.) Mide se un neno pode resolvelo co modelo intuitivo
+  "esta persoa, onde vai?". Esiximos isto no nivel Fácil.
+*/
+function resolverSoFilas(c) {
+  const n = c.solucion.length;
+  const st = Array.from({ length: n }, () => Array(n).fill(0));
+  function ponSi(s, o) {
+    st[s][o] = 1;
+    for (let j = 0; j < n; j++) if (j !== o && st[s][j] === 0) st[s][j] = 2;
+    for (let i = 0; i < n; i++) if (i !== s && st[i][o] === 0) st[i][o] = 2;
+  }
+  for (const [t, s, o] of c.restricciones) {
+    if (t === "pos") ponSi(s, o);
+    else if (st[s][o] === 0) st[s][o] = 2;
+  }
+  let cambiou = true;
+  while (cambiou) {
+    cambiou = false;
+    for (let r = 0; r < n; r++) {
+      const ocos = []; let temSi = false;
+      for (let col = 0; col < n; col++) { if (st[r][col] === 1) temSi = true; if (st[r][col] === 0) ocos.push(col); }
+      if (!temSi && ocos.length === 1) { ponSi(r, ocos[0]); cambiou = true; }
+    }
+  }
+  return st.every((fila, s) => fila[c.solucion[s]] === 1 && fila.filter((v) => v === 1).length === 1);
+}
+
 let haiErros = false;
 
 for (const c of CASOS) {
@@ -127,12 +158,19 @@ for (const c of CASOS) {
   const r = resolverComoNeno(c);
   if (!r.resolto) erros.push("NON se resolve só por eliminación (faría falta adiviñar): pista pouco amable para 1º ciclo");
 
+  // ---- Resoluble SÓ pensando en filas? (esixido no nivel Fácil) ----
+  const soFilas = resolverSoFilas(c);
+  if (c.nivel === 1 && !soFilas) {
+    erros.push("Nivel FÁCIL pero NON se resolve só pensando en filas (esixe razoamento por columnas)");
+  }
+
   if (erros.length) {
     haiErros = true;
     console.log(`✗ [${c.nivel}] ${c.id}`);
     for (const e of erros) console.log(`    - ${e}`);
   } else {
-    console.log(`✓ [${c.nivel}] ${c.id}  ->  culpable: ${c.sospechosos.gl[c.culpable]}`);
+    const modo = soFilas ? "só filas" : "filas+columnas";
+    console.log(`✓ [${c.nivel}] ${c.id}  ->  culpable: ${c.sospechosos.gl[c.culpable]}  [${modo}]`);
     r.pasos.forEach((p, i) => console.log(`      ${i + 1}. ${p}`));
   }
 }
