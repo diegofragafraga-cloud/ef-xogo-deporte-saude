@@ -38,6 +38,50 @@ function cumpre(asig, [tipo, s, o]) {
   throw new Error(`Tipo de restrición descoñecido: ${tipo}`);
 }
 
+/*
+  Solucionador "como un neno": só usa eliminación directa (singles).
+  - Aplica as pistas (pos -> ✓, neg -> ✗).
+  - Repite: cando unha fila ou columna ten un só oco baleiro, ese é ✓
+    e propágase ✗ ao resto da súa fila e columna.
+  Se ASÍ se resolve enteiro -> o caso é xusto para 1º ciclo (non hai que adiviñar).
+  Se queda atascado -> faría falta razoamento avanzado/adiviñar: PISTA pouco amable.
+  Devolve {resolto, atascado, pasos}.
+*/
+function resolverComoNeno(c) {
+  const n = c.solucion.length;
+  const st = Array.from({ length: n }, () => Array(n).fill(0)); // 0 baleiro, 1 ✓, 2 ✗
+  const pasos = [];
+  const S = c.sospechosos.gl, O = c.opciones.gl;
+  function ponSi(s, o, motivo) {
+    st[s][o] = 1;
+    for (let j = 0; j < n; j++) if (j !== o && st[s][j] === 0) st[s][j] = 2;
+    for (let i = 0; i < n; i++) if (i !== s && st[i][o] === 0) st[i][o] = 2;
+    pasos.push(`${S[s]} → ${O[o]}  (${motivo})`);
+  }
+  // pistas iniciais
+  for (const [t, s, o] of c.restricciones) {
+    if (t === "pos") ponSi(s, o, "pista directa");
+    else if (st[s][o] === 0) st[s][o] = 2;
+  }
+  // propagación por singles
+  let cambiou = true;
+  while (cambiou) {
+    cambiou = false;
+    for (let r = 0; r < n; r++) {
+      const ocos = []; let temSi = false;
+      for (let col = 0; col < n; col++) { if (st[r][col] === 1) temSi = true; if (st[r][col] === 0) ocos.push(col); }
+      if (!temSi && ocos.length === 1) { ponSi(r, ocos[0], "único oco da fila"); cambiou = true; }
+    }
+    for (let col = 0; col < n; col++) {
+      const ocos = []; let temSi = false;
+      for (let r = 0; r < n; r++) { if (st[r][col] === 1) temSi = true; if (st[r][col] === 0) ocos.push(r); }
+      if (!temSi && ocos.length === 1) { ponSi(ocos[0], col, "único oco da columna"); cambiou = true; }
+    }
+  }
+  const resolto = st.every((fila, s) => fila[c.solucion[s]] === 1 && fila.filter((v) => v === 1).length === 1);
+  return { resolto, atascado: !resolto, pasos };
+}
+
 let haiErros = false;
 
 for (const c of CASOS) {
@@ -79,12 +123,17 @@ for (const c of CASOS) {
     if (s < 0 || s >= nS || o < 0 || o >= nO) erros.push(`restrición [${tipo},${s},${o}] fóra de rango`);
   }
 
+  // ---- Resoluble por eliminación directa (sen adiviñar)? ----
+  const r = resolverComoNeno(c);
+  if (!r.resolto) erros.push("NON se resolve só por eliminación (faría falta adiviñar): pista pouco amable para 1º ciclo");
+
   if (erros.length) {
     haiErros = true;
     console.log(`✗ [${c.nivel}] ${c.id}`);
     for (const e of erros) console.log(`    - ${e}`);
   } else {
     console.log(`✓ [${c.nivel}] ${c.id}  ->  culpable: ${c.sospechosos.gl[c.culpable]}`);
+    r.pasos.forEach((p, i) => console.log(`      ${i + 1}. ${p}`));
   }
 }
 
