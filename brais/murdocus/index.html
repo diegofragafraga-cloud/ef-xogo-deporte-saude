@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murdocus · Misterios de lóxica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f1fb; --card:#ffffff; --ink:#241b3a; --ink-soft:#5b5172;
+    --line:#e7e1f3; --accent:#7c3aed; --accent-soft:#ede9fe;
+    --ok:#16a34a; --ok-bg:#dcfce7; --no:#e11d48; --no-bg:#ffe4e6;
+    --warn:#d97706; --warn-bg:#fef3c7;
+    --shadow:0 12px 34px -12px rgba(60,30,110,.28), 0 2px 8px -2px rgba(60,30,110,.10);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0;font-family:'Nunito',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);}
+
+  /* ---------- Cabeceira ---------- */
+  header{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+    padding:14px clamp(16px,4vw,40px);display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:12px;font-weight:900;font-size:clamp(20px,2.6vw,26px);}
+  .brand .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#5b21b6,#a855f7);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow);}
+  .brand .logo svg{width:24px;height:24px;color:#fff;}
+  .brand small{display:block;font-size:.62rem;font-weight:700;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;}
+  .head-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+  .btn{font-family:inherit;font-weight:800;cursor:pointer;border:none;border-radius:12px;transition:transform .15s,box-shadow .15s,background .15s;}
+  .btn:active{transform:translateY(1px) scale(.98);}
+  .icon-btn{width:42px;height:42px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .icon-btn:hover{background:var(--accent-soft);color:var(--accent);}
+  .icon-btn svg{width:20px;height:20px;}
+  .lang-toggle{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .lang-toggle button{font-family:inherit;font-weight:800;font-size:.82rem;border:none;background:none;padding:9px 13px;cursor:pointer;color:var(--ink-soft);}
+  .lang-toggle button.active{background:var(--accent);color:#fff;}
+
+  main{max-width:1080px;margin:0 auto;padding:clamp(18px,3vw,34px) clamp(16px,4vw,40px) 70px;}
+
+  /* ---------- Vistas ---------- */
+  .view{display:none;animation:fade .25s ease;}
+  .view.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+  /* ---------- Portada ---------- */
+  .hero{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,3vw,32px);box-shadow:var(--shadow);margin-bottom:26px;}
+  .hero h1{margin:0 0 8px;font-size:clamp(22px,3vw,32px);}
+  .hero p{margin:0;color:var(--ink-soft);font-weight:600;font-size:clamp(15px,1.6vw,17px);max-width:62ch;line-height:1.5;}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
+  .btn-primary{background:var(--accent);color:#fff;padding:13px 20px;font-size:.98rem;box-shadow:var(--shadow);display:inline-flex;align-items:center;gap:9px;}
+  .btn-primary:hover{background:#6d28d9;}
+  .btn-ghost{background:var(--accent-soft);color:var(--accent);padding:13px 20px;font-size:.98rem;display:inline-flex;align-items:center;gap:9px;}
+  .btn-ghost:hover{background:#ddd6fe;}
+  .btn svg{width:19px;height:19px;}
+
+  .nivel-block{margin-bottom:30px;}
+  .nivel-head{display:flex;align-items:center;gap:12px;margin:0 0 14px;}
+  .nivel-head h2{margin:0;font-size:1.25rem;}
+  .nivel-badge{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;font-weight:800;color:var(--accent);background:var(--accent-soft);padding:5px 11px;border-radius:999px;}
+  .stars{display:inline-flex;gap:2px;}
+  .stars svg{width:15px;height:15px;color:#f59e0b;}
+  .nivel-sub{color:var(--ink-soft);font-weight:700;font-size:.84rem;}
+
+  .casos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;}
+  .caso-card{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;cursor:pointer;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;}
+  .caso-card:hover{transform:translateY(-4px);border-color:var(--accent);}
+  .caso-top{display:flex;align-items:center;gap:10px;}
+  .caso-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .caso-ic svg{width:23px;height:23px;}
+  .tema-badge{font-size:.66rem;font-weight:800;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em;}
+  .caso-card h3{margin:0;font-size:1.02rem;line-height:1.25;}
+  .caso-meta{margin-top:auto;display:flex;align-items:center;justify-content:space-between;font-size:.78rem;font-weight:700;color:var(--ink-soft);}
+  .caso-meta .sus{display:inline-flex;align-items:center;gap:5px;}
+  .caso-meta .sus svg{width:15px;height:15px;}
+  .solved-tick{color:var(--ok);display:inline-flex;align-items:center;gap:4px;}
+  .solved-tick svg{width:16px;height:16px;}
+
+  /* ---------- Guía ---------- */
+  .back-link{display:inline-flex;align-items:center;gap:7px;font-weight:800;color:var(--accent);background:none;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;padding:6px 0;margin-bottom:14px;}
+  .back-link svg{width:18px;height:18px;}
+  .guide h1,.puzzle-head h1{margin:0 0 6px;font-size:clamp(20px,2.6vw,28px);}
+  .steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:18px;}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);}
+  .step .n{width:34px;height:34px;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+  .step h3{margin:0 0 6px;font-size:1.02rem;}
+  .step p{margin:0;color:var(--ink-soft);font-weight:600;font-size:.92rem;line-height:1.45;}
+  .demo{margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(16px,2.4vw,24px);box-shadow:var(--shadow);}
+  .demo h2{margin:0 0 4px;font-size:1.1rem;}
+  .demo p.lead{margin:0 0 14px;color:var(--ink-soft);font-weight:600;}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-weight:700;font-size:.9rem;}
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .chip{width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;}
+  .chip.yes{background:var(--ok-bg);color:var(--ok);}
+  .chip.no{background:var(--no-bg);color:var(--no);}
+
+  /* ---------- Puzzle ---------- */
+  .puzzle-head{margin-bottom:14px;}
+  .case-intro{background:var(--accent-soft);border-radius:14px;padding:14px 16px;color:#4c1d95;font-weight:700;line-height:1.5;margin-bottom:18px;}
+  .susrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
+  .sus-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;box-shadow:var(--shadow);}
+  .sus-card .name{display:flex;align-items:center;gap:8px;font-weight:900;font-size:.96rem;margin-bottom:6px;}
+  .sus-card .name .av{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem;flex-shrink:0;}
+  .sus-card .say{font-size:.82rem;color:var(--ink-soft);font-weight:600;font-style:italic;line-height:1.35;}
+
+  .grid-wrap{overflow-x:auto;margin-bottom:8px;}
+  table.grid{border-collapse:separate;border-spacing:0;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin:0 auto;}
+  table.grid th,table.grid td{border:1px solid var(--line);padding:0;text-align:center;}
+  table.grid th.corner{background:var(--accent);color:#fff;font-weight:900;font-size:.78rem;padding:10px 12px;min-width:120px;}
+  table.grid th.colh{background:var(--accent-soft);color:#4c1d95;font-weight:800;font-size:.82rem;padding:10px 8px;min-width:78px;vertical-align:bottom;line-height:1.2;}
+  table.grid th.rowh{background:#faf7ff;font-weight:800;font-size:.86rem;padding:8px 12px;text-align:left;white-space:nowrap;}
+  td.cell{width:62px;height:54px;cursor:pointer;font-size:1.5rem;font-weight:900;user-select:none;transition:background .12s;}
+  td.cell:hover{background:var(--accent-soft);}
+  td.cell.s-yes{background:var(--ok-bg);color:var(--ok);}
+  td.cell.s-no{background:var(--no-bg);color:var(--no);}
+  td.cell.locked{cursor:not-allowed;}
+
+  .clues{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin:18px 0;}
+  .clues h3{margin:0 0 10px;font-size:1rem;display:flex;align-items:center;gap:8px;}
+  .clues h3 svg{width:18px;height:18px;color:var(--accent);}
+  .clues ol{margin:0;padding-left:22px;}
+  .clues li{font-weight:700;color:var(--ink-soft);line-height:1.5;margin-bottom:7px;cursor:pointer;}
+  .clues li.used{text-decoration:line-through;opacity:.5;}
+  .final-clue{margin-top:12px;background:var(--warn-bg);color:#92400e;border-radius:10px;padding:10px 13px;font-weight:800;display:flex;align-items:center;gap:9px;}
+  .final-clue svg{width:18px;height:18px;flex-shrink:0;}
+
+  .accuse{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:18px;}
+  .accuse h3{margin:0 0 12px;font-size:1.05rem;}
+  .accuse-opts{display:flex;flex-wrap:wrap;gap:10px;}
+  .accuse-opts button{font-family:inherit;font-weight:800;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+  .accuse-opts button:hover{border-color:var(--accent);}
+  .accuse-opts button.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);}
+  .accuse-opts button .av{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.78rem;}
+
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .btn-check{background:var(--ok);color:#fff;padding:13px 22px;font-size:1rem;display:inline-flex;align-items:center;gap:8px;}
+  .btn-check:hover{background:#15803d;}
+  .btn-soft{background:var(--accent-soft);color:var(--accent);padding:13px 18px;display:inline-flex;align-items:center;gap:8px;}
+  .btn-soft:hover{background:#ddd6fe;}
+
+  .feedback{border-radius:14px;padding:16px 18px;font-weight:800;display:none;align-items:center;gap:12px;font-size:1.02rem;}
+  .feedback.show{display:flex;animation:fade .25s ease;}
+  .feedback.good{background:var(--ok-bg);color:var(--ok);}
+  .feedback.bad{background:var(--no-bg);color:var(--no);}
+  .feedback.hint{background:var(--warn-bg);color:#92400e;}
+  .feedback svg{width:26px;height:26px;flex-shrink:0;}
+
+  .help-toggle{display:flex;align-items:center;gap:9px;font-weight:800;font-size:.86rem;color:var(--ink-soft);margin-bottom:14px;cursor:pointer;user-select:none;}
+  .switch{width:42px;height:24px;border-radius:999px;background:#cbb8f0;position:relative;transition:background .2s;flex-shrink:0;}
+  .switch.on{background:var(--accent);}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;}
+  .switch.on::after{left:21px;}
+
+  footer{text-align:center;color:var(--ink-soft);font-weight:700;font-size:.82rem;padding:24px 16px 40px;}
+  footer a{color:var(--accent);text-decoration:none;}
+
+  @media (max-width:540px){
+    td.cell{width:48px;height:46px;font-size:1.25rem;}
+    table.grid th.colh{min-width:60px;font-size:.74rem;}
+    table.grid th.corner{min-width:96px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    </span>
+    <div>MURDOCUS<small data-i18n="tagline">Misterios de lóxica</small></div>
+  </div>
+  <div class="head-right">
+    <div class="lang-toggle">
+      <button id="lang-gl" class="active" onclick="setLang('gl')">GL</button>
+      <button id="lang-es" onclick="setLang('es')">ES</button>
+    </div>
+    <a class="icon-btn" href="imprimible.html" title="Versión imprimible" data-i18n-title="print">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+    </a>
+    <a class="icon-btn" href="../index.html" title="Volver aos recursos" data-i18n-title="home">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+  </div>
+</header>
+
+<main>
+  <!-- ====================== PORTADA ====================== -->
+  <section id="view-home" class="view active">
+    <div class="hero">
+      <h1 data-i18n="heroTitle">Detectives de lóxica</h1>
+      <p data-i18n="heroText">Un murdocus é un misterio que se resolve pensando, coma un sudoku. Le as pistas, completa a táboa marcando ✓ e ✗, e descubre quen foi. Non fai falta adiviñar: todo está nas pistas.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="showView('guide')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+          <span data-i18n="howTo">Como se xoga?</span>
+        </button>
+        <a class="btn btn-ghost" href="imprimible.html">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          <span data-i18n="printVersion">Imprimir en papel</span>
+        </a>
+      </div>
+    </div>
+    <div id="casos-container"></div>
+  </section>
+
+  <!-- ====================== GUÍA ====================== -->
+  <section id="view-guide" class="view guide">
+    <button class="back-link" onclick="showView('home')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      <span data-i18n="back">Volver</span>
+    </button>
+    <h1 data-i18n="guideTitle">Como se resolve un murdocus</h1>
+    <p style="color:var(--ink-soft);font-weight:700;max-width:62ch;margin:0;" data-i18n="guideLead">Segue estes pasos. Coa práctica sairache só!</p>
+    <div class="steps" id="steps-container"></div>
+
+    <div class="demo">
+      <h2 data-i18n="demoTitle">Mira un exemplo</h2>
+      <p class="lead" data-i18n="demoLead">Tres animais, tres comidas. Pista: «A Pata non comía cenorias nin mazás». Marcamos as súas dúas ✗ e só lle queda o millo: ✓. Ao poñer ese ✓, o resto da fila e da columna do millo son ✗.</p>
+      <div class="grid-wrap">
+        <table class="grid" id="demo-grid"></table>
+      </div>
+      <div class="legend">
+        <span><span class="chip yes">✓</span> <span data-i18n="legendYes">Si que foi (só un por fila e columna)</span></span>
+        <span><span class="chip no">✗</span> <span data-i18n="legendNo">Seguro que NON</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== PUZZLE ====================== -->
+  <section id="view-puzzle" class="view">
+    <button class="back-link" onclick="showView('home')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      <span data-i18n="backCases">Volver aos casos</span>
+    </button>
+    <div class="puzzle-head"><h1 id="p-title"></h1></div>
+    <div class="case-intro" id="p-intro"></div>
+
+    <div class="susrow" id="p-suspects"></div>
+
+    <div class="help-toggle" onclick="toggleHelp()">
+      <span class="switch" id="help-switch"></span>
+      <span data-i18n="autoHelp">Axuda automática (marca as ✗ por min ao poñer un ✓)</span>
+    </div>
+
+    <div class="grid-wrap">
+      <table class="grid" id="p-grid"></table>
+    </div>
+
+    <div class="clues">
+      <h3>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        <span data-i18n="cluesTitle">Pistas (tóca-las para tachalas)</span>
+      </h3>
+      <ol id="p-clues"></ol>
+      <div class="final-clue">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.3-4.3"/><circle cx="11" cy="11" r="7"/></svg>
+        <span id="p-finalclue"></span>
+      </div>
+    </div>
+
+    <div class="accuse">
+      <h3 id="p-question"></h3>
+      <div class="accuse-opts" id="p-accuse"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-check" onclick="comprobar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span data-i18n="check">Comprobar</span>
+      </button>
+      <button class="btn btn-soft" onclick="reiniciar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        <span data-i18n="reset">Reiniciar</span>
+      </button>
+      <button class="btn btn-soft" onclick="verSolucion()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span data-i18n="solution">Ver solución</span>
+      </button>
+    </div>
+    <div class="feedback" id="p-feedback"></div>
+  </section>
+</main>
+
+<footer>
+  Murdocus · <span data-i18n="footer">Recurso de lóxica para primeiro ciclo</span> · <a href="../index.html">Recursos de Brais</a>
+</footer>
+
+<script src="casos.js"></script>
+<script>
+/* ============ Textos de interface (gl/es) ============ */
+const UI = {
+  gl:{tagline:"Misterios de lóxica",heroTitle:"Detectives de lóxica",
+    heroText:"Un murdocus é un misterio que se resolve pensando, coma un sudoku. Le as pistas, completa a táboa marcando ✓ e ✗, e descubre quen foi. Non fai falta adiviñar: todo está nas pistas.",
+    howTo:"Como se xoga?",printVersion:"Imprimir en papel",print:"Versión imprimible",home:"Volver aos recursos",
+    back:"Volver",backCases:"Volver aos casos",
+    guideTitle:"Como se resolve un murdocus",guideLead:"Segue estes pasos. Coa práctica sairache só!",
+    demoTitle:"Mira un exemplo",demoLead:"Tres animais, tres comidas. Pista: «A Pata non comía cenorias nin mazás». Marcamos as súas dúas ✗ e só lle queda o millo: ✓. Ao poñer ese ✓, o resto da fila e da columna do millo son ✗.",
+    legendYes:"Si que foi (só un por fila e columna)",legendNo:"Seguro que NON",
+    cluesTitle:"Pistas (tóca-las para tachalas)",check:"Comprobar",reset:"Reiniciar",solution:"Ver solución",
+    autoHelp:"Axuda automática (marca as ✗ por min ao poñer un ✓)",footer:"Recurso de lóxica para primeiro ciclo",
+    nivelNames:["","Doado","Medio","Difícil"],nivelSub:["","3 sospeitosos","4 sospeitosos","5 sospeitosos"],
+    suspectsWord:"sospeitosos",solved:"Resolto",
+    fbGood:"Caso resolto! Moi ben, detective!",fbBadGrid:"A táboa aínda non está ben. Revisa as pistas con calma.",
+    fbBadAccuse:"A táboa parece ben, pero ese non é o culpable. Le outra vez a pista final.",
+    fbNoAccuse:"Resolve a táboa e despois sinala quen foi o culpable.",
+    fbIncomplete:"Aínda quedan ocos. Cada sospeitoso ten que ter un ✓.",
+    steps:[
+      {t:"Le o misterio",d:"Le que pasou e mira os sospeitosos. Cada un di algo, pero o que importa son as PISTAS."},
+      {t:"Mira a táboa",d:"Cada FILA é un sospeitoso. Cada COLUMNA é un lugar ou unha cousa. Hai que emparellalos."},
+      {t:"Pon as ✗",d:"Se unha pista di que NON, marca unha ✗ nesa casa. Vai descartando!"},
+      {t:"Atopa as ✓",d:"Cando nunha fila ou columna só queda un oco baleiro, ese é un ✓ seguro."},
+      {t:"Coma un sudoku",d:"Ao poñer un ✓, o resto da súa fila e da súa columna teñen que ser ✗. Só pode haber un ✓ por fila e columna."},
+      {t:"Pilla o culpable",d:"Completa toda a táboa e usa a PISTA FINAL para descubrir quen foi. Despois, sinálao."},
+    ]},
+  es:{tagline:"Misterios de lógica",heroTitle:"Detectives de lógica",
+    heroText:"Un murdocus es un misterio que se resuelve pensando, como un sudoku. Lee las pistas, completa la tabla marcando ✓ y ✗, y descubre quién fue. No hace falta adivinar: todo está en las pistas.",
+    howTo:"¿Cómo se juega?",printVersion:"Imprimir en papel",print:"Versión imprimible",home:"Volver a los recursos",
+    back:"Volver",backCases:"Volver a los casos",
+    guideTitle:"Cómo se resuelve un murdocus",guideLead:"Sigue estos pasos. ¡Con la práctica te saldrá solo!",
+    demoTitle:"Mira un ejemplo",demoLead:"Tres animales, tres comidas. Pista: «La Pata no comía zanahorias ni manzanas». Marcamos sus dos ✗ y solo le queda el maíz: ✓. Al poner ese ✓, el resto de la fila y de la columna del maíz son ✗.",
+    legendYes:"Sí que fue (solo uno por fila y columna)",legendNo:"Seguro que NO",
+    cluesTitle:"Pistas (tócalas para tacharlas)",check:"Comprobar",reset:"Reiniciar",solution:"Ver solución",
+    autoHelp:"Ayuda automática (marca las ✗ por mí al poner un ✓)",footer:"Recurso de lógica para primer ciclo",
+    nivelNames:["","Fácil","Medio","Difícil"],nivelSub:["","3 sospechosos","4 sospechosos","5 sospechosos"],
+    suspectsWord:"sospechosos",solved:"Resuelto",
+    fbGood:"¡Caso resuelto! ¡Muy bien, detective!",fbBadGrid:"La tabla aún no está bien. Revisa las pistas con calma.",
+    fbBadAccuse:"La tabla parece bien, pero ese no es el culpable. Lee otra vez la pista final.",
+    fbNoAccuse:"Resuelve la tabla y después señala quién fue el culpable.",
+    fbIncomplete:"Aún quedan huecos. Cada sospechoso tiene que tener un ✓.",
+    steps:[
+      {t:"Lee el misterio",d:"Lee qué pasó y mira a los sospechosos. Cada uno dice algo, pero lo que importa son las PISTAS."},
+      {t:"Mira la tabla",d:"Cada FILA es un sospechoso. Cada COLUMNA es un lugar o una cosa. Hay que emparejarlos."},
+      {t:"Pon las ✗",d:"Si una pista dice que NO, marca una ✗ en esa casilla. ¡Ve descartando!"},
+      {t:"Encuentra las ✓",d:"Cuando en una fila o columna solo queda un hueco vacío, ese es un ✓ seguro."},
+      {t:"Como un sudoku",d:"Al poner un ✓, el resto de su fila y de su columna tienen que ser ✗. Solo puede haber un ✓ por fila y columna."},
+      {t:"Pilla al culpable",d:"Completa toda la tabla y usa la PISTA FINAL para descubrir quién fue. Después, señálalo."},
+    ]},
+};
+
+let LANG = "gl";
+let casoActual = null;
+let estado = [];        // matriz nS×nO con 0=baleiro,1=si,2=non
+let acusado = -1;       // índice de sospeitoso acusado
+let ayuda = true;       // axuda automática
+const resoltos = new Set(JSON.parse(localStorage.getItem("murdocus_resoltos") || "[]"));
+
+/* ---------- utilidades ---------- */
+function L(k){return UI[LANG][k];}
+function inicial(nombre){return nombre.replace(/^(A|O|As|Os|El|La|Los|Las|Un|Unha|Una)\s+/i,"").charAt(0).toUpperCase();}
+function iconoTema(){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>';}
+
+function setLang(l){
+  LANG=l;
+  document.documentElement.lang=l;
+  document.getElementById("lang-gl").classList.toggle("active",l==="gl");
+  document.getElementById("lang-es").classList.toggle("active",l==="es");
+  // textos estáticos
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(UI[l][k])el.textContent=UI[l][k];});
+  document.querySelectorAll("[data-i18n-title]").forEach(el=>{const k=el.getAttribute("data-i18n-title");if(UI[l][k])el.setAttribute("title",UI[l][k]);});
+  localStorage.setItem("murdocus_lang",l);
+  renderCasos();
+  renderSteps();
+  renderDemo();
+  if(casoActual && document.getElementById("view-puzzle").classList.contains("active")) abrirCaso(casoActual.id,true);
+}
+
+/* ---------- navegación de vistas ---------- */
+function showView(v){
+  document.querySelectorAll(".view").forEach(s=>s.classList.remove("active"));
+  document.getElementById("view-"+v).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---------- portada: tarxetas de casos ---------- */
+function renderCasos(){
+  const cont=document.getElementById("casos-container");
+  cont.innerHTML="";
+  [1,2,3].forEach(nivel=>{
+    const casos=CASOS.filter(c=>c.nivel===nivel);
+    if(!casos.length)return;
+    const block=document.createElement("div");
+    block.className="nivel-block";
+    let stars="";for(let i=0;i<nivel;i++)stars+='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15 8.5 22 9.3 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.3 9 8.5 12 2"/></svg>';
+    block.innerHTML=`<div class="nivel-head">
+        <h2>${L("nivelNames")[nivel]}</h2>
+        <span class="nivel-badge"><span class="stars">${stars}</span></span>
+        <span class="nivel-sub">${L("nivelSub")[nivel]}</span>
+      </div>`;
+    const grid=document.createElement("div");
+    grid.className="casos-grid";
+    casos.forEach(c=>{
+      const t=TEMAS[c.tema];
+      const card=document.createElement("button");
+      card.className="caso-card";
+      card.onclick=()=>abrirCaso(c.id);
+      const hecho=resoltos.has(c.id);
+      card.innerHTML=`
+        <div class="caso-top">
+          <span class="caso-ic" style="background:${t.colorBg};color:${t.color}">${iconoTema()}</span>
+          <span class="tema-badge" style="background:${t.colorBg};color:${t.color}">${t.etiqueta[LANG]}</span>
+        </div>
+        <h3>${c.titulo[LANG]}</h3>
+        <div class="caso-meta">
+          <span class="sus"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>${c.sospechosos[LANG].length}</span>
+          ${hecho?`<span class="solved-tick"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>${L("solved")}</span>`:""}
+        </div>`;
+      grid.appendChild(card);
+    });
+    block.appendChild(grid);
+    cont.appendChild(block);
+  });
+}
+
+/* ---------- guía: pasos ---------- */
+function renderSteps(){
+  const cont=document.getElementById("steps-container");
+  cont.innerHTML="";
+  L("steps").forEach((s,i)=>{
+    const d=document.createElement("div");
+    d.className="step";
+    d.innerHTML=`<div class="n">${i+1}</div><h3>${s.t}</h3><p>${s.d}</p>`;
+    cont.appendChild(d);
+  });
+}
+
+/* ---------- guía: mini-cuadrícula de exemplo ---------- */
+function renderDemo(){
+  const filas=LANG==="gl"?["Coella","Porco","Pata"]:["Coneja","Cerdo","Pata"];
+  const cols=LANG==="gl"?["Cenorias","Mazás","Millo"]:["Zanahorias","Manzanas","Maíz"];
+  // estado de exemplo: Coella=Cenorias, Porco=Mazás, Pata=Millo
+  const ej=[[1,2,2],[2,1,2],[2,2,1]];
+  let html=`<tr><th class="corner"></th>`;
+  cols.forEach(c=>html+=`<th class="colh">${c}</th>`);
+  html+=`</tr>`;
+  filas.forEach((f,r)=>{
+    html+=`<tr><th class="rowh">${f}</th>`;
+    ej[r].forEach(v=>{
+      const cls=v===1?"s-yes":v===2?"s-no":"";
+      const ch=v===1?"✓":v===2?"✗":"";
+      html+=`<td class="cell ${cls}">${ch}</td>`;
+    });
+    html+=`</tr>`;
+  });
+  document.getElementById("demo-grid").innerHTML=html;
+}
+
+/* ---------- abrir un caso ---------- */
+function abrirCaso(id,mantener){
+  const c=CASOS.find(x=>x.id===id);
+  if(!c)return;
+  casoActual=c;
+  const nS=c.sospechosos[LANG].length;
+  if(!mantener){estado=Array.from({length:nS},()=>Array(nS).fill(0));acusado=-1;}
+  document.getElementById("p-title").textContent=c.titulo[LANG];
+  document.getElementById("p-intro").textContent=c.intro[LANG];
+  document.getElementById("p-question").textContent=c.pregunta[LANG];
+  document.getElementById("p-finalclue").textContent=c.pistaFinal[LANG];
+
+  // sospeitosos + declaracións
+  const sus=document.getElementById("p-suspects");
+  sus.innerHTML="";
+  c.sospechosos[LANG].forEach((n,i)=>{
+    const d=document.createElement("div");
+    d.className="sus-card";
+    d.innerHTML=`<div class="name"><span class="av">${inicial(n)}</span>${n}</div><div class="say">“${c.declaraciones[LANG][i]}”</div>`;
+    sus.appendChild(d);
+  });
+
+  // pistas
+  const ol=document.getElementById("p-clues");
+  ol.innerHTML="";
+  c.pistas[LANG].forEach(p=>{
+    const li=document.createElement("li");
+    li.textContent=p;
+    li.onclick=()=>li.classList.toggle("used");
+    ol.appendChild(li);
+  });
+
+  // acusación
+  const acc=document.getElementById("p-accuse");
+  acc.innerHTML="";
+  c.sospechosos[LANG].forEach((n,i)=>{
+    const b=document.createElement("button");
+    b.innerHTML=`<span class="av">${inicial(n)}</span>${n}`;
+    if(i===acusado)b.classList.add("sel");
+    b.onclick=()=>{acusado=i;[...acc.children].forEach((x,j)=>x.classList.toggle("sel",j===i));};
+    acc.appendChild(b);
+  });
+
+  // axuda
+  document.getElementById("help-switch").classList.toggle("on",ayuda);
+
+  pintarGrid();
+  document.getElementById("p-feedback").className="feedback";
+  showView("puzzle");
+}
+
+/* ---------- pintar a cuadrícula do caso ---------- */
+function pintarGrid(){
+  const c=casoActual;
+  const S=c.sospechosos[LANG], O=c.opciones[LANG];
+  let html=`<tr><th class="corner">${c.columna[LANG]}</th>`;
+  O.forEach(o=>html+=`<th class="colh">${o}</th>`);
+  html+=`</tr>`;
+  S.forEach((s,r)=>{
+    html+=`<tr><th class="rowh">${s}</th>`;
+    O.forEach((o,col)=>{
+      const v=estado[r][col];
+      const cls=v===1?"s-yes":v===2?"s-no":"";
+      const ch=v===1?"✓":v===2?"✗":"";
+      html+=`<td class="cell ${cls}" onclick="clicCell(${r},${col})">${ch}</td>`;
+    });
+    html+=`</tr>`;
+  });
+  document.getElementById("p-grid").innerHTML=html;
+}
+
+/* ---------- clic nunha casa: baleiro -> ✓ -> ✗ -> baleiro ---------- */
+function clicCell(r,col){
+  const n=estado.length;
+  estado[r][col]=(estado[r][col]+1)%3;
+  if(ayuda && estado[r][col]===1){
+    // propagar ✗ ás casas baleiras da fila e da columna
+    for(let j=0;j<n;j++) if(j!==col && estado[r][j]===0) estado[r][j]=2;
+    for(let i=0;i<n;i++) if(i!==r && estado[i][col]===0) estado[i][col]=2;
+  }
+  pintarGrid();
+}
+
+/* ---------- axuda automática on/off ---------- */
+function toggleHelp(){ayuda=!ayuda;document.getElementById("help-switch").classList.toggle("on",ayuda);}
+
+/* ---------- reiniciar ---------- */
+function reiniciar(){
+  const nS=casoActual.sospechosos[LANG].length;
+  estado=Array.from({length:nS},()=>Array(nS).fill(0));
+  acusado=-1;
+  abrirCaso(casoActual.id,true);
+}
+
+/* ---------- ver solución ---------- */
+function verSolucion(){
+  const c=casoActual;const n=c.solucion.length;
+  estado=Array.from({length:n},()=>Array(n).fill(2));
+  c.solucion.forEach((o,s)=>estado[s][o]=1);
+  acusado=c.culpable;
+  abrirCaso(c.id,true);
+  feedback("hint",L("solution")+": "+c.sospechosos[LANG][c.culpable]);
+}
+
+/* ---------- comprobar ---------- */
+function comprobar(){
+  const c=casoActual;const n=c.solucion.length;
+  // 1) cada fila ten exactamente un ✓?
+  let completa=true;
+  const eleccion=[];
+  for(let r=0;r<n;r++){
+    const sis=estado[r].map((v,i)=>v===1?i:-1).filter(i=>i>=0);
+    if(sis.length!==1){completa=false;break;}
+    eleccion[r]=sis[0];
+  }
+  if(!completa){feedback("hint",L("fbIncomplete"));return;}
+  // 2) coincide a táboa coa solución?
+  const gridOk=eleccion.every((o,s)=>o===c.solucion[s]);
+  if(!gridOk){feedback("bad",L("fbBadGrid"));return;}
+  // 3) acusou?
+  if(acusado<0){feedback("hint",L("fbNoAccuse"));return;}
+  // 4) acertou o culpable?
+  if(acusado!==c.culpable){feedback("bad",L("fbBadAccuse"));return;}
+  // resolto!
+  resoltos.add(c.id);
+  localStorage.setItem("murdocus_resoltos",JSON.stringify([...resoltos]));
+  feedback("good",L("fbGood"));
+}
+
+function feedback(tipo,texto){
+  const fb=document.getElementById("p-feedback");
+  const ic={good:'<path d="M20 6 9 17l-5-5"/>',bad:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',hint:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>'}[tipo];
+  fb.className="feedback show "+tipo;
+  fb.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${ic}</svg><span>${texto}</span>`;
+}
+
+/* ---------- arranque ---------- */
+(function init(){
+  const guardado=localStorage.getItem("murdocus_lang");
+  setLang(guardado==="es"?"es":"gl");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murdocus · Imprimible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1c1530;--soft:#5b5172;--line:#d7cfe8;--accent:#7c3aed;--accent-soft:#ede9fe;--warn-bg:#fef3c7;--warn:#92400e;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Nunito',system-ui,sans-serif;color:var(--ink);background:#f4f1fb;}
+
+  /* ---- barra de control (non se imprime) ---- */
+  .toolbar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);padding:12px clamp(14px,3vw,28px);display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 2px 10px rgba(60,30,110,.08);}
+  .toolbar h1{font-size:1.05rem;margin:0;display:flex;align-items:center;gap:9px;}
+  .toolbar h1 svg{width:22px;height:22px;color:var(--accent);}
+  .tb-right{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .btn{font-family:inherit;font-weight:800;cursor:pointer;border:none;border-radius:11px;padding:10px 16px;display:inline-flex;align-items:center;gap:8px;}
+  .btn svg{width:18px;height:18px;}
+  .btn-print{background:var(--accent);color:#fff;}
+  .btn-print:hover{background:#6d28d9;}
+  .btn-soft{background:var(--accent-soft);color:var(--accent);}
+  .lang-toggle{display:flex;border:1px solid var(--line);border-radius:11px;overflow:hidden;}
+  .lang-toggle button{font-family:inherit;font-weight:800;font-size:.82rem;border:none;background:#fff;padding:9px 12px;cursor:pointer;color:var(--soft);}
+  .lang-toggle button.active{background:var(--accent);color:#fff;}
+  label.chk{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.85rem;color:var(--soft);cursor:pointer;}
+  label.chk input{width:17px;height:17px;accent-color:var(--accent);}
+
+  .picker{background:#fff;border-bottom:1px solid var(--line);padding:10px clamp(14px,3vw,28px);display:flex;gap:10px;flex-wrap:wrap;}
+  .picker .pill{font-size:.8rem;font-weight:800;border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;background:#fff;color:var(--soft);user-select:none;}
+  .picker .pill.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+  .pages{max-width:820px;margin:18px auto;padding:0 14px 60px;}
+
+  /* ---- folla A4 ---- */
+  .sheet{background:#fff;border:1px solid var(--line);border-radius:8px;padding:26px 30px;margin-bottom:22px;box-shadow:0 8px 26px -12px rgba(60,30,110,.25);}
+  .sheet.hide{display:none;}
+  .s-head{display:flex;align-items:flex-start;gap:12px;border-bottom:3px solid var(--accent);padding-bottom:10px;margin-bottom:12px;}
+  .s-head .ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .s-head .ic svg{width:22px;height:22px;}
+  .s-head h2{margin:0;font-size:1.3rem;}
+  .s-head .tema{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;}
+  .s-head .nivel{margin-left:auto;font-size:.72rem;font-weight:800;color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+  .s-intro{font-weight:700;line-height:1.45;background:var(--accent-soft);color:#4c1d95;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:.95rem;}
+
+  .s-block-title{font-weight:900;font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin:14px 0 7px;}
+  .sus-list{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin-bottom:6px;}
+  .sus-list .it{font-weight:700;font-size:.92rem;display:flex;gap:7px;}
+  .sus-list .it .num{color:var(--accent);font-weight:900;}
+  .sus-list .it small{display:block;font-weight:600;color:var(--soft);font-style:italic;font-size:.8rem;}
+
+  table.grid{border-collapse:collapse;width:100%;margin:6px 0 4px;}
+  table.grid th,table.grid td{border:1.5px solid #b9aede;text-align:center;}
+  table.grid th.corner{background:var(--accent);color:#fff;font-size:.74rem;padding:7px;}
+  table.grid th.colh{background:var(--accent-soft);color:#4c1d95;font-size:.78rem;font-weight:800;padding:7px 5px;line-height:1.15;}
+  table.grid th.rowh{background:#faf7ff;font-size:.84rem;font-weight:800;text-align:left;padding:6px 9px;white-space:nowrap;}
+  table.grid td.cell{height:34px;}
+
+  .clues ol{margin:4px 0;padding-left:22px;}
+  .clues li{font-weight:700;color:#2a2440;line-height:1.4;margin-bottom:4px;font-size:.92rem;}
+  .final{margin-top:8px;background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 11px;font-weight:800;font-size:.9rem;}
+  .answer-line{margin-top:12px;font-weight:800;font-size:1rem;}
+  .answer-line .blank{display:inline-block;border-bottom:2px solid var(--accent);min-width:220px;margin-left:6px;}
+  .howto{font-size:.8rem;color:var(--soft);font-weight:700;margin-top:10px;border-top:1px dashed var(--line);padding-top:8px;}
+  .howto b.yes{color:#16a34a;}.howto b.no{color:#e11d48;}
+
+  /* ---- folla de guía ---- */
+  .guide-sheet ol{padding-left:20px;}
+  .guide-sheet li{font-weight:700;line-height:1.5;margin-bottom:8px;}
+  .guide-sheet li b{color:var(--accent);}
+
+  /* ---- soluciones ---- */
+  .sol-sheet{background:#fff;}
+  .sol-sheet h2{color:var(--accent);}
+  .sol-list{font-weight:700;line-height:1.7;}
+  .sol-list .cul{color:#16a34a;font-weight:900;}
+
+  /* ====================== IMPRESIÓN ====================== */
+  @media print{
+    body{background:#fff;}
+    .toolbar,.picker{display:none !important;}
+    .pages{max-width:none;margin:0;padding:0;}
+    .sheet{border:none;border-radius:0;box-shadow:none;margin:0;padding:14mm 14mm;page-break-after:always;}
+    .sheet:last-child{page-break-after:auto;}
+    @page{size:A4;margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <h1>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+    Murdocus · <span id="tb-sub">Imprimible</span>
+  </h1>
+  <div class="tb-right">
+    <div class="lang-toggle">
+      <button id="lang-gl" class="active" onclick="setLang('gl')">GL</button>
+      <button id="lang-es" onclick="setLang('es')">ES</button>
+    </div>
+    <label class="chk"><input type="checkbox" id="chk-guide" checked onchange="render()"> <span id="lbl-guide">Guía</span></label>
+    <label class="chk"><input type="checkbox" id="chk-sol" onchange="render()"> <span id="lbl-sol">Soluciones</span></label>
+    <a class="btn btn-soft" href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span id="lbl-back">Xogar online</span></a>
+    <button class="btn btn-print" onclick="window.print()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg><span id="lbl-print">Imprimir</span></button>
+  </div>
+</div>
+
+<div class="picker" id="picker"></div>
+<div class="pages" id="pages"></div>
+
+<script src="casos.js"></script>
+<script>
+const TXT={
+  gl:{sub:"Imprimible",guide:"Guía",sol:"Soluciones",back:"Xogar online",print:"Imprimir",
+    selAll:"Todos",nivel:["","Doado","Medio","Difícil"],
+    suspects:"Sospeitosos",clues:"Pistas",grid:"Completa a táboa",question:"Resposta",culprit:"O culpable é:",
+    howto:"Marca <b class='yes'>✓</b> se SI e <b class='no'>✗</b> se NON. Só pode haber un ✓ por fila e por columna.",
+    guideTitle:"Como se resolve un murdocus",
+    guideSteps:["Le o misterio e mira os sospeitosos.","Cada FILA da táboa é un sospeitoso; cada COLUMNA, un lugar ou cousa.","Se unha pista di que NON, marca unha <b>✗</b>.","Cando nunha fila ou columna só queda un oco, ese é un <b>✓</b>.","Ao poñer un ✓, o resto da súa fila e columna son <b>✗</b> (coma no sudoku).","Completa a táboa e usa a pista final para pillar o culpable."],
+    solTitle:"Soluciones (para o profe)",where:"estaba en / tiña"},
+  es:{sub:"Imprimible",guide:"Guía",sol:"Soluciones",back:"Jugar online",print:"Imprimir",
+    selAll:"Todos",nivel:["","Fácil","Medio","Difícil"],
+    suspects:"Sospechosos",clues:"Pistas",grid:"Completa la tabla",question:"Respuesta",culprit:"El culpable es:",
+    howto:"Marca <b class='yes'>✓</b> si SÍ y <b class='no'>✗</b> si NO. Solo puede haber un ✓ por fila y por columna.",
+    guideTitle:"Cómo se resuelve un murdocus",
+    guideSteps:["Lee el misterio y mira a los sospechosos.","Cada FILA de la tabla es un sospechoso; cada COLUMNA, un lugar o cosa.","Si una pista dice que NO, marca una <b>✗</b>.","Cuando en una fila o columna solo queda un hueco, ese es un <b>✓</b>.","Al poner un ✓, el resto de su fila y columna son <b>✗</b> (como en el sudoku).","Completa la tabla y usa la pista final para pillar al culpable."],
+    solTitle:"Soluciones (para el profe)",where:"estaba en / tenía"},
+};
+let LANG="gl";
+const seleccion=new Set(CASOS.map(c=>c.id)); // por defecto, todos
+function T(k){return TXT[LANG][k];}
+function ic(){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>';}
+
+function setLang(l){
+  LANG=l;document.documentElement.lang=l;
+  document.getElementById("lang-gl").classList.toggle("active",l==="gl");
+  document.getElementById("lang-es").classList.toggle("active",l==="es");
+  document.getElementById("tb-sub").textContent=T("sub");
+  document.getElementById("lbl-guide").textContent=T("guide");
+  document.getElementById("lbl-sol").textContent=T("sol");
+  document.getElementById("lbl-back").textContent=T("back");
+  document.getElementById("lbl-print").textContent=T("print");
+  localStorage.setItem("murdocus_lang",l);
+  renderPicker();render();
+}
+
+function renderPicker(){
+  const p=document.getElementById("picker");
+  p.innerHTML="";
+  const all=document.createElement("span");
+  all.className="pill "+(seleccion.size===CASOS.length?"on":"");
+  all.textContent=T("selAll");
+  all.onclick=()=>{if(seleccion.size===CASOS.length)seleccion.clear();else CASOS.forEach(c=>seleccion.add(c.id));renderPicker();render();};
+  p.appendChild(all);
+  CASOS.forEach(c=>{
+    const pill=document.createElement("span");
+    pill.className="pill "+(seleccion.has(c.id)?"on":"");
+    pill.textContent=c.titulo[LANG];
+    pill.onclick=()=>{seleccion.has(c.id)?seleccion.delete(c.id):seleccion.add(c.id);renderPicker();render();};
+    p.appendChild(pill);
+  });
+}
+
+function fichaCaso(c){
+  const t=TEMAS[c.tema];const S=c.sospechosos[LANG],O=c.opciones[LANG];
+  let sus="";
+  S.forEach((n,i)=>{sus+=`<div class="it"><span class="num">${i+1}.</span><div>${n}<small>“${c.declaraciones[LANG][i]}”</small></div></div>`;});
+  let head=`<tr><th class="corner">${c.columna[LANG]}</th>`;
+  O.forEach(o=>head+=`<th class="colh">${o}</th>`);head+=`</tr>`;
+  let rows="";
+  S.forEach(s=>{rows+=`<tr><th class="rowh">${s}</th>`;O.forEach(()=>rows+=`<td class="cell"></td>`);rows+=`</tr>`;});
+  let clues="";c.pistas[LANG].forEach(p=>clues+=`<li>${p}</li>`);
+  return `<div class="sheet" data-id="${c.id}">
+    <div class="s-head">
+      <span class="ic" style="background:${t.colorBg};color:${t.color}">${ic()}</span>
+      <div><div class="tema" style="color:${t.color}">${t.etiqueta[LANG]}</div><h2>${c.titulo[LANG]}</h2></div>
+      <span class="nivel">${T("nivel")[c.nivel]} · ${S.length}</span>
+    </div>
+    <div class="s-intro">${c.intro[LANG]}</div>
+    <div class="s-block-title">${T("suspects")}</div>
+    <div class="sus-list">${sus}</div>
+    <div class="s-block-title">${T("grid")}</div>
+    <table class="grid">${head}${rows}</table>
+    <div class="howto">${T("howto")}</div>
+    <div class="s-block-title clues-t">${T("clues")}</div>
+    <div class="clues"><ol>${clues}</ol></div>
+    <div class="final">${c.pistaFinal[LANG]}</div>
+    <div class="answer-line">${c.pregunta[LANG]} <span class="blank"></span></div>
+  </div>`;
+}
+
+function fichaGuia(){
+  let steps="";T("guideSteps").forEach(s=>steps+=`<li>${s}</li>`);
+  return `<div class="sheet guide-sheet">
+    <div class="s-head"><span class="ic" style="background:var(--accent-soft);color:var(--accent)">${ic()}</span><div><h2>${T("guideTitle")}</h2></div></div>
+    <ol>${steps}</ol>
+    <div class="howto" style="margin-top:18px;font-size:.9rem;">${T("howto")}</div>
+  </div>`;
+}
+
+function fichaSoluciones(){
+  let body="";
+  CASOS.filter(c=>seleccion.has(c.id)).forEach(c=>{
+    const S=c.sospechosos[LANG],O=c.opciones[LANG];
+    let pares=c.solucion.map((o,s)=>`${S[s]} → ${O[o]}`).join(" · ");
+    body+=`<p>· <b>${c.titulo[LANG]}</b><br><span style="color:var(--soft)">${pares}</span><br><span class="cul">${T("culprit")} ${S[c.culpable]}</span></p>`;
+  });
+  return `<div class="sheet sol-sheet"><div class="s-head"><span class="ic" style="background:#dcfce7;color:#16a34a">${ic()}</span><div><h2>${T("solTitle")}</h2></div></div><div class="sol-list">${body}</div></div>`;
+}
+
+function render(){
+  const cont=document.getElementById("pages");
+  let html="";
+  if(document.getElementById("chk-guide").checked)html+=fichaGuia();
+  CASOS.filter(c=>seleccion.has(c.id)).forEach(c=>html+=fichaCaso(c));
+  if(document.getElementById("chk-sol").checked)html+=fichaSoluciones();
+  cont.innerHTML=html;
+}
+
+(function init(){const g=localStorage.getItem("murdocus_lang");setLang(g==="es"?"es":"gl");})();
+</script>
+</body>
+</html>
