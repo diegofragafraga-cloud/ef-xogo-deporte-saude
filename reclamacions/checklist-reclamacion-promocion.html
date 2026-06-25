@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist · Reclamación de cualificacións e non promoción (Primaria)</title>
+<style>
+  /* ---------- Variables tema escuro (por defecto) ---------- */
+  :root{
+    --bg:#0f1115; --bg-card:#171a21; --bg-soft:#1e222b; --border:#2a2f3a;
+    --txt:#e6e9ef; --txt-soft:#9aa3b2; --accent:#5b8cff; --accent-soft:#1c2740;
+    --green:#3fbf6f; --green-soft:#15301f; --amber:#e0b341; --amber-soft:#322a12;
+    --red:#e8576b; --red-soft:#331519; --shadow:0 8px 30px rgba(0,0,0,.4);
+  }
+  html[data-theme="light"]{
+    --bg:#f4f6fa; --bg-card:#ffffff; --bg-soft:#eef1f6; --border:#dce1ea;
+    --txt:#1b1f27; --txt-soft:#5a6373; --accent:#2f5fd0; --accent-soft:#e3ecff;
+    --green:#1f9d57; --green-soft:#dcf3e6; --amber:#b9851a; --amber-soft:#f6edd4;
+    --red:#cc2f47; --red-soft:#fbe2e6; --shadow:0 6px 24px rgba(20,30,60,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.55;
+    padding:32px 20px 80px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto}
+  svg.ic{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round;vertical-align:-.14em;flex:none}
+
+  /* ---------- Cabeceira ---------- */
+  header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:6px}
+  h1{font-size:1.55rem;line-height:1.25;letter-spacing:-.01em;display:flex;gap:.5em;align-items:flex-start}
+  h1 svg.ic{color:var(--accent);margin-top:.15em}
+  .sub{color:var(--txt-soft);font-size:.95rem;margin:8px 0 22px}
+  .sub b{color:var(--txt)}
+  #theme{background:var(--bg-card);border:1px solid var(--border);color:var(--txt);
+    width:42px;height:42px;border-radius:12px;cursor:pointer;display:flex;align-items:center;
+    justify-content:center;font-size:1.15rem;transition:.15s}
+  #theme:hover{background:var(--bg-soft)}
+
+  /* ---------- Aviso clave ---------- */
+  .alert{background:var(--amber-soft);border:1px solid var(--amber);border-left-width:4px;
+    border-radius:12px;padding:14px 16px;margin-bottom:26px;display:flex;gap:12px;font-size:.92rem}
+  .alert svg.ic{color:var(--amber);font-size:1.25rem;margin-top:1px}
+  .alert b{color:var(--txt)}
+
+  /* ---------- Progreso ---------- */
+  .progress-box{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+    padding:14px 18px;margin-bottom:28px;box-shadow:var(--shadow);
+    position:sticky;top:14px;z-index:5;backdrop-filter:blur(6px)}
+  .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:.9rem}
+  .progress-top span{color:var(--txt-soft)}
+  .progress-top b{color:var(--accent);font-size:1.05rem}
+  .bar{height:9px;background:var(--bg-soft);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--green));
+    border-radius:99px;transition:width .3s ease}
+  .reset{background:none;border:none;color:var(--txt-soft);font-size:.8rem;cursor:pointer;
+    display:inline-flex;gap:5px;align-items:center;margin-top:10px;padding:0}
+  .reset:hover{color:var(--red)}
+
+  /* ---------- Fases ---------- */
+  .phase{margin-bottom:34px}
+  .phase-head{display:flex;align-items:center;gap:11px;margin-bottom:4px}
+  .badge{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:.95rem;flex:none}
+  .b-prev{background:var(--bg-soft);color:var(--txt-soft);border:1px solid var(--border)}
+  .b1{background:var(--accent-soft);color:var(--accent)}
+  .b2{background:var(--red-soft);color:var(--red)}
+  .phase-head h2{font-size:1.18rem;letter-spacing:-.01em}
+  .phase-meta{color:var(--txt-soft);font-size:.86rem;margin:0 0 16px 45px}
+  .phase-meta strong{color:var(--amber)}
+
+  /* ---------- Items checklist ---------- */
+  ul.list{list-style:none;display:flex;flex-direction:column;gap:10px}
+  li.item{background:var(--bg-card);border:1px solid var(--border);border-radius:13px;
+    padding:14px 16px;display:flex;gap:13px;align-items:flex-start;transition:.15s;cursor:pointer}
+  li.item:hover{border-color:var(--accent)}
+  li.item.done{opacity:.62;background:var(--green-soft);border-color:var(--green)}
+  li.item.done .it-title{text-decoration:line-through;text-decoration-color:var(--green)}
+  .check{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);flex:none;
+    margin-top:1px;display:flex;align-items:center;justify-content:center;transition:.15s;color:#fff}
+  li.item.done .check{background:var(--green);border-color:var(--green)}
+  .check svg{width:14px;height:14px;opacity:0;transition:.15s}
+  li.item.done .check svg{opacity:1}
+  .it-body{flex:1}
+  .it-title{font-weight:600;font-size:.97rem;display:flex;gap:.45em;align-items:baseline;flex-wrap:wrap}
+  .who{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+    padding:2px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+  .who.fam{background:var(--amber-soft);color:var(--amber)}
+  .who.dir{background:var(--red-soft);color:var(--red)}
+  .it-desc{color:var(--txt-soft);font-size:.875rem;margin-top:5px}
+  .it-desc code{background:var(--bg-soft);padding:1px 6px;border-radius:5px;font-size:.82em;color:var(--txt)}
+  .plazo{display:inline-flex;gap:5px;align-items:center;margin-top:8px;font-size:.8rem;
+    background:var(--bg-soft);color:var(--txt-soft);padding:4px 10px;border-radius:8px;font-weight:600}
+  .plazo svg.ic{color:var(--amber)}
+  .plazo.tope{background:var(--red-soft);color:var(--red)}
+  .plazo.tope svg.ic{color:var(--red)}
+
+  /* ---------- Documentación ---------- */
+  details.docs{background:var(--bg-soft);border:1px dashed var(--border);border-radius:12px;
+    padding:4px 16px;margin-top:14px}
+  details.docs summary{cursor:pointer;padding:11px 0;font-weight:600;font-size:.92rem;
+    display:flex;gap:8px;align-items:center;color:var(--accent)}
+  details.docs summary::-webkit-details-marker{display:none}
+  details.docs[open] summary{margin-bottom:4px}
+  details.docs ol{margin:0 0 14px 20px;font-size:.875rem;color:var(--txt-soft);display:flex;flex-direction:column;gap:6px}
+  details.docs li::marker{color:var(--accent)}
+  details.docs b{color:var(--txt)}
+
+  footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);
+    color:var(--txt-soft);font-size:.8rem;text-align:center}
+  footer b{color:var(--txt)}
+
+  /* ---------- Impresión ---------- */
+  @media print{
+    body{background:#fff;color:#000;padding:0}
+    #theme,.reset,.progress-box{display:none}
+    li.item,.phase{break-inside:avoid}
+    li.item{border:1px solid #ccc}
+    details.docs{border:1px solid #ccc}
+    details.docs[open] summary{color:#000}
+  }
+  @media(max-width:560px){h1{font-size:1.3rem}.phase-meta{margin-left:0}}
+</style>
+<style>
+  /* ---------- Gate de contrasinal ---------- */
+  body.locked{overflow:hidden}
+  body.locked .wrap{filter:blur(7px);pointer-events:none;user-select:none}
+  #gate{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+    background:rgba(10,12,16,.82);backdrop-filter:blur(4px)}
+  body:not(.locked) #gate{display:none}
+  #gate .card{background:var(--bg-card,#171a21);border:1px solid var(--border,#2a2f3a);
+    border-radius:18px;padding:34px 30px;width:min(380px,90vw);box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center}
+  #gate .lock{width:54px;height:54px;border-radius:14px;background:var(--accent-soft,#1c2740);
+    color:var(--accent,#5b8cff);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+  #gate .lock svg{width:26px;height:26px}
+  #gate h2{font-size:1.15rem;margin-bottom:4px;color:var(--txt,#e6e9ef)}
+  #gate p{color:var(--txt-soft,#9aa3b2);font-size:.88rem;margin-bottom:20px}
+  #gate input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border,#2a2f3a);
+    background:var(--bg-soft,#1e222b);color:var(--txt,#e6e9ef);font-size:1.1rem;text-align:center;
+    letter-spacing:.3em;margin-bottom:12px;outline:none}
+  #gate input:focus{border-color:var(--accent,#5b8cff)}
+  #gate button{width:100%;padding:12px;border:none;border-radius:10px;background:var(--accent,#5b8cff);
+    color:#fff;font-size:.98rem;font-weight:600;cursor:pointer}
+  #gate .err{color:var(--red,#e8576b);font-size:.82rem;margin-top:10px;min-height:1em;visibility:hidden}
+  #gate .err.show{visibility:visible}
+</style>
+</head>
+<body class="locked">
+
+<div id="gate">
+  <div class="card">
+    <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <h2>Acceso restrinxido</h2>
+    <p>Introduce o contrasinal para ver a checklist de reclamacións.</p>
+    <input id="gpass" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="32" autofocus>
+    <button id="gbtn">Entrar</button>
+    <div class="err" id="gerr">Contrasinal incorrecto</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header>
+    <h1>
+      <svg class="ic" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Reclamación de cualificacións e da decisión de non promoción
+    </h1>
+    <button id="theme" title="Cambiar tema" aria-label="Cambiar tema"></button>
+  </header>
+  <p class="sub">
+    Educación <b>Primaria</b> · Centro <b>público</b> · Tramitación pola aplicación
+    <b>Protocolos Educativos</b> (<code>edu.xunta.gal/protocoloseducativos</code>)<br>
+    Marco legal: <b>Instrución 2/2026</b> + Orde do 26/05/2023 (Decreto 155/2022), arts. 30–34. Anexo I.a.
+  </p>
+
+  <div class="alert">
+    <svg class="ic" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <div>
+      <b>Solicitudes separadas.</b> Faise <b>unha solicitude distinta por cada cousa</b> que se reclame:
+      unha por <b>Lingua Galega</b>, outra por <b>Lengua Castelá</b>, outra por <b>Matemáticas</b>
+      (cualificacións) e <b>outra pola decisión de non promoción</b>. O pai decide cales presenta:
+      ata <b>4 expedientes</b> independentes.
+    </div>
+  </div>
+
+  <div class="progress-box">
+    <div class="progress-top">
+      <span>Progreso da tramitación</span>
+      <b><span id="pct">0</span>%</b>
+    </div>
+    <div class="bar"><i id="barfill"></i></div>
+    <button class="reset" id="reset">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      Reiniciar marcado
+    </button>
+  </div>
+
+  <!-- ============ FASE PREVIA ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <div class="badge b-prev">0</div>
+      <h2>Fase previa · Aclaracións (informal)</h2>
+    </div>
+    <p class="phase-meta">Antes de calquera escrito. <strong>Prazo:</strong> antes de que remate o prazo de revisión ante a dirección.</p>
+    <ul class="list" data-phase="prev"></ul>
+  </section>
+
+  <!-- ============ FASE 1 ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <div class="badge b1">1</div>
+      <h2>Fase 1 · Revisión NO CENTRO</h2>
+    </div>
+    <p class="phase-meta">Resólvea a dirección do centro. <strong>Data límite global: 30 de xuño de 2026.</strong></p>
+    <ul class="list" data-phase="f1"></ul>
+
+    <details class="docs">
+      <summary>
+        <svg class="ic" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Documentos que xera o centro en cada expediente de revisión
+      </summary>
+      <ol>
+        <li><b>Cualificación de área</b> (Lingua/Lengua/Mates): informe motivado do/a docente que imparte a área (feitos previos + ratificación ou modificación da nota, fundamentada na <b>programación didáctica</b>). Achéganse os <b>instrumentos de avaliación escaneados</b> (exames, traballos, rexistros) e o <b>seguimento da programación</b>.</li>
+        <li>Acta/informe da <b>reunión do equipo docente</b> que analiza a solicitude e o informe do docente (modelo anexo II.c).</li>
+        <li><b>Decisión de promoción</b>: acta da reunión do <b>equipo docente</b> sobre os criterios de promoción da concreción curricular (modelo anexo II.d).</li>
+        <li><b>Resolución da dirección</b> razoada, ratificando ou modificando (modelo anexo II.e), entregada á familia.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- ============ FASE 2 ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <div class="badge b2">2</div>
+      <h2>Fase 2 · Reclamación ante a DIRECCIÓN TERRITORIAL</h2>
+    </div>
+    <p class="phase-meta">Só se, tras a resolución do centro, <strong>persiste o desacordo</strong>. Resólvea a DT con informe de Inspección.</p>
+    <ul class="list" data-phase="f2"></ul>
+
+    <details class="docs">
+      <summary>
+        <svg class="ic" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Documentación do expediente que o centro envía á Dirección Territorial
+      </summary>
+      <ol>
+        <li>Solicitude de reclamación ante a DT (familia).</li>
+        <li>Solicitude de revisión presentada antes á dirección (familia).</li>
+        <li>Informe da dirección coas <b>datas de entrega</b> das cualificacións e comunicacións á familia.</li>
+        <li>Informe motivado do/a <b>docente</b> da área (só reclamacións de cualificación).</li>
+        <li>Informe do <b>equipo docente</b> / acta da sesión.</li>
+        <li>Copia da <b>resolución da dirección</b>.</li>
+        <li>Copia da <b>programación didáctica</b> e do seu seguimento (cualificacións) ou do apartado da <b>concreción curricular</b> cos criterios de promoción.</li>
+        <li>Copia dos <b>instrumentos de avaliación</b> empregados durante o curso.</li>
+        <li>Copia da <b>acta de avaliación final</b>.</li>
+        <li>De ser o caso, novas alegacións da familia e informe da dirección sobre elas.</li>
+      </ol>
+    </details>
+  </section>
+
+  <footer>
+    Documento de apoio interno · CEIP · Curso 2025/26 · Baseado na <b>Instrución 2/2026</b> da Dirección Xeral de Ordenación e Innovación Educativa.<br>
+    Os prazos en <b>días hábiles</b> contan de luns a venres (festivos exclúense). Se unha data cae en inhábil, prorrógase ao seguinte día hábil.
+  </footer>
+</div>
+
+<script>
+/* ---------- Datos da checklist ---------- */
+const ICON = {
+  clock:'<path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M12 6v6l4 2"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>'
+};
+function plazo(txt, tope){return `<span class="plazo${tope?' tope':''}"><svg class="ic" viewBox="0 0 24 24">${ICON.clock}</svg>${txt}</span>`;}
+
+const DATA = {
+  prev:[
+    {who:'fam',w:'Familia',t:'Petición de aclaracións ao titor / profesorado',
+     d:'O pai solicita verbalmente ou por escrito as aclaracións que precise sobre as notas e a decisión de non promoción, segundo o procedemento das NOFC do centro.'},
+    {who:'dir',w:'Centro',t:'Atender e rexistrar a petición',
+     d:'O titor/a e o profesorado das áreas dan as explicacións. Se persiste o desacordo, pásase á Fase 1.'}
+  ],
+  f1:[
+    {who:'fam',w:'Familia',t:'Presentar solicitude(s) de REVISIÓN por escrito á dirección',
+     d:'Modelo <code>anexo II.a</code>. <b>Unha por cada área</b> (Lingua Galega, Lengua Castelá, Matemáticas) e <b>unha pola non promoción</b>. Deben ir motivadas: discrepancias concretas respecto da programación didáctica (cualificacións) ou da concreción curricular/normativa (promoción).',
+     p:plazo('Máx. 2 días hábiles desde a entrega de boletíns', false)+plazo('Tope: 30 xuño 2026', true)},
+    {who:'dir',w:'Dirección',t:'Iniciar o expediente en Protocolos Educativos',
+     d:'Engadir os datos e a copia da solicitude no aplicativo <code>edu.xunta.gal/protocoloseducativos</code>. Trasladar a solicitude ao profesorado/equipo docente. Consultar o <b>Manual</b> da páxina principal do aplicativo.'},
+    {who:'dir',w:'Docente',t:'Informe motivado do/a docente de cada área',
+     d:'Só para as cualificacións (Lingua/Lengua/Mates). Descrición dos feitos + decisión de ratificar ou modificar a nota, fundamentada na programación. Achegar instrumentos de avaliación escaneados e seguimento da programación.'},
+    {who:'dir',w:'Equipo docente',t:'Reunión do equipo docente (revisión)',
+     d:'En primaria, o <b>equipo docente</b> analiza a solicitude e o informe do docente e elabora o informe do resultado (modelo <code>anexo II.c</code> para cualificacións / <code>anexo II.d</code> para a decisión de promoción).',
+     p:plazo('Reunión: máx. 2 días hábiles desde fin do período', false)},
+    {who:'dir',w:'Dirección',t:'Resolución razoada da dirección',
+     d:'A dirección elabora a resolución (modelo <code>anexo II.e</code>) ratificando ou modificando a cualificación e/ou a decisión de promoción.'},
+    {who:'dir',w:'Dirección',t:'Comunicar a resolución á familia',
+     d:'Entregar a resolución á persoa solicitante e á persoa titora. Aquí remata a Fase 1: se a familia queda conforme, fin do procedemento.',
+     p:plazo('Máx. 1 día hábil desde fin da reunión', false)}
+  ],
+  f2:[
+    {who:'fam',w:'Familia',t:'Presentar solicitude de RECLAMACIÓN ante a Dirección Territorial',
+     d:'Modelo <code>anexo II.b</code>. Preséntase na dirección do centro pero vai <b>dirixida á Dirección Territorial</b>. Igual que antes: unha por cada área / pola promoción que se queira elevar.',
+     p:plazo('Máx. 2 días hábiles desde a comunicación da resolución do centro', true)},
+    {who:'dir',w:'Dirección',t:'Completar e enviar o expediente á DT (Protocolos Educativos)',
+     d:'A dirección completa toda a documentación do expediente no aplicativo (ver lista inferior). Ao engadir a copia da solicitude de reclamación, considérase xa comunicada a inspección a relación de alumnado reclamante.',
+     p:plazo('Máx. 2 días hábiles desde a solicitude de reclamación', true)},
+    {who:'fam',w:'D. Territorial',t:'Resolución da Dirección Territorial',
+     d:'A DT resolve considerando a proposta do informe do Servizo Territorial de Inspección Educativa.',
+     p:plazo('Máx. 15 días hábiles desde a recepción do expediente', false)},
+    {who:'dir',w:'D. Territorial',t:'Comunicación da resolución (inmediata)',
+     d:'A DT comunica a resolución á dirección do centro para a súa aplicación e traslado á familia; rexístrase nos documentos oficiais de avaliación se procede.',
+     p:plazo('De forma inmediata', false)},
+    {who:'fam',w:'Familia',t:'(Opcional) Recurso contencioso-administrativo',
+     d:'A resolución da DT esgota a vía administrativa. Contra ela cabe recurso contencioso-administrativo.',
+     p:plazo('2 meses desde o día seguinte á notificación', false)}
+  ]
+};
+
+/* ---------- Render ---------- */
+const KEY='reclamacion_promocion_check_v1';
+let state = JSON.parse(localStorage.getItem(KEY)||'{}');
+let total=0;
+
+function render(){
+  for(const [phase, items] of Object.entries(DATA)){
+    const ul=document.querySelector(`ul[data-phase="${phase}"]`);
+    items.forEach((it,i)=>{
+      total++;
+      const id=`${phase}-${i}`;
+      const done=state[id]?'done':'';
+      const li=document.createElement('li');
+      li.className=`item ${done}`; li.dataset.id=id;
+      li.innerHTML=`
+        <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${ICON.check}</svg></div>
+        <div class="it-body">
+          <div class="it-title"><span class="who ${it.who}">${it.w}</span>${it.t}</div>
+          <div class="it-desc">${it.d}</div>
+          ${it.p||''}
+        </div>`;
+      li.addEventListener('click',()=>toggle(id,li));
+      ul.appendChild(li);
+    });
+  }
+  update();
+}
+function toggle(id,li){
+  state[id]=!state[id];
+  li.classList.toggle('done',state[id]);
+  localStorage.setItem(KEY,JSON.stringify(state));
+  update();
+}
+function update(){
+  const done=Object.values(state).filter(Boolean).length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('pct').textContent=pct;
+  document.getElementById('barfill').style.width=pct+'%';
+}
+document.getElementById('reset').addEventListener('click',()=>{
+  if(!confirm('Reiniciar todo o marcado?'))return;
+  state={};localStorage.removeItem(KEY);
+  document.querySelectorAll('li.item').forEach(l=>l.classList.remove('done'));
+  update();
+});
+
+/* ---------- Tema ---------- */
+const SUN='<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+const MOON='<svg class="ic" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+const tBtn=document.getElementById('theme');
+function setTheme(t){
+  document.documentElement.dataset.theme=t;
+  tBtn.innerHTML = t==='light'?MOON:SUN; // escuro mostra sol... mostramos a acción inversa
+  localStorage.setItem('reclam_theme',t);
+}
+// Por defecto escuro → botón mostra a lúa (para ir a... ) seguimos convención CLAUDE: lúa en escuro, sol en claro
+function applyTheme(t){
+  document.documentElement.dataset.theme=t;
+  tBtn.innerHTML = t==='light'? SUN : MOON;
+  localStorage.setItem('reclam_theme',t);
+}
+tBtn.addEventListener('click',()=>{
+  const cur=document.documentElement.dataset.theme==='light'?'dark':'light';
+  applyTheme(cur);
+});
+applyTheme(localStorage.getItem('reclam_theme')||'dark');
+render();
+
+/* ---------- Gate de contrasinal (SHA-256 de "0810") ---------- */
+const G_KEY='reclam_check_ok';
+const G_HASH='6a8328b1da171410d67e3c0eb4c1904bfc18a4e0c4ef6e76d5bdaab8ae7a72b7';
+const gInput=document.getElementById('gpass');
+const gErr=document.getElementById('gerr');
+function unlock(){document.body.classList.remove('locked');}
+async function tryPass(){
+  try{
+    const buf=new TextEncoder().encode(gInput.value);
+    const dig=await crypto.subtle.digest('SHA-256',buf);
+    const hex=[...new Uint8Array(dig)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    if(hex===G_HASH){sessionStorage.setItem(G_KEY,'1');unlock();}
+    else{gErr.classList.add('show');gInput.value='';gInput.focus();}
+  }catch(e){gErr.textContent='Erro ao verificar';gErr.classList.add('show');}
+}
+document.getElementById('gbtn').addEventListener('click',tryPass);
+gInput.addEventListener('keydown',e=>{if(e.key==='Enter')tryPass();});
+if(sessionStorage.getItem(G_KEY)==='1')unlock(); else gInput.focus();
+</script>
+</body>
+</html>
