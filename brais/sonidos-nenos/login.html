@@ -110,8 +110,11 @@ if (sessionStorage.getItem('sonidos_auth') === 'true') location.replace('./index
     <div class="lock-icon">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     </div>
-    <input type="password" id="pwd" placeholder="Contrasinal..." onkeydown="if(event.key==='Enter')login()" autofocus>
-    <button class="login-btn" onclick="login()">Acceder</button>
+    <form onsubmit="event.preventDefault();login();return false;" autocomplete="on" style="display:contents">
+    <input type="text" name="username" autocomplete="username" style="display:none" tabindex="-1" aria-hidden="true">
+    <input type="password" id="pwd" name="password" autocomplete="current-password" placeholder="Contrasinal..." autofocus>
+    <button class="login-btn" type="submit">Acceder</button>
+    </form>
     <div class="login-error" id="loginError"></div>
   </div>
 </div>
