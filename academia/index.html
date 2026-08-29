@@ -131,6 +131,8 @@
   .doc-icon svg { width: 20px; height: 20px; stroke: var(--cat-color, var(--accent)); }
   .doc-info { flex: 1; min-width: 0; }
   .doc-nome { font-weight: 700; font-size: .92rem; word-break: break-word; }
+  .doc-nome.clicable { cursor: pointer; }
+  .doc-nome.clicable:hover { color: var(--cat-color, var(--accent)); text-decoration: underline; }
   .doc-meta { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 4px; font-size: .75rem; color: var(--text2); align-items: center; }
   .doc-cat {
     font-weight: 700; padding: 2px 8px; border-radius: 999px; font-size: .7rem;
@@ -430,6 +432,9 @@ function renderLista() {
         <div class="doc-desc hidden"></div>
       </div>
       <div class="doc-accions">
+        <button class="icon-btn btn-ver hidden" aria-label="Ver" title="Ver nunha pestana nova">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
         <button class="icon-btn btn-descargar" aria-label="Descargar" title="Descargar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
         </button>
@@ -438,7 +443,16 @@ function renderLista() {
         </button>
       </div>`;
     /* textContent para que os nomes/descricións non se interpreten como HTML */
-    card.querySelector('.doc-nome').textContent = d.nome || 'documento';
+    const nomeEl = card.querySelector('.doc-nome');
+    nomeEl.textContent = d.nome || 'documento';
+    if (esVisible(d.tipo)) {
+      nomeEl.classList.add('clicable');
+      nomeEl.title = 'Ver nunha pestana nova';
+      nomeEl.addEventListener('click', () => verDocumento(d));
+      const btnVer = card.querySelector('.btn-ver');
+      btnVer.classList.remove('hidden');
+      btnVer.addEventListener('click', () => verDocumento(d));
+    }
     card.querySelector('.doc-cat').textContent = c.etiqueta;
     card.querySelector('.doc-quen').textContent = d.quen ? '· ' + d.quen : '';
     if (d.descricion) {
@@ -523,6 +537,37 @@ document.getElementById('btnConfirmarSubida').addEventListener('click', async ()
     estado.classList.add('erro');
   }
 });
+
+/* ---------- Ver nunha pestana nova ---------- */
+/* Tipos que o navegador sabe amosar directamente */
+function esVisible(tipo) {
+  const t = tipo || '';
+  return t === 'application/pdf' || t.startsWith('text/') || t.startsWith('image/');
+}
+
+async function verDocumento(doc) {
+  /* A pestana ábrese SÍNCRONA no click: se se abrise despois do fetch,
+     o bloqueador de xanelas do navegador impediríao */
+  const xanela = window.open('', '_blank');
+  if (!xanela) { aviso('O navegador bloqueou a pestana nova'); return; }
+  try {
+    xanela.document.title = doc.nome || 'documento';
+    xanela.document.body.textContent = 'Cargando "' + (doc.nome || 'documento') + '"...';
+    const resp = await chamarApi('accion=descargar&id=' + encodeURIComponent(doc.id));
+    if (!resp.ok) throw new Error('Erro ' + resp.status);
+    let blob = await resp.blob();
+    /* Nos tipos de texto forzamos UTF-8: sen charset, o navegador asume
+       Latin-1 e os acentos saen rotos nos HTML sen <meta charset> */
+    if ((doc.tipo || '').startsWith('text/')) {
+      blob = new Blob([blob], { type: doc.tipo + ';charset=utf-8' });
+    }
+    /* Non se revoga a URL: faino o navegador ao pechar a páxina */
+    xanela.location = URL.createObjectURL(blob);
+  } catch (err) {
+    xanela.close();
+    aviso('Non se puido abrir: ' + err.message);
+  }
+}
 
 /* ---------- Descarga (con header de auth, por iso non vale un <a href>) ---------- */
 async function descargar(doc) {
