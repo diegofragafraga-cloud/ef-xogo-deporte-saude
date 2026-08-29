@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academia · Oposicións</title>
+<style>
+  :root {
+    --bg: #0b0d13; --bg2: #13161f; --bg3: #1c2030;
+    --text: #e8eaf0; --text2: #8b92a8; --accent: #8b5cf6;
+    --border: #252a3a; --radius: 16px; --red: #f87171; --green: #4ade80;
+  }
+  .light {
+    --bg: #f0f2f7; --bg2: #ffffff; --bg3: #e8eaf0;
+    --text: #13161f; --text2: #6b7280; --border: #d1d5db;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+  }
+  .hidden { display: none !important; }
+  svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  .header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 24px; background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn, .theme-toggle, .icon-btn {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: all .2s; flex-shrink: 0;
+  }
+  .back-btn:hover, .theme-toggle:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .header h1 { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .header h1 svg { width: 22px; height: 22px; stroke: var(--accent); }
+  .header .spacer { flex: 1; }
+
+  /* ---------- Login ---------- */
+  .login-screen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 24px;
+  }
+  .login-box {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 40px 32px; width: 380px; max-width: 100%; text-align: center;
+  }
+  .login-avatar {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; margin: 0 auto 16px;
+  }
+  .login-avatar svg { width: 30px; height: 30px; }
+  .login-box h2 { font-size: 1.1rem; margin-bottom: 4px; }
+  .login-box .login-sub { font-size: .8rem; color: var(--text2); margin-bottom: 20px; }
+  .login-box input[type="password"] {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 12px 16px; border-radius: 10px; font-size: .95rem; width: 100%;
+    margin-bottom: 12px; text-align: center;
+  }
+  .login-box input[type="password"]:focus { outline: none; border-color: var(--accent); }
+  .login-btn {
+    width: 100%; padding: 12px; border-radius: 10px; border: none;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: .9rem;
+    cursor: pointer; transition: filter .2s;
+  }
+  .login-btn:hover { filter: brightness(1.15); }
+  .login-btn:disabled { opacity: .6; cursor: wait; }
+  .login-error { color: var(--red); font-size: .8rem; margin-top: 8px; min-height: 1.2em; }
+
+  /* ---------- Biblioteca ---------- */
+  .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 20px; }
+  .tab {
+    background: var(--bg2); border: 1px solid var(--border); color: var(--text2);
+    padding: 8px 14px; border-radius: 999px; cursor: pointer; font-size: .82rem;
+    font-weight: 600; transition: all .2s;
+  }
+  .tab:hover { color: var(--text); border-color: var(--cat-color, var(--accent)); }
+  .tab.active {
+    color: #fff; background: var(--cat-color, var(--accent));
+    border-color: var(--cat-color, var(--accent));
+  }
+  .toolbar .spacer { flex: 1; }
+  .subir-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--accent); border: none; color: #fff;
+    padding: 10px 18px; border-radius: 10px; cursor: pointer;
+    font-weight: 700; font-size: .85rem; transition: filter .2s;
+  }
+  .subir-btn:hover { filter: brightness(1.15); }
+
+  /* Panel de subida */
+  .upload-panel {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px; margin-bottom: 20px;
+  }
+  .dropzone {
+    border: 2px dashed var(--border); border-radius: 12px; padding: 28px;
+    text-align: center; color: var(--text2); cursor: pointer; transition: all .2s;
+    font-size: .85rem;
+  }
+  .dropzone:hover, .dropzone.drag { border-color: var(--accent); color: var(--text); background: var(--bg3); }
+  .dropzone svg { width: 28px; height: 28px; stroke: var(--accent); margin-bottom: 8px; }
+  .dropzone .file-name { font-weight: 700; color: var(--text); }
+  .upload-fields { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .upload-fields select, .upload-fields input[type="text"] {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 12px; border-radius: 10px; font-size: .85rem;
+  }
+  .upload-fields input[type="text"] { flex: 1; min-width: 180px; }
+  .upload-fields select:focus, .upload-fields input:focus { outline: none; border-color: var(--accent); }
+  .upload-estado { font-size: .8rem; color: var(--text2); margin-top: 10px; min-height: 1.2em; }
+  .upload-estado.erro { color: var(--red); }
+  .upload-estado.ben { color: var(--green); }
+
+  /* Lista de documentos */
+  .doc-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 10px; transition: border-color .2s;
+  }
+  .doc-card:hover { border-color: var(--cat-color, var(--accent)); }
+  .doc-icon {
+    width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+    background: color-mix(in srgb, var(--cat-color, var(--accent)) 15%, transparent);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .doc-icon svg { width: 20px; height: 20px; stroke: var(--cat-color, var(--accent)); }
+  .doc-info { flex: 1; min-width: 0; }
+  .doc-nome { font-weight: 700; font-size: .92rem; word-break: break-word; }
+  .doc-meta { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 4px; font-size: .75rem; color: var(--text2); align-items: center; }
+  .doc-cat {
+    font-weight: 700; padding: 2px 8px; border-radius: 999px; font-size: .7rem;
+    color: var(--cat-color, var(--accent));
+    background: color-mix(in srgb, var(--cat-color, var(--accent)) 15%, transparent);
+  }
+  .doc-desc { font-size: .78rem; color: var(--text2); margin-top: 4px; }
+  .doc-accions { display: flex; gap: 8px; }
+  .icon-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .icon-btn.perigo:hover { background: var(--red); border-color: var(--red); }
+  .icon-btn svg { width: 16px; height: 16px; }
+
+  .baleiro { text-align: center; color: var(--text2); padding: 48px 24px; font-size: .9rem; }
+  .baleiro svg { width: 36px; height: 36px; stroke: var(--text2); margin-bottom: 10px; }
+
+  /* Modal de confirmación de borrado */
+  .modal-fondo {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 300;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  .modal {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px; width: 400px; max-width: 100%; text-align: center;
+  }
+  .modal h3 { font-size: 1rem; margin-bottom: 8px; }
+  .modal p { font-size: .85rem; color: var(--text2); margin-bottom: 20px; word-break: break-word; }
+  .modal-botons { display: flex; gap: 10px; }
+  .modal-botons button {
+    flex: 1; padding: 11px; border-radius: 10px; font-weight: 700; font-size: .85rem;
+    cursor: pointer; border: 1px solid var(--border); transition: filter .2s;
+  }
+  .btn-cancelar { background: var(--bg3); color: var(--text); }
+  .btn-borrar { background: var(--red); border-color: var(--red); color: #fff; }
+  .modal-botons button:hover { filter: brightness(1.15); }
+
+  /* Aviso flotante (toast) */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    padding: 12px 20px; border-radius: 12px; font-size: .85rem; font-weight: 600;
+    z-index: 400; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  }
+  .theme-fixed { position: fixed; top: 16px; right: 16px; z-index: 200; }
+
+  @media (max-width: 560px) {
+    .doc-card { flex-wrap: wrap; }
+    .doc-accions { width: 100%; justify-content: flex-end; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Pantalla de acceso -->
+<div class="login-screen" id="pantallaLogin">
+  <button class="theme-toggle theme-fixed" id="themeToggleLogin" aria-label="Cambiar tema">
+    <svg id="iconaLuaL" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <svg id="iconaSolL" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+  </button>
+  <div class="login-box">
+    <div class="login-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+    </div>
+    <h2>Academia · Oposicións</h2>
+    <div class="login-sub">Espazo privado de Brais e Diego</div>
+    <form id="formLogin">
+      <input type="password" id="pwd" name="password" autocomplete="current-password" placeholder="Contrasinal..." autofocus>
+      <button class="login-btn" id="btnLogin" type="submit">Acceder</button>
+    </form>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- Biblioteca -->
+<div class="hidden" id="pantallaApp">
+  <div class="header">
+    <a class="back-btn" href="../index.html" aria-label="Volver á portada">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </a>
+    <h1>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+      Academia · Oposicións
+    </h1>
+    <div class="spacer"></div>
+    <button class="theme-toggle" id="themeToggleApp" aria-label="Cambiar tema">
+      <svg id="iconaLuaA" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg id="iconaSolA" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </button>
+  </div>
+
+  <div class="container">
+    <div class="toolbar" id="pestanas"></div>
+
+    <div class="upload-panel hidden" id="panelSubida">
+      <div class="dropzone" id="dropzone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+        <div id="dropzoneTexto">Arrastra un arquivo aquí ou preme para escoller (máx. 25 MB)</div>
+        <input type="file" id="inputArquivo" class="hidden">
+      </div>
+      <div class="upload-fields">
+        <select id="selCategoria"></select>
+        <select id="selQuen">
+          <option value="Brais">Brais</option>
+          <option value="Diego">Diego</option>
+        </select>
+        <input type="text" id="inputDescricion" maxlength="200" placeholder="Descrición breve (opcional)">
+        <button class="subir-btn" id="btnConfirmarSubida">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Gardar
+        </button>
+      </div>
+      <div class="upload-estado" id="estadoSubida"></div>
+    </div>
+
+    <div id="listaDocs"></div>
+  </div>
+</div>
+
+<!-- Modal de confirmación de borrado -->
+<div class="modal-fondo hidden" id="modalBorrar">
+  <div class="modal">
+    <h3>Borrar documento</h3>
+    <p id="modalBorrarNome"></p>
+    <div class="modal-botons">
+      <button class="btn-cancelar" id="btnCancelarBorrado">Cancelar</button>
+      <button class="btn-borrar" id="btnConfirmarBorrado">Borrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '../api/academia';
+
+/* ============================================================
+   CATEGORÍAS — configuración visual do apartado.
+   - etiqueta: o texto que se ve na pestana e na tarxeta
+   - cor: cor de acento en hexadecimal (que non se repitan)
+   Os ids ("temario", "supostos"...) non se poden cambiar: a API
+   garda os documentos con eses nomes.
+   ============================================================ */
+const CATEGORIAS = {
+  temario: { etiqueta: 'Temario', cor: '#8b5cf6' },
+  supostos: { etiqueta: 'Supostos prácticos', cor: '#f59e0b' },
+  programacions: { etiqueta: 'Programacións', cor: '#10b981' },
+  lexislacion: { etiqueta: 'Lexislación', cor: '#3b82f6' },
+};
+
+/* Se unha categoría aínda non está configurada, píntase gris co seu id */
+function infoCategoria(id) {
+  return CATEGORIAS[id] || { etiqueta: id, cor: '#6b7280' };
+}
+
+let documentos = [];          // caché da listaxe
+let categoriaActiva = 'todo';
+let arquivoElixido = null;
+let idPendenteBorrado = null;
+
+/* ---------- Autenticación ---------- */
+function clave() { return sessionStorage.getItem('academia_key') || ''; }
+
+async function chamarApi(params, opcions = {}) {
+  const resp = await fetch(`${API}?${params}`, {
+    ...opcions,
+    headers: { 'X-Academia-Key': clave(), ...(opcions.headers || {}) }
+  });
+  return resp;
+}
+
+async function intentarLogin(contrasinal) {
+  sessionStorage.setItem('academia_key', contrasinal);
+  const resp = await chamarApi('accion=listar');
+  if (resp.status === 401) {
+    sessionStorage.removeItem('academia_key');
+    return false;
+  }
+  if (!resp.ok) throw new Error('Erro do servidor (' + resp.status + ')');
+  documentos = (await resp.json()).documentos || [];
+  return true;
+}
+
+document.getElementById('formLogin').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('btnLogin');
+  const erro = document.getElementById('loginError');
+  btn.disabled = true; erro.textContent = '';
+  try {
+    const ok = await intentarLogin(document.getElementById('pwd').value);
+    if (ok) {
+      mostrarApp();
+    } else {
+      erro.textContent = 'Contrasinal incorrecto';
+      document.getElementById('pwd').value = '';
+      document.getElementById('pwd').focus();
+    }
+  } catch (err) {
+    erro.textContent = 'Non se puido conectar. Téntao de novo.';
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function mostrarApp() {
+  document.getElementById('pantallaLogin').classList.add('hidden');
+  document.getElementById('pantallaApp').classList.remove('hidden');
+  renderPestanas();
+  renderSelectCategorias();
+  renderLista();
+}
+
+/* Sesión previa: se hai clave gardada, probámola en silencio */
+(async () => {
+  if (!clave()) return;
+  try {
+    if (await intentarLogin(clave())) mostrarApp();
+  } catch (_) { /* sen conexión: queda a pantalla de login */ }
+})();
+
+/* ---------- Pestanas e lista ---------- */
+function renderPestanas() {
+  const cont = document.getElementById('pestanas');
+  cont.innerHTML = '';
+  const engadir = (id, etiqueta, cor) => {
+    const b = document.createElement('button');
+    b.className = 'tab' + (categoriaActiva === id ? ' active' : '');
+    b.style.setProperty('--cat-color', cor);
+    b.textContent = etiqueta;
+    b.addEventListener('click', () => { categoriaActiva = id; renderPestanas(); renderLista(); });
+    cont.appendChild(b);
+  };
+  engadir('todo', 'Todo', 'var(--accent)');
+  for (const id of ['temario', 'supostos', 'programacions', 'lexislacion']) {
+    const c = infoCategoria(id);
+    engadir(id, c.etiqueta, c.cor);
+  }
+  const spacer = document.createElement('div');
+  spacer.className = 'spacer';
+  cont.appendChild(spacer);
+  const btnSubir = document.createElement('button');
+  btnSubir.className = 'subir-btn';
+  btnSubir.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Subir documento';
+  btnSubir.addEventListener('click', () => {
+    document.getElementById('panelSubida').classList.toggle('hidden');
+  });
+  cont.appendChild(btnSubir);
+}
+
+function renderSelectCategorias() {
+  const sel = document.getElementById('selCategoria');
+  sel.innerHTML = '';
+  for (const id of ['temario', 'supostos', 'programacions', 'lexislacion']) {
+    const op = document.createElement('option');
+    op.value = id;
+    op.textContent = infoCategoria(id).etiqueta;
+    sel.appendChild(op);
+  }
+}
+
+function formatoTamano(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function formatoData(iso) {
+  try {
+    return new Date(iso).toLocaleDateString('gl-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch (_) { return ''; }
+}
+
+function renderLista() {
+  const cont = document.getElementById('listaDocs');
+  cont.innerHTML = '';
+  const visibles = documentos.filter(d => categoriaActiva === 'todo' || d.categoria === categoriaActiva);
+  if (visibles.length === 0) {
+    cont.innerHTML = `<div class="baleiro">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+      <div>Aínda non hai documentos${categoriaActiva !== 'todo' ? ' nesta categoría' : ''}. Sube o primeiro!</div>
+    </div>`;
+    return;
+  }
+  for (const d of visibles) {
+    const c = infoCategoria(d.categoria);
+    const card = document.createElement('div');
+    card.className = 'doc-card';
+    card.style.setProperty('--cat-color', c.cor);
+    card.innerHTML = `
+      <div class="doc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+      </div>
+      <div class="doc-info">
+        <div class="doc-nome"></div>
+        <div class="doc-meta">
+          <span class="doc-cat"></span>
+          <span class="doc-quen"></span>
+          <span>${formatoData(d.data)}</span>
+          <span>${formatoTamano(d.tamano || 0)}</span>
+        </div>
+        <div class="doc-desc hidden"></div>
+      </div>
+      <div class="doc-accions">
+        <button class="icon-btn btn-descargar" aria-label="Descargar" title="Descargar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        </button>
+        <button class="icon-btn perigo btn-borrar-doc" aria-label="Borrar" title="Borrar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>`;
+    /* textContent para que os nomes/descricións non se interpreten como HTML */
+    card.querySelector('.doc-nome').textContent = d.nome || 'documento';
+    card.querySelector('.doc-cat').textContent = c.etiqueta;
+    card.querySelector('.doc-quen').textContent = d.quen ? '· ' + d.quen : '';
+    if (d.descricion) {
+      const desc = card.querySelector('.doc-desc');
+      desc.textContent = d.descricion;
+      desc.classList.remove('hidden');
+    }
+    card.querySelector('.btn-descargar').addEventListener('click', () => descargar(d));
+    card.querySelector('.btn-borrar-doc').addEventListener('click', () => abrirModalBorrado(d));
+    cont.appendChild(card);
+  }
+}
+
+async function recargarLista() {
+  try {
+    const resp = await chamarApi('accion=listar');
+    if (resp.ok) {
+      documentos = (await resp.json()).documentos || [];
+      renderLista();
+    }
+  } catch (_) { aviso('Non se puido actualizar a listaxe'); }
+}
+
+/* ---------- Subida ---------- */
+const dropzone = document.getElementById('dropzone');
+const inputArquivo = document.getElementById('inputArquivo');
+
+dropzone.addEventListener('click', () => inputArquivo.click());
+dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault(); dropzone.classList.remove('drag');
+  if (e.dataTransfer.files.length) elixirArquivo(e.dataTransfer.files[0]);
+});
+inputArquivo.addEventListener('change', () => {
+  if (inputArquivo.files.length) elixirArquivo(inputArquivo.files[0]);
+});
+
+function elixirArquivo(f) {
+  const estado = document.getElementById('estadoSubida');
+  estado.className = 'upload-estado';
+  if (f.size > 25 * 1024 * 1024) {
+    estado.textContent = 'Ese arquivo supera os 25 MB.';
+    estado.classList.add('erro');
+    return;
+  }
+  arquivoElixido = f;
+  document.getElementById('dropzoneTexto').innerHTML =
+    '<span class="file-name"></span> · ' + formatoTamano(f.size);
+  document.querySelector('#dropzoneTexto .file-name').textContent = f.name;
+  estado.textContent = '';
+}
+
+document.getElementById('btnConfirmarSubida').addEventListener('click', async () => {
+  const estado = document.getElementById('estadoSubida');
+  estado.className = 'upload-estado';
+  if (!arquivoElixido) {
+    estado.textContent = 'Escolle primeiro un arquivo.';
+    estado.classList.add('erro');
+    return;
+  }
+  estado.textContent = 'Subindo...';
+  try {
+    const form = new FormData();
+    form.append('arquivo', arquivoElixido);
+    form.append('categoria', document.getElementById('selCategoria').value);
+    form.append('quen', document.getElementById('selQuen').value);
+    form.append('descricion', document.getElementById('inputDescricion').value);
+    const resp = await chamarApi('accion=subir', { method: 'POST', body: form });
+    const datos = await resp.json();
+    if (!datos.ok) throw new Error(datos.error || 'Erro descoñecido');
+    estado.textContent = 'Documento gardado.';
+    estado.classList.add('ben');
+    arquivoElixido = null;
+    inputArquivo.value = '';
+    document.getElementById('inputDescricion').value = '';
+    document.getElementById('dropzoneTexto').textContent =
+      'Arrastra un arquivo aquí ou preme para escoller (máx. 25 MB)';
+    await recargarLista();
+  } catch (err) {
+    estado.textContent = 'Erro ao subir: ' + err.message;
+    estado.classList.add('erro');
+  }
+});
+
+/* ---------- Descarga (con header de auth, por iso non vale un <a href>) ---------- */
+async function descargar(doc) {
+  try {
+    aviso('Descargando "' + doc.nome + '"...');
+    const resp = await chamarApi('accion=descargar&id=' + encodeURIComponent(doc.id));
+    if (!resp.ok) throw new Error('Erro ' + resp.status);
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = doc.nome || 'documento';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    aviso('Non se puido descargar: ' + err.message);
+  }
+}
+
+/* ---------- Borrado con confirmación ---------- */
+function abrirModalBorrado(doc) {
+  idPendenteBorrado = doc.id;
+  document.getElementById('modalBorrarNome').textContent =
+    `"${doc.nome}" borrarase para sempre. Esta acción non se pode desfacer.`;
+  document.getElementById('modalBorrar').classList.remove('hidden');
+}
+document.getElementById('btnCancelarBorrado').addEventListener('click', () => {
+  idPendenteBorrado = null;
+  document.getElementById('modalBorrar').classList.add('hidden');
+});
+document.getElementById('btnConfirmarBorrado').addEventListener('click', async () => {
+  const id = idPendenteBorrado;
+  document.getElementById('modalBorrar').classList.add('hidden');
+  if (!id) return;
+  try {
+    const resp = await chamarApi('accion=borrar&id=' + encodeURIComponent(id), { method: 'POST' });
+    const datos = await resp.json();
+    if (!datos.ok) throw new Error(datos.error || 'Erro descoñecido');
+    aviso('Documento borrado');
+    await recargarLista();
+  } catch (err) {
+    aviso('Non se puido borrar: ' + err.message);
+  }
+});
+
+/* ---------- Aviso flotante ---------- */
+let avisoTimeout = null;
+function aviso(texto) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = texto;
+  document.body.appendChild(t);
+  clearTimeout(avisoTimeout);
+  avisoTimeout = setTimeout(() => t.remove(), 3000);
+}
+
+/* ---------- Tema claro/escuro (mesma clave que o resto do espazo) ---------- */
+function aplicarTema() {
+  const claro = localStorage.getItem('ef_theme') === 'light';
+  document.body.classList.toggle('light', claro);
+  for (const [lua, sol] of [['iconaLuaL', 'iconaSolL'], ['iconaLuaA', 'iconaSolA']]) {
+    document.getElementById(lua).classList.toggle('hidden', claro);
+    document.getElementById(sol).classList.toggle('hidden', !claro);
+  }
+}
+function alternarTema() {
+  localStorage.setItem('ef_theme', localStorage.getItem('ef_theme') === 'light' ? 'dark' : 'light');
+  aplicarTema();
+}
+document.getElementById('themeToggleLogin').addEventListener('click', alternarTema);
+document.getElementById('themeToggleApp').addEventListener('click', alternarTema);
+aplicarTema();
+</script>
+</body>
+</html>
