@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A programación didáctica · Do manual da Xunta á aula</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<style>
+/* ============ TEMA ============ */
+:root {
+    --bg: #07090c;
+    --bg-card: #10141a;
+    --bg-card-2: #151b23;
+    --text: #f2f5f8;
+    --text-2: #9aa7b5;
+    --text-3: #5c6875;
+    --border: rgba(255,255,255,0.08);
+    --success: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+
+    --font-title: 'Clash Display', 'Helvetica Neue', sans-serif;
+    --font-body: 'Satoshi', 'Helvetica Neue', sans-serif;
+
+    /* Tamaños pensados para proxección: topes altos; fitSlides() reduce a escala se unha diapositiva non cabe */
+    --title-size: clamp(1.8rem, 5vw, 5rem);
+    --h2-size: clamp(1.4rem, 3.4vw, 3.3rem);
+    --h3-size: clamp(1.05rem, 2.2vw, 2rem);
+    --body-size: clamp(0.9rem, 1.7vw, 1.55rem);
+    --small-size: clamp(0.78rem, 1.3vw, 1.3rem);
+    --slide-padding: clamp(1rem, 4vw, 4rem);
+    --content-gap: clamp(0.5rem, 1.8vw, 1.6rem);
+    --element-gap: clamp(0.25rem, 1vw, 0.9rem);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+body.light {
+    --bg: #e2e6ec;
+    --bg-card: #eef1f5;
+    --bg-card-2: #f4f6f9;
+    --text: #14181d;
+    --text-2: #48545f;
+    --text-3: #7d8894;
+    --border: rgba(10,20,30,0.12);
+}
+
+/* Acentos por sección */
+.slide[data-section="portada"]  { --acc: #2dd4bf; --acc-soft: rgba(45,212,191,0.12); }
+.slide[data-section="marco"]    { --acc: #5ea8ff; --acc-soft: rgba(94,168,255,0.12); }
+.slide[data-section="apartados"]{ --acc: #a78bfa; --acc-soft: rgba(167,139,250,0.12); }
+.slide[data-section="lei"]      { --acc: #ff8a5c; --acc-soft: rgba(255,138,92,0.12); }
+.slide[data-section="nos"]      { --acc: #fbbf24; --acc-soft: rgba(251,191,36,0.12); }
+.slide[data-section="sanmarti"] { --acc: #f472b6; --acc-soft: rgba(244,114,182,0.12); }
+.slide[data-section="sintese"]  { --acc: #34d399; --acc-soft: rgba(52,211,153,0.12); }
+.slide[data-section="refs"]     { --acc: #94a3b8; --acc-soft: rgba(148,163,184,0.12); }
+body.light .slide[data-section="nos"] { --acc: #d97706; --acc-soft: rgba(217,119,6,0.12); }
+body.light .slide[data-section="portada"] { --acc: #0d9488; --acc-soft: rgba(13,148,136,0.12); }
+body.light .slide[data-section="sintese"] { --acc: #059669; --acc-soft: rgba(5,150,105,0.12); }
+
+/* ============ VIEWPORT FITTING ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; height: 100%; }
+body {
+    height: 100%; overflow-x: hidden;
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-body); font-size: var(--body-size);
+    transition: background 0.4s, color 0.4s;
+}
+.slide {
+    width: 100vw; height: 100vh; height: 100dvh;
+    overflow: hidden;
+    scroll-snap-align: start;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative;
+    padding: var(--slide-padding);
+    text-align: center;
+}
+.slide-inner {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: var(--content-gap);
+    max-width: min(94vw, 1500px);
+    max-height: 100%;
+    width: 100%;
+    transform-origin: center center;
+}
+img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+
+/* ============ TIPOGRAFÍA ============ */
+h1 { font-family: var(--font-title); font-size: var(--title-size); font-weight: 600; line-height: 1.08; letter-spacing: -0.01em; }
+h2 { font-family: var(--font-title); font-size: var(--h2-size); font-weight: 600; line-height: 1.15; }
+h3 { font-family: var(--font-title); font-size: var(--h3-size); font-weight: 500; }
+.accent { color: var(--acc); }
+.eyebrow {
+    font-size: var(--small-size); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.28em;
+    color: var(--acc);
+    display: inline-flex; align-items: center; gap: 0.6em;
+}
+.eyebrow::before { content: ''; width: 2em; height: 1px; background: var(--acc); opacity: 0.6; }
+.eyebrow::after  { content: ''; width: 2em; height: 1px; background: var(--acc); opacity: 0.6; }
+.sub { color: var(--text-2); font-size: clamp(0.95rem, 2vw, 1.8rem); line-height: 1.5; max-width: 60ch; }
+.note { color: var(--text-3); font-size: var(--small-size); line-height: 1.45; max-width: 70ch; }
+.note a { color: var(--acc); text-decoration: none; }
+
+/* ============ COMPONENTES ============ */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: clamp(0.5rem, 1.4vw, 1.1rem); width: 100%; }
+.card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: clamp(0.7rem, 1.8vw, 1.4rem);
+    text-align: left; display: flex; flex-direction: column; gap: 0.45em;
+}
+.card.hl { border-color: var(--acc); background: var(--acc-soft); }
+.card-title { font-weight: 700; font-size: clamp(0.95rem, 1.9vw, 1.5rem); display: flex; align-items: center; gap: 0.5em; color: var(--text); }
+.card-title .ico { color: var(--acc); flex-shrink: 0; }
+.card p, .card li { color: var(--text-2); font-size: var(--small-size); line-height: 1.5; }
+.card ul { list-style: none; display: flex; flex-direction: column; gap: 0.35em; }
+.card ul li { padding-left: 1em; position: relative; }
+.card ul li::before { content: '·'; position: absolute; left: 0.1em; color: var(--acc); font-weight: 700; }
+
+.pill {
+    display: inline-flex; align-items: center; gap: 0.5em;
+    background: var(--acc-soft); color: var(--acc);
+    border: 1px solid var(--acc);
+    border-radius: 999px; padding: 0.35em 1em;
+    font-size: var(--small-size); font-weight: 700;
+}
+.tagline { display: flex; flex-wrap: wrap; gap: 0.6em; justify-content: center; }
+
+/* Lista numerada grande */
+.big-list { list-style: none; display: flex; flex-direction: column; gap: clamp(0.3rem, 1vh, 0.7rem); text-align: left; width: 100%; max-width: 1000px; }
+.big-list li { display: flex; align-items: baseline; gap: 0.9em; }
+.big-list .n { font-family: var(--font-title); font-size: clamp(1rem, 2.4vw, 2.1rem); font-weight: 700; color: var(--acc); opacity: 0.75; min-width: 1.6em; text-align: right; }
+.big-list .t { font-size: clamp(0.95rem, 1.9vw, 1.6rem); color: var(--text); line-height: 1.4; }
+.big-list .t small { color: var(--text-3); display: block; font-size: 0.85em; }
+
+/* Táboas */
+table { border-collapse: collapse; width: 100%; max-width: 1300px; text-align: left; }
+th {
+    font-size: var(--small-size); text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--acc); padding: 0.55em 0.8em; border-bottom: 2px solid var(--acc);
+    font-weight: 700;
+}
+td { padding: 0.5em 0.8em; border-bottom: 1px solid var(--border); color: var(--text-2); font-size: var(--small-size); line-height: 1.45; vertical-align: top; }
+td.strong, td strong { color: var(--text); font-weight: 700; }
+tr.hl-row td { background: var(--acc-soft); }
+
+/* Fluxo horizontal (proceso) */
+.flow { display: flex; align-items: stretch; justify-content: center; gap: clamp(0.35rem, 1vw, 0.8rem); flex-wrap: wrap; width: 100%; }
+.flow-step {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: clamp(0.55rem, 1.4vw, 1rem); flex: 1; min-width: 130px; max-width: 300px;
+    display: flex; flex-direction: column; gap: 0.3em; align-items: center; text-align: center;
+}
+.flow-step.hl { border-color: var(--acc); background: var(--acc-soft); }
+.flow-step .fs-t { font-weight: 700; font-size: var(--small-size); color: var(--text); }
+.flow-step .fs-d { font-size: calc(var(--small-size) * 0.94); color: var(--text-2); line-height: 1.4; }
+.flow-arrow { align-self: center; color: var(--acc); font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 700; }
+
+/* Cita */
+.quote { max-width: 1100px; }
+.quote-text { font-family: var(--font-title); font-size: clamp(1.2rem, 3.2vw, 3rem); font-weight: 500; line-height: 1.3; }
+.quote-text::before { content: '“'; color: var(--acc); }
+.quote-text::after { content: '”'; color: var(--acc); }
+.quote-author { margin-top: 0.9em; color: var(--text-2); font-size: var(--small-size); text-transform: uppercase; letter-spacing: 0.15em; }
+
+/* Semáforo */
+.sema { display: flex; gap: clamp(0.5rem, 1.5vw, 1.2rem); width: 100%; justify-content: center; flex-wrap: wrap; }
+.sema-item { border-radius: 14px; padding: clamp(0.6rem, 1.6vw, 1.2rem); flex: 1; min-width: 180px; max-width: 420px; text-align: left; border: 1px solid var(--border); background: var(--bg-card); }
+.sema-item .s-dot { width: 0.85em; height: 0.85em; border-radius: 50%; display: inline-block; margin-right: 0.5em; }
+.sema-item .s-t { font-weight: 700; font-size: var(--body-size); }
+.sema-item p { color: var(--text-2); font-size: var(--small-size); line-height: 1.45; margin-top: 0.4em; }
+.sema-verde  { border-color: rgba(52,211,153,0.5); }  .sema-verde .s-dot { background: var(--success); }
+.sema-ambar  { border-color: rgba(251,191,36,0.5); }  .sema-ambar .s-dot { background: var(--warn); }
+.sema-rojo   { border-color: rgba(248,113,113,0.5); } .sema-rojo .s-dot { background: var(--danger); }
+
+/* Check / prohibicións */
+.check-list { list-style: none; text-align: left; display: flex; flex-direction: column; gap: clamp(0.3rem, 1vh, 0.65rem); max-width: 1050px; width: 100%; }
+.check-list li { padding-left: 2em; position: relative; color: var(--text-2); font-size: clamp(0.9rem, 1.7vw, 1.5rem); line-height: 1.45; }
+.check-list li strong { color: var(--text); }
+.check-list li::before { position: absolute; left: 0; top: 0.18em; font-weight: 800; font-size: 1.05em; line-height: 1; }
+.check-list li.ok::before { content: '✓'; color: var(--success); }
+.check-list li.no::before { content: '✕'; color: var(--danger); }
+
+/* Tarxeta de criterio (exemplos) */
+.crit-card {
+    background: var(--bg-card); border: 1px solid var(--acc); border-radius: 16px;
+    padding: clamp(0.8rem, 2vw, 1.5rem); text-align: left; width: 100%; max-width: 1300px;
+    display: flex; flex-direction: column; gap: clamp(0.4rem, 1.2vh, 0.8rem);
+}
+.crit-head { display: flex; align-items: baseline; gap: 0.8em; flex-wrap: wrap; }
+.crit-code { font-family: var(--font-title); font-weight: 700; color: var(--acc); font-size: clamp(0.95rem, 2vw, 1.7rem); }
+.crit-text { color: var(--text-2); font-size: var(--small-size); line-height: 1.45; font-style: italic; }
+.crit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: clamp(0.4rem, 1vw, 0.8rem); }
+.grado { border-radius: 10px; padding: clamp(0.5rem, 1.3vw, 0.9rem); border: 1px solid var(--border); background: var(--bg-card-2); }
+.grado .g-t { font-weight: 800; font-size: var(--small-size); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4em; }
+.grado p { color: var(--text-2); font-size: calc(var(--small-size) * 0.95); line-height: 1.45; }
+.grado.g1 .g-t { color: var(--success); }
+.grado.g2 .g-t { color: var(--warn); }
+.grado.g3 .g-t { color: var(--danger); }
+.crit-foot { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(0.4rem, 1vw, 0.8rem); }
+.crit-foot .cf { background: var(--acc-soft); border-radius: 10px; padding: clamp(0.5rem, 1.2vw, 0.85rem); font-size: calc(var(--small-size) * 0.95); color: var(--text-2); line-height: 1.45; }
+.crit-foot .cf strong { color: var(--acc); text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.08em; display: block; margin-bottom: 0.25em; }
+
+/* Divider de sección */
+.divider-num {
+    font-family: var(--font-title); font-weight: 700;
+    font-size: clamp(4rem, 14vw, 11rem); line-height: 0.9;
+    color: transparent; -webkit-text-stroke: 2px var(--acc); opacity: 0.5;
+}
+
+/* ============ ANIMACIÓNS ============ */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo); }
+.slide.visible .reveal { opacity: 1; transform: none; }
+.slide.visible .reveal:nth-child(2) { transition-delay: 0.08s; }
+.slide.visible .reveal:nth-child(3) { transition-delay: 0.16s; }
+.slide.visible .reveal:nth-child(4) { transition-delay: 0.24s; }
+.slide.visible .reveal:nth-child(5) { transition-delay: 0.32s; }
+.slide.visible .reveal:nth-child(6) { transition-delay: 0.4s; }
+
+/* ============ UI FIXA ============ */
+.progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #2dd4bf, #5ea8ff, #f472b6); width: 0; z-index: 100; transition: width 0.3s ease; }
+.slide-counter { position: fixed; top: clamp(0.6rem, 2vh, 1.2rem); right: clamp(3.4rem, 6vw, 4.6rem); z-index: 100; font-size: var(--small-size); color: var(--text-3); font-weight: 700; letter-spacing: 0.08em; }
+.theme-toggle {
+    position: fixed; top: clamp(0.5rem, 1.8vh, 1rem); right: clamp(0.6rem, 2vw, 1.2rem); z-index: 101;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 50%;
+    width: 2.4rem; height: 2.4rem; cursor: pointer; color: var(--text-2);
+    display: flex; align-items: center; justify-content: center;
+}
+.theme-toggle svg { width: 1.15rem; height: 1.15rem; }
+.theme-toggle .icon-sun { display: none; }
+body.light .theme-toggle .icon-sun { display: block; }
+body.light .theme-toggle .icon-moon { display: none; }
+.nav-dots { position: fixed; right: clamp(0.5rem, 1.5vw, 1rem); top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 0.55rem; }
+.nav-dots a { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--text-3); opacity: 0.45; transition: all 0.3s; display: block; }
+.nav-dots a.active { opacity: 1; transform: scale(1.35); }
+.keyboard-hint { position: fixed; bottom: clamp(0.6rem, 2vh, 1.2rem); left: 50%; transform: translateX(-50%); color: var(--text-3); font-size: var(--small-size); z-index: 100; opacity: 0.7; }
+
+/* ============ BREAKPOINTS ============ */
+@media (max-height: 700px) {
+    :root { --slide-padding: clamp(0.75rem, 3vw, 2rem); --content-gap: clamp(0.4rem, 1.5vw, 1rem); --title-size: clamp(1.25rem, 4.5vw, 2.5rem); --h2-size: clamp(1rem, 3vw, 1.75rem); }
+}
+@media (max-height: 600px) {
+    :root { --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem); --content-gap: clamp(0.3rem, 1vw, 0.75rem); --title-size: clamp(1.1rem, 4vw, 2rem); --body-size: clamp(0.7rem, 1.2vw, 0.95rem); }
+    .nav-dots, .keyboard-hint { display: none; }
+}
+@media (max-height: 500px) {
+    :root { --slide-padding: clamp(0.4rem, 2vw, 1rem); --title-size: clamp(1rem, 3.5vw, 1.5rem); --h2-size: clamp(0.9rem, 2.5vw, 1.25rem); --body-size: clamp(0.65rem, 1vw, 0.85rem); }
+}
+@media (max-width: 600px) {
+    :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); }
+    .crit-grid, .crit-foot { grid-template-columns: 1fr; }
+    .keyboard-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+    html { scroll-behavior: auto; }
+}
+@media print {
+    .slide { height: auto; min-height: 100vh; page-break-after: always; }
+    .progress-bar, .nav-dots, .theme-toggle, .keyboard-hint, .slide-counter { display: none; }
+    .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="progress-bar"></div>
+<div class="slide-counter">1/38</div>
+<button class="theme-toggle" aria-label="Cambiar tema">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+</button>
+<nav class="nav-dots" aria-label="Seccións"></nav>
+<div class="keyboard-hint">← → para navegar</div>
+
+<!-- ==================== B0 · PORTADA ==================== -->
+<section class="slide" data-section="portada" id="s1" role="region" aria-label="Portada">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">Formación e oposicións · Educación Primaria</div>
+        <h1 class="reveal">A programación <span class="accent">didáctica</span><br>do manual da Xunta á aula</h1>
+        <div class="sub reveal">Guía práctica do <em>Manual de axuda para a elaboración das programacións didácticas</em> (v1.0.1), con foco especial na avaliación.</div>
+        <div class="tagline reveal">
+            <span class="pill">PROENS</span>
+            <span class="pill">Decreto 155/2022</span>
+            <span class="pill">Avaliación formativa</span>
+        </div>
+        <div class="note reveal">Brais Prados González · Educación Física · Primaria</div>
+    </div>
+</section>
+
+<section class="slide" data-section="portada" id="s2" role="region" aria-label="Para que serve">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">Antes de empezar</div>
+        <h2 class="reveal">Tres usos, <span class="accent">un mesmo documento</span></h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Estruturar a miña programación</div>
+                <p>O manual como esqueleto: os 8 apartados de PROENS, na orde e coa lóxica que pide a Administración.</p>
+            </div>
+            <div class="card">
+                <div class="card-title"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Explicalo aos compañeiros</div>
+                <p>Linguaxe común no claustro: que pide cada apartado e por que, sen tecnicismos innecesarios.</p>
+            </div>
+            <div class="card">
+                <div class="card-title"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Formar opositores</div>
+                <p>O apartado de programación decide notas. E dentro del, <strong>a avaliación é onde máis se suspende</strong>.</p>
+            </div>
+        </div>
+        <div class="note reveal">Mapa da sesión: o marco → os 8 apartados → avaliación (lei · o noso modelo · Sanmartí) → un sistema funcional para o día a día.</div>
+    </div>
+</section>
+
+<!-- ==================== B1 · O MARCO ==================== -->
+<section class="slide" data-section="marco" id="s3" role="region" aria-label="O manual">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">01 · O marco</div>
+        <h2 class="reveal">O manual <span class="accent">oficial</span></h2>
+        <div class="cards reveal">
+            <div class="card hl">
+                <div class="card-title">Que é</div>
+                <p><em>Manual de axuda para a elaboración das programacións didácticas</em> — Consellería de Educación, <strong>v1.0.1 (xuño 2023)</strong>, 58 páxinas. Infantil, primaria, ESO e bacharelato.</p>
+            </div>
+            <div class="card">
+                <div class="card-title">De onde nace</div>
+                <p>Dos decretos de currículo LOMLOE galegos: <strong>150/2022</strong> (infantil), <strong>155/2022</strong> (primaria), <strong>156/2022</strong> (ESO) e <strong>157/2022</strong> (bacharelato).</p>
+            </div>
+            <div class="card">
+                <div class="card-title">Onde está</div>
+                <p>Portal da Consellería (edu.xunta.gal, nodo 40229) e portal <strong>PROENS</strong>. É o criterio co que a inspección le a túa programación.</p>
+            </div>
+        </div>
+        <div class="note reveal">Non é normativa, pero é a interpretación oficial da normativa: o que o manual recomenda evitar, evítao.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="marco" id="s4" role="region" aria-label="Currículo galego">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">01 · O marco</div>
+        <h2 class="reveal">Como flúe o <span class="accent">currículo galego</span></h2>
+        <div class="flow reveal">
+            <div class="flow-step"><span class="fs-t">Perfil de saída</span><span class="fs-d">Competencias clave + descritores operativos ao final da etapa</span></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step"><span class="fs-t">Obxectivos da área</span><span class="fs-d">OBX1, OBX2… conectados aos descritores do perfil</span></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step hl"><span class="fs-t">Criterios de avaliación</span><span class="fs-d">CA por bloque: o que se avalía en cada curso</span></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step"><span class="fs-t">Contidos</span><span class="fs-d">Saberes por bloque que permiten traballar os CA</span></div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="ok"><strong>Nota terminolóxica:</strong> o Decreto 155/2022 di <strong>«obxectivos da área»</strong> onde o RD estatal di «competencias específicas». Son equivalentes.</li>
+            <li class="ok">Os CA codifícanse con dous díxitos: <strong>CA4.1</strong> = bloque 4, primeiro criterio dese bloque.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="marco" id="s5" role="region" aria-label="Os 8 apartados">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">01 · O marco</div>
+        <h2 class="reveal">Os <span class="accent">8 apartados</span> de PROENS</h2>
+        <ol class="big-list reveal">
+            <li><span class="n">1</span><span class="t">Introdución</span></li>
+            <li><span class="n">2</span><span class="t">Obxectivos da área e contribución ás competencias clave</span></li>
+            <li><span class="n">3</span><span class="t">Relación de unidades didácticas: secuenciación e temporización</span></li>
+            <li><span class="n">4</span><span class="t">Metodoloxía</span></li>
+            <li><span class="n">5</span><span class="t"><strong style="color: var(--acc)">Avaliación</strong> <small>— o corazón desta sesión</small></span></li>
+            <li><span class="n">6</span><span class="t">Medidas de atención á diversidade</span></li>
+            <li><span class="n">7</span><span class="t">Transversal: elementos transversais e complementarias</span></li>
+            <li><span class="n">8</span><span class="t">Práctica docente: avaliar o ensino e a propia programación</span></li>
+        </ol>
+    </div>
+</section>
+
+<section class="slide" data-section="marco" id="s6" role="region" aria-label="Lista de control">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">01 · O marco</div>
+        <h2 class="reveal">A <span class="accent">lista de control</span>: o teu tribunal particular</h2>
+        <div class="sub reveal">O manual pecha cunha checklist por apartado (páxs. 52-57). Úsaa como auditoría antes de entregar.</div>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6.5"/><path d="m9 11 3 3L22 4"/><path d="m16 19 2 2 4-4"/></svg>Para o docente</div>
+                <p>Verificación apartado a apartado antes de gravar en PROENS: nada queda sen cubrir.</p>
+            </div>
+            <div class="card">
+                <div class="card-title"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Para o opositor</div>
+                <p>É a rúbrica implícita do tribunal: cada ítem da lista é unha pregunta que che poden facer na defensa.</p>
+            </div>
+            <div class="card">
+                <div class="card-title"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10"/><path d="M12 6v6l4 2"/><path d="m16 20 2 2 4-4"/></svg>Cando</div>
+                <p>Non ao final: repasa a checklist do apartado 5 <strong>mentres</strong> deseñas a avaliación, non despois.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== B2 · APARTADOS EN BREVE ==================== -->
+<section class="slide" data-section="apartados" id="s7" role="region" aria-label="Introdución e obxectivos">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">02 · Apartados en breve</div>
+        <h2 class="reveal">1 · Introdución &nbsp;·&nbsp; 2 · <span class="accent">Obxectivos</span></h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">1 · Introdución</div>
+                <ul>
+                    <li>Contexto do centro e do alumnado <strong>real</strong>, non xenérico</li>
+                    <li>Características da área nese curso</li>
+                    <li>Breve: é a porta de entrada, non a tese</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">2 · Obxectivos da área</div>
+                <ul>
+                    <li>Tómanse <strong>literais</strong> do Decreto 155/2022</li>
+                    <li>Explícase a súa contribución ás competencias clave (vía descritores do perfil de saída)</li>
+                    <li>Non se inventan nin se reformulan</li>
+                </ul>
+            </div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="no"><strong>Erro típico:</strong> unha introdución de 10 páxinas copiada de lexislación. O tribunal quere ver <em>o teu contexto</em>, non a LOMLOE resumida.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="apartados" id="s8" role="region" aria-label="Unidades didácticas">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">02 · Apartados en breve</div>
+        <h2 class="reveal">3 · <span class="accent">Unidades didácticas</span> e temporización</h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">Dous tipos de UD</div>
+                <ul>
+                    <li><strong>Secuenciais:</strong> unha detrás doutra, na avaliación planificada</li>
+                    <li><strong>Transversais:</strong> simultáneas a outras, nun ou varios trimestres (p. ex. un proxecto anual)</li>
+                </ul>
+            </div>
+            <div class="card hl">
+                <div class="card-title">Regras dos pesos</div>
+                <ul>
+                    <li>A suma dos pesos de todas as UD = <strong>100 %</strong></li>
+                    <li>Peso segundo a <strong>importancia</strong> do que se traballa</li>
+                    <li>Unha UD cun peso moi baixo «non ten fundamento»</li>
+                    <li>Coherentes cos criterios de cualificación do apartado 5</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Equilibrio</div>
+                <ul>
+                    <li>Cada UD: título, descrición, nº de sesións, trimestre e peso</li>
+                    <li>A suma de sesións = total de sesións anuais da área</li>
+                    <li>Sen «UD 0 de presentación»: non é unha unidade didáctica</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide" data-section="apartados" id="s9" role="region" aria-label="Distribución de criterios">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">02 · Apartados en breve</div>
+        <h2 class="reveal">3.2 · Repartir <span class="accent">CA e contidos</span> entre as UD</h2>
+        <ul class="check-list reveal">
+            <li class="ok">Selecciona en cada UD <strong>só os CA que vas avaliar</strong> (e que terán peso na cualificación).</li>
+            <li class="ok">Número equilibrado: moitos CA por UD → pesos minúsculos; moi poucos → pesos esaxerados.</li>
+            <li class="ok">CA idénticos en bloques distintos <strong>non son o mesmo criterio</strong>: interprétanse desde o seu bloque.</li>
+            <li class="ok">CA de todo o curso: ou <strong>UD transversal</strong> en exclusiva para eles, ou déixalos en todas as UD creando <strong>subcriterios</strong> que os contextualicen.</li>
+        </ul>
+        <div class="note reveal">Os subcriterios teñen regras de redacción propias — vémolas no bloque de avaliación, porque é alí onde se xogan.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="apartados" id="s10" role="region" aria-label="Metodoloxía">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">02 · Apartados en breve</div>
+        <h2 class="reveal">4 · <span class="accent">Metodoloxía</span> e recursos</h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">4.1 · Concrecións</div>
+                <ul>
+                    <li>Estratexias, técnicas e métodos <strong>organizados arredor das UD</strong> (nada de descricións xeralistas)</li>
+                    <li>Agrupamentos e uso de espazos</li>
+                    <li>Estrutura das sesións (tarefas docentes e do alumnado)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">4.2 · Materiais e recursos</div>
+                <ul>
+                    <li>Lista variada e <strong>realista</strong>: só o que de verdade vas ter</li>
+                    <li>Categorías se son moitos: impresos, manipulativos, tecnolóxicos, dixitais</li>
+                    <li>Dereitos de autoría e protección de datos</li>
+                </ul>
+            </div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="ok"><strong>Punto de partida normativo:</strong> os principios pedagóxicos do decreto de etapa e as orientacións pedagóxicas do currículo da túa área.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="apartados" id="s11" role="region" aria-label="Diversidade e transversal">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">02 · Apartados en breve</div>
+        <h2 class="reveal">6 · <span class="accent">Diversidade</span> &nbsp;·&nbsp; 7 · Transversal</h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">6 · Atención á diversidade</div>
+                <ul>
+                    <li>Medidas <strong>ordinarias</strong> (adaptación de tempos e instrumentos, reforzos…) e <strong>extraordinarias</strong> (AC, apoio PT/AL…)</li>
+                    <li>Atención educativa virtual para ausencias xustificadas</li>
+                    <li>Estratexias <strong>DUA</strong>: autorregulación, eleccións nas tarefas, varias formas de representación</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">7 · Transversal</div>
+                <ul>
+                    <li>Elementos transversais da normativa aplicados á área</li>
+                    <li>Actividades complementarias vinculadas ás UD</li>
+                </ul>
+            </div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="ok">Fíxate: o DUA pide <strong>«propoñer actividades de autorregulación da aprendizaxe»</strong> — exactamente o que veremos con Sanmartí. A avaliación formativa é tamén atención á diversidade.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="apartados" id="s12" role="region" aria-label="Práctica docente">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">02 · Apartados en breve</div>
+        <h2 class="reveal">8 · Avaliar a <span class="accent">práctica docente</span></h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">8.1 · O proceso de ensino</div>
+                <p>Indicadores para avaliar como ensinas: adecuación das tarefas, clima de aula, axuste dos tempos, resposta á diversidade…</p>
+            </div>
+            <div class="card">
+                <div class="card-title">8.2 · A propia programación</div>
+                <p>Seguimento periódico (a través do seguimento de PROENS), avaliación final e <strong>propostas de mellora</strong> para o curso seguinte.</p>
+            </div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="ok">Pecha o círculo: se a avaliación do alumnado informa o ensino (Sanmartí, idea 10), este apartado é onde o documentas.</li>
+            <li class="no"><strong>Erro típico:</strong> escribir este apartado como puro trámite, sen indicadores concretos nin momentos definidos.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ==================== B3 · AVALIACIÓN: A LEI ==================== -->
+<section class="slide" data-section="lei" id="s13" role="region" aria-label="Divisor avaliación">
+    <div class="slide-inner">
+        <div class="divider-num reveal">5</div>
+        <h1 class="reveal">Avaliación: <span class="accent">onde se xoga a partida</span></h1>
+        <div class="sub reveal">É o apartado con máis regras explícitas do manual — e onde máis programacións (e oposicións) tropezan: mínimos mal redactados, criterios de cualificación inxustos, recuperacións ilegais.</div>
+        <div class="tagline reveal">
+            <span class="pill">5.1 Inicial</span>
+            <span class="pill">3.3 + 5.2 Cualificación</span>
+            <span class="pill">Recuperación</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide" data-section="lei" id="s14" role="region" aria-label="A tríada">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">03 · O que pide a lei</div>
+        <h2 class="reveal">A tríada: cada CA leva <span class="accent">tres cousas</span></h2>
+        <div class="sub reveal">Apartado 3.3 do manual: para <strong>cada criterio ou subcriterio</strong> de cada UD hai que concretar…</div>
+        <div class="flow reveal">
+            <div class="flow-step hl"><span class="fs-t">1 · Instrumento</span><span class="fs-d">Con que se recolle a evidencia da aprendizaxe</span></div>
+            <div class="flow-step hl"><span class="fs-t">2 · Mínimo de consecución</span><span class="fs-d">A aprendizaxe imprescindible para superar ese CA</span></div>
+            <div class="flow-step hl"><span class="fs-t">3 · Peso orientativo (%)</span><span class="fs-d">Respecto ao total de cualificación da UD</span></div>
+        </div>
+        <div class="note reveal">Esta tríade é o núcleo técnico da programación. Se dominas isto, o apartado 5 practicamente escríbese só.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="lei" id="s15" role="region" aria-label="Subcriterios">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">03 · O que pide a lei</div>
+        <h2 class="reveal">Subcriterios <span class="accent">ben redactados</span></h2>
+        <ul class="check-list reveal">
+            <li class="ok">Derivan sempre dun CA e <strong>o conxunto dos subcriterios debe reconstruír o CA orixinal</strong>.</li>
+            <li class="ok">Estrutura gramatical obrigada: <strong>verbo en infinitivo + obxecto + contexto</strong>. (Subcontido: substantivo/s e adxectivos.)</li>
+        </ul>
+        <div class="crit-card reveal">
+            <div class="crit-head"><span class="crit-code">Exemplo do manual · CCSS 6º</span></div>
+            <div class="crit-text">CA3.4. Explicar o funcionamento xeral dos órganos de goberno do concello, das comunidades autónomas, do Estado español e da Unión Europea…</div>
+            <div class="crit-grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));">
+                <div class="grado g1"><div class="g-t">CA3.4.1</div><p>Explicar o funcionamento xeral dos órganos de goberno do concello, das comunidades autónomas e do Estado español…</p></div>
+                <div class="grado g2"><div class="g-t">CA3.4.2</div><p>Explicar o funcionamento xeral dos órganos de goberno da Unión Europea…</p></div>
+            </div>
+            <div class="note">Xuntos, os dous subcriterios devolven o CA completo. Nada queda fóra, nada se engade.</div>
+        </div>
+    </div>
+</section>
+
+<section class="slide" data-section="lei" id="s16" role="region" aria-label="Instrumentos">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">03 · O que pide a lei</div>
+        <h2 class="reveal">Instrumentos: <span class="accent">só dúas categorías</span></h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>Proba escrita</div>
+                <p>O alumnado demostra o coñecemento <strong>a través dunha evidencia escrita</strong>: probas obxectivas, exames…</p>
+            </div>
+            <div class="card">
+                <div class="card-title"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 12H3"/><path d="M16 6H3"/><path d="M16 18H3"/><path d="m19 10-4 4 4 4"/></svg>Táboa de indicadores</div>
+                <p>O desempeño compróbase cunha <strong>lista de ítems ou escalas</strong>: rúbricas, listas de cotexo, escalas de observación…</p>
+            </div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="ok"><strong>O verbo do CA é o mellor referente</strong> para escoller instrumento: «explicar» ≠ «executar» ≠ «recoñecer».</li>
+            <li class="ok">Un instrumento pode avaliar <strong>varios CA á vez</strong> (avaliación máis rica e competencial) e reutilizarse en varias UD.</li>
+            <li class="ok">A forma concreta de aplicalos descríbese en 5.2.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="lei" id="s17" role="region" aria-label="Mínimos de consecución">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">03 · O que pide a lei</div>
+        <h2 class="reveal">O <span class="accent">mínimo de consecución</span></h2>
+        <div class="sub reveal">A aprendizaxe imprescindible para superar o CA. Redacción <strong>precisa, clara e sinxela</strong> — informa a alumnado, familias e profesorado.</div>
+        <div class="crit-card reveal">
+            <div class="crit-head"><span class="crit-code">3 vías (exemplo do manual, CA4.5 CCNN)</span></div>
+            <div class="crit-text">«Explicar os procesos fundamentais da nutrición relacionándoos coas estruturas dos aparellos e dos sistemas que interveñen nela.»</div>
+            <div class="crit-grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));">
+                <div class="grado g1"><div class="g-t">Rebaixar o verbo</div><p><strong>Nomear</strong> os procesos fundamentais da nutrición relacionándoos coas estruturas…</p></div>
+                <div class="grado g2"><div class="g-t">Reducir o obxecto</div><p>Explicar os procesos… coas estruturas <strong>do aparello dixestivo e do excretor</strong>.</p></div>
+                <div class="grado g3"><div class="g-t">Eliminar o contexto</div><p>Explicar os procesos fundamentais da nutrición <strong>[sen o resto]</strong>.</p></div>
+            </div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="no">Prohibido: mínimos <strong>cuantitativos</strong> («o 50 % de…») e <strong>textos xenéricos repetidos</strong> en varios mínimos.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="lei" id="s18" role="region" aria-label="Criterios de cualificación">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">03 · O que pide a lei</div>
+        <h2 class="reveal">5.2 · Criterios de <span class="accent">cualificación</span></h2>
+        <div class="cards reveal">
+            <div class="card hl">
+                <div class="card-title">Por UD: precisar instrumentos</div>
+                <p>Exemplo do manual — UD6 = 40 % proba escrita + 60 % táboa de indicadores. Aquí desglósase:<br><strong>40 %</strong> = 1º exame 15 % + 2º exame 25 %<br><strong>60 %</strong> = rúbrica 50 % + escala de observación 10 %</p>
+            </div>
+            <div class="card">
+                <div class="card-title">Por avaliación parcial e final</div>
+                <ul>
+                    <li>% de cada UD na nota do trimestre e forma de cálculo</li>
+                    <li>Especial coidado coas <strong>UD transversais</strong>: canto pesan en cada trimestre</li>
+                    <li>Nota final <strong>coherente cos pesos das UD</strong> do apartado 3</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Outros datos</div>
+                <ul>
+                    <li>Escala de valoración dos instrumentos</li>
+                    <li>Redondeo: se o hai e <strong>en que momento</strong></li>
+                    <li><strong>Grao mínimo de consecución exixido para superar a área</strong></li>
+                    <li>Que pasa se falta a un exame ou non entrega un traballo</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide" data-section="lei" id="s19" role="region" aria-label="Cualificación xusta">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">03 · O que pide a lei</div>
+        <h2 class="reveal">Cualificación <span class="accent">xusta</span>: tres liñas vermellas</h2>
+        <ul class="check-list reveal">
+            <li class="no"><strong>Criterios excluíntes</strong> que minimicen a cualificación: non ler un libro ou non facer unha actividade <em>non pode, por si mesmo, suspender</em> unha avaliación. Incumpre o dereito á avaliación obxectiva.</li>
+            <li class="no"><strong>Peso á asistencia ou ao comportamento</strong>: o clásico «70 % exames + 20 % traballos + 10 % comportamento» está expresamente desaconsellado. Asistencia e conduta van ás NOF e ao plan de convivencia, non á nota.</li>
+            <li class="no"><strong>Puntos por riba da nota máxima</strong>: dar puntos extra por tarefas voluntarias, clubs ou competicións fomenta a desigualdade — cada alumno ten unha realidade distinta.</li>
+        </ul>
+        <div class="note reveal">Regra de ouro do manual: só se cualifica <strong>aprendizaxe curricular</strong>, con regras claras, públicas e obxectivas.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="lei" id="s20" role="region" aria-label="Recuperación">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">03 · O que pide a lei</div>
+        <h2 class="reveal">Recuperación <span class="accent">sen trampas</span></h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">Que definir</div>
+                <ul>
+                    <li><strong>Momentos</strong>: ao longo do curso, non só ao final</li>
+                    <li><strong>Instrumentos</strong> e forma de construír a nota</li>
+                    <li>Se se manteñen as notas aprobadas previas</li>
+                </ul>
+            </div>
+            <div class="card hl">
+                <div class="card-title">Dúas prohibicións clave</div>
+                <ul>
+                    <li><strong>Non topar a nota</strong>: quen recupera pode chegar ao 10. «Como máximo un 6» é ilegal.</li>
+                    <li><strong>Non promediar co suspenso</strong>: se a 1ª avaliación foi un 3 e a recuperación un 5, a nota é <strong>5, non 4</strong>. As partes non superadas non entran no cálculo.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="note reveal">A lóxica de fondo é formativa: recuperar é <em>acadar a aprendizaxe</em>, non pagar unha penalización por chegar tarde a ela.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="lei" id="s21" role="region" aria-label="Avaliación inicial">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">03 · O que pide a lei</div>
+        <h2 class="reveal">5.1 · Avaliación inicial: <span class="accent">non cualifica</span></h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">Que concretar</div>
+                <ul>
+                    <li>Tipo de <strong>información</strong> que queres de cada alumno</li>
+                    <li><strong>Técnicas</strong>: informes do curso anterior, actas, informes do titor; traballos, probas, observación, entrevistas</li>
+                    <li><strong>Momentos</strong> de realización</li>
+                    <li>Accións co alumnado que se incorpore durante o curso</li>
+                </ul>
+            </div>
+            <div class="card hl">
+                <div class="card-title">Para que serve</div>
+                <ul>
+                    <li>Adecuar as ensinanzas e facilitar a progresión</li>
+                    <li>Compartir datos no equipo docente e axustar o currículo</li>
+                    <li><strong>«Non persegue cualificar ao alumnado»</strong> — literal do manual</li>
+                </ul>
+            </div>
+        </div>
+        <div class="note reveal">Ollo no deseño: se a túa avaliación inicial é un exame con nota, contradís o manual na primeira páxina do teu apartado 5.</div>
+    </div>
+</section>
+
+<!-- ==================== B4 · COMO O FIXEMOS NÓS ==================== -->
+<section class="slide" data-section="nos" id="s22" role="region" aria-label="Divisor marcos propios">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">04 · Caso real</div>
+        <h1 class="reveal">Como o fixemos <span class="accent">nós</span></h1>
+        <div class="sub reveal">Os marcos de avaliación que construímos para <strong>2º</strong> (Matemáticas e EF) e <strong>4º de primaria</strong> (5 áreas): criterios literais do Decreto 155/2022, graduados en niveis de complexidade e conectados a mínimos, instrumentos e pesos.</div>
+        <div class="tagline reveal">
+            <span class="pill">Base: Marco INEE 2025</span>
+            <span class="pill">169 criterios en 4º</span>
+            <span class="pill">35 en EF 2º · ciclo completo</span>
+        </div>
+        <div class="note reveal">Os criterios son normativos; a graduación é adaptación de aula, sen carácter oficial — e así se declara nos documentos.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="nos" id="s23" role="region" aria-label="Grados e escalas de verbos">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">04 · Caso real</div>
+        <h2 class="reveal">Grao 1 · 2 · 3: <span class="accent">dúas escalas de verbos</span></h2>
+        <div class="sub reveal">Cada criterio clasifícase nun grao de complexidade segundo o seu verbo (modelo INEE). O truco: usar unha escala distinta segundo a natureza do criterio.</div>
+        <table class="reveal">
+            <thead><tr><th>Perfil do criterio</th><th>Grao 1</th><th>Grao 2</th><th>Grao 3</th></tr></thead>
+            <tbody>
+                <tr><td class="strong">Cognitivo / cognitivo-motor</td><td><strong>Identifica</strong> · recoñece</td><td><strong>Emprega</strong> · aplica</td><td><strong>Xustifica</strong> · crea</td></tr>
+                <tr><td class="strong">Actitudinal / socioafectivo</td><td><strong>Recoñece</strong></td><td><strong>Xestiona</strong> con apoio</td><td><strong>Regula</strong> con autonomía</td></tr>
+            </tbody>
+        </table>
+        <ul class="check-list reveal">
+            <li class="ok">Evita forzar o socioemocional dentro dunha escala de coñecemento: «xustificar unha emoción» non ten sentido; <strong>regulala con autonomía</strong>, si.</li>
+            <li class="ok">O grao de complexidade fala <strong>do criterio</strong>: serve para deseñar indicadores e equilibrar probas. Non confundir cos <strong>niveis de consecución N0-N3</strong>, que falan do alumno e si entran na cualificación (veñen despois).</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="nos" id="s24" role="region" aria-label="Recalibración por idade">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">04 · Caso real</div>
+        <h2 class="reveal">Os verbos <span class="accent">recalíbranse por idade</span></h2>
+        <div class="cards reveal">
+            <div class="card hl">
+                <div class="card-title">«Xustificar» aos 6-7 anos</div>
+                <p>= explicar oralmente <strong>cun debuxo ou un exemplo</strong>.<br>«Crear» = inventar un caso <strong>parecido ao que se acaba de resolver</strong>.</p>
+            </div>
+            <div class="card">
+                <div class="card-title">«Xustificar» aos 9-10 anos</div>
+                <p>= argumentar o procedemento, comparar estratexias, detectar e corrixir erros propios con criterio.</p>
+            </div>
+        </div>
+        <table class="reveal">
+            <thead><tr><th>Peso na proba</th><th>Grao 1</th><th>Grao 2</th><th>Grao 3</th></tr></thead>
+            <tbody>
+                <tr><td class="strong">INEE · 4º EP</td><td>30 %</td><td>45 %</td><td>25 %</td></tr>
+                <tr class="hl-row"><td class="strong">Adaptación · 2º EP</td><td><strong>40 %</strong></td><td>45 %</td><td><strong>15 %</strong></td></tr>
+            </tbody>
+        </table>
+        <div class="note reveal">Aos 6-7 anos a maioría do alumnado móvese entre identificar e aplicar: o grao 3 aparece, pero non pode dominar unha proba calibrada á idade. Isto responde á crítica de que as taxonomías se aplican mecanicamente.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="nos" id="s25" role="region" aria-label="Exemplo cognitivo">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">04 · Caso real · EF 2º EP</div>
+        <h2 class="reveal">Un criterio <span class="accent">cognitivo</span>, completo</h2>
+        <div class="crit-card reveal">
+            <div class="crit-head"><span class="crit-code">CA2.4</span><span class="crit-text">«Recoñecer a importancia de desenvolver proxectos motores de carácter individual, cooperativo ou colaborativo, valorando a súa consecución a partir dunha análise dos resultados obtidos.» (Bloque 2 · OBX2)</span></div>
+            <div class="crit-grid">
+                <div class="grado g1"><div class="g-t">N1 · Identifica</div><p>Recoñece, con apoio, a meta dun proxecto motor sinxelo e se se logrou ou non.</p></div>
+                <div class="grado g2"><div class="g-t">N2 · Emprega</div><p>Participa nun proxecto motor sinxelo poñendo da súa parte para acadar a meta común, e fíxase nos resultados.</p></div>
+                <div class="grado g3"><div class="g-t">N3 · Xustifica / crea</div><p>Explica —cun debuxo, un exemplo propio ou de palabra— se conseguiron a meta e por que, ou propón unha mellora.</p></div>
+            </div>
+            <div class="crit-foot">
+                <div class="cf"><strong>Mínimo de consecución</strong>Participa nun proxecto motor sinxelo e recoñece se se acadou a meta proposta.</div>
+                <div class="cf"><strong>Instrumento</strong>Diana de autoavaliación e observación do logro do proxecto (táboa de indicadores).</div>
+            </div>
+        </div>
+        <div class="note reveal">Fíxate: o mínimo redáctase sen números e o instrumento responde ao verbo («recoñecer» → observación, non exame).</div>
+    </div>
+</section>
+
+<section class="slide" data-section="nos" id="s26" role="region" aria-label="Exemplo actitudinal">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">04 · Caso real · EF 2º EP</div>
+        <h2 class="reveal">Un criterio <span class="accent">actitudinal</span>, coa outra escala</h2>
+        <div class="crit-card reveal">
+            <div class="crit-head"><span class="crit-code">CA1.5</span><span class="crit-text">«Identificar as emocións que se producen durante o xogo, tentando xestionalas e gozando da actividade física.» (Bloque 1 · OBX3 · perfil actitudinal)</span></div>
+            <div class="crit-grid">
+                <div class="grado g1"><div class="g-t">N1 · Recoñece</div><p>Recoñece e nomea, con apoio visual (caras, debuxos), as emocións básicas que sente durante o xogo.</p></div>
+                <div class="grado g2"><div class="g-t">N2 · Xestiona con apoio</div><p>Tenta xestionar con apoio guiado as súas emocións durante a actividade (respirar, agardar, pedir axuda).</p></div>
+                <div class="grado g3"><div class="g-t">N3 · Regula con autonomía</div><p>Regula por si mesmo algunha emoción no xogo e amosa que fai para sentirse mellor.</p></div>
+            </div>
+            <div class="crit-foot">
+                <div class="cf"><strong>Mínimo de consecución</strong>Recoñece e nomea, con apoio, algunha emoción que sente durante o xogo e tenta xestionala coa guía do mestre.</div>
+                <div class="cf"><strong>Instrumento</strong>Diana de autoavaliación emocional e escala de observación durante a sesión.</div>
+            </div>
+        </div>
+        <div class="note reveal">A diana redáctase en 1ª persoa e linguaxe infantil («Souben dicir como me sentía»); a escala de observación, en 3ª persoa para o docente.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="nos" id="s27" role="region" aria-label="A fronteira do mínimo">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">04 · Caso real</div>
+        <h2 class="reveal">Onde vive o mínimo: <span class="accent">o semáforo</span></h2>
+        <div class="sema reveal">
+            <div class="sema-item sema-rojo"><span class="s-dot"></span><span class="s-t">Non adquirido</span><p>Aínda non o consegue, ou só con moita axuda e de forma puntual.</p></div>
+            <div class="sema-item sema-ambar"><span class="s-dot"></span><span class="s-t">En proceso</span><p>Nivel N1 / entrada ao N2: conségueo parcialmente ou con axuda. <strong>Aquí está a fronteira do mínimo.</strong></p></div>
+            <div class="sema-item sema-verde"><span class="s-dot"></span><span class="s-t">Adquirido</span><p>Niveis N2-N3: conségueo de forma habitual e autónoma. Superar o CA = chegar aquí.</p></div>
+        </div>
+        <table class="reveal">
+            <thead><tr><th>Semáforo</th><th>Cualificación 1º ciclo (cualitativa)</th><th>Apoio interno do docente</th></tr></thead>
+            <tbody>
+                <tr><td class="strong">Non adquirido</td><td>IN</td><td>M · coeficiente 0,25</td></tr>
+                <tr class="hl-row"><td class="strong">En proceso</td><td>SU</td><td>R · coeficiente 0,50</td></tr>
+                <tr><td class="strong">Adquirido</td><td>BE / NT / SB segundo autonomía</td><td>B 0,75 · MB 1,00</td></tr>
+            </tbody>
+        </table>
+        <div class="note reveal">Os coeficientes son trazabilidade interna (peso do criterio × coeficiente), non a nota. E fíxate: o chan é 0,25 — non hai ceros.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="nos" id="s28" role="region" aria-label="Coherencia de pesos">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">04 · Caso real</div>
+        <h2 class="reveal">Pechar a <span class="accent">coherencia</span>: pesos e matrices</h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">EF 2º · dobre sistema de pesos</div>
+                <ul>
+                    <li>Cada criterio pesa <strong>dentro da súa UD</strong> (suma 100 por UD)</li>
+                    <li>Cada UD pesa <strong>na área</strong> (12 UD que suman 100 %)</li>
+                    <li>Instrumentos: <strong>85 % observación sistemática</strong> · 15 % proba oral/gráfica</li>
+                    <li>34 de 35 criterios avalíanse por táboa de indicadores</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Mate 2º · matriz de especificacións</div>
+                <ul>
+                    <li>Toda proba se planifica cruzando <strong>sentidos × procesos × graos</strong></li>
+                    <li>Garante que a proba non sexa toda de grao 1 nin toda cálculo</li>
+                    <li>Ponderacións declaradas e xustificadas (p. ex. sentido numérico 35 % porque o 0-999 é o groso do 1º ciclo)</li>
+                </ul>
+            </div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="ok">Isto é exactamente o que o manual chama <strong>coherencia entre apartado 3 e apartado 5</strong>: os números casan de punta a punta.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ==================== B5 · SANMARTÍ ==================== -->
+<section class="slide" data-section="sanmarti" id="s29" role="region" aria-label="Divisor Sanmartí">
+    <div class="slide-inner">
+        <blockquote class="quote reveal">
+            <div class="quote-text">Si cambias la evaluación, lo cambias todo.</div>
+            <div class="quote-author">Neus Sanmartí</div>
+        </blockquote>
+        <div class="sub reveal">Catedrática emérita de Didáctica das Ciencias (UAB). A referencia en avaliación formativa no noso contexto — e a peza que converte o apartado 5 <em>legal</em> nun apartado 5 <em>con alma</em>.</div>
+        <div class="tagline reveal">
+            <span class="pill">Evaluar para aprender (2007)</span>
+            <span class="pill">Evaluar y aprender (2020)</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide" data-section="sanmarti" id="s30" role="region" aria-label="10 ideas clave">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">05 · Avaliación formativa</div>
+        <h2 class="reveal">As <span class="accent">10 ideas clave</span> de «Evaluar para aprender»</h2>
+        <div class="cards reveal" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));">
+            <div class="card">
+                <ul>
+                    <li><strong>1.</strong> A avaliación é o <strong>motor</strong> da aprendizaxe</li>
+                    <li><strong>2.</strong> A súa finalidade principal é a <strong>regulación</strong> do ensino e da aprendizaxe</li>
+                    <li><strong>3.</strong> O <strong>erro</strong> é útil para regular a aprendizaxe</li>
+                    <li><strong>4.</strong> O máis importante é aprender a <strong>autoavaliarse</strong></li>
+                    <li><strong>5.</strong> Na aula <strong>todos</strong> avalían e regulan</li>
+                </ul>
+            </div>
+            <div class="card">
+                <ul>
+                    <li><strong>6.</strong> A función <strong>cualificadora</strong> tamén é importante</li>
+                    <li><strong>7.</strong> A avaliación motiva <strong>se se ten éxito</strong></li>
+                    <li><strong>8.</strong> Instrumentos <strong>diversos</strong> melloran a avaliación</li>
+                    <li><strong>9.</strong> A avaliación <strong>externa</strong> pode ser útil</li>
+                    <li><strong>10.</strong> Avaliar é condición para <strong>mellorar o ensino</strong></li>
+                </ul>
+            </div>
+        </div>
+        <div class="note reveal">Ideas 6 e 9 evitan o maniqueísmo: Sanmartí non nega a cualificación nin as probas externas — sitúaas na súa función. Moi defendible ante un tribunal.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="sanmarti" id="s31" role="region" aria-label="Tipos de avaliación">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">05 · Avaliación formativa</div>
+        <h2 class="reveal">Formativa · formadora · <span class="accent">cualificadora</span></h2>
+        <table class="reveal">
+            <thead><tr><th></th><th>Avaliar para regular</th><th>Avaliar para cualificar</th></tr></thead>
+            <tbody>
+                <tr><td class="strong">Pregunta</td><td>Por que aparecen as dificultades? Como axudar?</td><td>Que resultado obtivo?</td></tr>
+                <tr><td class="strong">Momento</td><td>Durante todo o proceso</td><td>Ao final</td></tr>
+                <tr><td class="strong">Protagonista</td><td>Alumnado e docente</td><td>Docente / institución</td></tr>
+            </tbody>
+        </table>
+        <div class="cards reveal">
+            <div class="card"><div class="card-title">Formativa</div><p>Regula <strong>o docente</strong>: recolle datos, entende o razoamento do alumno e axusta o seu ensino.</p></div>
+            <div class="card hl"><div class="card-title">Formadora</div><p>Regula <strong>o alumno</strong>: é el quen analiza o seu traballo e decide como mellorar. A meta final.</p></div>
+            <div class="card"><div class="card-title">Cualificadora</div><p>Certifica ao final. Lexítima — pero o seu resultado depende da calidade da regulación previa.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="slide" data-section="sanmarti" id="s32" role="region" aria-label="Autorregulación">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">05 · Avaliación formativa</div>
+        <h2 class="reveal">Autorregularse = apropiarse de <span class="accent">tres cousas</span></h2>
+        <div class="flow reveal">
+            <div class="flow-step hl"><span class="fs-t">1 · Os obxectivos</span><span class="fs-d">Saber que se pretende aprender e para que</span></div>
+            <div class="flow-step hl"><span class="fs-t">2 · A planificación</span><span class="fs-d">Saber como facelo → bases de orientación (pasos da tarefa)</span></div>
+            <div class="flow-step hl"><span class="fs-t">3 · Os criterios</span><span class="fs-d">Saber que é un traballo ben feito → rúbricas compartidas</span></div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="ok">A <strong>base de orientación</strong> non se dá feita: co-constrúese na aula e <strong>cada alumno escribe a súa</strong> coas súas palabras.</li>
+            <li class="ok">As <strong>rúbricas</strong> tamén se co-constrúen (p. ex. analizando xuntos un traballo bo e un fraco) e úsanse en autoavaliación e coavaliación.</li>
+            <li class="ok">O indicador de éxito: o alumnado deixa de preguntar «canto vale isto?» e empeza a preguntar <strong>«como podo melloralo?»</strong>.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="sanmarti" id="s33" role="region" aria-label="Feedback e erro">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">05 · Avaliación formativa</div>
+        <h2 class="reveal">Feedback eficaz e <span class="accent">o valor do erro</span></h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">Como é un bo retorno</div>
+                <ul>
+                    <li>Sobre a <strong>tarefa</strong>, non sobre a persoa</li>
+                    <li>Non di «está mal» nin só eloxia: dá <strong>pistas e camiños</strong></li>
+                    <li>Non regala a solución: <strong>corrixe quen errou</strong></li>
+                    <li>Referido aos criterios compartidos, non á comparación cos demais</li>
+                    <li>A tempo e con <strong>opción real de refacer</strong></li>
+                    <li>Se non cambia nada no que fai o alumno, non foi feedback</li>
+                </ul>
+            </div>
+            <div class="card hl">
+                <div class="card-title">O erro (idea clave 3)</div>
+                <ul>
+                    <li>É <strong>normal e punto de partida</strong> para aprender</li>
+                    <li>Revela a lóxica que o alumno está aplicando: é información valiosa</li>
+                    <li>Se o erro se castiga coa nota, o alumnado <strong>escóndeo</strong> — e a información desaparece</li>
+                    <li>Práctica: corrección «sen cruces» — unha pista por erro e tempo para refacer</li>
+                </ul>
+            </div>
+        </div>
+        <div class="note reveal">«Corregir solo lo puede hacer quien se ha equivocado. Ayudar al alumno a corregir es el gran reto.» — N. Sanmartí</div>
+    </div>
+</section>
+
+<section class="slide" data-section="sanmarti" id="s34" role="region" aria-label="Instrumentos de aula">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">05 · Avaliación formativa</div>
+        <h2 class="reveal">Rutinas de <span class="accent">baixo custo</span> para a aula</h2>
+        <div class="cards reveal" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));">
+            <div class="card">
+                <div class="card-title">Diario de aprendizaxe (5 min finais)</div>
+                <p>Catro preguntas fixas: que aprendín hoxe? como? que aínda non entendo? que podo facer para melloralo?</p>
+            </div>
+            <div class="card">
+                <div class="card-title">Semáforo de saída</div>
+                <p>Verde: seino e podo explicalo · Ámbar: fágoo con axuda · Vermello: necesito volver empezar. Serve para reagrupar a sesión seguinte.</p>
+            </div>
+            <div class="card">
+                <div class="card-title">Coavaliación «2 + 1»</div>
+                <p>Coa rúbrica diante: dous acertos + unha proposta concreta de mellora. Nunca unha nota.</p>
+            </div>
+            <div class="card">
+                <div class="card-title">Carpeta de aprendizaxe</div>
+                <p>Borradores + versión final + reflexión de por que cambiou. O alumno escolle as evidencias que mostran que aprendeu.</p>
+            </div>
+        </div>
+        <div class="note reveal">Todas encaixan na categoría legal «táboa de indicadores» — a ponte perfecta co manual. (A escaleira de metacognición, se a usas, cita a Swartz e cols., non a Sanmartí.)</div>
+    </div>
+</section>
+
+<!-- ==================== B6 · SÍNTESE ==================== -->
+<section class="slide" data-section="sintese" id="s35" role="region" aria-label="Sistema día a día">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">06 · Síntese</div>
+        <h2 class="reveal">Un sistema <span class="accent">funcional</span> para o día a día</h2>
+        <div class="flow reveal">
+            <div class="flow-step"><span class="fs-t">Antes da UD</span><span class="fs-d">Escoller CA · fixar mínimos · preparar a táboa de indicadores · compartir criterios co alumnado</span></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step hl"><span class="fs-t">Durante (cada sesión)</span><span class="fs-d">Semáforo de saída · diario 5 min · pista + refacer · 2-3 alumnos observados por sesión</span></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step"><span class="fs-t">Peche da UD</span><span class="fs-d">Diana de autoavaliación · semáforo por criterio → rexistro → cualificación</span></div>
+        </div>
+        <ul class="check-list reveal">
+            <li class="ok">Regra de ouro: <strong>rexistro mínimo viable</strong>. Non anotar todo de todos, todos os días: 2-3 alumnos por sesión, rotando, chega para cubrir o grupo cada dúas semanas.</li>
+            <li class="ok">O documento operativo que acompaña esta presentación desenvolve o protocolo completo con plantillas imprimibles.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide" data-section="sintese" id="s36" role="region" aria-label="Legal e formativo">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">06 · Síntese</div>
+        <h2 class="reveal">O legal e o formativo <span class="accent">encaixan</span></h2>
+        <table class="reveal">
+            <thead><tr><th>O manual pide…</th><th>Sanmartí achega…</th></tr></thead>
+            <tbody>
+                <tr><td>Mínimos claros, sinxelos, que informen ao alumnado e ás familias</td><td>Criterios de avaliación <strong>compartidos e comprensibles</strong></td></tr>
+                <tr><td>Táboa de indicadores como instrumento maioritario</td><td>Rúbricas co-construídas, dianas, listas — usadas tamén en <strong>autoavaliación</strong></td></tr>
+                <tr><td>Recuperación ao longo do curso, sen topar nota nin promediar co suspenso</td><td>O erro como punto de partida; <strong>regulación continua</strong> ata acadar a aprendizaxe</td></tr>
+                <tr><td>Avaliación inicial que non cualifica</td><td>Diagnose de ideas previas para <strong>adaptar o ensino</strong></td></tr>
+                <tr><td>Sen peso para asistencia ou comportamento</td><td>Feedback sobre a <strong>tarefa</strong>, nunca sobre a persoa</td></tr>
+            </tbody>
+        </table>
+        <div class="note reveal">A nota como <strong>consecuencia</strong> da regulación, non como substituto. Iso é cumprir a lei e ser formativo á vez.</div>
+    </div>
+</section>
+
+<section class="slide" data-section="sintese" id="s37" role="region" aria-label="Erros que tumban">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">06 · Síntese</div>
+        <h2 class="reveal">Checklist final: <span class="accent">erros que tumban</span> programacións</h2>
+        <ul class="check-list reveal">
+            <li class="no">Mínimos <strong>cuantitativos</strong> ou textos xenéricos copiados en todos os criterios</li>
+            <li class="no">Porcentaxe para <strong>asistencia ou comportamento</strong> na nota</li>
+            <li class="no">Criterios <strong>excluíntes</strong> («sen o libro lido, suspenso»)</li>
+            <li class="no"><strong>Topar a nota</strong> da recuperación ou promediala co suspenso</li>
+            <li class="no">Pesos de UD que <strong>non suman 100 %</strong> ou non casan coa fórmula final</li>
+            <li class="no">Instrumento desligado do <strong>verbo do CA</strong> (avaliar «executar» cun exame escrito)</li>
+            <li class="no">Avaliación inicial <strong>con nota</strong></li>
+        </ul>
+        <div class="note reveal">Se a túa programación pasa esta lista, pasa a lista de control do manual. E se ademais o alumnado coñece os criterios e pode refacer o traballo, tes unha avaliación que tamén ensina.</div>
+    </div>
+</section>
+
+<!-- ==================== B7 · REFERENCIAS ==================== -->
+<section class="slide" data-section="refs" id="s38" role="region" aria-label="Referencias">
+    <div class="slide-inner">
+        <div class="eyebrow reveal">Referencias</div>
+        <h2 class="reveal">Para seguir <span class="accent">tirando do fío</span></h2>
+        <div class="cards reveal">
+            <div class="card">
+                <div class="card-title">Normativa e manuais</div>
+                <ul>
+                    <li>Decreto 155/2022, do 15 de setembro (DOG 26/09/2022) — currículo de primaria en Galicia</li>
+                    <li>Real decreto 157/2022 — ensinanzas mínimas de primaria</li>
+                    <li>Xunta de Galicia (2023). <em>Manual de axuda para a elaboración das programacións didácticas</em>, v1.0.1 — edu.xunta.gal · PROENS</li>
+                    <li>INEE (2025). <em>Marco general de las evaluaciones del sistema educativo</em>, 2ª ed.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-title">Avaliación formativa</div>
+                <ul>
+                    <li>Sanmartí, N. (2007). <em>10 ideas clave. Evaluar para aprender</em>. Graó</li>
+                    <li>Sanmartí, N. (2020). <em>Evaluar y aprender: un único proceso</em>. Octaedro</li>
+                    <li>Marcos de avaliación propios: Mate 2º EP · 4º EP (5 áreas) · Programación EF 2º EP</li>
+                </ul>
+            </div>
+        </div>
+        <div class="note reveal">Presentación elaborada por Brais Prados González · 2026</div>
+    </div>
+</section>
+
+<script>
+class SlidePresentation {
+    constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.current = 0;
+        this.total = this.slides.length;
+        this.buildDots();
+        this.initKeyboard();
+        this.initTouch();
+        this.initObserver();
+        this.initTheme();
+        this.updateUI();
+    }
+    buildDots() {
+        // Un punto por sección
+        const nav = document.querySelector('.nav-dots');
+        const seen = new Set();
+        this.sectionStarts = [];
+        this.slides.forEach((s, i) => {
+            const sec = s.dataset.section;
+            if (!seen.has(sec)) {
+                seen.add(sec);
+                this.sectionStarts.push({ sec, index: i });
+                const a = document.createElement('a');
+                a.href = '#' + s.id;
+                a.dataset.section = sec;
+                a.setAttribute('aria-label', 'Sección ' + sec);
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.goTo(i);
+                });
+                nav.appendChild(a);
+            }
+        });
+    }
+    goTo(index) {
+        if (index < 0 || index >= this.total) return;
+        this.current = index;
+        this.slides[index].scrollIntoView({ behavior: 'smooth' });
+        this.updateUI();
+    }
+    move(dir) { this.goTo(this.current + dir); }
+    initKeyboard() {
+        document.addEventListener('keydown', e => {
+            if (['ArrowRight', ' ', 'PageDown', 'Enter', 'ArrowDown'].includes(e.key)) { e.preventDefault(); this.move(1); }
+            if (['ArrowLeft', 'PageUp', 'ArrowUp'].includes(e.key)) { e.preventDefault(); this.move(-1); }
+            if (e.key === 'Home') { e.preventDefault(); this.goTo(0); }
+            if (e.key === 'End') { e.preventDefault(); this.goTo(this.total - 1); }
+        });
+    }
+    initTouch() {
+        let sx = 0, sy = 0;
+        document.addEventListener('touchstart', e => {
+            sx = e.changedTouches[0].screenX; sy = e.changedTouches[0].screenY;
+        }, { passive: true });
+        document.addEventListener('touchend', e => {
+            const dx = sx - e.changedTouches[0].screenX;
+            const dy = Math.abs(sy - e.changedTouches[0].screenY);
+            if (Math.abs(dx) > 50 && dy < 100) this.move(dx > 0 ? 1 : -1);
+        }, { passive: true });
+    }
+    initObserver() {
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(en => {
+                if (en.isIntersecting) {
+                    en.target.classList.add('visible');
+                    this.current = [...this.slides].indexOf(en.target);
+                    this.updateUI();
+                }
+            });
+        }, { threshold: 0.5 });
+        this.slides.forEach(s => obs.observe(s));
+    }
+    initTheme() {
+        const btn = document.querySelector('.theme-toggle');
+        try {
+            if (localStorage.getItem('prog-did-theme') === 'light') document.body.classList.add('light');
+        } catch (err) { /* file:// sen localStorage */ }
+        btn.addEventListener('click', () => {
+            document.body.classList.toggle('light');
+            try { localStorage.setItem('prog-did-theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch (err) { /* ignorar */ }
+        });
+    }
+    updateUI() {
+        const counter = document.querySelector('.slide-counter');
+        if (counter) counter.textContent = (this.current + 1) + '/' + this.total;
+        const bar = document.querySelector('.progress-bar');
+        if (bar) bar.style.width = ((this.current + 1) / this.total * 100) + '%';
+        const curSec = this.slides[this.current].dataset.section;
+        document.querySelectorAll('.nav-dots a').forEach(a => {
+            a.classList.toggle('active', a.dataset.section === curSec);
+        });
+    }
+}
+new SlidePresentation();
+
+// Axuste ao viewport: os tamaños son grandes para proxección; se unha diapositiva
+// non cabe en alto, redúcese a escala do seu contido (nunca por debaixo do 55 %).
+function fitSlides() {
+    document.querySelectorAll('.slide').forEach(slide => {
+        const inner = slide.querySelector('.slide-inner');
+        if (!inner) return;
+        inner.style.transform = '';
+        const cs = getComputedStyle(slide);
+        const dispo = slide.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+        const alto = inner.scrollHeight;
+        if (alto > dispo && dispo > 0) {
+            const k = Math.max(0.55, dispo / alto);
+            inner.style.transform = 'scale(' + k.toFixed(3) + ')';
+        }
+    });
+}
+window.addEventListener('load', fitSlides);
+window.addEventListener('resize', fitSlides);
+try { document.fonts.ready.then(fitSlides); } catch (err) { /* navegadores sen Font Loading API */ }
+</script>
+</body>
+</html>

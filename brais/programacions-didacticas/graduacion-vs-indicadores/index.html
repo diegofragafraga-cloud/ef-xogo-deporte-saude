@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graos, niveis e indicadores · Criterios de avaliación LOMLOE</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<style>
+/* ---------- Tokens (mesma paleta ca avaliacion-funcional) ---------- */
+:root {
+    --bg: #0a0d11;
+    --paper: #10151b;
+    --paper-2: #161c24;
+    --text: #eef2f6;
+    --text-2: #9fabb8;
+    --text-3: #66727f;
+    --border: rgba(255,255,255,0.1);
+    --acc: #2dd4bf;
+    --acc-soft: rgba(45,212,191,0.1);
+    --blue: #5ea8ff;
+    --blue-soft: rgba(94,168,255,0.12);
+    --violet: #a78bfa;
+    --violet-soft: rgba(167,139,250,0.12);
+    --orange: #ff8a5c;
+    --orange-soft: rgba(255,138,92,0.12);
+    --pink: #f472b6;
+    --pink-soft: rgba(244,114,182,0.12);
+    --success: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+    --font-title: 'Clash Display', 'Helvetica Neue', sans-serif;
+    --font-body: 'Satoshi', 'Helvetica Neue', sans-serif;
+}
+body.light {
+    --bg: #e4e8ee;
+    --paper: #f6f7f9;
+    --paper-2: #eceff3;
+    --text: #161b21;
+    --text-2: #47525d;
+    --text-3: #7b8692;
+    --border: rgba(15,25,35,0.15);
+    --acc: #0d9488;
+    --acc-soft: rgba(13,148,136,0.08);
+    --blue: #1d6fd8;
+    --blue-soft: rgba(29,111,216,0.09);
+    --violet: #7c5fd3;
+    --violet-soft: rgba(124,95,211,0.09);
+    --orange: #d96b35;
+    --orange-soft: rgba(217,107,53,0.1);
+    --pink: #c2417f;
+    --pink-soft: rgba(194,65,127,0.09);
+    --success: #059669;
+    --warn: #b45309;
+    --danger: #dc2626;
+}
+
+/* ---------- Base ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* Escala tipográfica pensada para proxección: a raíz crece coa pantalla e todo o rem segue */
+html { scroll-behavior: smooth; font-size: 16px; }
+@media (min-width: 1100px) { html { font-size: 18px; } }
+@media (min-width: 1500px) { html { font-size: 20px; } }
+@media (min-width: 1900px) { html { font-size: 22px; } }
+body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-body);
+    font-size: 1rem; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 72rem; margin: 0 auto; padding: 3.5rem 1.5rem 5rem; }
+h1, h2, h3, h4 { font-family: var(--font-title); font-weight: 600; line-height: 1.15; }
+h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 14px; letter-spacing: -0.01em; }
+h1 em { font-style: normal; color: var(--acc); }
+h2 { font-size: 1.6rem; margin-bottom: 6px; }
+h3 { font-size: 1.1rem; margin-bottom: 8px; }
+p { color: var(--text-2); }
+p strong, li strong { color: var(--text); font-weight: 700; }
+a { color: var(--acc); }
+
+.eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.26em; color: var(--acc); margin-bottom: 14px; }
+header .sub { font-size: 1.1rem; max-width: 66ch; }
+header .meta { margin-top: 18px; color: var(--text-3); font-size: 0.85rem; }
+
+/* Sección con acento propio */
+section.doc { margin-top: 64px; --sec: var(--acc); --sec-soft: var(--acc-soft); }
+section.doc.s-blue { --sec: var(--blue); --sec-soft: var(--blue-soft); }
+section.doc.s-violet { --sec: var(--violet); --sec-soft: var(--violet-soft); }
+section.doc.s-orange { --sec: var(--orange); --sec-soft: var(--orange-soft); }
+section.doc.s-pink { --sec: var(--pink); --sec-soft: var(--pink-soft); }
+.sec-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+.sec-num {
+    flex: none; width: 44px; height: 44px; border-radius: 12px;
+    background: var(--sec-soft); color: var(--sec);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-title); font-weight: 700; font-size: 1.1rem;
+}
+.sec-head p { max-width: 72ch; }
+
+/* Cards */
+.grid { display: grid; gap: 14px; }
+.grid-5 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.card {
+    background: var(--paper); border: 1px solid var(--border); border-radius: 16px;
+    padding: 20px 22px; position: relative; overflow: hidden;
+}
+.card.tone { border-top: 3px solid var(--tone); }
+.card .icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--tone-soft); color: var(--tone); margin-bottom: 14px; }
+.card .icon svg { width: 18px; height: 18px; }
+.card h3 { color: var(--text); }
+.card .ask { font-family: var(--font-title); font-weight: 500; font-size: 1rem; color: var(--tone); margin-bottom: 8px; }
+.card p { font-size: 0.92rem; }
+.card .tag { display: inline-block; margin-top: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--tone); background: var(--tone-soft); padding: 4px 10px; border-radius: 999px; }
+.t-teal { --tone: var(--acc); --tone-soft: var(--acc-soft); }
+.t-blue { --tone: var(--blue); --tone-soft: var(--blue-soft); }
+.t-violet { --tone: var(--violet); --tone-soft: var(--violet-soft); }
+.t-orange { --tone: var(--orange); --tone-soft: var(--orange-soft); }
+.t-pink { --tone: var(--pink); --tone-soft: var(--pink-soft); }
+
+/* Frase mnemotécnica */
+.mnemo {
+    margin-top: 18px; padding: 22px 26px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--paper-2), var(--paper));
+    border: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px;
+}
+.mnemo div { font-family: var(--font-title); font-size: 1rem; color: var(--text-2); }
+.mnemo b { display: block; font-size: 1.35rem; font-weight: 700; color: var(--tone); }
+
+/* Callouts */
+.callout {
+    border-left: 3px solid var(--sec); background: var(--sec-soft);
+    padding: 14px 18px; border-radius: 0 12px 12px 0; margin-top: 16px; font-size: 0.95rem;
+}
+.callout strong { color: var(--text); }
+.callout.warn { border-color: var(--warn); background: rgba(251,191,36,0.1); }
+.callout.danger { border-color: var(--danger); background: rgba(248,113,113,0.1); }
+.callout.ok { border-color: var(--success); background: rgba(52,211,153,0.1); }
+
+/* Dous usos: dúas columnas grandes */
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 16px; }
+.two .col { background: var(--paper); border: 1px solid var(--border); border-radius: 18px; padding: 22px 24px; border-top: 4px solid var(--tone); }
+.two .col .kicker { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--tone); margin-bottom: 6px; }
+.two .col h3 { font-size: 1.35rem; margin-bottom: 4px; }
+.two .col .lead { color: var(--text-2); font-size: 0.95rem; margin-bottom: 14px; }
+.two dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 14px; font-size: 0.9rem; }
+.two dt { color: var(--text-3); font-weight: 700; }
+.two dd { color: var(--text-2); }
+.two dd strong { color: var(--text); }
+.two .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.two .chips span { font-family: var(--font-title); font-weight: 600; font-size: 0.85rem; padding: 4px 10px; border-radius: 8px; background: var(--tone-soft); color: var(--tone); }
+
+/* Bloque criterio literal */
+.law {
+    background: var(--paper); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px;
+}
+.law .lbl { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--sec); margin-bottom: 8px; }
+.law blockquote { font-family: var(--font-title); font-weight: 500; font-size: 1.15rem; line-height: 1.4; color: var(--text); }
+.law .src { margin-top: 8px; color: var(--text-3); font-size: 0.82rem; }
+.law .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.law .chips span { font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); }
+.law .chips span.hi { border-color: var(--blue); color: var(--blue); }
+
+/* Niveis */
+.graos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px; margin-top: 16px; }
+.grao { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; border-top: 3px solid var(--g); }
+.grao .g { font-family: var(--font-title); font-weight: 700; font-size: 1.2rem; color: var(--g); }
+.grao .v { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-3); margin-bottom: 8px; }
+.grao p { font-size: 0.9rem; }
+.g0 { --g: var(--text-3); }
+.g1 { --g: var(--warn); }
+.g2 { --g: var(--blue); }
+.g3 { --g: var(--success); }
+
+/* Rúbrica indicadores × niveis */
+.rub-wrap { overflow-x: auto; margin-top: 16px; border: 1px solid var(--border); border-radius: 16px; background: var(--paper); }
+table.rub { border-collapse: collapse; width: 100%; min-width: 700px; font-size: 0.9rem; }
+table.rub th, table.rub td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: middle; }
+table.rub thead th { font-family: var(--font-title); font-weight: 600; font-size: 0.85rem; color: var(--text-3); background: var(--paper-2); }
+table.rub thead th.gh { text-align: center; color: var(--g); }
+table.rub thead th.gh small { display: block; font-weight: 500; font-size: 0.7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; }
+table.rub td.ind { color: var(--text); }
+table.rub td.ind small { display: block; color: var(--text-3); font-size: 0.78rem; margin-top: 2px; }
+table.rub td.gr { text-align: center; white-space: nowrap; }
+table.rub td.gr span { font-family: var(--font-title); font-weight: 700; font-size: 0.8rem; padding: 3px 9px; border-radius: 6px; background: var(--blue-soft); color: var(--blue); }
+table.rub td.c { text-align: center; }
+table.rub td.c span { display: inline-flex; width: 26px; height: 26px; border-radius: 8px; align-items: center; justify-content: center; }
+table.rub td.c span.yes { background: rgba(52,211,153,0.16); color: var(--success); }
+table.rub td.c span.help { background: rgba(251,191,36,0.16); color: var(--warn); }
+table.rub td.c span svg { width: 15px; height: 15px; }
+table.rub tr:last-child td { border-bottom: none; }
+table.rub th.min-line, table.rub td.min-line { border-left: 2px dashed var(--pink); }
+.rub-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 10px; font-size: 0.82rem; color: var(--text-3); }
+.rub-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.rub-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; }
+.rub-legend i.yes { background: rgba(52,211,153,0.5); }
+.rub-legend i.help { background: rgba(251,191,36,0.5); }
+.rub-legend i.min { width: 0; height: 12px; border-left: 2px dashed var(--pink); }
+
+.axis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; margin-top: 14px; }
+.axis .card { padding: 14px 18px; }
+.axis .card h4 { font-size: 0.95rem; margin-bottom: 4px; color: var(--tone); }
+.axis .card p { font-size: 0.88rem; }
+
+/* Táboas */
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 16px; background: var(--paper); margin-top: 16px; }
+table.tbl { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 0.9rem; }
+table.tbl th, table.tbl td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+table.tbl thead th { font-family: var(--font-title); font-weight: 600; font-size: 0.85rem; color: var(--text-3); background: var(--paper-2); }
+table.tbl tbody th { font-family: var(--font-title); font-weight: 600; color: var(--text); white-space: nowrap; }
+table.tbl td { color: var(--text-2); }
+table.tbl td strong { color: var(--text); }
+table.tbl tr:last-child td, table.tbl tr:last-child th { border-bottom: none; }
+table.tbl .norm { font-family: var(--font-title); font-weight: 600; color: var(--sec); white-space: nowrap; }
+table.tbl q { font-style: italic; color: var(--text); quotes: "«" "»"; }
+table.tbl .no { color: var(--danger); font-weight: 700; }
+table.tbl .yes { color: var(--success); font-weight: 700; }
+table.tbl .grp td { background: var(--paper-2); color: var(--text); font-family: var(--font-title); font-weight: 600; font-size: 0.85rem; }
+
+/* Proba do algodón */
+.test { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; margin-top: 16px; }
+.test .card { display: flex; gap: 14px; align-items: flex-start; }
+.test .q { font-family: var(--font-title); font-weight: 600; color: var(--text); }
+.test .a { margin-top: 4px; font-size: 0.9rem; }
+.test .a b { color: var(--tone); }
+.test .icon { margin: 0; flex: none; }
+
+/* Cláusula */
+.clause {
+    margin-top: 16px; background: var(--paper); border: 1px solid var(--border); border-radius: 16px; padding: 22px 26px;
+}
+.clause .lbl { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--sec); margin-bottom: 10px; }
+.clause p { color: var(--text); font-size: 1rem; line-height: 1.6; }
+.clause p + p { margin-top: 10px; }
+.clause .where { margin-top: 12px; color: var(--text-3); font-size: 0.82rem; }
+
+/* Escala */
+.scale { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px; margin-top: 16px; }
+.scale .step { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; border-top: 3px solid var(--g); }
+.scale .step .g { font-family: var(--font-title); font-weight: 700; font-size: 1.3rem; color: var(--g); }
+.scale .step .n { font-family: var(--font-title); font-weight: 700; font-size: 2rem; color: var(--text); margin: 4px 0; }
+.scale .step .q { font-size: 0.8rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+.scale .step .d { font-size: 0.85rem; color: var(--text-2); margin-top: 6px; }
+
+/* Checklist */
+ul.check { list-style: none; margin-top: 14px; display: grid; gap: 8px; }
+ul.check li { display: flex; gap: 12px; align-items: flex-start; background: var(--paper); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; font-size: 0.93rem; color: var(--text-2); }
+ul.check li svg { flex: none; width: 18px; height: 18px; color: var(--sec); margin-top: 2px; }
+ul.check li strong { color: var(--text); }
+
+ol.refs { margin-top: 12px; padding-left: 20px; color: var(--text-2); font-size: 0.9rem; display: grid; gap: 6px; }
+ol.refs li::marker { color: var(--text-3); }
+
+/* Botóns fixos */
+.theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 10;
+    background: var(--paper); border: 1px solid var(--border); border-radius: 50%;
+    width: 40px; height: 40px; cursor: pointer; color: var(--text-2);
+    display: flex; align-items: center; justify-content: center;
+}
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .icon-sun { display: none; }
+body.light .theme-toggle .icon-sun { display: block; }
+body.light .theme-toggle .icon-moon { display: none; }
+.print-btn {
+    position: fixed; top: 16px; right: 64px; z-index: 10;
+    background: var(--paper); border: 1px solid var(--border); border-radius: 999px;
+    height: 40px; padding: 0 16px; cursor: pointer; color: var(--text-2);
+    display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 0.85rem; font-weight: 700;
+}
+.print-btn svg { width: 16px; height: 16px; }
+
+footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-3); font-size: 0.82rem; }
+
+/* ---------- Impresión ---------- */
+@media print {
+    html { font-size: 16px; }
+    body, body.light {
+        background: #fff; --bg: #fff; --paper: #fff; --paper-2: #f2f4f6; --text: #111; --text-2: #333; --text-3: #666;
+        --border: #c8cdd2; --acc: #0d7a6f; --acc-soft: #eef6f5; --blue: #1d5fb8; --blue-soft: #eaf1fb; --violet: #6d4fc3; --violet-soft: #f0ecfa;
+        --orange: #c05a28; --orange-soft: #fbeee7; --pink: #c2417f; --pink-soft: #f9ebf2; --success: #047857; --warn: #b45309; --danger: #b91c1c;
+    }
+    .theme-toggle, .print-btn { display: none; }
+    .wrap { max-width: 100%; padding: 0; }
+    body { font-size: 10.5pt; }
+    h1 { font-size: 22pt; }
+    h2 { font-size: 15pt; }
+    section.doc { margin-top: 22px; }
+    section.doc.brk { break-before: page; }
+    .card, .callout, .grao, .law, .clause, .step, ul.check li, .rub-wrap, .tbl-wrap, .two .col { break-inside: avoid; }
+    .sec-head { break-after: avoid; }
+    .rub-wrap, .tbl-wrap { overflow: visible; }
+    table.rub, table.tbl { min-width: 0; font-size: 9.5pt; }
+    table.rub td.c span.yes { background: #d9f3e8; }
+    table.rub td.c span.help { background: #fdf0d3; }
+    a { color: inherit; text-decoration: none; }
+    @page { size: A4; margin: 12mm; }
+}
+</style>
+</head>
+<body>
+<button class="theme-toggle" aria-label="Cambiar tema">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+</button>
+<button class="print-btn" onclick="window.print()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
+    Imprimir
+</button>
+
+<div class="wrap">
+
+<header>
+    <div class="eyebrow">Avaliación · Educación Primaria · LOMLOE</div>
+    <h1>Graos de complexidade, niveis de consecución <em>e</em> indicadores</h1>
+    <p class="sub">Cinco pezas que se parecen na forma e responden a preguntas distintas. Que é cada unha, onde as confundimos e como se xustifican legalmente. Documento de referencia para o equipo docente e, se cómpre, para a Inspección educativa.</p>
+    <p class="meta">Brais Prados González · CEIP Condesa de Fenosa · Setembro 2026 · Marco: Decreto 155/2022, Orde do 26 de maio de 2023, Manual de axuda PROENS v1.0.1 e Marco xeral das avaliacións do INEE</p>
+</header>
+
+<!-- ============ 1. CINCO PEZAS ============ -->
+<section class="doc" id="pezas">
+    <div class="sec-head">
+        <div class="sec-num">1</div>
+        <div>
+            <h2>Cinco pezas, cinco preguntas</h2>
+            <p>Só a primeira é normativa. As outras catro son ferramentas do docente, e dúas delas levan a mesma palabra («grao») con significados distintos.</p>
+        </div>
+    </div>
+
+    <div class="grid grid-5">
+        <div class="card tone t-teal">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></div>
+            <h3>Criterio de avaliación</h3>
+            <div class="ask">Que hai que avaliar?</div>
+            <p>Texto literal do anexo II do Decreto 155/2022. Referente único. Non se modifica.</p>
+            <span class="tag">Normativo · DOG</span>
+        </div>
+        <div class="card tone t-blue">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16h3"/><path d="M7 11h6"/><path d="M7 6h10"/></svg></div>
+            <h3>Grao de complexidade</h3>
+            <div class="ask">Canto esixe o criterio?</div>
+            <p>Clasificación 1 · 2 · 3 segundo o verbo. Cada criterio (ou indicador) está nun só grao. Modelo INEE.</p>
+            <span class="tag">Atributo do criterio</span>
+        </div>
+        <div class="card tone t-orange">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg></div>
+            <h3>Nivel de consecución</h3>
+            <div class="ask">Canto acada o alumno?</div>
+            <p>Rúbrica N0 · N1 · N2 · N3 do mesmo criterio. Cada criterio descríbese en todos os niveis.</p>
+            <span class="tag">Escala de valoración</span>
+        </div>
+        <div class="card tone t-violet">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg></div>
+            <h3>Indicador</h3>
+            <div class="ask">En que se nota?</div>
+            <p>Conduta observable que se marca nun instrumento. Varias evidencias do mesmo criterio.</p>
+            <span class="tag">Ítem dun instrumento</span>
+        </div>
+        <div class="card tone t-pink">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+            <h3>Mínimo de consecución</h3>
+            <div class="ask">Desde onde aproba?</div>
+            <p>Aprendizaxe imprescindible para superar o criterio. Sen cifras. Esixido por PROENS.</p>
+            <span class="tag">Obrigatorio · tríada PROENS</span>
+        </div>
+    </div>
+
+    <div class="mnemo">
+        <div class="t-teal"><b>Que</b>di o criterio</div>
+        <div class="t-blue"><b>Canto esixe</b>di o grao</div>
+        <div class="t-orange"><b>Canto acada</b>di o nivel</div>
+        <div class="t-violet"><b>En que se nota</b>di o indicador</div>
+        <div class="t-pink"><b>Desde onde aproba</b>di o mínimo</div>
+    </div>
+
+    <div class="callout warn">
+        <strong>Nota de nomenclatura.</strong> Ata setembro de 2026 usabamos «G1 · G2 · G3» tanto para o grao de complexidade coma para os niveis da rúbrica. Desde entón reservamos <strong>Grao 1-2-3</strong> para a complexidade do criterio (modelo INEE) e chamamos <strong>N0-N1-N2-N3</strong> aos niveis de consecución do alumno. As programacións de EF 26-27, a presentación e o protocolo de avaliación funcional xa usan esta nomenclatura; se atopas un «G1-G3» nun material antigo, a equivalencia é directa (G0 = N0, G1 = N1…).
+    </div>
+</section>
+
+<!-- ============ 2. DOUS USOS DE GRAO ============ -->
+<section class="doc s-blue" id="dous-usos">
+    <div class="sec-head">
+        <div class="sec-num">2</div>
+        <div>
+            <h2>Dous usos de «grao» que non son o mesmo</h2>
+            <p>Aquí está a raíz da confusión. Son dúas operacións distintas sobre o mesmo criterio, unha horizontal e outra vertical, que compartían etiqueta e ata os mesmos verbos.</p>
+        </div>
+    </div>
+
+    <div class="two">
+        <div class="col t-blue">
+            <div class="kicker">Operación A · horizontal</div>
+            <h3>Grao de complexidade</h3>
+            <p class="lead">Clasificar cada criterio (ou cada indicador) nun grao segundo a demanda cognitiva do seu verbo.</p>
+            <dl>
+                <dt>Que se gradúa</dt><dd>O <strong>criterio</strong> ou o <strong>indicador</strong>. É un atributo fixo: «CA1.2 é de grao 1».</dd>
+                <dt>Cantos</dt><dd>Tres: 1 identifica · 2 emprega · 3 xustifica ou crea.</dd>
+                <dt>Cada criterio</dt><dd>Está <strong>nun só grao</strong>. Non se describe en tres.</dd>
+                <dt>Como se asigna</dt><dd>Polo verbo: identificar, recoñecer, nomear → 1. Aplicar, empregar, comprobar → 2. Xustificar, argumentar, crear → 3.</dd>
+                <dt>Para que serve</dt><dd>Saber que criterios son máis esixentes. Equilibrar unha proba (matriz de especificacións: 30 % · 45 % · 25 % no INEE de 4º, 40 · 45 · 15 na adaptación a 2º). Deseñar tarefas multinivel.</dd>
+                <dt>Non serve para</dt><dd>Cualificar. Un grao non é unha nota.</dd>
+                <dt>Onde o usamos</dt><dd>Marco de avaliación de Matemáticas 2º (49 criterios, o 84 % nun único grao). Marco de 4º (5 áreas).</dd>
+                <dt>Base</dt><dd>INEE (2025): «os indicadores de logro dividíronse en tres graos segundo o seu nivel de complexidade». Exemplos do INEE: «recoñece estratexias» (1), «comproba a validez da solución» (2), «crea representacións» (3).</dd>
+            </dl>
+            <div class="chips"><span>Grao 1</span><span>Grao 2</span><span>Grao 3</span></div>
+        </div>
+        <div class="col t-orange">
+            <div class="kicker">Operación B · vertical</div>
+            <h3>Nivel de consecución</h3>
+            <p class="lead">Describir como se ve o mesmo criterio en cada nivel de dominio do alumno, do «en proceso» ao «excelente».</p>
+            <dl>
+                <dt>Que se gradúa</dt><dd>O <strong>desempeño do alumno</strong> nese criterio. Cambia co tempo.</dd>
+                <dt>Cantos</dt><dd>Catro: N0 en proceso · N1 mínimo · N2 pleno · N3 excelente.</dd>
+                <dt>Cada criterio</dt><dd>Descríbese <strong>en todos os niveis</strong>. É unha rúbrica.</dd>
+                <dt>Como se redacta</dt><dd>N2 é o criterio tal como está escrito. N1 rebaixa verbo, obxecto ou contexto (é o mínimo). N3 vai máis alá: xustifica, transfire, crea. N0 é o que aínda non chega ao mínimo.</dd>
+                <dt>Para que serve</dt><dd>Valorar o criterio ao pechar a UD. Converter a cualificación. Dar retroalimentación («estás en N1, para N2 falta…»).</dd>
+                <dt>Non serve para</dt><dd>Dicir se un criterio é fácil ou difícil. Todos os criterios teñen os catro niveis.</dd>
+                <dt>Onde o usamos</dt><dd>Programacións de EF 1º e 2º (68 criterios, todos en catro niveis). Rúbricas de Ciencias de 4º (Adquirido · En proceso · Non adquirido).</dd>
+                <dt>Base</dt><dd>Manual PROENS 5.2: «a escala de valoración e os criterios que se empregarán nos instrumentos». Decreto 155/2022 art. 6.2.e: os CA «indican os niveis de desempeño esperados».</dd>
+            </dl>
+            <div class="chips"><span>N0</span><span>N1</span><span>N2</span><span>N3</span></div>
+        </div>
+    </div>
+
+    <div class="callout">
+        <strong>Como se relacionan.</strong> O grao de complexidade dun criterio di onde se sitúa o seu verbo. Na rúbrica, ese verbo é o nivel N2 (o criterio «tal cal»). Por iso un criterio de grao 1 («identificar as emocións») ten un N2 que só pide identificar, e o seu N3 (regular con autonomía) vai máis alá do que o Decreto esixe: é a excelencia, non o aprobado. E por iso o mínimo (N1) sempre queda por debaixo do verbo do criterio, como pide o Manual.
+    </div>
+    <div class="callout danger">
+        <strong>Por que nos liamos.</strong> Os dous sistemas usaban as mesmas etiquetas (G1 · G2 · G3) e os mesmos verbos (identifica · emprega · xustifica). E, para máis confusión, os indicadores de grao 1 son os que iluminan a columna N1 da rúbrica, os de grao 2 a columna N2, e así. Os números coinciden, pero un fala do criterio e o outro do alumno.
+    </div>
+</section>
+
+<!-- ============ 3. EXEMPLO ============ -->
+<section class="doc s-orange" id="exemplo">
+    <div class="sec-head">
+        <div class="sec-num">3</div>
+        <div>
+            <h2>Un exemplo completo: EF 2º · CA2.4</h2>
+            <p>As cinco pezas sobre o mesmo criterio. Fíxate en que o grao de complexidade é un dato, e os niveis de consecución son catro descricións.</p>
+        </div>
+    </div>
+
+    <div class="law">
+        <div class="lbl">Criterio de avaliación · literal do DOG</div>
+        <blockquote>CA2.4. Recoñecer a importancia de desenvolver proxectos motores de carácter individual, cooperativo ou colaborativo, valorando a súa consecución a partir dunha análise dos resultados obtidos.</blockquote>
+        <div class="src">Decreto 155/2022, anexo II · Educación Física · 2º curso · Bloque 2 · OBX2. Perfil cognitivo-motor.</div>
+        <div class="chips">
+            <span class="hi">Grao de complexidade: 1</span>
+            <span>Verbo principal: recoñecer</span>
+            <span>Instrumento: escala de observación + diana (táboa de indicadores)</span>
+            <span>Peso na UD: segundo mapeo</span>
+        </div>
+    </div>
+
+    <h3 style="margin-top:22px">Niveis de consecución: catro descricións do mesmo criterio</h3>
+    <div class="graos">
+        <div class="grao g0"><div class="g">N0</div><div class="v">En proceso</div><p>Realízao só con moita axuda ou en moi poucas ocasións. Aínda non acada o mínimo do criterio.</p></div>
+        <div class="grao g1"><div class="g">N1</div><div class="v">Mínimo</div><p>Recoñece, con apoio, a meta dun proxecto motor sinxelo e se se logrou ou non.</p></div>
+        <div class="grao g2"><div class="g">N2</div><div class="v">Pleno · o criterio tal cal</div><p>Participa nun proxecto motor sinxelo poñendo da súa parte para acadar a meta común, e valora os resultados obtidos.</p></div>
+        <div class="grao g3"><div class="g">N3</div><div class="v">Excelente</div><p>Explica, cun debuxo, un exemplo propio ou de palabra, se conseguiron a meta e por que, ou propón unha mellora.</p></div>
+    </div>
+
+    <h3 style="margin-top:22px">Indicadores × niveis: a rúbrica do instrumento</h3>
+    <p>Cada fila é un indicador (conduta que se marca na sesión) e leva o seu grao de complexidade. Cada columna é un nivel de consecución. A liña discontinua é o mínimo.</p>
+    <div class="rub-wrap">
+        <table class="rub">
+            <thead>
+                <tr>
+                    <th>Indicador (evidencia observable)</th>
+                    <th style="text-align:center">Grao</th>
+                    <th class="gh g0">N0<small>en proceso</small></th>
+                    <th class="gh g1 min-line">N1<small>mínimo</small></th>
+                    <th class="gh g2">N2<small>pleno</small></th>
+                    <th class="gh g3">N3<small>excelente</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="ind">Di cal é a meta do proxecto motor<small>Pregunta directa ao comezo da tarefa</small></td>
+                    <td class="gr"><span>1</span></td>
+                    <td class="c"><span class="help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span></td>
+                    <td class="c min-line"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td>
+                    <td class="c"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td>
+                    <td class="c"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td>
+                </tr>
+                <tr>
+                    <td class="ind">Di se a meta se logrou ou non<small>Ao rematar, sen que llo diga o mestre</small></td>
+                    <td class="gr"><span>1</span></td>
+                    <td class="c"></td>
+                    <td class="c min-line"><span class="help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span></td>
+                    <td class="c"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td>
+                    <td class="c"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td>
+                </tr>
+                <tr>
+                    <td class="ind">Participa activamente durante todo o proxecto<small>Observación na sesión</small></td>
+                    <td class="gr"><span>2</span></td>
+                    <td class="c"></td>
+                    <td class="c min-line"><span class="help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span></td>
+                    <td class="c"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td>
+                    <td class="c"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td>
+                </tr>
+                <tr>
+                    <td class="ind">Explica por que se logrou ou propón unha mellora<small>De palabra ou cun debuxo na diana</small></td>
+                    <td class="gr"><span>3</span></td>
+                    <td class="c"></td>
+                    <td class="c min-line"></td>
+                    <td class="c"></td>
+                    <td class="c"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="rub-legend">
+        <span><i class="yes"></i> Faino de forma habitual e autónoma</span>
+        <span><i class="help"></i> Faino con axuda ou de forma puntual</span>
+        <span><i class="min"></i> Mínimo de consecución: acadar N1 é superar o criterio</span>
+    </div>
+
+    <div class="axis">
+        <div class="card t-violet"><h4>Filas = indicadores</h4><p>Evidencias. Márcanse cunha cruz nunha sesión. Un criterio pode ter dous, tres ou catro.</p></div>
+        <div class="card t-blue"><h4>Columna «Grao» = complexidade</h4><p>Cada indicador leva o seu grao polo verbo. É o que fai o marco de Matemáticas 2º: clasificar indicadores, non describir niveis.</p></div>
+        <div class="card t-orange"><h4>Columnas N0-N3 = niveis</h4><p>Dominio do alumno. Infírese do conxunto de indicadores marcados ao pechar a UD.</p></div>
+        <div class="card t-pink"><h4>Liña = mínimo</h4><p>Fronteira legal do aprobado. Redáctase á parte porque PROENS o pide: «Participa nun proxecto motor sinxelo e recoñece se se acadou a meta proposta».</p></div>
+    </div>
+</section>
+
+<!-- ============ 4. CONFUSIÓN ============ -->
+<section class="doc s-violet" id="confusion">
+    <div class="sec-head">
+        <div class="sec-num">4</div>
+        <div>
+            <h2>Onde nace a confusión</h2>
+            <p>Catro causas, e as catro son razoables. A primeira é nosa; as outras tres veñen da normativa e da súa historia.</p>
+        </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr))">
+        <div class="card tone t-violet">
+            <h3>1 · Mesma etiqueta para dúas operacións</h3>
+            <p>Nos marcos de avaliación, «G1-G3» clasifica criterios e indicadores por complexidade (INEE). Nas programacións de EF, «G0-G3» describe niveis de dominio do alumno. Ao usar os mesmos números e os mesmos verbos, acabamos lendo unha rúbrica como se fose unha clasificación, e viceversa.</p>
+        </div>
+        <div class="card tone t-violet">
+            <h3>2 · «Indicador de logro» ten tres significados</h3>
+            <p>No INEE é un enunciado breve derivado do criterio que serve para codificar a resposta a un ítem. No Decreto 155/2022 (arts. 15.2.h e 21.5) refírese só á avaliación da práctica docente. Nos nosos instrumentos é unha conduta observable do alumno. O Manual PROENS evita o termo e fala de «táboa de indicadores» como categoría de instrumento.</p>
+        </div>
+        <div class="card tone t-violet">
+            <h3>3 · Herdanza LOMCE</h3>
+            <p>Co Decreto 105/2014 había estándares de aprendizaxe e moitos centros troceábanos en indicadores que servían á vez de evidencia e de nivel. A LOMLOE eliminou os estándares e o Manual substituíunos polo mínimo de consecución.</p>
+        </div>
+        <div class="card tone t-violet">
+            <h3>4 · «Grao» tamén é umbral</h3>
+            <p>O Decreto (art. 15.2.e) e o Manual falan de «grao mínimo de consecución» para referirse ao chan do aprobado da área. É un terceiro uso da palabra, sen relación cos graos 1-2-3 nin cos niveis N0-N3.</p>
+        </div>
+    </div>
+
+    <h3 style="margin-top:22px">A proba do algodón</h3>
+    <div class="test">
+        <div class="card t-blue">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16h3"/><path d="M7 11h6"/><path d="M7 6h10"/></svg></div>
+            <div><div class="q">Fala do criterio e non cambia de alumno a alumno?</div><div class="a">É un <b>grao de complexidade</b>. Vale para ordenar criterios e equilibrar probas.</div></div>
+        </div>
+        <div class="card t-orange">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg></div>
+            <div><div class="q">Fala do alumno e pode subir ao longo do curso?</div><div class="a">É un <b>nivel de consecución</b>. Vale para valorar e cualificar.</div></div>
+        </div>
+        <div class="card t-violet">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg></div>
+            <div><div class="q">Pódese marcar cunha cruz nunha sesión?</div><div class="a">É un <b>indicador</b>. Vai dentro dun instrumento e non se cualifica por si só.</div></div>
+        </div>
+    </div>
+
+    <h3 style="margin-top:22px">Táboa comparativa</h3>
+    <div class="tbl-wrap">
+        <table class="tbl">
+            <thead>
+                <tr><th></th><th>Criterio</th><th>Grao de complexidade</th><th>Nivel de consecución</th><th>Indicador</th><th>Mínimo</th></tr>
+            </thead>
+            <tbody>
+                <tr><th>Pregunta</th><td>Que se avalía</td><td>Canto esixe o criterio</td><td>Canto acada o alumno</td><td>En que se nota</td><td>Desde onde aproba</td></tr>
+                <tr><th>De quen fala</th><td>Do currículo</td><td>Do criterio</td><td>Do alumno</td><td>Do alumno, nunha sesión</td><td>Do alumno, ao pechar</td></tr>
+                <tr><th>Quen o fixa</th><td>Consellería (DOG)</td><td>Docente, seguindo o INEE</td><td>Docente</td><td>Docente</td><td>Docente, por esixencia de PROENS</td></tr>
+                <tr><th>Carácter</th><td><span class="yes">Normativo</span></td><td><span class="no">Non normativo</span>, adaptación de aula</td><td><span class="no">Non normativo</span>, escala de valoración declarada</td><td>Ítem dun instrumento</td><td><span class="yes">Obrigatorio</span> na tríada</td></tr>
+                <tr><th>Cantos por criterio</th><td>1</td><td><strong>1</strong> (o criterio está nun grao)</td><td><strong>4</strong> (o criterio descríbese en todos)</td><td>2-4</td><td>1</td></tr>
+                <tr><th>Onde vive</th><td>Apartado 3.2 de PROENS</td><td>Marcos de avaliación (Mate 2º, 4º)</td><td>Anexo da programación e apartado 5.2</td><td>Dentro do instrumento</td><td>Apartado 3.3 de PROENS</td></tr>
+                <tr><th>Exemplo</th><td>Recoñecer a importancia de desenvolver proxectos motores…</td><td>Grao 1 (recoñecer)</td><td>N2: participa poñendo da súa parte e valora os resultados</td><td>Di se a meta se logrou ou non</td><td>Participa nun proxecto motor sinxelo e recoñece se se acadou a meta</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============ 5. BASE LEGAL ============ -->
+<section class="doc s-pink brk" id="legal">
+    <div class="sec-head">
+        <div class="sec-num">5</div>
+        <div>
+            <h2>Como se xustifica legalmente</h2>
+            <p>Nin o grao de complexidade nin o nivel de consecución teñen artigo propio. Xustifícanse como desenvolvemento de mandatos que si existen, e cada un ten os seus apoios.</p>
+        </div>
+    </div>
+
+    <div class="tbl-wrap">
+        <table class="tbl">
+            <thead>
+                <tr><th>Apoio</th><th>Norma</th><th>O que di</th><th>O que achega</th></tr>
+            </thead>
+            <tbody>
+                <tr class="grp"><td colspan="4">Comúns ás dúas operacións</td></tr>
+                <tr>
+                    <td><strong>O criterio non se toca</strong></td>
+                    <td class="norm">D. 155/2022 art. 21.1<br>Orde 26/05/2023 art. 17.3</td>
+                    <td>Os referentes da avaliación <q>serán os criterios de avaliación que figuran no anexo II</q>.</td>
+                    <td>Grao e nivel son capas sobre o criterio literal. Ningunha o substitúe.</td>
+                </tr>
+                <tr>
+                    <td><strong>Avaliación obxectiva e pública</strong></td>
+                    <td class="norm">D. 155/2022 art. 24<br>Orde art. 30</td>
+                    <td>Facer públicos <q>os criterios de avaliación, os instrumentos de avaliación e os criterios de promoción</q> conforme <q>criterios de plena obxectividade</q>.</td>
+                    <td>Descritores públicos por nivel e clasificación explícita por grao son garantías de obxectividade.</td>
+                </tr>
+                <tr class="grp"><td colspan="4">Grao de complexidade (operación A)</td></tr>
+                <tr>
+                    <td><strong>Marco INEE</strong></td>
+                    <td class="norm">INEE (2025)<br>Marco xeral das avaliacións, 2ª ed.</td>
+                    <td><q>Os indicadores de logro dividíronse en tres graos segundo o seu nivel de complexidade</q>. Estrutura de proba con reparto de ítems por grao.</td>
+                    <td>É o modelo oficial das avaliacións de diagnóstico de 4º. Clasificar os nosos criterios igual é aliñarse con el.</td>
+                </tr>
+                <tr>
+                    <td><strong>Instrumentos adaptados ás situacións</strong></td>
+                    <td class="norm">D. 155/2022 art. 21.4<br>Orde art. 17.4</td>
+                    <td><q>Instrumentos de avaliación variados, diversos e adaptados ás distintas situacións de aprendizaxe</q>.</td>
+                    <td>Unha proba equilibrada por grao é un instrumento adaptado, non unha lista de ítems ao chou.</td>
+                </tr>
+                <tr>
+                    <td><strong>Atención á diversidade e DUA</strong></td>
+                    <td class="norm">D. 155/2022 art. 15.2.f<br>(apartado 6 de PROENS)</td>
+                    <td>A programación inclúe <q>medidas de atención á diversidade</q>.</td>
+                    <td>Coñecer o grao de cada criterio permite deseñar a mesma tarefa con tres portas de entrada.</td>
+                </tr>
+                <tr class="grp"><td colspan="4">Nivel de consecución (operación B)</td></tr>
+                <tr>
+                    <td><strong>O criterio fala de niveis de desempeño</strong></td>
+                    <td class="norm">D. 155/2022 art. 6.2.e</td>
+                    <td>Os CA son <q>referentes que indican os niveis de desempeño esperados no alumnado</q>.</td>
+                    <td>Describir eses niveis é facer explícito o que o Decreto xa presupón.</td>
+                </tr>
+                <tr>
+                    <td><strong>Escala de valoración dos instrumentos</strong></td>
+                    <td class="norm">Manual PROENS 5.2<br>(páx. 39)</td>
+                    <td>No apartado de cualificación pódese indicar <q>a escala de valoración e os criterios que se empregarán nos diferentes instrumentos</q>.</td>
+                    <td>N0-N3 coa súa conversión numérica é exactamente esa escala, declarada.</td>
+                </tr>
+                <tr>
+                    <td><strong>Mínimo de consecución</strong></td>
+                    <td class="norm">D. 155/2022 art. 15.2.e<br>Manual, páx. 32-33</td>
+                    <td>Redactar o mínimo rebaixando o verbo, reducindo o obxecto ou eliminando o contexto; <q>non se deben establecer mínimos de consecución cuantitativos</q>.</td>
+                    <td>O N1 é o mínimo redactado con esa técnica. O N2 é o criterio tal cal.</td>
+                </tr>
+                <tr>
+                    <td><strong>Avaliación continua e formativa</strong></td>
+                    <td class="norm">D. 155/2022 art. 21.2<br>Orde art. 17.2</td>
+                    <td><q>A avaliación do alumnado será global, continua e formativa</q>.</td>
+                    <td>Catro niveis permiten rexistrar progreso dentro do curso e devolver información útil ao alumno.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:16px">
+        <div class="callout ok">
+            <strong>Cautela 1 · Declarar as dúas capas como adaptación de aula.</strong> Os criterios seguen sendo os literais do DOG. Nin o grao nin o nivel modifican o currículo.
+        </div>
+        <div class="callout ok">
+            <strong>Cautela 2 · A cualificación pasa polo mínimo e polo nivel, nunca polo grao.</strong> O grao de complexidade non entra na nota. O que decide o aprobado é o mínimo (N1), e a nota sae do nivel acadado.
+        </div>
+    </div>
+
+    <div class="clause">
+        <div class="lbl">Cláusula modelo para a programación</div>
+        <p>«Os criterios de avaliación tómanse literalmente do anexo II do Decreto 155/2022. Como adaptación de aula sen carácter normativo, cada criterio leva asignado un grao de complexidade (1 identifica · 2 emprega · 3 xustifica ou crea) segundo a demanda cognitiva do seu verbo, seguindo o Marco xeral das avaliacións do INEE. Este grao serve para equilibrar as tarefas e as probas e para deseñar propostas multinivel; non intervén na cualificación.»</p>
+        <p>«Para cada criterio avaliado en cada UD concrétase a tríada que exixe PROENS: instrumento, mínimo de consecución (sen limiares numéricos) e peso orientativo. Como escala de valoración dos instrumentos, cada criterio descríbese en catro niveis de consecución (N0 en proceso · N1 mínimo · N2 pleno · N3 excelente). O mínimo de consecución coincide co N1: acadalo supón superar o criterio.»</p>
+        <div class="where">Onde: apartado 3 (introdución á avaliación das UD) e apartado 5.2 (criterios de cualificación) de PROENS.</div>
+    </div>
+</section>
+
+<!-- ============ 6. ESCALA ============ -->
+<section class="doc s-orange" id="escala">
+    <div class="sec-head">
+        <div class="sec-num">6</div>
+        <div>
+            <h2>Do nivel á cualificación legal</h2>
+            <p>Escala de valoración declarada no apartado 5.2, coherente coas cualificacións da Orde do 26 de maio de 2023 (art. 23.1). Achega de cada criterio = peso na UD × nota do nivel. Redondeo unha soa vez, na nota da avaliación.</p>
+        </div>
+    </div>
+
+    <div class="scale">
+        <div class="step g0"><div class="g">N0</div><div class="n">2,5</div><div class="q">IN</div><div class="d">En proceso. Non acada o mínimo.</div></div>
+        <div class="step g1"><div class="g">N1</div><div class="n">5</div><div class="q">SU</div><div class="d">Acada o mínimo. Supera o criterio.</div></div>
+        <div class="step g2"><div class="g">N2</div><div class="n">7,5</div><div class="q">BE · NT</div><div class="d">Fai o que pide o criterio, de forma habitual e autónoma.</div></div>
+        <div class="step g3"><div class="g">N3</div><div class="n">10</div><div class="q">SB</div><div class="d">Xustifica, transfire ou crea.</div></div>
+    </div>
+
+    <div class="callout warn">
+        <strong>Non hai ceros e non hai «non acadado».</strong> O nivel inferior chámase «En proceso» porque describe onde está o alumno, non o que lle falta. Coincide co carácter formativo da avaliación (Orde, art. 17.2.c) e coa liña do Manual de non usar criterios que minimicen a cualificación.
+    </div>
+</section>
+
+<!-- ============ 7. CHECKLIST ============ -->
+<section class="doc" id="checklist">
+    <div class="sec-head">
+        <div class="sec-num">7</div>
+        <div>
+            <h2>Antes de entregar a programación</h2>
+            <p>Oito comprobacións para que criterio, grao, nivel, indicador e mínimo queden cada un no seu sitio.</p>
+        </div>
+    </div>
+    <ul class="check">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span><strong>Os criterios son literais do DOG.</strong> Nin resumidos nin reformulados. Se fai falta precisar, úsanse subcriterios que reconstrúen o CA orixinal.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span><strong>«Grao» e «nivel» non se mesturan.</strong> Grao 1-3 é complexidade do criterio; N0-N3 é consecución do alumno. Nunca a mesma etiqueta para as dúas cousas.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span><strong>As dúas capas están declaradas como adaptación de aula</strong> sen carácter normativo, coa cláusula modelo do apartado 5.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span><strong>Cada CA de cada UD leva a tríada:</strong> instrumento, mínimo de consecución e peso. A suma de pesos por UD é 100.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span><strong>Os mínimos non levan cifras nin textos xenéricos repetidos.</strong> Cada un parte do seu criterio e rebaixa verbo, obxecto ou contexto. Coincide co N1.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span><strong>Os indicadores viven dentro dos instrumentos</strong> (categoría «táboa de indicadores»), non como lista paralela de criterios.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span><strong>A escala de valoración está descrita no apartado 5.2</strong> (N0 a N3 e a súa correspondencia con IN · SU · BE · NT · SB), xunto co momento do redondeo. O grao de complexidade non aparece na fórmula da nota.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span><strong>Ningún peso á asistencia nin ao comportamento,</strong> sen criterios excluíntes nin puntos por riba do 10, e a recuperación sen topar nota nin promediar co suspenso.</span></li>
+    </ul>
+</section>
+
+<!-- ============ REFERENCIAS ============ -->
+<section class="doc" id="refs">
+    <div class="sec-head">
+        <div class="sec-num">R</div>
+        <div>
+            <h2>Referencias</h2>
+        </div>
+    </div>
+    <ol class="refs">
+        <li>Decreto 155/2022, do 15 de setembro, polo que se establecen a ordenación e o currículo da educación primaria na Comunidade Autónoma de Galicia (DOG 26/09/2022). Arts. 6, 15, 21, 22 e 24.</li>
+        <li>Orde do 26 de maio de 2023 pola que se desenvolve o Decreto 155/2022 e se regula a avaliación na educación primaria (DOG 13/06/2023). Arts. 9, 17, 18, 20, 23 e 30.</li>
+        <li>Real decreto 157/2022, do 1 de marzo, polo que se establecen a ordenación e as ensinanzas mínimas da educación primaria.</li>
+        <li>Xunta de Galicia (2023). Manual de axuda para a elaboración das programacións didácticas, v1.0.1. Apartados 3.3 e 5.2 e lista de control (páxs. 52-57).</li>
+        <li>INEE (2025). Marco general de las evaluaciones del sistema educativo, 2ª ed. Evaluaciones de diagnóstico e anexos de competencias específicas. Ministerio de Educación, Formación Profesional y Deportes. Ver tamén o blog do INEE: «La evaluación de Lengua Castellana y Literatura y Matemáticas en las evaluaciones de diagnóstico» (18/01/2024) e «Marco de competencias específicas de Conocimiento del Medio» (07/06/2024).</li>
+        <li>Sanmartí, N. (2020). Evaluar y aprender: un único proceso. Octaedro.</li>
+    </ol>
+</section>
+
+<footer>Brais Prados González · CEIP Condesa de Fenosa · 2026 · Documento complementario da presentación «Do manual da Xunta á aula» e do protocolo «Avaliación funcional día a día».</footer>
+
+</div>
+
+<script>
+try {
+    if (localStorage.getItem('grad-ind-theme') === 'light') document.body.classList.add('light');
+} catch (err) { /* file:// sen localStorage */ }
+document.querySelector('.theme-toggle').addEventListener('click', function () {
+    document.body.classList.toggle('light');
+    try { localStorage.setItem('grad-ind-theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch (err) { /* ignorar */ }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programacións didácticas · Recursos</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #07090c; --card: #10151b; --text: #f2f5f8; --text-2: #9aa7b5; --text-3: #5c6875;
+    --border: rgba(255,255,255,0.09); --teal: #2dd4bf; --pink: #f472b6; --violet: #a78bfa;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Satoshi', 'Helvetica Neue', sans-serif;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+}
+.wrap { max-width: 960px; width: 100%; text-align: center; }
+.eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.28em; color: var(--teal); margin-bottom: 14px; }
+h1 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: clamp(1.7rem, 5vw, 2.6rem); line-height: 1.12; margin-bottom: 10px; }
+h1 span { color: var(--teal); }
+.sub { color: var(--text-2); font-size: 1rem; line-height: 1.55; max-width: 54ch; margin: 0 auto 36px; }
+.links { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; text-align: left; }
+a.card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px 24px; text-decoration: none; color: var(--text);
+    display: flex; flex-direction: column; gap: 8px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+a.card:hover { transform: translateY(-3px); }
+a.card.c1:hover { border-color: var(--teal); }
+a.card.c2:hover { border-color: var(--pink); }
+a.card.c3:hover { border-color: var(--violet); }
+.c3 .card-tag { color: var(--violet); }
+.card-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
+.c1 .card-tag { color: var(--teal); }
+.c2 .card-tag { color: var(--pink); }
+.card-title { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 1.25rem; }
+.card-desc { color: var(--text-2); font-size: 0.9rem; line-height: 1.5; }
+.foot { margin-top: 40px; color: var(--text-3); font-size: 0.78rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="eyebrow">Formación e oposicións · Educación Primaria</div>
+    <h1>A programación <span>didáctica</span></h1>
+    <p class="sub">Tres recursos complementarios: a presentación para entender o manual da Xunta (con foco na avaliación), o protocolo operativo para levala á aula día a día e a guía que separa graos de complexidade, niveis de consecución, indicadores e mínimos.</p>
+    <div class="links">
+        <a class="card c1" href="presentacion/">
+            <span class="card-tag">Presentación · 38 diapositivas</span>
+            <span class="card-title">Do manual da Xunta á aula</span>
+            <span class="card-desc">Os 8 apartados de PROENS, o que pide a lei en avaliación, os marcos propios G1/G2/G3 e a avaliación formativa de Sanmartí.</span>
+        </a>
+        <a class="card c2" href="avaliacion-funcional/">
+            <span class="card-tag">Documento operativo · Imprimible</span>
+            <span class="card-title">Avaliación funcional día a día</span>
+            <span class="card-desc">Protocolo por UD, rutinas de baixo custo, conversión a cualificación legal e 6 plantillas listas para imprimir en A4.</span>
+        </a>
+        <a class="card c3" href="graduacion-vs-indicadores/">
+            <span class="card-tag">Guía de referencia · Imprimible</span>
+            <span class="card-title">Graos, niveis e indicadores</span>
+            <span class="card-desc">Grao de complexidade (INEE) vs. nivel de consecución (rúbrica), indicadores e mínimo: que é cada un, onde se confunden e a base legal artigo por artigo.</span>
+        </a>
+    </div>
+    <p class="foot">Brais Prados González · 2026</p>
+</div>
+</body>
+</html>

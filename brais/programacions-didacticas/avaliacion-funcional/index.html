@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avaliación funcional día a día · Protocolo e plantillas</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0a0d11;
+    --paper: #10151b;
+    --paper-2: #161c24;
+    --text: #eef2f6;
+    --text-2: #9fabb8;
+    --text-3: #66727f;
+    --border: rgba(255,255,255,0.1);
+    --acc: #2dd4bf;
+    --acc-soft: rgba(45,212,191,0.1);
+    --blue: #5ea8ff;
+    --violet: #a78bfa;
+    --orange: #ff8a5c;
+    --pink: #f472b6;
+    --success: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+    --font-title: 'Clash Display', 'Helvetica Neue', sans-serif;
+    --font-body: 'Satoshi', 'Helvetica Neue', sans-serif;
+}
+body.light {
+    --bg: #e4e8ee;
+    --paper: #f6f7f9;
+    --paper-2: #eceff3;
+    --text: #161b21;
+    --text-2: #47525d;
+    --text-3: #7b8692;
+    --border: rgba(15,25,35,0.15);
+    --acc: #0d9488;
+    --acc-soft: rgba(13,148,136,0.08);
+    --blue: #1d6fd8;
+    --violet: #7c5fd3;
+    --orange: #d96b35;
+    --pink: #c2417f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px; line-height: 1.55;
+    transition: background 0.3s, color 0.3s;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 48px 24px 96px; }
+
+h1 { font-family: var(--font-title); font-weight: 600; font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.1; }
+h2 { font-family: var(--font-title); font-weight: 600; font-size: clamp(1.3rem, 3.5vw, 1.8rem); margin: 0 0 4px; }
+h3 { font-family: var(--font-title); font-weight: 500; font-size: 1.1rem; margin-bottom: 6px; }
+.accent { color: var(--acc); }
+p { color: var(--text-2); }
+strong { color: var(--text); }
+em { color: var(--text-2); }
+
+.eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em; color: var(--acc); margin-bottom: 8px; }
+.lead { color: var(--text-2); font-size: 1.05rem; max-width: 62ch; }
+
+section.doc { margin-top: 56px; }
+.sec-head { border-left: 4px solid var(--acc); padding-left: 16px; margin-bottom: 20px; }
+.sec-head .sub { color: var(--text-3); font-size: 0.9rem; }
+section.doc:nth-of-type(2) .sec-head { border-color: var(--blue); }
+section.doc:nth-of-type(3) .sec-head { border-color: var(--violet); }
+section.doc:nth-of-type(4) .sec-head { border-color: var(--orange); }
+section.doc:nth-of-type(5) .sec-head { border-color: var(--pink); }
+
+.card {
+    background: var(--paper); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 20px; margin-bottom: 14px;
+}
+.card.hl { border-color: var(--acc); background: var(--acc-soft); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 14px; }
+.grid2 .card { margin-bottom: 0; }
+
+ul.doc-list, ol.doc-list { margin: 8px 0 0 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+ul.doc-list li, ol.doc-list li { color: var(--text-2); padding-left: 22px; position: relative; }
+ul.doc-list li::before { content: '·'; color: var(--acc); font-weight: 800; position: absolute; left: 6px; }
+ul.doc-list li.no::before { content: '✕'; color: var(--danger); font-size: 0.85em; top: 2px; }
+ul.doc-list li.ok::before { content: '✓'; color: var(--success); font-size: 0.85em; top: 2px; }
+ol.doc-list { counter-reset: n; }
+ol.doc-list li { counter-increment: n; padding-left: 30px; }
+ol.doc-list li::before { content: counter(n); position: absolute; left: 0; top: 1px; width: 20px; height: 20px; border-radius: 6px; background: var(--acc-soft); color: var(--acc); font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
+
+table { border-collapse: collapse; width: 100%; margin-top: 10px; font-size: 0.85rem; }
+th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--acc); border-bottom: 2px solid var(--acc); padding: 8px 10px; }
+td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+td strong { color: var(--text); }
+tr.hl-row td { background: var(--acc-soft); }
+
+.sem { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+.sem.v { background: var(--success); } .sem.a { background: var(--warn); } .sem.r { background: var(--danger); }
+
+.callout { border-left: 4px solid var(--warn); background: var(--paper-2); border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 16px 0; color: var(--text-2); font-size: 0.92rem; }
+.callout strong { color: var(--text); }
+
+.theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 10;
+    background: var(--paper); border: 1px solid var(--border); border-radius: 50%;
+    width: 40px; height: 40px; cursor: pointer; color: var(--text-2);
+    display: flex; align-items: center; justify-content: center;
+}
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .icon-sun { display: none; }
+body.light .theme-toggle .icon-sun { display: block; }
+body.light .theme-toggle .icon-moon { display: none; }
+.print-btn {
+    position: fixed; top: 16px; right: 64px; z-index: 10;
+    background: var(--paper); border: 1px solid var(--border); border-radius: 999px;
+    height: 40px; padding: 0 16px; cursor: pointer; color: var(--text-2);
+    font-family: var(--font-body); font-size: 0.8rem; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+}
+.print-btn svg { width: 16px; height: 16px; }
+
+/* ============ PLANTILLAS ============ */
+.tpl {
+    background: #ffffff; color: #1a1f26;
+    border-radius: 14px; border: 1px solid var(--border);
+    padding: 26px 28px; margin-top: 18px;
+}
+.tpl h3 { color: #1a1f26; display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.tpl h3 .tpl-tag { font-family: var(--font-body); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #0d9488; }
+.tpl .meta { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.82rem; color: #4a545e; margin: 8px 0 4px; }
+.tpl .meta span { border-bottom: 1px solid #b9c1c9; padding-right: 60px; }
+.tpl table { font-size: 0.78rem; }
+.tpl th { color: #0d9488; border-bottom: 2px solid #0d9488; font-size: 0.65rem; }
+.tpl td { color: #333a42; border-bottom: 1px solid #d5dade; height: 26px; }
+.tpl .tpl-note { font-size: 0.75rem; color: #6b747d; margin-top: 10px; }
+.tpl td.c { text-align: center; }
+.tpl .rot { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; font-size: 0.62rem; }
+
+/* Pauta de escritura 1º ciclo: renglón alto ~11 mm, liñas sólidas */
+.pauta { margin-top: 6px; }
+.pauta .ren { height: 11mm; border-bottom: 1.2px solid #8d979f; }
+.pauta .ren:first-child { border-top: 1.2px solid #8d979f; }
+
+/* Diana SVG */
+.diana-box { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+.diana-legend { font-size: 0.8rem; color: #4a545e; display: flex; flex-direction: column; gap: 6px; }
+.diana-legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+
+/* ============ PRINT ============ */
+@media print {
+    body, body.light { background: #fff; --paper: #fff; --paper-2: #f2f4f6; --text: #111; --text-2: #333; --text-3: #666; --border: #c8cdd2; --acc: #0d7a6f; --acc-soft: #eef6f5; --blue: #1d5fb8; --violet: #6d4fc3; --orange: #c05a28; --pink: #c2417f; }
+    .theme-toggle, .print-btn { display: none; }
+    .wrap { max-width: 100%; padding: 0; }
+    section.doc { margin-top: 24px; }
+    .card, .callout, .tpl { break-inside: avoid; }
+    .tpl { border: 1px solid #aaa; border-radius: 0; page-break-before: always; padding: 8mm 6mm; }
+    .sec-head + .tpl { page-break-before: auto; }
+    .tpl td { height: 18px; padding: 3px 8px; }
+    .tpl th { padding: 5px 8px; }
+    h1 { font-size: 22pt; }
+    body { font-size: 10.5pt; }
+    a { color: inherit; text-decoration: none; }
+    @page { size: A4; margin: 12mm; }
+}
+</style>
+</head>
+<body>
+<button class="theme-toggle" aria-label="Cambiar tema">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+</button>
+<button class="print-btn" onclick="window.print()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
+    Imprimir
+</button>
+
+<div class="wrap">
+
+<header>
+    <div class="eyebrow">Protocolo de aula · Educación Primaria</div>
+    <h1>Avaliación funcional <span class="accent">día a día</span></h1>
+    <p class="lead" style="margin-top: 12px;">Un sistema de avaliación que cumpre todo o que pide o manual da Xunta (instrumento + mínimo + peso por criterio, cualificación obxectiva, recuperación legal) e que ademais é <strong>formativo</strong>: o alumnado coñece os criterios, recibe feedback antes que nota e ten sempre a opción de mellorar. Acompaña a presentación <em>«A programación didáctica: do manual da Xunta á aula»</em>.</p>
+</header>
+
+<!-- ============ 1. PRINCIPIOS ============ -->
+<section class="doc">
+    <div class="sec-head">
+        <h2>1 · Cinco regras <span class="accent">non negociables</span></h2>
+        <div class="sub">O contrato entre o legal e o formativo</div>
+    </div>
+    <ol class="doc-list">
+        <li><strong>Todo CA avaliado leva instrumento + mínimo + peso.</strong> Se un criterio non ten os tres, ou non se avalía nesa UD ou está mal deseñado (manual, apdo. 3.3).</li>
+        <li><strong>A observación sistemática é o instrumento maioritario.</strong> Táboas de indicadores (listas de cotexo, escalas, rúbricas, dianas) para o groso; a proba escrita/oral, reservada aos criterios cuxo verbo a pida.</li>
+        <li><strong>Feedback antes que nota.</strong> Durante a UD devólvese información («pista + refacer»), non cualificacións. A nota chega ao pechar, como consecuencia do proceso (Sanmartí).</li>
+        <li><strong>O alumnado coñece os criterios.</strong> Ao comezar cada UD compártese —en linguaxe infantil— que imos aprender e como sabemos se está ben feito. A diana de autoavaliación usa eses mesmos criterios.</li>
+        <li><strong>Rexistro mínimo viable.</strong> Non se anota todo de todos os días: obsérvanse 2-3 alumnos por sesión, rotando. Nun grupo de 22, cada alumno queda rexistrado cada dúas semanas — suficiente e sostible.</li>
+    </ol>
+</section>
+
+<!-- ============ 2. CICLO DUNHA UD ============ -->
+<section class="doc">
+    <div class="sec-head" style="border-color: var(--blue);">
+        <h2>2 · O ciclo dunha <span style="color: var(--blue);">unidade didáctica</span></h2>
+        <div class="sub">Antes → durante → peche</div>
+    </div>
+    <div class="grid2">
+        <div class="card">
+            <h3>Antes (1 tarde de preparación)</h3>
+            <ul class="doc-list">
+                <li>Escoller os <strong>3-6 CA</strong> que se van avaliar de verdade nesta UD (só eses levan peso).</li>
+                <li>Redactar o <strong>mínimo</strong> de cada un: partir do CA e rebaixar verbo, obxecto ou contexto. Sen números, sen frases xenéricas.</li>
+                <li>Preparar a <strong>táboa de indicadores</strong> (plantillas A e B) cos ítems en 3ª persoa e a diana en 1ª persoa.</li>
+                <li>Decidir os pesos dos CA dentro da UD (suman 100).</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Durante (cada sesión)</h3>
+            <ul class="doc-list">
+                <li><strong>1ª sesión:</strong> presentar os obxectivos e co-construír «que é facelo ben» (base de orientación / criterios da diana).</li>
+                <li>Observar e rexistrar <strong>2-3 alumnos</strong> (plantilla B ou E), rotando pola lista.</li>
+                <li>Devolver tarefas con <strong>pista + refacer</strong>: unha pregunta por erro, tempo para mellorar. Só se valora a versión revisada.</li>
+                <li>Pechar con <strong>semáforo de saída</strong> ou diario (rutinas do apartado 3) e reaxustar a sesión seguinte.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Peche da UD (1 sesión)</h3>
+            <ul class="doc-list">
+                <li>O alumnado cobre a súa <strong>diana de autoavaliación</strong> (plantilla C).</li>
+                <li>O docente pecha o <strong>semáforo por criterio</strong> na folla de grupo (plantilla E): Adquirido · En proceso · Non adquirido.</li>
+                <li>Contrastar diana e semáforo: onde non coinciden hai unha conversa valiosa de 2 minutos.</li>
+                <li>Trasladar á cualificación (apartado 4) e anotar propostas para a UD seguinte.</li>
+            </ul>
+        </div>
+        <div class="card hl">
+            <h3>Se alguén non chega ao mínimo</h3>
+            <ul class="doc-list">
+                <li>A recuperación é <strong>continua e integrada</strong>: o criterio volve traballarse e observarse nas UD seguintes ou nunha tarefa específica.</li>
+                <li>A nova valoración <strong>substitúe</strong> a anterior (non se promedia co suspenso) e pode chegar á cualificación máxima.</li>
+                <li>Rexistrar o momento e o instrumento da recuperación na plantilla D ou E.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 3. RUTINAS ============ -->
+<section class="doc">
+    <div class="sec-head" style="border-color: var(--violet);">
+        <h2>3 · Rutinas de <span style="color: var(--violet);">baixo custo</span></h2>
+        <div class="sub">Avaliación formativa que cabe nunha xornada real</div>
+    </div>
+    <table>
+        <thead><tr><th>Rutina</th><th>Cando</th><th>Tempo</th><th>Que obtés</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Semáforo de saída</strong><br>Verde: seino e explícoo · Ámbar: con axuda · Vermello: volvo empezar</td><td>Fin de sesión</td><td>1 min</td><td>Mapa instantáneo do grupo para reagrupar a próxima sesión</td></tr>
+            <tr><td><strong>Diario de aprendizaxe</strong> (plantilla F)<br>Que aprendín? Como? Que non entendo? Que farei para melloralo?</td><td>Fin de sesión, 2-3 veces/semana</td><td>5 min</td><td>Metacognición do alumno + a mellor avaliación formativa do día para o docente</td></tr>
+            <tr><td><strong>Base de orientación</strong><br>Pasos da tarefa co-construídos; cada alumno escribe a súa versión</td><td>Ao comezar un tipo de tarefa novo</td><td>10-15 min unha vez</td><td>O alumno localiza en que paso falla, non só que «está mal»</td></tr>
+            <tr><td><strong>Corrección «pista + refacer»</strong><br>Unha pregunta ou pista por erro, nunca a solución</td><td>Ao devolver tarefas</td><td>O mesmo que corrixir</td><td>Corrixe quen errou; o erro convértese en información</td></tr>
+            <tr><td><strong>Coavaliación 2 + 1</strong><br>Dous acertos + unha proposta de mellora, coa rúbrica/diana diante</td><td>1 vez por UD</td><td>10 min</td><td>Feedback entre iguais na linguaxe do que aprende; nunca unha nota</td></tr>
+            <tr><td><strong>Diana de autoavaliación</strong> (plantilla C)</td><td>Peche de UD</td><td>10 min</td><td>Autoavaliación graduada que despois se contrasta co rexistro docente</td></tr>
+            <tr><td><strong>Rexistro anecdótico</strong> (plantilla D)</td><td>Cando ocorre algo relevante</td><td>30 s</td><td>Evidencias puntuais (sobre todo actitudinais) con data e criterio</td></tr>
+        </tbody>
+    </table>
+    <div class="callout"><strong>Rigor coas fontes:</strong> diario, semáforo, bases de orientación, carpeta e coavaliación proceden de Neus Sanmartí (<em>Evaluar para aprender</em>, 2007; <em>Evaluar y aprender</em>, 2020). A «escaleira de metacognición», se a usas, é de Swartz e cols. Todas encaixan na categoría legal <strong>«táboa de indicadores»</strong> do manual da Xunta.</div>
+</section>
+
+<!-- ============ 4. REXISTRO E CUALIFICACIÓN ============ -->
+<section class="doc">
+    <div class="sec-head" style="border-color: var(--orange);">
+        <h2>4 · Do rexistro á <span style="color: var(--orange);">cualificación legal</span></h2>
+        <div class="sub">Como o observado se converte en nota sen traizoar o proceso</div>
+    </div>
+    <div class="card">
+        <h3>4.1 · As dúas escalas de traballo</h3>
+        <p><strong>Ítems de observación (día a día):</strong> valóranse de 1 a 4 — <em>1 Aínda non · 2 Con axuda · 3 Case sempre · 4 Sempre só/soa</em>.</p>
+        <p style="margin-top: 8px;"><strong>Criterios (peche de UD):</strong> semáforo — <span class="sem r"></span><strong>Non adquirido</strong> · <span class="sem a"></span><strong>En proceso</strong> · <span class="sem v"></span><strong>Adquirido</strong>. O <strong>mínimo de consecución</strong> está na fronteira «En proceso → Adquirido»: superar o criterio é chegar, polo menos, ao nivel Adquirido básico.</p>
+    </div>
+    <div class="card">
+        <h3>4.2 · Conversión a cualificación</h3>
+        <table>
+            <thead><tr><th>Nivel de desempeño no criterio</th><th>Coeficiente interno</th><th>1º ciclo (cualitativa)</th><th>Resto de cursos (1-10)</th></tr></thead>
+            <tbody>
+                <tr><td><span class="sem r"></span>Non adquirido</td><td>M · 0,25</td><td>IN</td><td>&lt; 5</td></tr>
+                <tr class="hl-row"><td><span class="sem a"></span>En proceso (mínimo á vista)</td><td>R · 0,50</td><td>SU</td><td>5-6</td></tr>
+                <tr><td><span class="sem v"></span>Adquirido (nivel N2)</td><td>B · 0,75</td><td>BE / NT</td><td>7-8</td></tr>
+                <tr><td><span class="sem v"></span>Adquirido con autonomía (nivel N3)</td><td>MB · 1,00</td><td>NT / SB</td><td>9-10</td></tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 10px; font-size: 0.88rem;">Aportación de cada criterio = <strong>peso do criterio na UD × coeficiente</strong>. Nota da UD = suma das aportacións. Nota da avaliación/final = suma ponderada das UD segundo os pesos do apartado 3 da programación. O coeficiente é <strong>trazabilidade interna</strong> do docente, non unha nota que se comunique ao alumnado durante o proceso.</p>
+    </div>
+    <div class="card">
+        <h3>4.3 · Recordatorio das liñas vermellas</h3>
+        <ul class="doc-list">
+            <li class="no">Nada de porcentaxes para asistencia ou comportamento (van ás NOF, non á nota).</li>
+            <li class="no">Nada de criterios excluíntes («sen o traballo entregado, suspenso directo»).</li>
+            <li class="no">Nada de mínimos cuantitativos nin copiados en serie.</li>
+            <li class="no">Na recuperación: non topar a nota nin promediar coa parte non superada (3 → recupera con 5 → a nota é 5).</li>
+            <li class="no">Nada de puntos extra por riba do máximo.</li>
+        </ul>
+    </div>
+    <div class="card hl">
+        <h3>4.4 · Que escribir en PROENS para que isto sexa o teu texto oficial</h3>
+        <ul class="doc-list">
+            <li><strong>Apartado 3.3 (por cada CA):</strong> instrumento («escala de observación», «lista de cotexo», «diana de autoavaliación» → categoría <em>táboa de indicadores</em>; «proba oral/gráfica» → <em>proba escrita</em>), o mínimo redactado e o peso na UD.</li>
+            <li><strong>Apartado 5.1:</strong> avaliación inicial por observación das primeiras sesións, análise de informes do curso anterior e tarefas de diagnose; sen cualificación; procedemento para incorporacións tardías.</li>
+            <li><strong>Apartado 5.2 · cualificación:</strong> desagregación dos instrumentos por UD (p. ex. «85 % observación sistemática + 15 % proba oral/gráfica»), escala 1-4 dos ítems, conversión do nivel de desempeño á cualificación, momento do redondeo e <strong>grao mínimo de consecución da área</strong> (p. ex. «acadar o mínimo na maioría dos criterios traballados e, en particular, nos vinculados aos obxectivos nucleares da área»).</li>
+            <li><strong>Apartado 5.2 · recuperación:</strong> continua e integrada nas UD seguintes; a nova valoración substitúe a anterior; sen límite de nota; instrumentos idénticos aos ordinarios.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============ 5. PLANTILLAS ============ -->
+<section class="doc">
+    <div class="sec-head" style="border-color: var(--pink);">
+        <h2>5 · Plantillas <span style="color: var(--pink);">imprimibles</span></h2>
+        <div class="sub">Co botón «Imprimir», cada plantilla sae nunha páxina A4 propia</div>
+    </div>
+
+    <!-- A · LISTA DE COTEXO -->
+    <div class="tpl">
+        <h3>Lista de cotexo <span class="tpl-tag">Plantilla A · táboa de indicadores</span></h3>
+        <div class="meta"><span>UD:</span><span>Curso:</span><span>Data:</span></div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Alumno/a</th>
+                    <th class="c">Ítem 1<br><small>________________</small></th>
+                    <th class="c">Ítem 2<br><small>________________</small></th>
+                    <th class="c">Ítem 3<br><small>________________</small></th>
+                    <th class="c">Ítem 4<br><small>________________</small></th>
+                    <th class="c">Ítem 5<br><small>________________</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>2.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>3.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>4.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>5.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>6.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>7.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>8.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>9.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>10.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>11.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>12.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>13.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>14.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>15.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>16.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>17.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>18.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>19.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>20.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>21.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>22.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+            </tbody>
+        </table>
+        <p class="tpl-note">Marcar ✓ (si) ou · (aínda non). Ítems redactados en 3ª persoa, observables («Executa o lanzamento coas dúas mans», «Respecta a quenda de palabra»).</p>
+    </div>
+
+    <!-- B · ESCALA DE OBSERVACIÓN -->
+    <div class="tpl">
+        <h3>Escala de observación 1-4 <span class="tpl-tag">Plantilla B · táboa de indicadores</span></h3>
+        <div class="meta"><span>UD:</span><span>Criterio (CA):</span><span>Semana:</span></div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 34%;">Alumno/a observado/a</th>
+                    <th class="c">Ítem 1</th>
+                    <th class="c">Ítem 2</th>
+                    <th class="c">Ítem 3</th>
+                    <th style="width: 30%;">Observacións</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+                <tr><td></td><td class="c"></td><td class="c"></td><td class="c"></td><td></td></tr>
+            </tbody>
+        </table>
+        <p class="tpl-note">Escala: <strong>1</strong> Aínda non · <strong>2</strong> Con axuda · <strong>3</strong> Case sempre · <strong>4</strong> Sempre só/soa. Plan de rotación: 2-3 alumnos por sesión.</p>
+    </div>
+
+    <!-- C · DIANA -->
+    <div class="tpl">
+        <h3>Diana de autoavaliación <span class="tpl-tag">Plantilla C · para o alumnado (1ª persoa)</span></h3>
+        <div class="meta"><span>Nome:</span><span>UD:</span><span>Data:</span></div>
+        <div class="diana-box">
+            <svg viewBox="0 0 300 300" width="290" height="290" role="img" aria-label="Diana de autoavaliación con catro sectores e tres aneis">
+                <!-- aneis -->
+                <circle cx="150" cy="150" r="135" fill="#e8f6f3" stroke="#5aa79b" stroke-width="1.5"/>
+                <circle cx="150" cy="150" r="92" fill="#fdf3d7" stroke="#c9a53f" stroke-width="1.5"/>
+                <circle cx="150" cy="150" r="48" fill="#fde5df" stroke="#c96b52" stroke-width="1.5"/>
+                <!-- divisores de sectores -->
+                <line x1="150" y1="15" x2="150" y2="285" stroke="#8a949c" stroke-width="1.5"/>
+                <line x1="15" y1="150" x2="285" y2="150" stroke="#8a949c" stroke-width="1.5"/>
+                <!-- etiquetas de sector -->
+                <text x="72" y="11" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">Criterio 1</text>
+                <text x="228" y="11" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">Criterio 2</text>
+                <text x="72" y="297" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">Criterio 4</text>
+                <text x="228" y="297" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">Criterio 3</text>
+            </svg>
+            <div class="diana-legend">
+                <div><span class="dot" style="background: #fde5df; border: 1px solid #c96b52;"></span><strong>Centro:</strong> Pouco — aínda me custa</div>
+                <div><span class="dot" style="background: #fdf3d7; border: 1px solid #c9a53f;"></span><strong>Medio:</strong> Ás veces — vou mellorando</div>
+                <div><span class="dot" style="background: #e8f6f3; border: 1px solid #5aa79b;"></span><strong>Fóra:</strong> Sempre — xa o consigo</div>
+                <p style="max-width: 34ch; margin-top: 6px;">O alumno pinta un punto en cada sector, do centro (pouco) cara a fóra (sempre). Escribir os criterios en 1ª persoa e linguaxe infantil: «Respectei as regras do xogo».</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- D · REXISTRO ANECDÓTICO -->
+    <div class="tpl">
+        <h3>Rexistro anecdótico <span class="tpl-tag">Plantilla D · evidencias puntuais</span></h3>
+        <div class="meta"><span>Curso:</span><span>Área:</span><span>Trimestre:</span></div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 12%;">Data</th>
+                    <th style="width: 20%;">Alumno/a</th>
+                    <th style="width: 38%;">Feito observado (obxectivo, sen xuízos)</th>
+                    <th style="width: 12%;">CA</th>
+                    <th style="width: 18%;">Seguimento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+        </table>
+        <p class="tpl-note">Describir o que se viu, non interpretalo («abandonou o xogo e sentou», non «portouse mal»). Ideal para evidencias actitudinais.</p>
+    </div>
+
+    <!-- E · FOLLA DE GRUPO -->
+    <div class="tpl">
+        <h3>Folla de grupo · semáforo por criterio <span class="tpl-tag">Plantilla E · peche de UD</span></h3>
+        <div class="meta"><span>UD:</span><span>Curso:</span><span>Data de peche:</span></div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 28%;">Alumno/a</th>
+                    <th class="c">CA ____</th>
+                    <th class="c">CA ____</th>
+                    <th class="c">CA ____</th>
+                    <th class="c">CA ____</th>
+                    <th class="c">CA ____</th>
+                    <th class="c">CA ____</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>2.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>3.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>4.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>5.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>6.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>7.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>8.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>9.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>10.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>11.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>12.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>13.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>14.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>15.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>16.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>17.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>18.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>19.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>20.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>21.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+                <tr><td>22.</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+            </tbody>
+        </table>
+        <p class="tpl-note">Código: <strong>A</strong> Adquirido (verde) · <strong>EP</strong> En proceso (ámbar) · <strong>NA</strong> Non adquirido (vermello). O mínimo supérase ao chegar a A. Esta folla é a fonte directa da cualificación da UD.</p>
+    </div>
+
+    <!-- F · DIARIO DE APRENDIZAXE -->
+    <div class="tpl">
+        <h3>O meu diario de aprendizaxe <span class="tpl-tag">Plantilla F · 1º ciclo · pauta alta</span></h3>
+        <div class="meta"><span>Nome:</span><span>Data:</span></div>
+        <div style="font-size: 1rem; color: #1a1f26; margin-top: 14px;">
+            <p style="font-weight: 700; color: #1a1f26;">1 · Que aprendín hoxe?</p>
+            <div class="pauta"><div class="ren"></div><div class="ren"></div></div>
+            <p style="font-weight: 700; color: #1a1f26; margin-top: 16px;">2 · Como o aprendín?</p>
+            <div class="pauta"><div class="ren"></div><div class="ren"></div></div>
+            <p style="font-weight: 700; color: #1a1f26; margin-top: 16px;">3 · Que é o que aínda non entendo?</p>
+            <div class="pauta"><div class="ren"></div><div class="ren"></div></div>
+            <p style="font-weight: 700; color: #1a1f26; margin-top: 16px;">4 · Que podo facer para melloralo?</p>
+            <div class="pauta"><div class="ren"></div><div class="ren"></div></div>
+            <p style="font-weight: 700; color: #1a1f26; margin-top: 16px;">Como me sentín? Rodea: &nbsp; 😀 &nbsp; 🙂 &nbsp; 😐 &nbsp; 🙁</p>
+        </div>
+        <p class="tpl-note">As catro preguntas de Sanmartí, en versión 6-7 anos. Tamén pode facerse oral en asemblea, rotando quen responde.</p>
+    </div>
+</section>
+
+<footer style="margin-top: 64px; color: var(--text-3); font-size: 0.8rem; border-top: 1px solid var(--border); padding-top: 16px;">
+    Brais Prados González · 2026. Fontes: Manual de axuda para a elaboración das programacións didácticas (Xunta, v1.0.1, 2023) · Decreto 155/2022 · Sanmartí (2007, 2020) · Marcos de avaliación propios 2º/4º EP.
+</footer>
+</div>
+
+<script>
+try {
+    if (localStorage.getItem('aval-func-theme') === 'light') document.body.classList.add('light');
+} catch (err) { /* file:// sen localStorage */ }
+document.querySelector('.theme-toggle').addEventListener('click', function () {
+    document.body.classList.toggle('light');
+    try { localStorage.setItem('aval-func-theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch (err) { /* ignorar */ }
+});
+</script>
+</body>
+</html>
