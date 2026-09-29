@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>Aprendizaxes imprescindibles por ciclo</title>
+<title>Guía de ciclo · Matemáticas 1º ciclo</title>
 <style>
   /* Paleta: escuro por defecto; cada sección ten a súa cor de acento */
   :root {
     --bg:#0b0d13; --bg2:#12151e; --bg3:#1a1e2b; --text:#e8eaf0; --text2:#98a0b5; --text3:#646c82;
-    --border:#252a3a; --a1:#60a5fa; --a2:#fbbf24; --a3:#a78bfa;
+    --border:#252a3a; --a1:#60a5fa; --a2:#fbbf24; --a3:#34d399; --a4:#a78bfa;
     --ok:#34d399; --warn:#fbbf24; --bad:#f87171; --radius:14px;
   }
   body.light { --bg:#f3f4f8; --bg2:#ffffff; --bg3:#eceef4; --text:#141722; --text2:#555d72; --text3:#8a91a3;
-    --border:#d8dbe4; --a1:#2563eb; --a2:#b45309; --a3:#7c3aed; --ok:#059669; --warn:#b45309; --bad:#dc2626; }
+    --border:#d8dbe4; --a1:#2563eb; --a2:#b45309; --a3:#047857; --a4:#7c3aed; --ok:#059669; --warn:#b45309; --bad:#dc2626; }
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; scroll-padding-top:120px; }
   body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; font-size:15.5px; }
@@ -25,34 +25,37 @@
   .top-row { max-width:1080px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px; }
   .top-row .brand { font-weight:700; font-size:.95rem; }
   .top-row .brand small { color:var(--text2); font-weight:500; margin-left:6px; }
-  .btn { background:var(--bg3); border:1px solid var(--border); color:var(--text); width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; }
+  .btn { background:var(--bg3); border:1px solid var(--border); color:var(--text); height:36px; min-width:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; text-decoration:none; font:inherit; font-size:.84rem; font-weight:600; }
   .btn:hover { border-color:var(--text2); }
+  .btn.pdf { padding:0 14px; background:var(--a2); border-color:var(--a2); color:#1a1305; }
+  .btn.pdf:hover { filter:brightness(1.08); }
   .ml { margin-left:auto; display:flex; gap:8px; }
   nav.tabs { max-width:1080px; margin:0 auto; padding:0 20px 10px; display:flex; gap:8px; overflow-x:auto; }
   nav.tabs a { font-size:.82rem; font-weight:600; color:var(--text2); text-decoration:none; padding:6px 12px; border-radius:999px; border:1px solid var(--border); white-space:nowrap; }
   nav.tabs a[data-s="1"]:hover { color:var(--a1); border-color:var(--a1); }
   nav.tabs a[data-s="2"]:hover { color:var(--a2); border-color:var(--a2); }
   nav.tabs a[data-s="3"]:hover { color:var(--a3); border-color:var(--a3); }
+  nav.tabs a[data-s="4"]:hover { color:var(--a4); border-color:var(--a4); }
 
   main { max-width:1080px; margin:0 auto; padding:32px 20px 80px; }
   .hero { margin-bottom:40px; }
   .eyebrow { font-size:.72rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--text2); margin-bottom:10px; }
   h1 { font-size:clamp(1.6rem,4.5vw,2.4rem); line-height:1.15; margin-bottom:12px; letter-spacing:-.01em; }
-  .lead { color:var(--text2); max-width:70ch; font-size:1.02rem; }
+  .lead { color:var(--text2); max-width:72ch; font-size:1.02rem; }
   .verdict { margin-top:22px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:12px; }
   .v { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; }
   .v b { display:flex; align-items:center; gap:8px; margin-bottom:4px; font-size:.95rem; }
   .v p { color:var(--text2); font-size:.88rem; }
-  .v.ok b { color:var(--ok); } .v.warn b { color:var(--warn); } .v.bad b { color:var(--bad); }
+  .v.c1 b { color:var(--ok); } .v.c2 b { color:var(--bad); } .v.c3 b { color:var(--a1); }
 
   section { margin-top:56px; }
   .sec-head { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
   .sec-num { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#0b0d13; flex-shrink:0; }
-  #analise .sec-num { background:var(--a1); } #piloto .sec-num { background:var(--a2); } #concrecion .sec-num { background:var(--a3); }
+  #base .sec-num { background:var(--a1); } #imprescindibles .sec-num { background:var(--a2); } #uso .sec-num { background:var(--a3); } #notas .sec-num { background:var(--a4); }
   h2 { font-size:1.45rem; letter-spacing:-.01em; }
   .sec-sub { color:var(--text2); margin:0 0 22px 46px; max-width:72ch; }
   h3 { font-size:1.05rem; margin:30px 0 12px; display:flex; align-items:center; gap:8px; }
-  #analise h3 svg { color:var(--a1); } #piloto h3 svg { color:var(--a2); } #concrecion h3 svg { color:var(--a3); }
+  #base h3 svg { color:var(--a1); } #imprescindibles h3 svg { color:var(--a2); } #uso h3 svg { color:var(--a3); } #notas h3 svg { color:var(--a4); }
   p + p { margin-top:10px; }
 
   /* Táboas */
@@ -61,15 +64,15 @@
   th, td { text-align:left; vertical-align:top; padding:11px 14px; border-bottom:1px solid var(--border); }
   th { font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--text2); background:var(--bg3); }
   tr:last-child td { border-bottom:none; }
-  td.ref { white-space:nowrap; font-weight:700; }
-  #analise td.ref { color:var(--a1); }
+  td.ref { white-space:nowrap; font-weight:700; color:var(--a1); }
   q { font-style:italic; color:var(--text); }
   q::before { content:"«"; } q::after { content:"»"; }
 
-  /* Tarxetas de problemas */
-  .probs { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:14px; }
+  /* Tarxetas */
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:14px; }
   .card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; }
   .card h4 { font-size:.96rem; margin-bottom:8px; display:flex; gap:8px; align-items:center; }
+  .card h4 svg { color:var(--a3); }
   .card p, .card li { font-size:.88rem; color:var(--text2); }
   .card ul { padding-left:18px; margin-top:6px; }
   .tag { display:inline-block; font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:6px; }
@@ -77,17 +80,14 @@
   .t-warn { background:color-mix(in srgb,var(--warn) 16%,transparent); color:var(--warn); }
   .t-bad { background:color-mix(in srgb,var(--bad) 16%,transparent); color:var(--bad); }
 
-  .quote { border-left:3px solid var(--a2); background:var(--bg2); padding:14px 18px; border-radius:0 var(--radius) var(--radius) 0; margin:18px 0; }
+  .quote { border-left:3px solid var(--a1); background:var(--bg2); padding:14px 18px; border-radius:0 var(--radius) var(--radius) 0; margin:18px 0; }
   .quote p { font-style:italic; } .quote small { display:block; margin-top:6px; color:var(--text2); font-style:normal; font-size:.8rem; }
-  #analise .quote { border-left-color:var(--a1); }
 
-  /* Niveis */
-  .levels { display:grid; gap:10px; counter-reset:lv; }
-  .lv { display:grid; grid-template-columns:44px 1fr; gap:14px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; }
-  .lv .n { width:36px; height:36px; border-radius:10px; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--a1); }
-  .lv b { display:block; } .lv p { color:var(--text2); font-size:.88rem; }
+  .formula { display:flex; flex-wrap:wrap; align-items:center; gap:10px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; font-size:.9rem; margin-top:14px; }
+  .formula span.box { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:8px 12px; }
+  .formula span.box b { color:var(--a1); }
 
-  /* Imprescindibles do piloto */
+  /* Imprescindibles */
   .imp { background:var(--bg2); border:1px solid var(--border); border-left:4px solid var(--a2); border-radius:var(--radius); padding:20px 22px; margin-bottom:14px; break-inside:avoid; }
   .imp-head { display:flex; gap:12px; align-items:baseline; flex-wrap:wrap; }
   .imp-id { font-weight:800; color:var(--a2); font-size:.85rem; letter-spacing:.05em; }
@@ -95,29 +95,28 @@
   .imp .desc { margin:8px 0 14px; font-size:.98rem; }
   .imp dl { display:grid; grid-template-columns:170px 1fr; gap:8px 16px; font-size:.86rem; }
   .imp dt { color:var(--text2); font-weight:600; }
-  .imp dd { color:var(--text); }
   .imp dd.min { background:color-mix(in srgb,var(--a2) 10%,transparent); border-radius:8px; padding:6px 10px; }
+  .prog { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:stretch; }
+  .prog div { background:var(--bg3); border-radius:8px; padding:6px 10px; }
+  .prog div b { display:block; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--text2); }
+  .prog > span { align-self:center; color:var(--a2); font-weight:800; }
   .crit { display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.78rem; background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:1px 6px; margin:0 4px 4px 0; cursor:help; }
   .note { font-size:.82rem; color:var(--text2); margin-top:12px; padding-top:10px; border-top:1px dashed var(--border); display:flex; gap:8px; }
   .note svg { color:var(--a2); margin-top:2px; }
 
-  .formula { display:flex; flex-wrap:wrap; align-items:center; gap:10px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; font-size:.9rem; }
-  .formula span.box { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:8px 12px; }
-  .formula span.box b { color:var(--a2); }
-
-  /* Texto proposto para a concreción */
-  .legal { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px; }
-  .legal ol { padding-left:22px; } .legal li { margin-bottom:12px; }
-  .legal li small { color:var(--a3); font-weight:600; }
-  .debate { border:1px dashed var(--a3); border-radius:8px; padding:1px 6px; font-size:.78rem; color:var(--a3); font-weight:700; white-space:nowrap; }
+  .legal { background:var(--bg2); border:1px solid var(--border); border-left:4px solid var(--a3); border-radius:var(--radius); padding:20px 24px; margin-top:14px; }
+  .legal p { font-size:.94rem; }
+  .legal small { color:var(--a3); font-weight:600; }
+  .debate { border:1px dashed var(--a2); border-radius:8px; padding:1px 6px; font-size:.78rem; color:var(--a2); font-weight:700; white-space:nowrap; }
 
   footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--border); color:var(--text3); font-size:.8rem; }
 
   @media (max-width:640px) {
     .sec-sub { margin-left:0; }
     .imp dl { grid-template-columns:1fr; gap:2px; } .imp dt { margin-top:8px; }
-    .top-row .brand small { display:none; }
-    /* Táboas apiladas en móbil: cada fila é un bloque */
+    .prog { grid-template-columns:1fr; } .prog > span { transform:rotate(90deg); justify-self:center; }
+    .top-row .brand small, .btn.pdf span { display:none; }
+    .btn.pdf { padding:0; width:36px; }
     table, tbody, tr, td { display:block; width:100%; }
     thead { display:none; }
     tr { border-bottom:1px solid var(--border); padding:6px 0; }
@@ -125,14 +124,29 @@
     td { border-bottom:none; padding:4px 14px; }
     td.ref, td:first-child { white-space:normal; font-weight:700; padding-top:10px; }
   }
+
+  /* Impresión / PDF: A4, fondo branco, cores de acento conservadas */
+  @page { size:A4; margin:14mm 13mm 16mm; }
   @media print {
-    body { background:#fff; color:#000; font-size:11pt; }
-    body, body.light { --bg:#fff; --bg2:#fff; --bg3:#f2f2f2; --text:#000; --text2:#333; --border:#bbb; }
-    header.top, .ml { display:none; }
+    html { scroll-padding-top:0; }
+    body, body.light { --bg:#fff; --bg2:#fff; --bg3:#f1f2f5; --text:#111; --text2:#444; --text3:#666; --border:#c9ccd4;
+      --a1:#1d4ed8; --a2:#b45309; --a3:#047857; --a4:#6d28d9; --ok:#047857; --warn:#b45309; --bad:#b91c1c;
+      background:#fff; color:#111; font-size:10pt; line-height:1.45; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    header.top { display:none; }
     main { padding:0; max-width:none; }
-    section { break-before:page; margin-top:0; }
-    .imp, .card, .v, .lv { break-inside:avoid; }
+    .hero { margin-bottom:18px; }
+    h1 { font-size:20pt; }
+    section { margin-top:22px; }
+    #notas { break-before:page; }
+    .sec-head { break-after:avoid; }
+    h2 { font-size:15pt; } h3 { font-size:11.5pt; margin:16px 0 8px; break-after:avoid; }
+    .imp, .card, .v, .legal, tr, .formula, .quote { break-inside:avoid; }
+    .imp { padding:12px 14px; margin-bottom:8px; }
+    .imp .desc { margin:4px 0 8px; }
+    .imp dl { grid-template-columns:130px 1fr; gap:4px 12px; font-size:9pt; }
     .tw { overflow:visible; }
+    table { font-size:9pt; } th, td { padding:6px 9px; }
+    footer { margin-top:24px; }
   }
 </style>
 </head>
@@ -143,10 +157,11 @@
     <a class="btn" href="../index.html" title="Volver aos recursos">
       <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
     </a>
-    <div class="brand">Aprendizaxes imprescindibles <small>· Brais e Diego · borrador para debate</small></div>
+    <div class="brand">Guía de ciclo · Matemáticas <small>· 1º ciclo · borrador para revisión</small></div>
     <div class="ml">
-      <button class="btn" onclick="window.print()" title="Imprimir">
+      <button class="btn pdf" onclick="window.print()" title="Imprimir ou gardar en PDF">
         <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
+        <span>Imprimir / Gardar PDF</span>
       </button>
       <button class="btn" id="tema" title="Cambiar tema">
         <svg id="ic-moon" class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
@@ -155,94 +170,69 @@
     </div>
   </div>
   <nav class="tabs">
-    <a href="#analise" data-s="1">1 · Análise legal</a>
-    <a href="#piloto" data-s="2">2 · Piloto: Matemáticas 1º ciclo</a>
-    <a href="#concrecion" data-s="3">3 · Texto para a concreción curricular</a>
+    <a href="#base" data-s="1">1 · Para que serve</a>
+    <a href="#imprescindibles" data-s="2">2 · As 6 aprendizaxes imprescindibles</a>
+    <a href="#uso" data-s="3">3 · Como usala no ciclo</a>
+    <a href="#notas" data-s="4">4 · Notas de elaboración</a>
   </nav>
 </header>
 
 <main>
   <div class="hero">
-    <div class="eyebrow">CEIP Condesa de Fenosa · Proposta de marco común</div>
-    <h1>Que debe acadar cada neno e nena ao remate de cada ciclo?</h1>
-    <p class="lead">Revisión do documento <i>Aprendizaxes básicas por ciclo</i> á luz da LOE, o RD 157/2022, o Decreto 155/2022 e a Orde do 26 de maio de 2023, cunha proposta para reformulalo e un piloto completo de Matemáticas do primeiro ciclo.</p>
+    <div class="eyebrow">CEIP Condesa de Fenosa · Guía de ciclo · Matemáticas · 1º ciclo (1º e 2º)</div>
+    <h1>Cara a onde teñen que ir, como mínimo, os nenos e nenas ao remate de 2º</h1>
+    <p class="lead">Orientación común para que o profesorado do ciclo planifique co mesmo norte. Cada docente organiza a súa aula como considere; esta guía fixa o chan compartido: as aprendizaxes imprescindibles que ninguén debería deixar sen traballar, derivadas dos criterios de avaliación de 2º do Decreto 155/2022.</p>
     <div class="verdict">
-      <div class="v ok"><b><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>A idea é legal e necesaria</b><p>A norma pide que o claustro fixe criterios xerais de avaliación e promoción na concreción curricular (D. 155, art. 14.2.h).</p></div>
-      <div class="v warn"><b><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>A redacción non serve aínda</b><p>Está escrito en contidos. O referente legal da avaliación son os criterios (D. 155, art. 21.1).</p></div>
-      <div class="v bad"><b><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>Non sostería unha permanencia</b><p>Ante unha reclamación revísase a aplicación dos criterios da concreción e da programación, non un listado de temas.</p></div>
+      <div class="v c1"><b><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Que é</b><p>Unha guía para planificar o ciclo: que aprendizaxes son imprescindibles, como progresan de 1º a 2º e onde se poden observar.</p></div>
+      <div class="v c2"><b><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>Que non é</b><p>Non é un baremo de promoción. A decisión de permanencia é global e colexiada, e ten en conta moitos máis factores (D. 155/2022, art. 22).</p></div>
+      <div class="v c3"><b><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>Base legal</b><p>Criterios e contidos de 2º curso do anexo II do Decreto 155/2022, que son o referente da avaliación (art. 21.1).</p></div>
     </div>
   </div>
 
-  <!-- ============ 1. ANÁLISE ============ -->
-  <section id="analise">
-    <div class="sec-head"><div class="sec-num">1</div><h2>Análise legal</h2></div>
-    <p class="sec-sub">Citas comprobadas no texto oficial do DOG e do BOE. A dúbida inicial era correcta: o contido é un medio, e a norma dío expresamente.</p>
+  <!-- ============ 1. PARA QUE SERVE ============ -->
+  <section id="base">
+    <div class="sec-head"><div class="sec-num">1</div><h2>Para que serve e en que se apoia</h2></div>
+    <p class="sec-sub">A norma pide coherencia dentro do ciclo e identifica unhas «aprendizaxes imprescindibles». Esta guía concreta ambas as cousas para Matemáticas.</p>
 
-    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>O que di a norma</h3>
     <div class="tw"><table>
-      <thead><tr><th>Norma</th><th>Que fixa</th></tr></thead>
+      <thead><tr><th>Norma</th><th>Que di e que implica para esta guía</th></tr></thead>
       <tbody>
-        <tr><td class="ref">D. 155/2022, art. 21.1</td><td><q>Os referentes para a valoración do grao de adquisición das competencias clave e o logro dos obxectivos das áreas e da etapa na avaliación das áreas serán os criterios de avaliación que figuran no anexo II.</q></td></tr>
-        <tr><td class="ref">D. 155/2022, art. 15.2.e</td><td>A programación inclúe <q>criterios de cualificación con indicación do grao mínimo de consecución para a superación da área</q>. É o que facemos en PROENS: o mínimo vai asociado ao criterio.</td></tr>
-        <tr><td class="ref">D. 155/2022, art. 14.2.g-h</td><td>A concreción curricular (claustro) inclúe <q>os criterios para o deseño dos plans específicos de reforzo</q> e <q>os criterios xerais para a avaliación e a promoción</q>. <b>Este é o sitio legal do noso documento.</b></td></tr>
-        <tr><td class="ref">D. 155/2022, art. 22.1</td><td>En 2º, 4º e 6º o equipo docente decide <q>de xeito colexiado, tendo en conta os criterios de promoción e tomando especialmente en consideración a información e o criterio do profesorado titor</q>.</td></tr>
-        <tr><td class="ref">D. 155/2022, art. 22.3<br>RD 157/2022, art. 15.3<br>LOE, art. 20</td><td>Permanencia: medida excepcional, <q>tras aplicar as medidas ordinarias suficientes, adecuadas e personalizadas</q>, unha soa vez na etapa, oídas as familias e cun plan específico de reforzo.</td></tr>
-        <tr><td class="ref">D. 155/2022, art. 21.3<br>RD 157/2022, art. 14.2</td><td>O único termo legal próximo a «mínimos»: as <q>aprendizaxes imprescindibles para continuar o proceso educativo</q>, que activan medidas de reforzo <q>tan axiña como se detecten as dificultades</q>.</td></tr>
-        <tr><td class="ref">D. 155/2022, art. 22.4</td><td>Informe final de ciclo sobre o grao de adquisición das competencias clave, coas medidas de reforzo para o ciclo seguinte.</td></tr>
-        <tr><td class="ref">Orde 26/05/2023, arts. 9.7 e 32-34</td><td>Os criterios de promoción comunícanse ás familias nos primeiros días de curso. Nunha revisión ou reclamación compróbase a aplicación dos <q>criterios da concreción curricular</q> (centro e, despois, Inspección).</td></tr>
+        <tr><td class="ref">D. 155/2022, art. 21.1</td><td><q>Os referentes para a valoración do grao de adquisición das competencias clave e o logro dos obxectivos das áreas e da etapa na avaliación das áreas serán os criterios de avaliación que figuran no anexo II.</q> → Cada imprescindible sae dun criterio, non dun tema.</td></tr>
+        <tr><td class="ref">D. 155/2022, art. 21.3</td><td>Cando o progreso non é o axeitado, as medidas de reforzo adóptanse <q>tan axiña como se detecten as dificultades</q> e diríxense a <q>garantir a adquisición das aprendizaxes imprescindibles para continuar o proceso educativo</q>. → É o termo legal que usa esta guía.</td></tr>
+        <tr><td class="ref">D. 155/2022, art. 14.1</td><td>A concreción curricular orienta o desenvolvemento do currículo <q>para garantir a coherencia na actuación docente</q>.</td></tr>
+        <tr><td class="ref">Orde 26/05/2023, art. 9</td><td>Os equipos de ciclo coordínanse <q>para garantir a coherencia na actuación docente nos ciclos que conforman a etapa</q> e fan seguimento das programacións cunha frecuencia mínima mensual.</td></tr>
+        <tr><td class="ref">D. 155/2022, art. 15.2.e</td><td>As programacións inclúen o <q>grao mínimo de consecución</q>. → Os mínimos de PROENS de 2º deberían ser coherentes con esta guía.</td></tr>
+        <tr><td class="ref">D. 155/2022, art. 22.4</td><td>Ao remate de 2º, informe final de ciclo co grao de adquisición das competencias clave e as medidas de reforzo para o ciclo seguinte. → A guía axuda a redactalo con criterios comúns.</td></tr>
       </tbody>
     </table></div>
 
+    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>Como está construída</h3>
+    <p>Os criterios de Matemáticas de 2º son <b>criterios de proceso</b> que se repiten en todos os bloques: <i>comprender a pregunta</i>, <i>empregar estratexias</i>, <i>explicar o proceso</i>, <i>recoñecer as matemáticas na vida cotiá</i>. O «que» (números ata o 999, o reloxo, as figuras) está nos contidos. Por iso cada aprendizaxe imprescindible combina os tres elementos:</p>
+    <div class="formula">
+      <span class="box"><b>Criterio</b> · que fai o alumno</span><span>+</span>
+      <span class="box"><b>Contido</b> · sobre que o fai</span><span>+</span>
+      <span class="box"><b>Situación</b> · onde se observa</span><span>=</span>
+      <span class="box"><b>Aprendizaxe imprescindible</b></span>
+    </div>
     <div class="quote">
       <p>«Os obxectivos de área avaliaranse a través da posta en acción de diversos contidos. Estes, entendidos como un medio, non como un fin, teñen conexións cos criterios de avaliación.»</p>
       <small>Decreto 155/2022, anexo II, introdución da área de Matemáticas</small>
     </div>
-
-    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Problemas do documento actual</h3>
-    <div class="probs">
-      <div class="card"><h4><span class="tag t-bad">a</span> Contidos, non aprendizaxes</h4><p>«Sistemas do corpo», «Historia: grandes etapas», «ODS», «Múltiplos, divisores e potencias», «Números ata o 999»: din que se traballa, non que debe saber facer o alumno nin en que situación.</p></div>
-      <div class="card"><h4><span class="tag t-bad">b</span> Elementos non esixibles</h4><p>«Lateralidade definida» ou «esquema corporal en afianzamento» son madurativos. «Interese pola lectura» ou «hábito lector» son actitudes. Ningún pode fundamentar unha permanencia.</p></div>
-      <div class="card"><h4><span class="tag t-warn">c</span> 12 ámbitos ≠ 9 áreas</h4><p>«Competencia dixital», «Autonomía e convivencia» e «Problemas e pensamento» non son áreas (Orde, art. 3) e non teñen criterios propios. Hai que ancoralos en criterios de áreas e nas competencias clave.</p></div>
-      <div class="card"><h4><span class="tag t-warn">d</span> Parece un baremo automático</h4><p>Lido tal cal, «non acadou X» → «repite». A decisión legal é global, colexiada e posterior ás medidas ordinarias. Os imprescindibles son sinal de alerta e punto de partida do reforzo.</p></div>
-      <div class="card"><h4><span class="tag t-warn">e</span> Terminoloxía e fontes</h4><p>En Galicia son <b>contidos</b>, non «saberes básicos» (termo do RD). «Non hai mínimos oficiais» precísase: existe o grao mínimo de consecución (art. 15.2.e). Falta citar a Orde do 26/05/2023.</p></div>
-      <div class="card"><h4><span class="tag t-ok">+</span> O que xa está ben</h4><p>A idea de marco común, a promoción só ao final de ciclo, o carácter excepcional da permanencia e o plan de reforzo para o que quede pendente.</p></div>
-    </div>
-
-    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>Proposta: tres niveis enlazados</h3>
-    <div class="levels">
-      <div class="lv"><div class="n">1</div><div><b>Concreción curricular (art. 14.2.h)</b><p>Catro ou cinco criterios xerais de promoción de ciclo, aprobados polo claustro. Proposta de texto na sección 3.</p></div></div>
-      <div class="lv"><div class="n">2</div><div><b>Anexo «Aprendizaxes imprescindibles ao remate de ciclo»</b><p>Polas 9 áreas. Poucos por área (5-6 como máximo): só os que bloquean o que vén despois. Cada un redactado como desempeño que sae dun criterio do último curso do ciclo (2º, 4º, 6º), co código do criterio.</p></div></div>
-      <div class="lv"><div class="n">3</div><div><b>Programacións en PROENS (art. 15.2.e)</b><p>O grao mínimo de consecución deses criterios en 2º, 4º e 6º coincide co anexo. Así todo o sistema é coherente e defendible.</p></div></div>
-    </div>
   </section>
 
-  <!-- ============ 2. PILOTO ============ -->
-  <section id="piloto">
-    <div class="sec-head"><div class="sec-num">2</div><h2>Piloto: Matemáticas · remate do 1º ciclo</h2></div>
-    <p class="sec-sub">Elaborado a partir dos criterios e contidos de <b>2º curso</b> do anexo II do Decreto 155/2022. Pasa o rato por riba dun código de criterio para ler o texto literal.</p>
-
-    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>O achado clave do currículo galego de Matemáticas</h3>
-    <p>Os criterios de Matemáticas de 2º son <b>criterios de proceso</b> que se repiten en todos os bloques: <i>comprender a pregunta</i>, <i>empregar estratexias</i>, <i>explicar o proceso</i>, <i>recoñecer as matemáticas na vida cotiá</i>. Non din «números ata o 999»; iso está nos contidos. Por iso un imprescindible non pode ser só un criterio (demasiado xenérico) nin só un contido (non é referente legal). Ten que ser a combinación:</p>
-    <div class="formula" style="margin-top:14px">
-      <span class="box"><b>Criterio</b> · que fai o alumno (o referente)</span>
-      <span>+</span>
-      <span class="box"><b>Contido</b> · sobre que o fai (o medio)</span>
-      <span>+</span>
-      <span class="box"><b>Situación</b> · en que contexto se observa</span>
-      <span>=</span>
-      <span class="box"><b>Aprendizaxe imprescindible</b></span>
-    </div>
-
-    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>As 6 aprendizaxes imprescindibles</h3>
+  <!-- ============ 2. IMPRESCINDIBLES ============ -->
+  <section id="imprescindibles">
+    <div class="sec-head"><div class="sec-num">2</div><h2>As 6 aprendizaxes imprescindibles ao remate de 2º</h2></div>
+    <p class="sec-sub">Para cada unha: o desempeño, os criterios de 2º que a sosteñen (pasa o rato por riba para ler o texto literal), a progresión de 1º a 2º segundo os contidos do decreto, onde se pode observar e o chan mínimo ao que debería chegar todo o alumnado.</p>
 
     <div class="imp">
       <div class="imp-head"><span class="imp-id">MAT-1C-01</span><h4>O número ata o 999</h4></div>
       <p class="desc">Le, escribe, representa, compara e ordena números ata o 999 en situacións cotiás, e explica o valor de cada cifra (centenas, decenas e unidades) con material ou debuxo.</p>
       <dl>
         <dt>Criterios de 2º</dt><dd><span class="crit" data-c="CA1.3">CA1.3</span><span class="crit" data-c="CA1.9">CA1.9</span></dd>
-        <dt>Contidos que o concretan</dt><dd>Cantidade (lectura, escritura, representación, composición e descomposición ata 999) · Relacións (base dez e valor posicional; comparación e ordenación ata 999)</dd>
+        <dt>Progresión no ciclo</dt><dd><div class="prog"><div><b>1º</b>Números ata o 99; base dez (decenas e unidades); ordinais ata o 5º.</div><span>→</span><div><b>2º</b>Números ata o 999; centenas; composición e descomposición; ordinais ata o 10º.</div></div></dd>
         <dt>Onde se observa</dt><dd>Prezos dunha tenda de aula, números de páxinas, entrevista breve con bloques multibase ou ábaco.</dd>
-        <dt>Grao mínimo</dt><dd class="min">Le e escribe números de tres cifras e descompóñeos en centenas, decenas e unidades, con apoio de material se o precisa; ordena series curtas de números.</dd>
+        <dt>Chan mínimo</dt><dd class="min">Le e escribe números de tres cifras e descompóñeos en centenas, decenas e unidades, con apoio de material se o precisa; ordena series curtas de números.</dd>
       </dl>
     </div>
 
@@ -251,11 +241,11 @@
       <p class="desc">Calcula sumas e restas ata o 999 en contextos significativos cunha estratexia fiable (mental, con material ou escrita) e explica como o fixo.</p>
       <dl>
         <dt>Criterios de 2º</dt><dd><span class="crit" data-c="CA1.4">CA1.4</span><span class="crit" data-c="CA1.9">CA1.9</span></dd>
-        <dt>Contidos que o concretan</dt><dd>Sentido das operacións (cálculo mental de sumas e restas ata 999; relación entre suma e resta; uso da base dez nas operacións)</dd>
+        <dt>Progresión no ciclo</dt><dd><div class="prog"><div><b>1º</b>Cálculo mental de sumas e restas ata o 99; relación suma-resta con material, de forma guiada.</div><span>→</span><div><b>2º</b>Cálculo mental de sumas e restas ata o 999; uso da base dez nas operacións; calculadora para verificar.</div></div></dd>
         <dt>Onde se observa</dt><dd>Rutinas de cálculo mental, tarefas de compra-venda, explicación oral dunha operación resolta.</dd>
-        <dt>Grao mínimo</dt><dd class="min">Resolve sumas e restas con números de ata tres cifras cunha estratexia propia fiable, aínda que non sexa a máis rápida, e verbaliza os pasos.</dd>
+        <dt>Chan mínimo</dt><dd class="min">Resolve sumas e restas con números de ata tres cifras cunha estratexia propia fiable, aínda que non sexa a máis rápida, e verbaliza os pasos.</dd>
       </dl>
-      <div class="note"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>O currículo de 2º fala de estratexias e de base dez, non do algoritmo «con levadas» como contido. O algoritmo escrito pode ser unha das estratexias, pero non debería ser a condición de promoción.</span></div>
+      <div class="note"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>O currículo fala de estratexias e de base dez, non do algoritmo «con levadas» como contido. O algoritmo escrito é unha estratexia máis, non o obxectivo.</span></div>
     </div>
 
     <div class="imp">
@@ -263,11 +253,11 @@
       <p class="desc">Resolve problemas da vida cotiá de suma ou resta, incluídos os de diñeiro: comprende a pregunta, identifica os datos, representa a situación (material, debuxo ou esquema), resolve e comproba se a solución ten sentido.</p>
       <dl>
         <dt>Criterios de 2º</dt><dd><span class="crit" data-c="CA1.2">CA1.2</span><span class="crit" data-c="CA1.3">CA1.3</span><span class="crit" data-c="CA1.5">CA1.5</span><span class="crit" data-c="CA2.3">CA2.3</span></dd>
-        <dt>Contidos que o concretan</dt><dd>Resolución de problemas de suma e resta · Procesos de resolución · Educación financeira (moedas e billetes de euro, prezos)</dd>
+        <dt>Progresión no ciclo</dt><dd><div class="prog"><div><b>1º</b>Problemas de suma e resta guiados, con debuxos, material e dramatización; compra-venda en xogos de equipo.</div><span>→</span><div><b>2º</b>Máis autonomía no proceso; prezos reais e equivalencias de moedas e billetes; formula problemas propios.</div></div></dd>
         <dt>Onde se observa</dt><dd>Problemas orais ou lidos en voz alta pola mestra, mercado de aula, escala de observación do proceso.</dd>
-        <dt>Grao mínimo</dt><dd class="min">Ante un problema dunha soa operación, explica que se pregunta, escolle a operación e dá unha solución coherente co contexto, con apoio manipulativo ou gráfico se o precisa.</dd>
+        <dt>Chan mínimo</dt><dd class="min">Ante un problema dunha soa operación, explica que se pregunta, escolle a operación e dá unha solución coherente co contexto, con apoio manipulativo ou gráfico se o precisa.</dd>
       </dl>
-      <div class="note"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>O enunciado pódese ler en voz alta. Aquí avalíase o razoamento matemático; a lectura xa ten os seus imprescindibles nas áreas de lingua. Se non, un alumno con dificultade lectora suspendería dúas veces pola mesma causa.</span></div>
+      <div class="note"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>O enunciado pódese ler en voz alta. Aquí trabállase e obsérvase o razoamento matemático; a lectura ten os seus propios imprescindibles nas áreas de lingua.</span></div>
     </div>
 
     <div class="imp">
@@ -275,9 +265,9 @@
       <p class="desc">Mide e compara lonxitudes, masas e capacidades escollendo un instrumento axeitado (regra, cinta, balanza, xerra) e expresa o resultado coa unidade correcta (m, cm, kg, g, l).</p>
       <dl>
         <dt>Criterios de 2º</dt><dd><span class="crit" data-c="CA2.6">CA2.6</span><span class="crit" data-c="CA2.7">CA2.7</span><span class="crit" data-c="CA2.8">CA2.8</span></dd>
-        <dt>Contidos que o concretan</dt><dd>Magnitude (unidades convencionais e non convencionais) · Medición (instrumentos, selección e precisión)</dd>
+        <dt>Progresión no ciclo</dt><dd><div class="prog"><div><b>1º</b>Unidades non convencionais (palmo, pé, paso, cullerada…); identificación de m, cm, kg, g e l; comparación directa.</div><span>→</span><div><b>2º</b>Medición con instrumentos convencionais; equivalencias entre quilo, medio e cuarto, e litro, medio e cuarto; estimación.</div></div></dd>
         <dt>Onde se observa</dt><dd>Obradoiro de medida (receitas, altura da clase, peso de mochilas), lista de cotexo.</dd>
-        <dt>Grao mínimo</dt><dd class="min">Mide un obxecto próximo co instrumento axeitado, nomea a unidade e compara dúas medidas dicindo cal é maior.</dd>
+        <dt>Chan mínimo</dt><dd class="min">Mide un obxecto próximo co instrumento axeitado, nomea a unidade e compara dúas medidas dicindo cal é maior.</dd>
       </dl>
     </div>
 
@@ -286,10 +276,11 @@
       <p class="desc">Le a hora (en punto, medias e cuartos) en reloxos analóxicos e dixitais e usa o calendario (días, semanas, meses e estacións) para situar feitos da súa vida.</p>
       <dl>
         <dt>Criterios de 2º</dt><dd><span class="crit" data-c="CA2.6">CA2.6</span><span class="crit" data-c="CA2.7">CA2.7</span></dd>
-        <dt>Contidos que o concretan</dt><dd>Magnitude: unidades de medida do tempo; lectura da hora en punto, medias e cuartos en reloxos analóxicos e dixitais</dd>
+        <dt>Progresión no ciclo</dt><dd><div class="prog"><div><b>1º</b>Unidades de tempo (ano, estación, mes, semana, día, hora); construción do calendario; relato de experiencias.</div><span>→</span><div><b>2º</b>Lectura da hora en punto, medias e cuartos en reloxo analóxico e dixital; construción dun reloxo; minutos e segundos.</div></div></dd>
         <dt>Onde se observa</dt><dd>Rutina diaria do reloxo e do calendario de aula, axenda de clase.</dd>
-        <dt>Grao mínimo</dt><dd class="min">Le horas en punto e medias en reloxo analóxico e dixital (os cuartos, polo menos con apoio) e localiza unha data no calendario. <span class="debate">a debater</span></dd>
+        <dt>Chan mínimo</dt><dd class="min">Le horas en punto e medias en reloxo analóxico e dixital (os cuartos, polo menos con apoio) e localiza unha data no calendario. <span class="debate">a revisar</span></dd>
       </dl>
+      <div class="note"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>A lectura do reloxo é contido de 2º, non de 1º. En 1º abonda con traballar as unidades de tempo e o calendario.</span></div>
     </div>
 
     <div class="imp">
@@ -297,75 +288,75 @@
       <p class="desc">Recoñece e nomea triángulo, cadrado, rectángulo, rombo e círculo e os seus elementos (lados e vértices) en obxectos cotiáns, e describe posicións e itinerarios con vocabulario espacial (diante, detrás, entre, preto, lonxe, á beira…).</p>
       <dl>
         <dt>Criterios de 2º</dt><dd><span class="crit" data-c="CA3.7">CA3.7</span><span class="crit" data-c="CA3.8">CA3.8</span></dd>
-        <dt>Contidos que o concretan</dt><dd>Figuras xeométricas (vocabulario, elementos e propiedades) · Localización e sistemas de representación (posicións, itinerarios)</dd>
+        <dt>Progresión no ciclo</dt><dd><div class="prog"><div><b>1º</b>Triángulo, cadrado, rectángulo e círculo (lados e vértices); liñas rectas e curvas; posicións respecto a un mesmo.</div><span>→</span><div><b>2º</b>Engádese o rombo e os ángulos; simetrías; esbozos de itinerarios; vocabulario comparativo (máis preto que, entre…).</div></div></dd>
         <dt>Onde se observa</dt><dd>Caza de figuras polo colexio, itinerarios no patio (conectable con EF), xeoplano e tangram.</dd>
-        <dt>Grao mínimo</dt><dd class="min">Identifica e nomea as figuras planas básicas na contorna e segue ou describe un itinerario sinxelo.</dd>
+        <dt>Chan mínimo</dt><dd class="min">Identifica e nomea as figuras planas básicas na contorna e segue ou describe un itinerario sinxelo.</dd>
       </dl>
     </div>
 
-    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Que pasa co resto de criterios?</h3>
-    <p>Todos os criterios se avalían e cualifican na programación. A diferenza é que estes <b>non condicionan por si sós unha permanencia</b>, porque non bloquean a aprendizaxe de 3º ou porque son actitudinais:</p>
+    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>E o resto de criterios?</h3>
+    <p>Trabállanse, avalíanse e cualifícanse igual na programación. Non figuran como imprescindibles porque non son requisito previo do 2º ciclo ou porque son actitudinais:</p>
     <div class="tw" style="margin-top:12px"><table>
-      <thead><tr><th>Aprendizaxe</th><th>Criterios</th><th>Por que non é imprescindible</th></tr></thead>
+      <thead><tr><th>Aprendizaxe</th><th>Criterios de 2º</th><th>Por que non é imprescindible</th></tr></thead>
       <tbody>
-        <tr><td>Series, patróns e igualdades (= e ≠)</td><td>CA1.6 · CA4.5</td><td>Formativo e transversal; non bloquea o seguinte ciclo.</td></tr>
-        <tr><td>Pensamento computacional (algoritmos da vida cotiá)</td><td>CA3.4 · CA4.6</td><td>Interpretación guiada; retómase e amplíase en 2º ciclo.</td></tr>
-        <tr><td>Datos e gráficos sinxelos; posible/imposible</td><td>CA5.2 – CA5.7</td><td>Importante, pero non é requisito previo do cálculo nin da resolución de problemas.</td></tr>
-        <tr><td>Multiplicación como agrupación (2, 3, 4, 5 e 10)</td><td>CA1.6</td><td>En 2º só se <i>introduce</i>; as táboas son contido do 2º ciclo.</td></tr>
-        <tr><td>Emocións, erro, traballo en equipo</td><td>CA1.1 · CA4.1 · CA5.1 · bloque 6</td><td>Actitudinais: avalíanse e reforzanse, pero non poden fundamentar unha permanencia.</td></tr>
+        <tr><td>Series, patróns e igualdades (= e ≠)</td><td>CA1.6 · CA4.5</td><td>Formativo e transversal; retómase no 2º ciclo.</td></tr>
+        <tr><td>Pensamento computacional (algoritmos da vida cotiá)</td><td>CA3.4 · CA4.6</td><td>Interpretación guiada; amplíase no 2º ciclo.</td></tr>
+        <tr><td>Datos e gráficos sinxelos; posible e imposible</td><td>CA5.2 – CA5.7</td><td>Importante, pero non condiciona o cálculo nin a resolución de problemas do ciclo seguinte.</td></tr>
+        <tr><td>Multiplicación como agrupación (2, 3, 4, 5 e 10)</td><td>CA1.6</td><td>En 2º só se <i>introduce</i>; as táboas son do 2º ciclo.</td></tr>
+        <tr><td>Emocións, erro e traballo en equipo</td><td>CA1.1 · CA4.1 · CA5.1 · bloque 6</td><td>Actitudinais: trabállanse en todas as sesións, pero non se formulan como chan de coñecemento.</td></tr>
       </tbody>
     </table></div>
+  </section>
 
-    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="M7 12h10"/></svg>Do documento actual ao piloto</h3>
+  <!-- ============ 3. USO ============ -->
+  <section id="uso">
+    <div class="sec-head"><div class="sec-num">3</div><h2>Como usala no ciclo</h2></div>
+    <p class="sec-sub">Catro momentos do curso nos que a guía serve de referencia común.</p>
+    <div class="cards">
+      <div class="card"><h4><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>Ao programar</h4><p>Comprobar que cada imprescindible ten unidades didácticas e situacións de aprendizaxe en 1º e en 2º, seguindo a progresión. Axustar os mínimos de consecución de PROENS en 2º para que sexan coherentes co chan mínimo.</p></div>
+      <div class="card"><h4><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Na avaliación inicial</h4><p>En 2º, partir do que 1º deixou traballado (columna «1º» da progresión) para detectar quen precisa apoio desde o comezo.</p></div>
+      <div class="card"><h4><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Durante o curso</h4><p>Se un neno ou nena non avanza nun imprescindible, activar o reforzo canto antes, sen agardar ao final do ciclo (D. 155, art. 21.3). Revisalo nas reunións mensuais de ciclo.</p></div>
+      <div class="card"><h4><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>Ao remate de 2º</h4><p>Usar os imprescindibles como linguaxe común no informe final de ciclo: que quedou consolidado e que medidas se recomendan para 3º (D. 155, art. 22.4).</p></div>
+    </div>
+
+    <div class="legal">
+      <p><b>Proposta de redacción para a concreción curricular.</b> «O centro establece, para cada área e ciclo, unha guía de aprendizaxes imprescindibles derivadas dos criterios de avaliación do último curso do ciclo, como referente común para a planificación, a detección temperá de dificultades e a coordinación entre ciclos. A guía orienta a práctica docente e non substitúe a valoración global e colexiada que o equipo docente realiza nas decisións de promoción.» <small>D. 155/2022, arts. 14.1, 21.3 e 22 · Orde 26/05/2023, art. 9</small></p>
+    </div>
+  </section>
+
+  <!-- ============ 4. NOTAS ============ -->
+  <section id="notas">
+    <div class="sec-head"><div class="sec-num">4</div><h2>Notas de elaboración</h2></div>
+    <p class="sec-sub">Como se pasou do primeiro documento de ámbitos (Matemáticas do 1º ciclo) a esta guía, contrastando cada punto cos contidos de 1º e 2º do decreto.</p>
     <div class="tw"><table>
-      <thead><tr><th>Documento actual (1º ciclo)</th><th>Estado</th><th>Onde queda</th></tr></thead>
+      <thead><tr><th>Documento inicial</th><th>Estado</th><th>Onde queda</th></tr></thead>
       <tbody>
         <tr><td>Números ata o 999; valor posicional</td><td><span class="tag t-ok">Mantense</span></td><td>MAT-1C-01, reescrito como desempeño</td></tr>
         <tr><td>Suma e resta con e sen levar</td><td><span class="tag t-warn">Reformúlase</span></td><td>MAT-1C-02: estratexia fiable, non algoritmo obrigatorio</td></tr>
-        <tr><td>Multiplicación como suma repetida</td><td><span class="tag t-warn">Baixa</span></td><td>Avalíase, non imprescindible (en 2º só se introduce)</td></tr>
+        <tr><td>Multiplicación como suma repetida</td><td><span class="tag t-warn">Baixa</span></td><td>Trabállase, non imprescindible (en 2º só se introduce)</td></tr>
         <tr><td>Dobres e metades</td><td><span class="tag t-bad">Sae</span></td><td>Non figura como contido de cálculo en 1º nin en 2º (só «medio» e «cuarto» en medida)</td></tr>
         <tr><td>Cálculo mental sinxelo</td><td><span class="tag t-ok">Integrado</span></td><td>MAT-1C-02</td></tr>
         <tr><td>Reloxo: en punto, medias e cuartos</td><td><span class="tag t-ok">Mantense</span></td><td>MAT-1C-05</td></tr>
         <tr><td>Moedas e billetes de euro</td><td><span class="tag t-ok">Integrado</span></td><td>MAT-1C-03, como contexto dos problemas</td></tr>
         <tr><td>Medir con unidades non convencionais e iniciar m, kg, l</td><td><span class="tag t-ok">Mantense</span></td><td>MAT-1C-04</td></tr>
-        <tr><td>Formas planas e corpos; posicións</td><td><span class="tag t-ok">Mantense</span></td><td>MAT-1C-06 (figuras planas; os corpos, avaliados pero non imprescindibles)</td></tr>
-        <tr><td>Problemas dunha operación con apoio manipulativo; explicar como o resolveu</td><td><span class="tag t-ok">Mantense</span></td><td>MAT-1C-03; «explicar» vai en todos (CA x.8/x.9)</td></tr>
-        <tr><td>Series e patróns; programación desenchufada</td><td><span class="tag t-warn">Baixa</span></td><td>Avalíanse, non imprescindibles</td></tr>
+        <tr><td>Formas planas e corpos; posicións</td><td><span class="tag t-ok">Mantense</span></td><td>MAT-1C-06 (figuras planas; os corpos trabállanse, pero non son imprescindibles)</td></tr>
+        <tr><td>Problemas dunha operación con apoio manipulativo; explicar como o resolveu</td><td><span class="tag t-ok">Mantense</span></td><td>MAT-1C-03; «explicar» vai en todos (criterios CA x.8 e CA x.9)</td></tr>
+        <tr><td>Series e patróns; programación desenchufada</td><td><span class="tag t-warn">Baixa</span></td><td>Trabállanse, non imprescindibles</td></tr>
       </tbody>
+    </table></div>
+
+    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.38 3.62a1 1 0 0 1 3 3L7.37 18.63a2 2 0 0 1-.86.5l-2.87.84a.5.5 0 0 1-.62-.62l.84-2.87a2 2 0 0 1 .5-.86z"/></svg>Criterios citados (texto literal, 2º curso)</h3>
+    <div class="tw"><table id="taboa-criterios">
+      <thead><tr><th>Código</th><th>Criterio de avaliación</th></tr></thead>
+      <tbody></tbody>
     </table></div>
   </section>
 
-  <!-- ============ 3. CONCRECIÓN ============ -->
-  <section id="concrecion">
-    <div class="sec-head"><div class="sec-num">3</div><h2>Texto proposto para a concreción curricular</h2></div>
-    <p class="sec-sub">Borrador do apartado «Criterios xerais para a avaliación e a promoción» (D. 155/2022, art. 14.2.h). As marcas <span class="debate">a debater</span> son decisións do centro, non da norma.</p>
-
-    <div class="legal"><ol>
-      <li>A decisión sobre a promoción ao remate de 2º, 4º e 6º tómaa o equipo docente de forma colexiada, valorando globalmente o grao de adquisición das competencias clave e tomando especialmente en consideración a información e o criterio da persoa titora. <small>D. 155, art. 22.1</small></li>
-      <li>Como referente común, o centro fixa no anexo as <b>aprendizaxes imprescindibles</b> de cada área ao remate de cada ciclo, derivadas dos criterios de avaliación do último curso do ciclo. Coinciden co grao mínimo de consecución das programacións didácticas para eses criterios. <small>D. 155, arts. 15.2.e e 21.1</small></li>
-      <li>Non acadar unha ou varias aprendizaxes imprescindibles non implica por si mesmo a permanencia. Activa medidas de reforzo desde o momento en que se detecta e rexístrase no informe final de ciclo como medida para o ciclo seguinte. <small>D. 155, arts. 21.3 e 22.4</small></li>
-      <li>A permanencia só se valorará cando se cumpran todas estas condicións:
-        a) constan medidas ordinarias suficientes, adecuadas e personalizadas, aplicadas e rexistradas;
-        b) as aprendizaxes imprescindibles non acadadas se concentran nas áreas instrumentais (linguas e matemáticas) e impiden seguir con aproveitamento o ciclo seguinte <span class="debate">a debater</span>;
-        c) o equipo docente considera que é a medida máis adecuada para o seu desenvolvemento. <small>D. 155, art. 22.3</small></li>
-      <li>Antes da decisión oiranse as nais, os pais ou as persoas titoras legais. Se se adopta, o equipo docente elaborará, coordinado pola titoría, un plan específico de reforzo. A permanencia só se pode adoptar unha vez na etapa. <small>D. 155, art. 22.3 · Orde 26/05/2023, art. 24</small></li>
-      <li>No alumnado con adaptación curricular, os referentes son os da adaptación, sen que iso lle impida a promoción. <small>D. 155, art. 21.1</small></li>
-      <li>Estes criterios e o anexo de aprendizaxes imprescindibles comunicaranse ás familias nos primeiros días de cada curso. <small>Orde 26/05/2023, art. 9.7 · D. 155, art. 24</small></li>
-    </ol></div>
-
-    <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>Seguintes pasos</h3>
-    <div class="probs">
-      <div class="card"><h4>1 · Validar o piloto</h4><p>Revisar entre os dous os 6 imprescindibles e os graos mínimos, sobre todo os marcados «a debater».</p></div>
-      <div class="card"><h4>2 · Estender</h4><p>Mesmo formato para as 9 áreas e os 3 ciclos. As prioritarias son as instrumentais: Lingua Galega, Lingua Castelá e Matemáticas.</p></div>
-      <div class="card"><h4>3 · Levar a CCP e a claustro</h4><p>Incorporar o texto e o anexo á concreción curricular e axustar os mínimos de PROENS en 2º, 4º e 6º.</p></div>
-    </div>
-  </section>
-
-  <footer>Borrador de traballo · Brais Prados e Diego · CEIP Condesa de Fenosa · setembro 2026. Fontes: LOE (LO 2/2006, redacción LOMLOE), RD 157/2022, Decreto 155/2022 (DOG 26/09/2022) e Orde do 26 de maio de 2023 (DOG 13/06/2023). Os criterios citados son os de 2º curso do anexo II do Decreto 155/2022.</footer>
+  <footer>Borrador de traballo · Brais Prados e Diego · CEIP Condesa de Fenosa · setembro 2026. Fontes: Decreto 155/2022 (DOG 26/09/2022), anexo II, Matemáticas, 1º e 2º curso; RD 157/2022; LOE (redacción LOMLOE); Orde do 26 de maio de 2023 (DOG 13/06/2023).</footer>
 </main>
 
 <script>
-  // Texto literal dos criterios de 2º (anexo II, D. 155/2022) para o tooltip
+  // Texto literal dos criterios de 2º (anexo II, D. 155/2022): tooltip no ecrán e táboa final
   const CRIT = {
     "CA1.2":"Comprender as preguntas formuladas a través de diferentes estratexias ou ferramentas, recoñecendo a información contida en problemas da vida cotiá.",
     "CA1.3":"Proporcionar exemplos de representacións de situacións problematizadas sinxelas con recursos manipulativos e gráficos que axuden na resolución dun problema da vida cotiá.",
@@ -379,10 +370,19 @@
     "CA3.7":"Recoñecer linguaxe matemática sinxela presente na vida cotiá, adquirindo un vocabulario específico básico.",
     "CA3.8":"Explicar ideas e procesos matemáticos sinxelos, os pasos seguidos na resolución dun problema ou os resultados matemáticos de forma verbal ou gráfica."
   };
-  document.querySelectorAll('.crit').forEach(el => {
-    const t = CRIT[el.dataset.c];
-    if (t) el.title = el.dataset.c + ' (2º) · ' + t;
-  });
+  try {
+    document.querySelectorAll('.crit').forEach(el => {
+      const t = CRIT[el.dataset.c];
+      if (t) el.title = el.dataset.c + ' (2º) · ' + t;
+    });
+    const tb = document.querySelector('#taboa-criterios tbody');
+    Object.entries(CRIT).forEach(([k, v]) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td class="ref">' + k + '</td><td></td>';
+      tr.lastChild.textContent = v;
+      tb.appendChild(tr);
+    });
+  } catch (e) { console.error('Erro ao cargar os criterios', e); }
 
   // Tema: escuro por defecto; lúa en escuro, sol en claro
   const aplicarTema = claro => {
