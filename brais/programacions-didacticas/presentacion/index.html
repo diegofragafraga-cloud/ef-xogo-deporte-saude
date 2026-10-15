@@ -198,6 +198,12 @@ tr.hl-row td { background: var(--acc-soft); }
 .grado.g1 .g-t { color: var(--success); }
 .grado.g2 .g-t { color: var(--warn); }
 .grado.g3 .g-t { color: var(--danger); }
+/* Niveis de consecución N0-N3 (mesma cor ca a escala do semáforo) */
+.grado.n0 .g-t { color: var(--danger); }
+.grado.n1 .g-t { color: var(--warn); }
+.grado.n2 .g-t { color: var(--success); }
+.grado.n3 .g-t { color: #38bdf8; }
+.grado.n1 { border-color: rgba(251,191,36,0.5); }
 .crit-foot { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(0.4rem, 1vw, 0.8rem); }
 .crit-foot .cf { background: var(--acc-soft); border-radius: 10px; padding: clamp(0.5rem, 1.2vw, 0.85rem); font-size: calc(var(--small-size) * 0.95); color: var(--text-2); line-height: 1.45; }
 .crit-foot .cf strong { color: var(--acc); text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.08em; display: block; margin-bottom: 0.25em; }
@@ -753,12 +759,13 @@ body.light .theme-toggle .icon-moon { display: none; }
             <thead><tr><th>Perfil do criterio</th><th>Grao 1</th><th>Grao 2</th><th>Grao 3</th></tr></thead>
             <tbody>
                 <tr><td class="strong">Cognitivo / cognitivo-motor</td><td><strong>Identifica</strong> · recoñece</td><td><strong>Emprega</strong> · aplica</td><td><strong>Xustifica</strong> · crea</td></tr>
-                <tr><td class="strong">Actitudinal / socioafectivo</td><td><strong>Recoñece</strong></td><td><strong>Xestiona</strong> con apoio</td><td><strong>Regula</strong> con autonomía</td></tr>
+                <tr><td class="strong">Actitudinal / socioafectivo</td><td><strong>Recoñece</strong> · identifica</td><td><strong>Xestiona</strong></td><td><strong>Regula</strong> · autorregula</td></tr>
             </tbody>
         </table>
         <ul class="check-list reveal">
-            <li class="ok">Evita forzar o socioemocional dentro dunha escala de coñecemento: «xustificar unha emoción» non ten sentido; <strong>regulala con autonomía</strong>, si.</li>
-            <li class="ok">O grao de complexidade fala <strong>do criterio</strong>: serve para deseñar indicadores e equilibrar probas. Non confundir cos <strong>niveis de consecución N0-N3</strong>, que falan do alumno e si entran na cualificación (veñen despois).</li>
+            <li class="ok">Evita forzar o socioemocional dentro dunha escala de coñecemento: «xustificar unha emoción» non ten sentido; <strong>regulala</strong>, si.</li>
+            <li class="ok">O grao de complexidade fala <strong>do criterio</strong>: serve para deseñar indicadores e equilibrar probas. Non confundir cos <strong>niveis de consecución N0-N3</strong>, que falan do alumno e si entran na cualificación.</li>
+            <li class="no">Estes verbos <strong>non serven para redactar os niveis</strong>. Se o N3 dun criterio de «identificar» pide «xustificar», xa avalía outro criterio: os niveis conservan sempre o verbo do criterio.</li>
         </ul>
     </div>
 </section>
@@ -795,32 +802,34 @@ body.light .theme-toggle .icon-moon { display: none; }
         <div class="crit-card reveal">
             <div class="crit-head"><span class="crit-code">CA2.4</span><span class="crit-text">«Recoñecer a importancia de desenvolver proxectos motores de carácter individual, cooperativo ou colaborativo, valorando a súa consecución a partir dunha análise dos resultados obtidos.» (Bloque 2 · OBX2)</span></div>
             <div class="crit-grid">
-                <div class="grado g1"><div class="g-t">N1 · Identifica</div><p>Recoñece, con apoio, a meta dun proxecto motor sinxelo e se se logrou ou non.</p></div>
-                <div class="grado g2"><div class="g-t">N2 · Emprega</div><p>Participa nun proxecto motor sinxelo poñendo da súa parte para acadar a meta común, e fíxase nos resultados.</p></div>
-                <div class="grado g3"><div class="g-t">N3 · Xustifica / crea</div><p>Explica —cun debuxo, un exemplo propio ou de palabra— se conseguiron a meta e por que, ou propón unha mellora.</p></div>
+                <div class="grado n0"><div class="g-t">N0 · En proceso</div><p>Recoñece a meta dun proxecto motor sinxelo e se se acadou só con apoio (pregunta guiada ou imaxe).</p></div>
+                <div class="grado n1"><div class="g-t">N1 · Mínimo</div><p>Recoñece por si mesmo/a a meta e se se acadou, aínda que de forma irregular (nalgúns proxectos si e noutros non).</p></div>
+                <div class="grado n2"><div class="g-t">N2 · Pleno</div><p>Recoñece a importancia de poñer da súa parte e valora se se acadou a meta a partir dos resultados, de forma habitual.</p></div>
+                <div class="grado n3"><div class="g-t">N3 · Excelente</div><p>Faino con precisión tamén en proxectos ou xogos novos, sinalando que resultado concreto mostra se se acadou a meta.</p></div>
             </div>
             <div class="crit-foot">
-                <div class="cf"><strong>Mínimo de consecución</strong>Participa nun proxecto motor sinxelo e recoñece se se acadou a meta proposta.</div>
+                <div class="cf"><strong>Mínimo de consecución (= N1)</strong>Participa nun proxecto motor sinxelo e recoñece por si mesmo/a, aínda que de forma irregular, se se acadou a meta proposta.</div>
                 <div class="cf"><strong>Instrumento</strong>Diana de autoavaliación e observación do logro do proxecto (táboa de indicadores).</div>
             </div>
         </div>
-        <div class="note reveal">Fíxate: o mínimo redáctase sen números e o instrumento responde ao verbo («recoñecer» → observación, non exame).</div>
+        <div class="note reveal">Fíxate: os catro niveis conservan o verbo «recoñecer»; o que cambia é o apoio, a regularidade e o contexto. O mínimo redáctase sen números e o instrumento responde ao verbo («recoñecer» → observación, non exame).</div>
     </div>
 </section>
 
 <section class="slide" data-section="nos" id="s26" role="region" aria-label="Exemplo actitudinal">
     <div class="slide-inner">
         <div class="eyebrow reveal">04 · Caso real · EF 2º EP</div>
-        <h2 class="reveal">Un criterio <span class="accent">actitudinal</span>, coa outra escala</h2>
+        <h2 class="reveal">Un criterio <span class="accent">actitudinal</span>, cos mesmos verbos</h2>
         <div class="crit-card reveal">
             <div class="crit-head"><span class="crit-code">CA1.5</span><span class="crit-text">«Identificar as emocións que se producen durante o xogo, tentando xestionalas e gozando da actividade física.» (Bloque 1 · OBX3 · perfil actitudinal)</span></div>
             <div class="crit-grid">
-                <div class="grado g1"><div class="g-t">N1 · Recoñece</div><p>Recoñece e nomea, con apoio visual (caras, debuxos), as emocións básicas que sente durante o xogo.</p></div>
-                <div class="grado g2"><div class="g-t">N2 · Xestiona con apoio</div><p>Tenta xestionar con apoio guiado as súas emocións durante a actividade (respirar, agardar, pedir axuda).</p></div>
-                <div class="grado g3"><div class="g-t">N3 · Regula con autonomía</div><p>Regula por si mesmo algunha emoción no xogo e amosa que fai para sentirse mellor.</p></div>
+                <div class="grado n0"><div class="g-t">N0 · En proceso</div><p>Identifica as emocións básicas só con apoio visual (caras, debuxos) e xestionaas só coa guía directa do mestre.</p></div>
+                <div class="grado n1"><div class="g-t">N1 · Mínimo</div><p>Identifica por si mesmo/a algunha emoción que sente no xogo e tenta xestionala, aínda que de forma irregular.</p></div>
+                <div class="grado n2"><div class="g-t">N2 · Pleno</div><p>Identifica as emocións que sente e tenta xestionalas de forma habitual (respirar, agardar, pedir axuda), gozando da actividade.</p></div>
+                <div class="grado n3"><div class="g-t">N3 · Excelente</div><p>Faino tamén en situacións novas ou de máis tensión (competir, perder) e explica que fai para sentirse mellor.</p></div>
             </div>
             <div class="crit-foot">
-                <div class="cf"><strong>Mínimo de consecución</strong>Recoñece e nomea, con apoio, algunha emoción que sente durante o xogo e tenta xestionala coa guía do mestre.</div>
+                <div class="cf"><strong>Mínimo de consecución (= N1)</strong>Identifica por si mesmo/a algunha emoción que sente durante o xogo e tenta xestionala, aínda que de forma irregular.</div>
                 <div class="cf"><strong>Instrumento</strong>Diana de autoavaliación emocional e escala de observación durante a sesión.</div>
             </div>
         </div>
@@ -831,21 +840,22 @@ body.light .theme-toggle .icon-moon { display: none; }
 <section class="slide" data-section="nos" id="s27" role="region" aria-label="A fronteira do mínimo">
     <div class="slide-inner">
         <div class="eyebrow reveal">04 · Caso real</div>
-        <h2 class="reveal">Onde vive o mínimo: <span class="accent">o semáforo</span></h2>
+        <h2 class="reveal">Onde vive o mínimo: <span class="accent">o 30/40/30</span></h2>
         <div class="sema reveal">
-            <div class="sema-item sema-rojo"><span class="s-dot"></span><span class="s-t">Non adquirido</span><p>Aínda non o consegue, ou só con moita axuda e de forma puntual.</p></div>
-            <div class="sema-item sema-ambar"><span class="s-dot"></span><span class="s-t">En proceso</span><p>Nivel N1 / entrada ao N2: conségueo parcialmente ou con axuda. <strong>Aquí está a fronteira do mínimo.</strong></p></div>
-            <div class="sema-item sema-verde"><span class="s-dot"></span><span class="s-t">Adquirido</span><p>Niveis N2-N3: conségueo de forma habitual e autónoma. Superar o CA = chegar aquí.</p></div>
+            <div class="sema-item sema-rojo"><span class="s-dot"></span><span class="s-t">A · 30 % · todo o alumnado</span><p>Porta de entrada con apoio (opcións, modelo, primeiro paso feito). Se alguén non chega, a proba está mal deseñada. <strong>N0 · en proceso</strong>: aínda non é o mínimo.</p></div>
+            <div class="sema-item sema-ambar"><span class="s-dot"></span><span class="s-t">B · 40 % · a maioría</span><p>O criterio sen axuda. Coa A e parte da B chégase ao 5: <strong>aquí está a fronteira do mínimo (N1)</strong>; toda a B é o N2.</p></div>
+            <div class="sema-item sema-verde"><span class="s-dot"></span><span class="s-t">C · 30 % · os máis avanzados</span><p>O mesmo verbo nunha situación nova ou con máis elementos: <strong>N3</strong>.</p></div>
         </div>
         <table class="reveal">
-            <thead><tr><th>Semáforo</th><th>Cualificación 1º ciclo (cualitativa)</th><th>Apoio interno do docente</th></tr></thead>
+            <thead><tr><th>O alumno fai…</th><th>Puntos (3 · 4 · 3)</th><th>Nivel</th><th>Cualificación</th></tr></thead>
             <tbody>
-                <tr><td class="strong">Non adquirido</td><td>IN</td><td>M · coeficiente 0,25</td></tr>
-                <tr class="hl-row"><td class="strong">En proceso</td><td>SU</td><td>R · coeficiente 0,50</td></tr>
-                <tr><td class="strong">Adquirido</td><td>BE / NT / SB segundo autonomía</td><td>B 0,75 · MB 1,00</td></tr>
+                <tr><td class="strong">Só a A</td><td>3</td><td>N0 · 2,5</td><td>IN</td></tr>
+                <tr class="hl-row"><td class="strong">A + parte da B</td><td>5</td><td>N1 · 5</td><td>SU</td></tr>
+                <tr><td class="strong">A + toda a B</td><td>7</td><td>N2 · 7,5</td><td>BE · NT</td></tr>
+                <tr><td class="strong">A + B + C</td><td>10</td><td>N3 · 10</td><td>SB</td></tr>
             </tbody>
         </table>
-        <div class="note reveal">Os coeficientes son trazabilidade interna (peso do criterio × coeficiente), non a nota. E fíxate: o chan é 0,25 — non hai ceros.</div>
+        <div class="note reveal">Nas probas e tarefas súmase por criterio e despois aplícanse os pesos; nos instrumentos de observación úsase a escala N0-N3. As dúas din o mesmo e en ningunha hai ceros.</div>
     </div>
 </section>
 
