@@ -1,668 +1,238 @@
 <!DOCTYPE html>
-<html lang="gl">
+<html lang="gl" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diego - Recursos EF</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Diego · Recursos</title>
+<meta name="description" content="Espazo de Diego Fraga no Espazo educativo de Brais e Diego: recursos de Sociais, Matemáticas, EF, Lingua, Música, Titoría e avaliación.">
 <style>
-  :root {
-    --bg: #0b0d13; --bg2: #13161f; --bg3: #1c2030;
-    --text: #e8eaf0; --text2: #8b92a8; --accent: #10b981;
-    --accent2: #34d399; --border: #252a3a; --radius: 14px;
-  }
-  .light { --bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-  .hidden { display:none !important; }
+/* Portada como panel, igual ca o portal Profe Diego: cabeceira curta con buscador e
+   un compartimento por categoría, cada un coa súa cor, a súa icona e as súas ligazóns. */
+:root{
+  --bg:#0e1116; --bg2:#151a21; --card:#171d26; --card2:#1e2632;
+  --tx:#e6ebf2; --tx2:#94a1b2; --tx3:#66717f; --bd:#252e3a;
+  --sh:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.28);
+  --cs:#34d399; --ma:#fb923c; --ef:#6b8cff; --li:#f472b6; --ti:#22d3ee; --av:#a78bfa; --ce:#fbbf24;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --bg2:#ffffff; --card:#ffffff; --card2:#f1f3f6;
+  --tx:#161b22; --tx2:#566270; --tx3:#8a94a2; --bd:#e2e6ec;
+  --sh:0 1px 2px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.06);
+  --cs:#0f8f5f; --ma:#c2410c; --ef:#1e40af; --li:#be185d; --ti:#0e7490; --av:#6d28d9; --ce:#a16207;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--tx);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.i{width:1em;height:1em;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+a{color:inherit}
 
-  .header {
-    display:flex; align-items:center; gap:12px;
-    padding:16px 24px; background:var(--bg2);
-    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
-  }
-  .back-btn {
-    background:var(--bg3); border:1px solid var(--border); color:var(--text);
-    width:36px; height:36px; border-radius:8px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    text-decoration:none; transition:all .2s; flex-shrink:0;
-  }
-  .back-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
-  .back-btn svg { width:18px; height:18px; }
-  .header h1 { font-size:1.2rem; font-weight:700; display:flex; align-items:center; gap:10px; }
-  .avatar { width:32px; height:32px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:.9rem; }
-  .header-right { margin-left:auto; display:flex; gap:8px; }
-  .icon-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text); width:36px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
-  .icon-btn:hover { background:var(--accent); color:#fff; }
-  .icon-btn svg { width:16px; height:16px; }
+/* cabeceira */
+header{display:flex;align-items:center;gap:12px;padding:14px max(20px,env(safe-area-inset-left,0px));
+  border-bottom:1px solid var(--bd);background:var(--bg2)}
+.b{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;
+  border:1px solid var(--bd);background:var(--card);color:var(--tx2);cursor:pointer;text-decoration:none}
+.b:hover{color:var(--tx)} .b .i{width:18px;height:18px}
+.marca{font-weight:700;letter-spacing:-.02em;font-size:1.05rem;display:flex;align-items:center;gap:10px}
+.av{width:30px;height:30px;border-radius:50%;background:#10b981;color:#06281c;display:grid;place-items:center;font-weight:800;font-size:.9rem}
+.spacer{flex:1}
 
-  .layout { display:flex; min-height:calc(100vh - 65px); }
+main{max-width:1160px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-left,0px)) 40px}
 
-  /* Sidebar */
-  .sidebar {
-    width:240px; background:var(--bg2); border-right:1px solid var(--border);
-    padding:20px 0; flex-shrink:0; overflow-y:auto;
-  }
-  .sidebar-title {
-    padding:8px 20px; font-size:.68rem; font-weight:600; color:var(--text2);
-    text-transform:uppercase; letter-spacing:1.5px;
-  }
-  .sidebar-toggle {
-    display:flex; align-items:center; gap:8px; padding:10px 20px;
-    font-size:.85rem; font-weight:600; color:var(--text); cursor:pointer;
-    transition:all .15s; border:none; background:none; width:100%; text-align:left;
-  }
-  .sidebar-toggle:hover { background:var(--bg3); }
-  .sidebar-toggle svg { width:14px; height:14px; color:var(--text2); transition:transform .2s; flex-shrink:0; }
-  .sidebar-toggle.open svg { transform:rotate(90deg); }
-  .sidebar-toggle .st-badge {
-    margin-left:auto; font-size:.65rem; background:var(--bg3); color:var(--text2);
-    padding:2px 8px; border-radius:10px;
-  }
-  .sidebar-items { display:none; padding:2px 0; }
-  .sidebar-items.open { display:block; }
-  .sidebar-item {
-    display:flex; align-items:center; gap:8px; padding:8px 20px 8px 36px;
-    font-size:.82rem; color:var(--text2); text-decoration:none;
-    transition:all .15s; border-left:2px solid transparent;
-  }
-  .sidebar-item:hover { background:var(--bg3); color:var(--text); border-left-color:var(--accent); }
-  .sidebar-item .si-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+/* hero curto */
+.hero{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-radius:18px;padding:14px 20px;margin-bottom:16px;
+  border:1px solid var(--bd);box-shadow:var(--sh);
+  background:linear-gradient(120deg,color-mix(in srgb,var(--cs) 22%,var(--card)),color-mix(in srgb,var(--av) 18%,var(--card)) 55%,color-mix(in srgb,var(--ma) 20%,var(--card)))}
+.hero-tx{flex:1;min-width:240px}
+.hero h1{margin:0;font-size:1.3rem;letter-spacing:-.01em}
+.hero p{margin:2px 0 0;color:var(--tx2);font-size:.9rem}
+#busca{background:var(--bg2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:9px 12px;font:inherit;font-size:.92rem;width:260px}
+#busca:focus{outline:none;border-color:var(--cs)}
+.accions{display:flex;gap:8px;flex-wrap:wrap}
+.bt{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:10px;border:1px solid var(--bd);
+  background:var(--card);text-decoration:none;font-size:.88rem;font-weight:600;color:var(--tx)}
+.bt:hover{border-color:var(--cs)} .bt .i{width:16px;height:16px;color:var(--cs)}
 
-  /* Subgrupos dentro dunha categoría (ex: Ciencias Sociais dentro de Xogos interactivos) */
-  .sidebar-subtoggle {
-    display:flex; align-items:center; gap:6px; padding:6px 20px 6px 28px;
-    font-size:.74rem; font-weight:600; color:var(--text2); cursor:pointer;
-    transition:all .15s; border:none; background:none; width:100%; text-align:left;
-    text-transform:uppercase; letter-spacing:1px;
-  }
-  .sidebar-subtoggle:hover { color:var(--text); }
-  .sidebar-subtoggle svg { width:11px; height:11px; transition:transform .2s; flex-shrink:0; }
-  .sidebar-subtoggle.open svg { transform:rotate(90deg); }
-  .sidebar-subtoggle .sst-badge {
-    margin-left:auto; font-size:.62rem; background:var(--bg3); color:var(--text2);
-    padding:1px 7px; border-radius:9px; text-transform:none; letter-spacing:0;
-  }
-  .sidebar-subitems { display:none; }
-  .sidebar-subitems.open { display:block; }
-  .sidebar-subitems .sidebar-item { padding-left:48px; font-size:.8rem; }
+/* compartimentos */
+.areas{display:grid;gap:14px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.areas2{display:grid;gap:14px;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:14px}
+.col{position:relative;border:1px solid color-mix(in srgb,var(--ac) 30%,var(--bd));border-top:3px solid var(--ac);
+  border-radius:16px;padding:14px 16px 12px;box-shadow:var(--sh);min-width:0;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 16%,var(--card)) 0%,var(--card) 62%)}
+.col h2{display:flex;align-items:center;gap:8px;margin:0 0 8px;min-height:40px;padding-right:52px;
+  font-size:.8rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ac);font-weight:700}
+.c-cs{--ac:var(--cs)} .c-ma{--ac:var(--ma)} .c-ef{--ac:var(--ef)} .c-li{--ac:var(--li)}
+.c-ti{--ac:var(--ti)} .c-av{--ac:var(--av)} .c-ce{--ac:var(--ce)}
+.et{font-size:.76rem;color:var(--tx3);margin:10px 0 4px}
+.et:first-of-type{margin-top:0}
+a.l{display:flex;align-items:center;gap:9px;padding:6px 8px;margin:0 -8px;border-radius:9px;text-decoration:none;font-size:.94rem;min-width:0}
+a.l:hover{background:var(--card2)}
+a.l .ic{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;flex:none;
+  color:var(--ac);background:color-mix(in srgb,var(--ac) 18%,transparent);transition:transform .2s}
+a.l .ic .i{width:16px;height:16px}
+a.l:hover .ic{transform:rotate(-8deg) scale(1.08)}
+a.l .tx{min-width:0;overflow:hidden;text-overflow:ellipsis}
+a.l small{color:var(--tx3);font-size:.75rem;white-space:nowrap}
+a.l .fr{width:15px;height:15px;color:var(--tx3);margin-left:auto;transition:transform .15s}
+a.l:hover .fr{transform:translateX(2px);color:var(--ac)}
+.tag{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:5px;
+  color:var(--ac);background:color-mix(in srgb,var(--ac) 16%,transparent);white-space:nowrap}
+.tag.priv{color:var(--tx2);background:var(--card2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+a.chip{display:inline-flex;align-items:center;height:30px;padding:0 10px;border-radius:9px;text-decoration:none;font-size:.86rem;font-weight:600;
+  border:1px solid color-mix(in srgb,var(--ac) 35%,var(--bd));background:color-mix(in srgb,var(--ac) 12%,var(--card2));transition:transform .15s,background .15s}
+a.chip:hover{background:var(--ac);color:var(--bg);border-color:var(--ac);transform:translateY(-2px)}
+.oculto{display:none!important}
 
-  /* Main */
-  .main { flex:1; padding:28px 32px; overflow-y:auto; }
-  .main h2 { font-size:1.1rem; margin-bottom:20px; display:flex; align-items:center; gap:8px; }
-  .main h2 span { color:var(--accent2); }
+/* debuxos de cada compartimento */
+.dibu{position:absolute;top:10px;right:12px;width:42px;height:42px;color:var(--ac);fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.dibu .f{fill:color-mix(in srgb,var(--ac) 22%,transparent)}
+.dibu .xira{transform-box:view-box;transform-origin:32px 32px;animation:xira 8s linear infinite}
+.dibu .bota{animation:bota 1.4s ease-in-out infinite alternate}
+.dibu .onda{stroke-dasharray:40;stroke-dashoffset:40;animation:trazo 2.6s ease-in-out infinite}
+@keyframes xira{to{transform:rotate(360deg)}}
+@keyframes bota{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+@keyframes trazo{0%,15%{stroke-dashoffset:40}60%,100%{stroke-dashoffset:0}}
+.col:hover .dibu{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--ac) 55%,transparent))}
+@media(prefers-reduced-motion:reduce){.dibu *{animation:none!important;stroke-dashoffset:0!important}}
 
-  .resource-list { display:flex; flex-direction:column; gap:12px; }
-  .res-card {
-    display:flex; align-items:center; gap:14px;
-    background:var(--bg2); border:1px solid var(--border); border-radius:12px;
-    padding:18px 20px; text-decoration:none; color:var(--text); transition:all .2s;
-  }
-  .res-card:hover { border-color:var(--accent); transform:translateX(4px); }
-  .res-icon {
-    width:44px; height:44px; border-radius:10px;
-    display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  }
-  .res-icon svg { width:22px; height:22px; stroke:#fff; }
-  .res-info { flex:1; }
-  .res-title { font-weight:700; font-size:.92rem; margin-bottom:2px; }
-  .res-desc { font-size:.78rem; color:var(--text2); }
-  .res-arrow svg { width:16px; height:16px; color:var(--text2); }
-  .res-badge { font-size:.6rem; font-weight:600; padding:2px 8px; border-radius:8px; text-transform:uppercase; letter-spacing:.5px; margin-left:8px; }
-  .res-badge-sda { background:rgba(16,185,129,.15); color:var(--accent2); }
-  .res-badge-ud { background:rgba(108,99,255,.15); color:#a78bfa; }
+footer{text-align:center;color:var(--tx3);font-size:.8rem;padding:6px 16px 26px}
+.sen{display:none;color:var(--tx3);text-align:center;padding:30px}
 
-  .sidebar-hamburger {
-    display:none; background:var(--bg3); border:1px solid var(--border);
-    color:var(--text); width:36px; height:36px; border-radius:8px; cursor:pointer;
-    align-items:center; justify-content:center;
-  }
-  .sidebar-hamburger svg { width:18px; height:18px; }
-
-  @media (max-width:768px) {
-    .sidebar { position:fixed; left:-260px; top:65px; bottom:0; z-index:50; transition:left .3s; width:240px; }
-    .sidebar.open { left:0; box-shadow:4px 0 20px rgba(0,0,0,.5); }
-    .sidebar-hamburger { display:flex; }
-    .main { padding:20px 16px; }
-    .hero-personal { padding:28px 22px !important; }
-    .hp-name { font-size:1.4rem !important; }
-    .hp-avatar { width:80px !important; height:80px !important; font-size:2rem !important; }
-  }
-
-  /* Hero personal */
-  .hero-personal {
-    background: linear-gradient(135deg, #065f46 0%, #10b981 60%, #34d399 100%);
-    border-radius: var(--radius); padding: 36px 32px; margin-bottom: 28px;
-    display: flex; gap: 24px; align-items: center;
-    position: relative; overflow: hidden;
-  }
-  .hero-personal::before {
-    content:''; position:absolute; top:-60px; right:-60px;
-    width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,.08);
-  }
-  .hero-personal::after {
-    content:''; position:absolute; bottom:-80px; left:30%;
-    width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.06);
-  }
-  .hp-deco {
-    position: absolute; top: 50%; right: 24px; transform: translateY(-50%);
-    width: 150px; height: 150px; opacity: .55; pointer-events: none;
-  }
-  @media (min-width: 981px) { .hp-info { padding-right: 160px; } }
-  @media (max-width: 980px) { .hp-deco { display: none; } }
-  .hp-avatar {
-    width: 100px; height: 100px; border-radius: 50%;
-    background: rgba(255,255,255,.18); backdrop-filter: blur(8px);
-    border: 3px solid rgba(255,255,255,.3);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; color: #fff; font-size: 2.6rem;
-    flex-shrink: 0; position: relative; z-index: 1;
-  }
-  .hp-info { position: relative; z-index: 1; flex: 1; }
-  .hp-eyebrow {
-    font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.85);
-    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;
-  }
-  .hp-name { font-size: 1.7rem; font-weight: 800; color: #fff; margin-bottom: 4px; line-height: 1.15; }
-  .hp-role { font-size: .92rem; color: rgba(255,255,255,.85); margin-bottom: 14px; line-height: 1.5; }
-  .hp-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-  .hp-tags span {
-    background: rgba(255,255,255,.14); color: #fff; padding: 4px 10px;
-    border-radius: 8px; font-size: .72rem; font-weight: 500;
-    backdrop-filter: blur(4px);
-  }
-  .hp-cta { display: flex; gap: 8px; flex-wrap: wrap; }
-  .hp-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 9px 16px; border-radius: 10px;
-    font-size: .82rem; font-weight: 600; text-decoration: none;
-    transition: transform .15s, filter .15s;
-  }
-  .hp-btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
-  .hp-btn-primary { background: #fff; color: #065f46; }
-  .hp-btn-secondary { background: rgba(255,255,255,.18); color: #fff; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,.25); }
-  .hp-btn svg { width: 14px; height: 14px; }
-
-  @media (max-width:680px) {
-    .hero-personal { flex-direction: column; text-align: center; padding: 32px 22px; }
-    .hp-tags { justify-content: center; }
-    .hp-cta { justify-content: center; }
-  }
-
-  /* Reveal */
-  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .res-card { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
-  .res-card:hover { transform: translateX(4px) translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.16); }
-
-  /* Sub-header */
-  .main-section { margin-top: 8px; margin-bottom: 14px; font-size: .72rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 1.5px; }
+@media(max-width:1000px){.areas2{grid-template-columns:1fr 1fr}}
+@media(max-width:860px){.areas{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.areas,.areas2{grid-template-columns:1fr} #busca{width:100%}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <a class="back-btn" href="../index.html" title="Volver ao portal">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-  </a>
-  <button class="sidebar-hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-  </button>
-  <h1><div class="avatar">D</div> Diego — Recursos</h1>
-  <div class="header-right">
-    <button class="icon-btn" onclick="document.body.classList.toggle('light');document.getElementById('m').classList.toggle('hidden');document.getElementById('s').classList.toggle('hidden')">
-      <svg id="m" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-      <svg id="s" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-    </button>
+<header>
+  <a class="b" href="../index.html" title="Volver ao portal" aria-label="Volver ao portal"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></a>
+  <div class="marca"><span class="av">D</span>Diego · Recursos</div>
+  <span class="spacer"></span>
+  <button class="b" id="tema" type="button" aria-label="Cambiar tema"></button>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-tx">
+      <h1>Espazo de Diego Fraga</h1>
+      <p>Mestre de Educación Física · CEIP de Coirón-Dena · materiais para usar na aula</p>
+    </div>
+    <input id="busca" type="search" placeholder="Buscar: mapa, SdA, xogo…" aria-label="Buscar recursos">
+    <div class="accions">
+      <a class="bt" href="mailto:pradosfraga@gmail.com"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>Escríbeme</a>
+      <a class="bt" href="programacion-dena-2026.html"><svg class="i" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>Programación 2026</a>
+    </div>
+  </section>
+
+  <!-- ÁREAS -->
+  <div class="areas">
+    <section class="col c-cs">
+      <h2>Ciencias Sociais</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><circle class="f" cx="32" cy="32" r="22"/><g class="xira"><path d="M10 32h44"/><path d="M32 10a34 34 0 0 1 0 44"/><path d="M32 10a34 34 0 0 0 0 44"/></g></svg>
+      <p class="et">Para o alumnado</p>
+      <a class="l" href="sociais/xogos/proba-mapa-ue.html" title="Os 27 países da Unión Europea · nome e capital · autoavaliación"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></span><span class="tx">Proba Mapa UE</span><span class="tag">Proba</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="sociais/propostas-5.html" title="18 actividades autoavaliables · goberno, Europa, comunidades"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="tx">Propostas competenciais</span><small>5º</small><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="sociais/apuntes-vivir-en-sociedade.html" title="Bloque 3 completo · A4 imprimible"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5z"/><path d="M8 7h8M8 11h6"/></svg></span><span class="tx">Apuntes · Vivir en sociedade</span><span class="tag">Apuntes</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <p class="et">SdA · Tenda sostible</p>
+      <a class="l" href="sociais/tenda-sostible/presentacion.html" title="Mini-empresa con xefatura electa · 8 sesións · 3.º trimestre"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg></span><span class="tx">Presentación para o alumnado</span><span class="tag">SdA</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="sociais/tenda-sostible/competencial-sociais.html"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span><span class="tx">Documento competencial</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <p class="et">Xogos de mapas</p>
+      <div class="chips">
+        <a class="chip" href="sociais/xogos/mapa-mundi.html">Mundo</a>
+        <a class="chip" href="sociais/xogos/mapa-ue.html">Unión Europea</a>
+        <a class="chip" href="sociais/xogos/mapa-ccaa.html">CCAA</a>
+        <a class="chip" href="sociais/xogos/mapa-galicia-provincias.html">Provincias</a>
+        <a class="chip" href="sociais/xogos/mapa-galicia-municipios.html">Concellos</a>
+      </div>
+    </section>
+
+    <section class="col c-ma">
+      <h2>Matemáticas</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><rect class="f" x="12" y="12" width="40" height="40" rx="6"/><path class="onda" d="M20 44 30 30l6 8 8-14"/><path d="M12 52h40"/></svg>
+      <a class="l" href="mates/propostas-5.html" title="18 actividades autoavaliables · escalas, polígonos, estatística"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="tx">Propostas competenciais</span><small>5º</small><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="mates/sda-mochilas.html" title="ABP de matemáticas integradas en EF · 8 sesións · decimais"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 6V4a3 3 0 0 1 6 0v2M8 14h8"/></svg></span><span class="tx">Mochilas saudables</span><span class="tag">SdA</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="mates/xogos/chuvia-medidas.html"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M8 19v2M12 17v4M16 19v2"/></svg></span><span class="tx">Chuvia de medidas</span><span class="tag">Xogo</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
+
+    <section class="col c-ef">
+      <h2>Educación Física</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><ellipse cx="32" cy="54" rx="12" ry="3" class="f"/><g class="bota"><circle class="f" cx="32" cy="28" r="16"/><path d="M16 28h32M32 12c-6 6-6 26 0 32M32 12c6 6 6 26 0 32"/></g></svg>
+      <a class="l" href="ef/ud-bijbol.html" title="Cooperación e deporte alternativo · 5 sesións · fitball"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2M16 3.1a4 4 0 0 1 0 7.8M21 21v-2a4 4 0 0 0-3-3.9"/></svg></span><span class="tx">A unión fai a forza · Bijbol</span><span class="tag">UD</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="titoria/tarefas-ef.html" title="Banco organizado por cursos · saúde, cooperación, cultura motriz, contorna"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="tx">Tarefas competenciais</span><small>banco</small><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
   </div>
-</div>
 
-<div class="layout">
-  <nav class="sidebar">
-    <div class="sidebar-title">Áreas</div>
+  <!-- MÁIS COMPARTIMENTOS -->
+  <div class="areas2">
+    <section class="col c-li">
+      <h2>Lingua e Música</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><path class="f" d="M24 46V16l26-6v30"/><circle class="f" cx="18" cy="46" r="7"/><circle class="f" cx="44" cy="40" r="7"/><path class="onda" d="M24 24l26-6"/></svg>
+      <a class="l" href="lingua/letras-galegas-2026.html" title="16 estacións de xogos populares · alumnado guía"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span class="tx">Letras Galegas 2026</span><span class="tag">Evento</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="lingua/xtranoid-gramatica.html" title="Rompe ladrillos coas clases de palabras · 7 niveis"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/></svg></span><span class="tx">Xtranoid gramatical</span><span class="tag">Xogo</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="musica/beatbox.html" title="Crea música arrastrando sons aos personaxes"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span class="tx">BeatBox · máquina de ritmos</span><span class="tag">Xogo</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
 
-    <!-- ===== CIENCIAS SOCIAIS ===== -->
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Ciencias Sociais
-      <span class="st-badge">9</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="sociais/apuntes-vivir-en-sociedade.html">
-        <span class="si-dot" style="background:#f59e0b"></span>
-        Apuntes · Vivir en sociedade
-      </a>
-      <a class="sidebar-item" href="sociais/propostas-5.html">
-        <span class="si-dot" style="background:#f59e0b"></span>
-        Propostas competenciais · 5º
-      </a>
-      <a class="sidebar-item" href="sociais/tenda-sostible/presentacion.html">
-        <span class="si-dot" style="background:#a855f7"></span>
-        SdA Tenda Sostible · alumnado
-      </a>
-      <a class="sidebar-item" href="sociais/tenda-sostible/competencial-sociais.html">
-        <span class="si-dot" style="background:#a855f7"></span>
-        SdA Tenda Sostible · competencial
-      </a>
-      <button class="sidebar-subtoggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-        Xogos · mapas
-        <span class="sst-badge">6</span>
-      </button>
-      <div class="sidebar-subitems open">
-        <a class="sidebar-item" href="sociais/xogos/mapa-mundi.html">
-          <span class="si-dot" style="background:#3b82f6"></span>
-          Mapa do mundo
-        </a>
-        <a class="sidebar-item" href="sociais/xogos/mapa-ue.html">
-          <span class="si-dot" style="background:#ffcc00"></span>
-          Mapa da UE
-        </a>
-        <a class="sidebar-item" href="sociais/xogos/proba-mapa-ue.html">
-          <span class="si-dot" style="background:#1d4ed8"></span>
-          Proba Mapa UE
-        </a>
-        <a class="sidebar-item" href="sociais/xogos/mapa-ccaa.html">
-          <span class="si-dot" style="background:#aa151b"></span>
-          CCAA de España
-        </a>
-        <a class="sidebar-item" href="sociais/xogos/mapa-galicia-provincias.html">
-          <span class="si-dot" style="background:#0066b3"></span>
-          Provincias de Galicia
-        </a>
-        <a class="sidebar-item" href="sociais/xogos/mapa-galicia-municipios.html">
-          <span class="si-dot" style="background:#22c55e"></span>
-          Concellos de Galicia
-        </a>
-      </div>
-    </div>
+    <section class="col c-ti">
+      <h2>Titoría · 6º</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><circle class="f" cx="24" cy="22" r="8"/><circle class="f" cx="42" cy="24" r="6"/><path d="M10 50c0-9 6-15 14-15s14 6 14 15M38 38c8 0 14 5 14 12"/></svg>
+      <a class="l" href="murdokus/index.html" title="Misterios de lóxica para cando rematan a tarefa · ficha A4 + guía + solución"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><span class="tx">Murdokus · recuncho tranquilo</span><span class="tag">Imprimible</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
 
-    <!-- ===== MATEMÁTICAS ===== -->
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Matemáticas
-      <span class="st-badge">3</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="mates/propostas-5.html">
-        <span class="si-dot" style="background:#10b981"></span>
-        Propostas competenciais · 5º
-      </a>
-      <a class="sidebar-item" href="mates/sda-mochilas.html">
-        <span class="si-dot" style="background:#10b981"></span>
-        SdA · Mochilas saudables
-      </a>
-      <a class="sidebar-item" href="mates/xogos/chuvia-medidas.html">
-        <span class="si-dot" style="background:#10b981"></span>
-        Xogo · Chuvia de medidas
-      </a>
-    </div>
+    <section class="col c-av">
+      <h2>Avaliación</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><path class="f" d="M10 52h12V40h12V28h12V16h8v36z"/><path d="M10 52h44"/><path class="onda" d="M14 36 30 22l8 6 14-14"/></svg>
+      <a class="l" href="avaliacion/dous-eixos-tarefa.html" title="Complexidade (grao 1·2·3) e dificultade (partes A·B·C) cun exemplo"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 20h4v-4h4v-4h4V8h4V4"/></svg></span><span class="tx">Dous eixos dunha tarefa</span><span class="tag">Novo</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="programacion-dena-2026.html" title="Programación completa do centro · competencial · avaliación"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tx">Programación Dena 2026</span><span class="tag priv">Privado</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
 
-    <!-- ===== EDUCACIÓN FÍSICA ===== -->
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Educación Física
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="ef/ud-bijbol.html">
-        <span class="si-dot" style="background:#6c63ff"></span>
-        UD · Bijbol
-      </a>
-    </div>
+    <section class="col c-ce">
+      <h2>Centro</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><path class="f" d="M10 28 32 12l22 16v24H10z"/><path d="M26 52V38h12v14M10 52h44"/></svg>
+      <a class="l" href="../reclamacions/checklist-reclamacion-promocion.html" title="Checklist do procedemento · Instrución 2/2026"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg></span><span class="tx">Reclamacións de notas</span><span class="tag priv">Privado</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="../patios-dins/index.html" title="Presentación sobre os Patios Dinámicos"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span><span class="tx">Patios DINS · presentación</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
+  </div>
 
-    <!-- ===== LINGUA ===== -->
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Lingua
-      <span class="st-badge">2</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="lingua/letras-galegas-2026.html">
-        <span class="si-dot" style="background:#3b82f6"></span>
-        Letras Galegas 2026
-      </a>
-      <a class="sidebar-item" href="lingua/xtranoid-gramatica.html">
-        <span class="si-dot" style="background:#10b981"></span>
-        Xtranoid Gramatical · Xogo
-      </a>
-    </div>
+  <p class="sen" id="sen">Non hai ningún recurso con esa palabra.</p>
+</main>
 
-    <!-- ===== MÚSICA ===== -->
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Música
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="musica/beatbox.html">
-        <span class="si-dot" style="background:#8b5cff"></span>
-        BeatBox · Máquina de ritmos
-      </a>
-    </div>
-
-    <!-- ===== TITORÍA ===== -->
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Titoría · 6º
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="titoria/tarefas-ef.html">
-        <span class="si-dot" style="background:#34d399"></span>
-        Tarefas competenciais · EF
-      </a>
-    </div>
-
-    <div class="sidebar-title" style="margin-top:18px">Centro</div>
-
-    <!-- ===== PROGRAMACIÓN ===== -->
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Programación
-      <span class="st-badge">2</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="programacion-dena-2026.html">
-        <span class="si-dot" style="background:#f59e0b"></span>
-        Programación Dena 2026
-      </a>
-      <a class="sidebar-item" href="avaliacion/dous-eixos-tarefa.html">
-        <span class="si-dot" style="background:#a78bfa"></span>
-        Dous eixos dunha tarefa
-      </a>
-    </div>
-
-    <!-- ===== PRESENTACIÓNS ===== -->
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Presentacións
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="../patios-dins/presentacion-presaras.html">
-        <span class="si-dot" style="background:#52b788"></span>
-        Patios DINS · Présaras
-      </a>
-    </div>
-
-  </nav>
-
-  <main class="main">
-
-    <!-- Hero persoal -->
-    <div class="hero-personal reveal">
-      <div class="hp-avatar">D</div>
-      <!-- Decoración SVG flat -->
-      <svg class="hp-deco" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Cronómetro -->
-        <g transform="translate(40,30)">
-          <circle cx="0" cy="0" r="22" fill="rgba(255,255,255,.18)" stroke="#fff" stroke-width="2"/>
-          <rect x="-6" y="-30" width="12" height="6" rx="2" fill="#fff" opacity=".9"/>
-          <line x1="0" y1="0" x2="0" y2="-14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-          <line x1="0" y1="0" x2="10" y2="6" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="0" cy="0" r="2" fill="#fff"/>
-        </g>
-        <!-- Balón -->
-        <g transform="translate(140,55)">
-          <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,.18)" stroke="#fff" stroke-width="2"/>
-          <path d="M-20 0 Q0 -10 20 0 Q0 10 -20 0" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7"/>
-          <path d="M0 -20 Q-8 0 0 20 Q8 0 0 -20" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7"/>
-        </g>
-        <!-- Regla -->
-        <g transform="translate(30,120) rotate(-25)">
-          <rect x="0" y="0" width="80" height="14" rx="2" fill="rgba(255,255,255,.22)" stroke="#fff" stroke-width="1.5"/>
-          <line x1="10" y1="0" x2="10" y2="6" stroke="#fff" stroke-width="1.2"/>
-          <line x1="20" y1="0" x2="20" y2="6" stroke="#fff" stroke-width="1.2"/>
-          <line x1="30" y1="0" x2="30" y2="8" stroke="#fff" stroke-width="1.2"/>
-          <line x1="40" y1="0" x2="40" y2="6" stroke="#fff" stroke-width="1.2"/>
-          <line x1="50" y1="0" x2="50" y2="6" stroke="#fff" stroke-width="1.2"/>
-          <line x1="60" y1="0" x2="60" y2="8" stroke="#fff" stroke-width="1.2"/>
-          <line x1="70" y1="0" x2="70" y2="6" stroke="#fff" stroke-width="1.2"/>
-        </g>
-        <!-- Libro aberto -->
-        <g transform="translate(125,135)">
-          <path d="M-20 -10 L-2 -8 L-2 12 L-20 10 Z" fill="rgba(255,255,255,.2)" stroke="#fff" stroke-width="1.5"/>
-          <path d="M2 -8 L20 -10 L20 10 L2 12 Z" fill="rgba(255,255,255,.2)" stroke="#fff" stroke-width="1.5"/>
-          <line x1="-15" y1="-4" x2="-7" y2="-3" stroke="#fff" stroke-width="1" opacity=".7"/>
-          <line x1="-15" y1="0" x2="-7" y2="1" stroke="#fff" stroke-width="1" opacity=".7"/>
-          <line x1="-15" y1="4" x2="-7" y2="5" stroke="#fff" stroke-width="1" opacity=".7"/>
-          <line x1="7" y1="-3" x2="15" y2="-4" stroke="#fff" stroke-width="1" opacity=".7"/>
-          <line x1="7" y1="1" x2="15" y2="0" stroke="#fff" stroke-width="1" opacity=".7"/>
-          <line x1="7" y1="5" x2="15" y2="4" stroke="#fff" stroke-width="1" opacity=".7"/>
-        </g>
-        <!-- Dots -->
-        <circle cx="90" cy="20" r="3" fill="#fff" opacity=".4"/>
-        <circle cx="170" cy="100" r="2.5" fill="#fff" opacity=".4"/>
-        <circle cx="80" cy="170" r="2" fill="#fff" opacity=".35"/>
-      </svg>
-      <div class="hp-info">
-        <div class="hp-eyebrow">Espazo persoal · CEIP Coirón Dena</div>
-        <div class="hp-name">Diego Fraga</div>
-        <div class="hp-role">Mestre de Educación Física en Infantil e Primaria. Programación competencial, integración de matemáticas en EF e patios dinámicos.</div>
-        <div class="hp-tags">
-          <span>Educación Física</span>
-          <span>5.º Primaria</span>
-          <span>LOMLOE</span>
-          <span>Patios DINS</span>
-          <span>Mat integrada</span>
-        </div>
-        <div class="hp-cta">
-          <a class="hp-btn hp-btn-primary" href="mailto:pradosfraga@gmail.com">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            Escríbeme
-          </a>
-          <a class="hp-btn hp-btn-secondary" href="programacion-dena-2026.html">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            Programación 2026
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== CIENCIAS SOCIAIS ===== -->
-    <div class="main-section">Ciencias Sociais</div>
-    <div class="resource-list">
-      <a class="res-card reveal" href="sociais/xogos/proba-mapa-ue.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Proba Mapa UE <span class="res-badge" style="background:rgba(29,78,216,.15);color:#60a5fa">Proba</span></div>
-          <div class="res-desc">Os 27 países da Unión Europea · pulsa cada país e escribe nome e capital · autoavaliación por 2 criterios (países e capitais) · envío de resultados ao profe · zoom e versión imprimible</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card reveal" href="sociais/tenda-sostible/presentacion.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#581c87,#a855f7)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18l-2 11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L3 7Z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">SdA · Tenda Sostible <span class="res-badge res-badge-sda">SdA</span></div>
-          <div class="res-desc">Vivir en sociedade · Bloque 3 · Mini-empresa con xefatura electa: Xefe/a, Subxefe/a, Tesourería, Comunicación, Inventario, Atención · 8 sesións · 3.º trimestre</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card reveal" href="sociais/apuntes-vivir-en-sociedade.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#78350f,#f59e0b)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h8"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Apuntes · Vivir en sociedade <span class="res-badge" style="background:rgba(245,158,11,.15);color:#fbbf24">Apuntes</span></div>
-          <div class="res-desc">Bloque 3 completo · Sociedade, diversidade, cohesión · Estereotipos · Tres poderes · Constitución · Galicia · 5.º Primaria · A4 imprimible</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card reveal" href="sociais/propostas-5.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#78350f,#f59e0b)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h18"/><path d="M5 22V11l7-7 7 7v11"/><path d="M9 22v-7h6v7"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Propostas competenciais · 5º Sociais</div>
-          <div class="res-desc">18 actividades autoavaliables · Sistemas de goberno (tenda sostible) · Mapa de Europa · Comunidades de España · 3 niveis de complexidade</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-    </div>
-
-    <!-- ===== MATEMÁTICAS ===== -->
-    <div class="main-section">Matemáticas</div>
-    <div class="resource-list">
-      <a class="res-card reveal" href="mates/propostas-5.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#064e3b,#10b981)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-9 5-9-5V8l9-5 9 5v8Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Propostas competenciais · 5º Mates</div>
-          <div class="res-desc">18 actividades autoavaliables para o alumnado · Escalas · Polígonos · Estatística · 3 niveis de complexidade</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card reveal" href="mates/sda-mochilas.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#065f46,#10b981)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Mochilas saudables <span class="res-badge res-badge-sda">SdA</span></div>
-          <div class="res-desc">ABP de matemáticas integradas en EF · 5.º Primaria · 8 sesións · UD1 Decimais · ODS 3</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-    </div>
-
-    <!-- ===== EDUCACIÓN FÍSICA ===== -->
-    <div class="main-section">Educación Física</div>
-    <div class="resource-list">
-      <a class="res-card reveal" href="ef/ud-bijbol.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#312e81,#6c63ff)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">A Unión Fai a Forza · Bijbol <span class="res-badge res-badge-ud">UD</span></div>
-          <div class="res-desc">Cooperación e deporte alternativo · 5 sesións · Fitball</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-    </div>
-
-    <!-- ===== LINGUA ===== -->
-    <div class="main-section">Lingua · Letras Galegas</div>
-    <div class="resource-list">
-      <a class="res-card reveal" href="lingua/letras-galegas-2026.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h8"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Letras Galegas 2026 · Xogos populares <span class="res-badge" style="background:rgba(59,130,246,.15);color:#60a5fa">Evento</span></div>
-          <div class="res-desc">Semana 17 maio · 16 estacións de xogos populares · 5ºB, 4ºA, 2º + Infantil · Alumnado guía</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-      <a class="res-card reveal" href="lingua/xtranoid-gramatica.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#065f46,#10b981)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Xtranoid Gramatical <span class="res-badge" style="background:rgba(16,185,129,.15);color:#34d399">Xogo</span></div>
-          <div class="res-desc">Rompe ladrillos e familiarízate coas clases de palabras · 7 niveis (substantivos a interxeccións) · power-ups · 5º-6º</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-    </div>
-
-    <!-- ===== MÚSICA ===== -->
-    <div class="main-section">Música</div>
-    <div class="resource-list">
-      <a class="res-card reveal" href="musica/beatbox.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#5b21b6,#8b5cff)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">BeatBox · Máquina de ritmos <span class="res-badge" style="background:rgba(139,92,255,.15);color:#a78bfa">Xogo</span></div>
-          <div class="res-desc">Crea música arrastrando sons aos personaxes (estilo Incredibox) · 3 xéneros (pop, techno rave, afro house) · voces, piano pentatónico, tonalidade e modo · muñeco bailón · grava en WAV e comparte por enlace</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-    </div>
-
-    <!-- ===== TITORÍA ===== -->
-    <div class="main-section">Titoría · 6º</div>
-    <div class="resource-list">
-      <a class="res-card reveal" href="titoria/tarefas-ef.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#065f46,#34d399)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Tarefas competenciais · EF</div>
-          <div class="res-desc">Banco organizado por cursos · 4 tarefas · B1 Saúde · B3 Cooperación · B5 Cultura motriz · B6 Contorna</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-    </div>
-
-    <!-- ===== CENTRO ===== -->
-    <div class="main-section">Centro</div>
-    <div class="resource-list">
-      <a class="res-card reveal" href="avaliacion/dous-eixos-tarefa.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#4c1d95,#a78bfa)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h4v-4h4v-4h4V8h4V4"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Dous eixos dunha tarefa <span class="res-badge" style="background:rgba(167,139,250,.15);color:#c4b5fd">Avaliación</span></div>
-          <div class="res-desc">Complexidade (grao 1·2·3) e dificultade (partes A·B·C) cun exemplo da lista do patio · tres sesións e como se cualifica</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card reveal" href="programacion-dena-2026.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#78350f,#f59e0b)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Programación Dena 2026 <span class="res-badge" style="background:rgba(245,158,11,.15);color:#fbbf24">Privado</span></div>
-          <div class="res-desc">Programación completa do centro · Xogos na rúa · Mochilas · 4º curso · Competencial · Avaliación</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card reveal" href="../reclamacions/checklist-reclamacion-promocion.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Reclamacións de notas e promoción <span class="res-badge" style="background:rgba(59,130,246,.15);color:#60a5fa">Privado</span></div>
-          <div class="res-desc">Checklist do procedemento (Instrución 2/2026) · Primaria · revisión no centro + Dirección Territorial · prazos e documentación</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card reveal" href="../patios-dins/presentacion-presaras.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#2d6a4f,#52b788)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Patios DINS · CEIP de Présaras <span class="res-badge" style="background:rgba(82,183,136,.15);color:#74c69d">Privado</span></div>
-          <div class="res-desc">Presentación externa sobre Patios Dinámicos · CEIP de Présaras · 2025</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-    </div>
-
-  </main>
-</div>
+<footer>Diego Fraga Fraga · CEIP de Coirón-Dena (Meaño) · Espazo educativo de Brais e Diego</footer>
 
 <script>
-if(localStorage.getItem('ef_theme')==='light'){document.body.classList.add('light');document.getElementById('m').classList.add('hidden');document.getElementById('s').classList.remove('hidden')}
+// Tema: escuro por defecto e lembrado entre páxinas do espazo (ef_theme). Lúa en escuro, sol en claro.
+(function(){
+  var b=document.getElementById('tema');
+  var lua='<svg class="i" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+  var sol='<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+  function pon(t){ document.documentElement.setAttribute('data-theme',t); b.innerHTML = t==='dark'?lua:sol;
+    try{ localStorage.setItem('ef_theme', t); }catch(e){} }
+  var t='dark'; try{ if(localStorage.getItem('ef_theme')==='light') t='light'; }catch(e){}
+  pon(t); b.onclick=function(){ pon(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); };
+})();
 
-const __io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); __io.unobserve(e.target); }
+// Buscador: deixa só as ligazóns que levan a palabra e agocha os compartimentos baleiros
+(function(){
+  var caixa=document.getElementById('busca'), sen=document.getElementById('sen');
+  function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
+  caixa.addEventListener('input', function(){
+    try{
+      var q=norm(caixa.value.trim()), algun=false;
+      document.querySelectorAll('.col').forEach(function(col){
+        var visibles=0, area=norm(col.querySelector('h2').textContent);
+        col.querySelectorAll('a.l, a.chip').forEach(function(a){
+          var ok=!q || area.indexOf(q)>-1 || norm(a.textContent+' '+(a.title||'')).indexOf(q)>-1;
+          a.classList.toggle('oculto', !ok); if(ok) visibles++;
+        });
+        col.querySelectorAll('.et, .chips').forEach(function(el){ el.classList.toggle('oculto', !!q); });
+        col.classList.toggle('oculto', visibles===0); if(visibles) algun=true;
+      });
+      sen.style.display = algun ? 'none' : 'block';
+    }catch(e){ console.error('Busca:', e); }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-document.querySelectorAll('.reveal').forEach(el => __io.observe(el));
+})();
 </script>
 </body>
 </html>
