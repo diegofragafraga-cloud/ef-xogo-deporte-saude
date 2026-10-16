@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dos ejes de una tarea</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@700&display=swap">
+<style>
+/* Maqueta: un ejemplo completo con dibujos. Esquema de ejes → bicis (A·B·C) → lista → 3 sesiones con bocetos de la tabla → corrección con barras */
+:root{
+  --bg:#f5f6f4; --card:#ffffff; --ink:#1b211f; --muted:#5f6a66; --line:#d6ddda;
+  --g1:#0f7c74; --g1s:#dcf0ec; --g2:#b8650b; --g2s:#fbecd8; --g3:#6a3fb5; --g3s:#ece4fa;
+  --ok:#2f7d3b; --oks:#e0f2e3; --no:#c0392b; --nos:#fbe4e1; --half:#b07a0a; --halfs:#fbefd3;
+  --f-d:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --f-b:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-m:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121615; --card:#1a201e; --ink:#e7ecea; --muted:#9aa6a1; --line:#34403c;
+  --g1:#4fc3b7; --g1s:#15302d; --g2:#f0a84e; --g2s:#352614; --g3:#b39af0; --g3s:#271f3b;
+  --ok:#6cc87a; --oks:#183020; --no:#ef8173; --nos:#3a1c19; --half:#e2b44a; --halfs:#33290f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#121615; --card:#1a201e; --ink:#e7ecea; --muted:#9aa6a1; --line:#34403c;
+  --g1:#4fc3b7; --g1s:#15302d; --g2:#f0a84e; --g2s:#352614; --g3:#b39af0; --g3s:#271f3b;
+  --ok:#6cc87a; --oks:#183020; --no:#ef8173; --nos:#3a1c19; --half:#e2b44a; --halfs:#33290f; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font:17px/1.55 var(--f-b);
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:36px 64px}
+.wrap{max-width:1000px; margin:0 auto; display:flex; flex-direction:column; gap:56px}
+h1,h2{font-family:var(--f-d); margin:0; line-height:1.1; text-wrap:balance}
+h1{font-size:clamp(2rem,5.5vw,3.2rem); font-weight:800; letter-spacing:-.02em}
+h2{font-size:clamp(1.3rem,3vw,1.75rem); font-weight:800}
+p{margin:0}
+.sub{font-size:1.12rem; color:var(--muted); max-width:56ch}
+section{display:flex; flex-direction:column; gap:16px}
+.paso{font:700 .78rem/1 var(--f-m); color:var(--muted); letter-spacing:.1em; text-transform:uppercase}
+.cap{font-size:.88rem; color:var(--muted)}
+.g1{--c:var(--g1); --cs:var(--g1s)} .g2{--c:var(--g2); --cs:var(--g2s)} .g3{--c:var(--g3); --cs:var(--g3s)}
+svg{display:block; max-width:100%}
+.ln{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.lnm{fill:none; stroke:var(--muted); stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+
+/* --- esquema de ejes --- */
+.hero{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:28px; align-items:center}
+.esq{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:14px}
+.esq text{font-family:var(--f-m); font-weight:700; font-size:12px; fill:var(--muted)}
+.esq .tg{font-family:var(--f-d); font-size:15px; fill:var(--ink)}
+.dot1{fill:var(--g1)} .dot2{fill:var(--g2)} .dot3{fill:var(--g3)}
+.ejes{display:flex; flex-direction:column; gap:12px}
+.eje{border-radius:14px; padding:14px 16px; display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:center}
+.eje.c{background:var(--g3s)} .eje.d{background:var(--card); border:1px solid var(--line)}
+.eje svg{width:44px; height:44px}
+.eje b{font-family:var(--f-d); font-size:1.2rem; display:block}
+.eje span{color:var(--muted); font-size:.95rem}
+
+/* --- bicis --- */
+.bicis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+.bici{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 14px; display:flex; flex-direction:column; gap:6px; align-items:center; text-align:center}
+.bici svg{width:150px; height:80px}
+.bici b{font-family:var(--f-d); font-size:1.15rem}
+.bici span{font-size:.9rem; color:var(--muted)}
+.wheel{fill:none; stroke:var(--ink); stroke-width:2.4}
+.tw{fill:none; stroke:var(--g1); stroke-width:2.4}
+.road{fill:none; stroke:var(--g3); stroke-width:3; stroke-dasharray:6 6; stroke-linecap:round}
+
+/* --- lista --- */
+.tabla{overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:12px; align-self:flex-start; max-width:100%}
+table{border-collapse:collapse; font-size:.95rem}
+th,td{padding:8px 14px; border-bottom:1px solid var(--line); text-align:center}
+th{font:700 .72rem/1.25 var(--f-m); color:var(--muted); text-transform:uppercase; letter-spacing:.04em}
+td:first-child,th:first-child{text-align:left}
+td.n{font:700 1rem/1 var(--f-m)}
+tr:last-child td{border-bottom:0}
+
+/* --- sesiones --- */
+.ses{display:grid; grid-template-columns:170px 1fr; gap:12px; align-items:stretch}
+.lab{background:var(--cs); color:var(--c); border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:6px; justify-content:center; align-items:flex-start}
+.lab svg{width:46px; height:46px}
+.lab svg .ic{fill:none; stroke:var(--c); stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+.lab b{font-family:var(--f-d); font-size:1.35rem}
+.lab span{color:var(--ink); font-size:.92rem}
+.lab .nota{font:700 .72rem/1.3 var(--f-m); color:var(--c)}
+.abc{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px}
+.q{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; display:flex; flex-direction:column; gap:8px}
+.ses.ev .q{border:2px solid var(--g3)}
+.q .top{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.q .l{font:700 .85rem/1 var(--f-m); width:28px; height:28px; border-radius:50%; display:grid; place-items:center; background:var(--ink); color:var(--card); flex:none}
+.q .ay{font:700 .7rem/1.2 var(--f-m); color:var(--muted); text-transform:uppercase; letter-spacing:.04em; text-align:right}
+.q .sk{width:100%; height:92px; background:var(--bg); border-radius:8px}
+.q .p{font-size:.97rem}
+.q .r{font-size:.85rem; color:var(--muted); border-top:1px dashed var(--line); padding-top:6px}
+/* boceto da táboa */
+.sk .cell{fill:var(--card); stroke:var(--line); stroke-width:1.5}
+.sk .hi{fill:var(--cs); stroke:var(--c); stroke-width:2}
+.sk .on{fill:var(--c); stroke:var(--c); stroke-width:2}
+.sk .row{fill:var(--cs)}
+.sk .arr{fill:none; stroke:var(--c); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round}
+.sk .bub{fill:var(--card); stroke:var(--c); stroke-width:2}
+.sk .tx{font-family:var(--f-m); font-weight:700; font-size:13px; fill:var(--c)}
+.sk .blank{stroke:var(--c); stroke-width:2.2; stroke-dasharray:5 4}
+.sk .chipw{fill:var(--cs); stroke:var(--c); stroke-width:1.5}
+.claves{display:flex; flex-wrap:wrap; gap:8px 20px; font-size:.93rem; color:var(--muted)}
+.claves b{color:var(--ink)}
+
+/* --- corrección --- */
+.alum{display:grid; gap:10px}
+.al{display:grid; grid-template-columns:110px minmax(0,1fr) 120px 70px; gap:14px; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px}
+.al.min{border:2px solid var(--ok)}
+.al .nm{font-weight:700}
+.bar{display:grid; grid-template-columns:3fr 4fr 3fr; gap:4px; height:30px}
+.bar span{border-radius:6px; background:var(--bg); border:1.5px dashed var(--line); display:grid; place-items:center; font:700 .75rem/1 var(--f-m); color:var(--muted)}
+.bar .f{background:var(--ok); border:0; color:var(--card)}
+.bar .h{background:linear-gradient(90deg, var(--ok) 50%, var(--bg) 50%); border:1.5px solid var(--ok); color:var(--ink)}
+.al .nv{font:700 .85rem/1.2 var(--f-m); color:var(--muted)}
+.al .nt{font:800 1.7rem/1 var(--f-d); text-align:right}
+
+/* --- erro --- */
+.vs{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.col{border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:10px; align-items:center; text-align:center}
+.col.mal{background:var(--nos)} .col.bien{background:var(--oks)}
+.col h3{margin:0; font-family:var(--f-d); font-size:1.15rem}
+.col svg{width:100%; max-width:300px; height:auto}
+.st1{fill:var(--g1)} .st2{fill:var(--g2)} .st3{fill:var(--g3)}
+
+@media (max-width:760px){
+  .hero,.vs{grid-template-columns:1fr}
+  .bicis{grid-template-columns:1fr}
+  .ses{grid-template-columns:1fr}
+  .abc{grid-template-columns:1fr}
+  .al{grid-template-columns:1fr; gap:8px}
+  .al .nt{text-align:left}
+}
+</style><style>
+.volver,.tema{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));z-index:5;width:40px;height:40px;border-radius:10px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.volver{left:max(14px, env(safe-area-inset-left,0px))} .tema{right:max(14px, env(safe-area-inset-right,0px))}
+.volver svg,.tema svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.volver:focus-visible,.tema:focus-visible{outline:2px solid var(--g3);outline-offset:2px}
+</style>
+</head>
+<body>
+<a class="volver" href="../index.html" title="Volver ao espazo de Diego" aria-label="Volver"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></a>
+<button class="tema" id="tema" type="button" aria-label="Cambiar tema"></button>
+
+
+<div class="wrap">
+
+<header class="hero">
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <h1>Leer un dato no es investigar</h1>
+    <p class="sub">Una tarea se mueve en dos direcciones. Hacia arriba cambia lo que piensa la cabeza; hacia la derecha, lo que cuesta.</p>
+    <div class="ejes">
+      <div class="eje c">
+        <svg viewBox="0 0 24 24"><path class="ln" style="stroke:var(--g3)" d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path class="ln" style="stroke:var(--g3)" d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path class="ln" style="stroke:var(--g3)" d="M12 5v13"/></svg>
+        <div><b>Grado 1 · 2 · 3</b><span>Complejidad: qué hace la cabeza</span></div>
+      </div>
+      <div class="eje d">
+        <svg viewBox="0 0 24 24"><path class="ln" d="M3 20h4v-4h4v-4h4V8h4V4"/></svg>
+        <div><b>Partes A · B · C</b><span>Dificultad: cuánto cuesta</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="esq">
+    <svg viewBox="0 0 360 290" role="img" aria-label="Esquema: tres filas de grados y tres columnas de partes A, B y C; los círculos crecen hacia la derecha">
+      <path class="lnm" d="M60 250V24"/><path class="lnm" d="m52 34 8-12 8 12"/>
+      <path class="lnm" d="M60 250h280"/><path class="lnm" d="m330 242 12 8-12 8"/>
+      <text x="14" y="18">GRADO</text>
+      <text x="300" y="238">PARTE</text>
+      <text x="22" y="206">1</text><text x="22" y="138">2</text><text x="22" y="70">3</text>
+      <text x="124" y="274">A</text><text x="204" y="274">B</text><text x="284" y="274">C</text>
+      <!-- grado 1 -->
+      <circle class="dot1" cx="128" cy="202" r="9"/><circle class="dot1" cx="208" cy="202" r="14"/><circle class="dot1" cx="288" cy="202" r="20"/>
+      <!-- grado 2 -->
+      <circle class="dot2" cx="128" cy="134" r="9"/><circle class="dot2" cx="208" cy="134" r="14"/><circle class="dot2" cx="288" cy="134" r="20"/>
+      <!-- grado 3 -->
+      <circle class="dot3" cx="128" cy="66" r="9"/><circle class="dot3" cx="208" cy="66" r="14"/><circle class="dot3" cx="288" cy="66" r="20"/>
+      <text class="tg" x="96" y="30">mismo color = mismo pensamiento</text>
+    </svg>
+  </div>
+</header>
+
+<section>
+  <span class="paso">La dificultad, como aprender a ir en bici</span>
+  <div class="bicis">
+    <div class="bici">
+      <svg viewBox="0 0 150 80"><circle class="wheel" cx="35" cy="55" r="18"/><circle class="wheel" cx="110" cy="55" r="18"/><path class="ln" d="M35 55 60 28h34l16 27M60 28l14 27h-39M94 28l-6-12h10M56 22h12"/><circle class="tw" cx="22" cy="68" r="7"/><circle class="tw" cx="48" cy="68" r="7"/><path class="ln" style="stroke:var(--g1)" d="M22 68 35 55 48 68"/></svg>
+      <b>A · con ruedines</b><span>Con ayuda: banco de palabras, opciones, una pista</span>
+    </div>
+    <div class="bici">
+      <svg viewBox="0 0 150 80"><circle class="wheel" cx="35" cy="55" r="18"/><circle class="wheel" cx="110" cy="55" r="18"/><path class="ln" d="M35 55 60 28h34l16 27M60 28l14 27h-39M94 28l-6-12h10M56 22h12"/></svg>
+      <b>B · sin ruedines</b><span>Lo mismo, sin ayuda</span>
+    </div>
+    <div class="bici">
+      <svg viewBox="0 0 150 80"><path class="road" d="M4 76c30-10 40 4 70-6s40-12 72-2"/><circle class="wheel" cx="35" cy="48" r="18"/><circle class="wheel" cx="110" cy="48" r="18"/><path class="ln" d="M35 48 60 21h34l16 27M60 21l14 27h-39M94 21l-6-12h10M56 15h12"/></svg>
+      <b>C · camino nuevo</b><span>Lo mismo, con más datos o un caso que no vimos</span>
+    </div>
+  </div>
+  <p class="cap">En las tres se hace lo mismo: ir en bici. Cambia cuánto cuesta.</p>
+</section>
+
+<section>
+  <span class="paso">Paso 1 · los datos</span>
+  <h2>La lista de participación del patio</h2>
+  <div class="tabla">
+    <table>
+      <thead><tr><th>Equipo</th><th>Tarjeta 1<br>fútbol</th><th>Tarjeta 3<br>21 basket</th><th>Tarjeta 6<br>pita cega</th></tr></thead>
+      <tbody>
+        <tr><td>1º Primaria</td><td class="n">4</td><td class="n">3</td><td class="n">12</td></tr>
+        <tr><td>Terra (5ºA)</td><td class="n">15</td><td class="n">6</td><td class="n">3</td></tr>
+        <tr><td>Bolboreta A (6ºA)</td><td class="n">14</td><td class="n">8</td><td class="n">2</td></tr>
+        <tr><td>Bolboreta B (6ºB)</td><td class="n">11</td><td class="n">9</td><td class="n">4</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="cap">Datos de ejemplo: personas de cada equipo que jugaron a cada tarjeta en seis días.</p>
+</section>
+
+<section>
+  <span class="paso">Paso 2 · tres sesiones, una por grado</span>
+  <h2>Con los mismos datos, la cabeza hace cosas distintas</h2>
+
+  <div class="ses g1">
+    <div class="lab"><svg viewBox="0 0 24 24"><circle class="ic" cx="11" cy="11" r="7"/><path class="ic" d="m21 21-4.3-4.3"/></svg><b>Grado 1</b><span>Leer un dato</span><span class="nota">Para practicar</span></div>
+    <div class="abc">
+      <div class="q"><div class="top"><span class="l">A</span><span class="ay">la fila marcada</span></div><svg class="sk" data-sk="g1a" viewBox="0 0 200 92"></svg><span class="p">¿Cuántas personas de Bolboreta A jugaron a la tarjeta 1?</span><span class="r">14</span></div>
+      <div class="q"><div class="top"><span class="l">B</span><span class="ay">sin marcar</span></div><svg class="sk" data-sk="g1b" viewBox="0 0 200 92"></svg><span class="p">¿Qué tarjeta tuvo más participación en Bolboreta B?</span><span class="r">La 1 (11)</span></div>
+      <div class="q"><div class="top"><span class="l">C</span><span class="ay">toda la columna</span></div><svg class="sk" data-sk="g1c" viewBox="0 0 200 92"></svg><span class="p">¿Qué equipo jugó más a la tarjeta 6 y cuál menos?</span><span class="r">Más 1º (12) · menos Bolboreta A (2)</span></div>
+    </div>
+  </div>
+
+  <div class="ses g2">
+    <div class="lab"><svg viewBox="0 0 24 24"><path class="ic" d="M12 3v18M5 21h14M5 7h14"/><path class="ic" d="m5 7-3 7a3 3 0 0 0 6 0Z"/><path class="ic" d="m19 7-3 7a3 3 0 0 0 6 0Z"/></svg><b>Grado 2</b><span>Comparar datos</span><span class="nota">Para practicar</span></div>
+    <div class="abc">
+      <div class="q"><div class="top"><span class="l">A</span><span class="ay">dos números dados</span></div><svg class="sk" data-sk="g2a" viewBox="0 0 200 92"></svg><span class="p">1º y Bolboreta A en la tarjeta 6: ¿cuánta diferencia hay?</span><span class="r">12 − 2 = 10</span></div>
+      <div class="q"><div class="top"><span class="l">B</span><span class="ay">sin ayuda</span></div><svg class="sk" data-sk="g2b" viewBox="0 0 200 92"></svg><span class="p">Compara 5º y 6º en la tarjeta 1 y explica qué ves.</span><span class="r">Parecidos: 15 frente a 14 y 11</span></div>
+      <div class="q"><div class="top"><span class="l">C</span><span class="ay">todos los equipos</span></div><svg class="sk" data-sk="g2c" viewBox="0 0 200 92"></svg><span class="p">¿Qué pasa con la tarjeta 6 según la edad?</span><span class="r">Cuanto más pequeños, más juegan</span></div>
+    </div>
+  </div>
+
+  <div class="ses g3 ev">
+    <div class="lab"><svg viewBox="0 0 24 24"><path class="ic" d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path class="ic" d="M9 18h6M10 22h4"/></svg><b>Grado 3</b><span>Formular y predecir</span><span class="nota">Da la nota del CA1.2</span></div>
+    <div class="abc">
+      <div class="q"><div class="top"><span class="l">A</span><span class="ay">banco de palabras</span></div><svg class="sk" data-sk="g3a" viewBox="0 0 200 92"></svg><span class="p">Completa: «Creo que 1º jugará más a la tarjeta 6 porque son más ___».</span><span class="r">Banco: pequeños · rápidos</span></div>
+      <div class="q"><div class="top"><span class="l">B</span><span class="ay">sin ayuda</span></div><svg class="sk" data-sk="g3b" viewBox="0 0 200 92"></svg><span class="p">Escribe tu propia pregunta y tu predicción: «Creo que… porque…».</span><span class="r">Tiene que poder responderse con la lista</span></div>
+      <div class="q"><div class="top"><span class="l">C</span><span class="ay">un dato nuevo</span></div><svg class="sk" data-sk="g3c" viewBox="0 0 200 92"></svg><span class="p">La lista añade si llovió cada día. Formula una pregunta con ese dato y predice.</span><span class="r">«¿Se juega menos al fútbol si llueve? Creo que sí porque…»</span></div>
+    </div>
+  </div>
+
+  <div class="claves"><span><b>Mira una fila:</b> mismo color, mismo pensamiento; solo cuesta más.</span><span><b>Mira una columna:</b> cuesta parecido, pero la cabeza hace algo distinto.</span></div>
+</section>
+
+<section>
+  <span class="paso">Paso 3 · corregir la sesión que da nota</span>
+  <h2>Cuatro alumnos en la sesión de grado 3</h2>
+  <div class="alum">
+    <div class="al"><span class="nm">Alumno 1</span><div class="bar"><span class="f">A</span><span>B</span><span>C</span></div><span class="nv">Nivel 1 · en proceso</span><span class="nt">2,5</span></div>
+    <div class="al min"><span class="nm">Alumno 2</span><div class="bar"><span class="f">A</span><span class="h">½ B</span><span>C</span></div><span class="nv" style="color:var(--ok)">Nivel 2 · mínimo</span><span class="nt">5</span></div>
+    <div class="al"><span class="nm">Alumno 3</span><div class="bar"><span class="f">A</span><span class="f">B</span><span>C</span></div><span class="nv">Nivel 3 · lo hace bien</span><span class="nt">7,5</span></div>
+    <div class="al"><span class="nm">Alumno 4</span><div class="bar"><span class="f">A</span><span class="f">B</span><span class="f">C</span></div><span class="nv">Nivel 4 · excelente</span><span class="nt">10</span></div>
+  </div>
+  <p class="cap">En cada pregunta solo se marca bien, la mitad o no. El nivel sale de hasta dónde llega y la nota es nivel × 2,5. El alumno 2 aprueba porque ya formula y predice, aunque solo con ayuda y a medias sin ella.</p>
+</section>
+
+<section>
+  <span class="paso">El error que hay que evitar</span>
+  <h2>Subir de dificultad cambiando de grado</h2>
+  <div class="vs">
+    <div class="col mal">
+      <h3>Así no: cada parte, otro pensamiento</h3>
+      <svg viewBox="0 0 300 130" role="img" aria-label="Escalera de tres colores distintos"><rect class="st1" x="20" y="88" width="80" height="30" rx="5"/><rect class="st2" x="110" y="58" width="80" height="60" rx="5"/><rect class="st3" x="200" y="28" width="80" height="90" rx="5"/><text x="52" y="108" style="font:700 14px var(--f-m);fill:#fff">A</text><text x="142" y="94" style="font:700 14px var(--f-m);fill:#fff">B</text><text x="232" y="78" style="font:700 14px var(--f-m);fill:#fff">C</text></svg>
+      <p class="cap">A lee un dato, B compara, C crea. El alumno que solo hace la A no ha tocado el criterio.</p>
+    </div>
+    <div class="col bien">
+      <h3>Así sí: el mismo pensamiento, cada vez más difícil</h3>
+      <svg viewBox="0 0 300 130" role="img" aria-label="Escalera de un solo color"><rect class="st3" x="20" y="88" width="80" height="30" rx="5"/><rect class="st3" x="110" y="58" width="80" height="60" rx="5"/><rect class="st3" x="200" y="28" width="80" height="90" rx="5"/><text x="52" y="108" style="font:700 14px var(--f-m);fill:#fff">A</text><text x="142" y="94" style="font:700 14px var(--f-m);fill:#fff">B</text><text x="232" y="78" style="font:700 14px var(--f-m);fill:#fff">C</text></svg>
+      <p class="cap">Las tres partes formulan y predicen. Quien hace la A ya está dentro del criterio.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+// Bocetos da táboa: 4 filas (1º, Terra, Bolboreta A, Bolboreta B) × 3 tarxetas (1, 3, 6)
+(function(){
+  try{
+    var X0=46, Y0=8, W=46, H=18, G=4;
+    function cx(c){return X0+c*(W+G)} function cy(r){return Y0+r*(H+G)}
+    function grid(cls){ // cls(r,c) -> clase da cela
+      var s='';
+      for(var r=0;r<4;r++){
+        s+='<rect class="cell" x="6" y="'+cy(r)+'" width="34" height="'+H+'" rx="3"/>';
+        for(var c=0;c<3;c++){ s+='<rect class="'+(cls(r,c)||'cell')+'" x="'+cx(c)+'" y="'+cy(r)+'" width="'+W+'" height="'+H+'" rx="3"/>'; }
+      }
+      return s;
+    }
+    function mid(r,c){return [cx(c)+W/2, cy(r)+H/2]}
+    var bocetos={
+      g1a: function(){ var m=mid(2,0); return grid(function(r,c){return r===2&&c===0?'on':(r===2?'hi':null)})+'<path class="arr" d="M1 '+(m[1]-6)+'l5 6-5 6"/>'; },
+      g1b: function(){ return grid(function(r,c){return r===3&&c===0?'on':(r===3?'hi':null)}); },
+      g1c: function(){ return grid(function(r,c){return c===2&&(r===0||r===2)?'on':(c===2?'hi':null)}); },
+      g2a: function(){ var a=mid(0,2), b=mid(2,2); return grid(function(r,c){return c===2&&(r===0||r===2)?'on':null})+
+        '<path class="arr" d="M'+(a[0]+30)+' '+a[1]+'c14 0 14 '+(b[1]-a[1])+' 0 '+(b[1]-a[1])+'"/><text class="tx" x="'+(a[0]+38)+'" y="'+((a[1]+b[1])/2+4)+'">−</text>'; },
+      g2b: function(){ return grid(function(r,c){return c===0&&r>0?'on':null})+'<path class="arr" d="M'+(cx(0)-4)+' '+(cy(1)+2)+'v'+(3*(H+G)-6)+'"/>'; },
+      g2c: function(){ return grid(function(r,c){return c===2?'hi':null})+'<path class="arr" d="M'+(cx(2)+8)+' '+(cy(0)+6)+'L'+(cx(2)+W-8)+' '+(cy(3)+H-4)+'"/><path class="arr" d="M'+(cx(2)+W-16)+' '+(cy(3)+H-4)+'h8v-8"/>'; },
+      g3a: function(){ return '<path class="bub" d="M14 10h172a8 8 0 0 1 8 8v34a8 8 0 0 1-8 8H60l-14 12v-12H14a8 8 0 0 1-8-8V18a8 8 0 0 1 8-8Z"/><text class="tx" x="20" y="40">creo que… porque</text><path class="blank" d="M150 42h30"/><rect class="chipw" x="70" y="70" width="58" height="18" rx="9"/><rect class="chipw" x="134" y="70" width="52" height="18" rx="9"/>'; },
+      g3b: function(){ return '<path class="bub" d="M14 10h172a8 8 0 0 1 8 8v34a8 8 0 0 1-8 8H60l-14 12v-12H14a8 8 0 0 1-8-8V18a8 8 0 0 1 8-8Z"/><text class="tx" x="20" y="34">?</text><path class="blank" d="M34 30h140M20 48h154"/>'; },
+      g3c: function(){ return '<path class="bub" d="M14 10h128a8 8 0 0 1 8 8v34a8 8 0 0 1-8 8H60l-14 12v-12H14a8 8 0 0 1-8-8V18a8 8 0 0 1 8-8Z"/><text class="tx" x="20" y="34">?</text><path class="blank" d="M34 30h96M20 48h110"/>'+
+        '<path class="arr" d="M166 44a10 10 0 0 1 2-19.8A13 13 0 0 1 192 30a8 8 0 0 1-2 14Z"/><path class="arr" d="M170 56l-3 8M180 56l-3 8M190 56l-3 8"/>'; }
+    };
+    document.querySelectorAll('svg[data-sk]').forEach(function(el){
+      var f=bocetos[el.getAttribute('data-sk')]; if(f) el.innerHTML=f();
+    });
+  }catch(e){ console.error('Bocetos:', e); }
+})();
+</script>
+
+<script>
+// Tema: escuro por defecto; lembra a elección do espazo (ef_theme). Lúa en escuro, sol en claro.
+(function(){
+  var b=document.getElementById('tema');
+  var lua='<svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+  var sol='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+  function pon(t){ document.documentElement.setAttribute('data-theme', t); b.innerHTML = t==='dark' ? lua : sol;
+    try{ localStorage.setItem('ef_theme', t==='dark' ? 'dark' : 'light'); }catch(e){} }
+  var t='dark'; try{ if(localStorage.getItem('ef_theme')==='light') t='light'; }catch(e){}
+  pon(t); b.onclick=function(){ pon(document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark'); };
+})();
+</script>
+</body>
+</html>
