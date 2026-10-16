@@ -84,6 +84,16 @@ a.chip{display:inline-flex;align-items:center;height:30px;padding:0 10px;border-
   border:1px solid color-mix(in srgb,var(--ac) 35%,var(--bd));background:color-mix(in srgb,var(--ac) 12%,var(--card2));transition:transform .15s,background .15s}
 a.chip:hover{background:var(--ac);color:var(--bg);border-color:var(--ac);transform:translateY(-2px)}
 .oculto{display:none!important}
+.col h2 .cnt{margin-left:4px;font-size:.68rem;letter-spacing:0;padding:1px 7px;border-radius:99px;color:var(--ac);
+  background:color-mix(in srgb,var(--ac) 16%,transparent)}
+.novas{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px;font-size:.88rem}
+.novas b{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--tx3)}
+a.nova{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:99px;text-decoration:none;
+  border:1px solid color-mix(in srgb,var(--ac) 40%,var(--bd));background:color-mix(in srgb,var(--ac) 12%,var(--card))}
+a.nova:hover{border-color:var(--ac)}
+a.nova i{width:8px;height:8px;border-radius:50%;background:var(--ac)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--cs);outline-offset:2px}
+.tecla{font:600 .72rem/1 ui-monospace,Menlo,monospace;border:1px solid var(--bd);border-radius:5px;padding:2px 5px;color:var(--tx3)}
 
 /* debuxos de cada compartimento */
 .dibu{position:absolute;top:10px;right:12px;width:42px;height:42px;color:var(--ac);fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -135,12 +145,19 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
       <h1>Espazo de Diego Fraga</h1>
       <p>Mestre de Educación Física · CEIP de Coirón-Dena · materiais para usar na aula</p>
     </div>
-    <input id="busca" type="search" placeholder="Buscar: mapa, SdA, xogo…" aria-label="Buscar recursos">
+    <input id="busca" type="search" placeholder="Buscar: mapa, SdA, xogo…  ( / )" aria-label="Buscar recursos">
     <div class="accions">
       <button class="bt" type="button" id="abrirBuzon"><svg class="i" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Buzón</button>
       <a class="bt" href="programacion-dena-2026.html"><svg class="i" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>Programación 2026</a>
     </div>
   </section>
+
+  <nav class="novas" aria-label="Novidades">
+    <b>Novidades</b>
+    <a class="nova c-av" href="avaliacion/dous-eixos-tarefa.html"><i></i>Dous eixos dunha tarefa</a>
+    <a class="nova c-ti" href="murdokus/index.html"><i></i>Murdokus</a>
+    <a class="nova c-cs" href="#" id="novaBuzon"><i></i>Buzón para escribirme</a>
+  </nav>
 
   <!-- ÁREAS -->
   <div class="areas">
@@ -247,10 +264,23 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
   pon(t); b.onclick=function(){ pon(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); };
 })();
 
+// Contador de recursos en cada compartimento
+document.querySelectorAll('.col').forEach(function(col){
+  var n=col.querySelectorAll('a.l, a.chip').length, h=col.querySelector('h2');
+  if(h && n) h.insertAdjacentHTML('beforeend','<span class="cnt">'+n+'</span>');
+});
+// Atallos: «/» vai ao buscador e Esc baléirao
+document.addEventListener('keydown',function(e){
+  var b=document.getElementById('busca'), enCampo=/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName);
+  if(e.key==='/' && !enCampo){ e.preventDefault(); b.focus(); }
+  else if(e.key==='Escape' && document.activeElement===b){ b.value=''; b.dispatchEvent(new Event('input')); b.blur(); }
+});
+
 // Buzón: formulario na propia páxina; a mensaxe vai a /api/mensaxe (mesmo dominio, non o bloquea a rede do cole)
 (function(){
   var d=document.getElementById('buzon'), f=document.getElementById('formBuzon'), res=document.getElementById('bRes'), env=document.getElementById('bEnviar');
   document.getElementById('abrirBuzon').onclick=function(){ res.textContent=''; res.className='resultado'; if(d.showModal) d.showModal(); else d.setAttribute('open',''); document.getElementById('bNome').focus(); };
+  document.getElementById('novaBuzon').onclick=function(e){ e.preventDefault(); document.getElementById('abrirBuzon').click(); };
   document.getElementById('pecharBuzon').onclick=function(){ d.close ? d.close() : d.removeAttribute('open'); };
   f.addEventListener('submit', async function(ev){
     ev.preventDefault();
