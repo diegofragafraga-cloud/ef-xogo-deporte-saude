@@ -92,7 +92,7 @@ a.nova{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-ra
   border:1px solid color-mix(in srgb,var(--ac) 40%,var(--bd));background:color-mix(in srgb,var(--ac) 12%,var(--card))}
 a.nova:hover{border-color:var(--ac)}
 a.nova i{width:8px;height:8px;border-radius:50%;background:var(--ac)}
-a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ef);outline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--ef);outline-offset:2px}
 
 /* debuxos de cada compartimento */
 .dibu{position:absolute;top:10px;right:12px;width:42px;height:42px;color:var(--ac);fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -107,6 +107,21 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 @media(prefers-reduced-motion:reduce){.dibu *{animation:none!important;stroke-dashoffset:0!important}}
 
 footer{text-align:center;color:var(--tx3);font-size:.8rem;padding:6px 16px 26px}
+footer a{color:var(--tx3)}
+dialog{border:1px solid var(--bd);border-radius:16px;background:var(--card);color:var(--tx);padding:0;width:min(520px,calc(100% - 32px));box-shadow:var(--sh)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+#formBuzon{padding:20px;display:flex;flex-direction:column;gap:6px}
+#formBuzon h2{margin:0;font-size:1.15rem}
+#formBuzon .axuda{margin:0 0 6px;color:var(--tx2);font-size:.9rem}
+#formBuzon label{font-size:.85rem;font-weight:600;margin-top:6px}
+#formBuzon label span{color:var(--tx3);font-weight:400}
+#formBuzon input,#formBuzon textarea{background:var(--bg2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:9px 11px;font:inherit;resize:vertical}
+#formBuzon input:focus,#formBuzon textarea:focus{outline:none;border-color:var(--ef)}
+#formBuzon .trampa{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+#formBuzon .pe{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+#formBuzon .env{background:var(--ef);color:#fff;border-color:var(--ef)}
+#formBuzon .resultado{margin:4px 0 0;font-size:.9rem;min-height:1.2em}
+#formBuzon .resultado.ok{color:var(--cs)} #formBuzon .resultado.erro{color:#f87171}
 .sen{display:none;color:var(--tx3);text-align:center;padding:30px}
 
 @media(max-width:1000px){.areas2{grid-template-columns:1fr 1fr}}
@@ -131,6 +146,7 @@ footer{text-align:center;color:var(--tx3);font-size:.8rem;padding:6px 16px 26px}
     </div>
     <input id="busca" type="search" placeholder="Buscar: SdA, xogo, avaliación…  ( / )" aria-label="Buscar recursos">
     <div class="accions">
+      <button class="bt" type="button" id="abrirBuzon"><svg class="i" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Buzón</button>
       <a class="bt" href="programacions-didacticas/index.html"><svg class="i" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>Programación didáctica</a>
     </div>
   </section>
@@ -139,7 +155,7 @@ footer{text-align:center;color:var(--tx3);font-size:.8rem;padding:6px 16px 26px}
     <b>Novidades</b>
     <a class="nova c-cs" href="xogos-ciencias-3a/index.html"><i></i>Xogos de Ciencias 3.º</a>
     <a class="nova c-av" href="programacions-didacticas/graduacion-vs-indicadores/index.html"><i></i>Graos, niveis e indicadores</a>
-    <a class="nova c-av" href="aprendizaxes-imprescindibles/index.html"><i></i>Imprescindibles por ciclo</a>
+    <a class="nova c-ef" href="#" id="novaBuzon"><i></i>Buzón para escribirme</a>
   </nav>
 
   <!-- ÁREAS -->
@@ -205,7 +221,26 @@ footer{text-align:center;color:var(--tx3);font-size:.8rem;padding:6px 16px 26px}
   <p class="sen" id="sen">Non hai ningún recurso con esa palabra.</p>
 </main>
 
-<footer>Brais Prados González · CEIP Condesa de Fenosa (O Barco de Valdeorras) · Espazo educativo de Brais e Diego</footer>
+<dialog id="buzon" aria-labelledby="buzonTit">
+  <form id="formBuzon" novalidate>
+    <h2 id="buzonTit">Déixame unha mensaxe</h2>
+    <p class="axuda">Chégame ao meu buzón. Se queres resposta, deixa un correo ou un teléfono.</p>
+    <label for="bNome">O teu nome</label>
+    <input id="bNome" name="nome" maxlength="80" required autocomplete="name">
+    <label for="bContacto">Correo ou teléfono <span>(opcional)</span></label>
+    <input id="bContacto" name="contacto" maxlength="120" autocomplete="email">
+    <label for="bTexto">Mensaxe</label>
+    <textarea id="bTexto" name="texto" rows="5" maxlength="3000" required></textarea>
+    <input class="trampa" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <p class="resultado" id="bRes" role="status"></p>
+    <div class="pe">
+      <button type="button" class="bt" id="pecharBuzon">Pechar</button>
+      <button type="submit" class="bt env" id="bEnviar">Enviar</button>
+    </div>
+  </form>
+</dialog>
+
+<footer>Brais Prados González · CEIP Condesa de Fenosa (O Barco de Valdeorras) · Espazo educativo de Brais e Diego · <a href="buzon/index.html">Ler o buzón</a></footer>
 
 <script>
 // Tema: escuro por defecto e lembrado entre páxinas do espazo (ef_theme). Lúa en escuro, sol en claro.
@@ -230,6 +265,27 @@ document.addEventListener('keydown',function(e){
   if(e.key==='/' && !enCampo){ e.preventDefault(); b.focus(); }
   else if(e.key==='Escape' && document.activeElement===b){ b.value=''; b.dispatchEvent(new Event('input')); b.blur(); }
 });
+
+// Buzón: formulario na propia páxina; a mensaxe vai a /api/mensaxe-brais (mesmo dominio, non o bloquea a rede do cole)
+(function(){
+  var d=document.getElementById('buzon'), f=document.getElementById('formBuzon'), res=document.getElementById('bRes'), env=document.getElementById('bEnviar');
+  document.getElementById('abrirBuzon').onclick=function(){ res.textContent=''; res.className='resultado'; if(d.showModal) d.showModal(); else d.setAttribute('open',''); document.getElementById('bNome').focus(); };
+  document.getElementById('novaBuzon').onclick=function(e){ e.preventDefault(); document.getElementById('abrirBuzon').click(); };
+  document.getElementById('pecharBuzon').onclick=function(){ d.close ? d.close() : d.removeAttribute('open'); };
+  f.addEventListener('submit', async function(ev){
+    ev.preventDefault();
+    var datos={nome:f.nome.value.trim(), contacto:f.contacto.value.trim(), texto:f.texto.value.trim(), web:f.web.value};
+    if(!datos.nome || datos.texto.length<5){ res.className='resultado erro'; res.textContent='Escribe o teu nome e a mensaxe.'; return; }
+    env.disabled=true; res.className='resultado'; res.textContent='Enviando…';
+    try{
+      var r=await fetch('/api/mensaxe-brais',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(datos)});
+      var j=await r.json();
+      if(j.ok){ res.className='resultado ok'; res.textContent='Enviada. Grazas!'; f.texto.value=''; }
+      else { res.className='resultado erro'; res.textContent=j.error||'Non se puido enviar.'; }
+    }catch(e){ res.className='resultado erro'; res.textContent='Sen conexión. Proba de novo.'; }
+    env.disabled=false;
+  });
+})();
 
 // Buscador: deixa só as ligazóns que levan a palabra e agocha os compartimentos baleiros
 (function(){
