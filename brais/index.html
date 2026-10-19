@@ -1,436 +1,256 @@
 <!DOCTYPE html>
-<html lang="gl">
+<html lang="gl" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brais - Recursos EF</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Brais · Recursos</title>
+<meta name="description" content="Espazo de Brais Prados no Espazo educativo de Brais e Diego: programación e avaliación, Matemáticas, EF, Infantil, Ciencias, Lingua e lóxica.">
 <style>
-  :root {
-    --bg: #0b0d13; --bg2: #13161f; --bg3: #1c2030;
-    --text: #e8eaf0; --text2: #8b92a8; --accent: #3b82f6;
-    --accent2: #60a5fa; --border: #252a3a; --radius: 14px;
-  }
-  .light { --bg:#f0f2f7;--bg2:#fff;--bg3:#e8eaf0;--text:#13161f;--text2:#6b7280;--border:#d1d5db; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-  .hidden { display:none !important; }
+/* Portada como panel, igual ca o espazo de Diego: cabeceira curta con buscador e
+   un compartimento por categoría, cada un coa súa cor, a súa icona e as súas ligazóns. */
+:root{
+  --bg:#0e1116; --bg2:#151a21; --card:#171d26; --card2:#1e2632;
+  --tx:#e6ebf2; --tx2:#94a1b2; --tx3:#66717f; --bd:#252e3a;
+  --sh:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.28);
+  --cs:#34d399; --ma:#fb923c; --ef:#6b8cff; --li:#f472b6; --ti:#22d3ee; --av:#a78bfa; --ce:#fbbf24;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --bg2:#ffffff; --card:#ffffff; --card2:#f1f3f6;
+  --tx:#161b22; --tx2:#566270; --tx3:#8a94a2; --bd:#e2e6ec;
+  --sh:0 1px 2px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.06);
+  --cs:#0f8f5f; --ma:#c2410c; --ef:#1e40af; --li:#be185d; --ti:#0e7490; --av:#6d28d9; --ce:#a16207;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--tx);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.i{width:1em;height:1em;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+a{color:inherit}
 
-  .header {
-    display:flex; align-items:center; gap:12px;
-    padding:16px 24px; background:var(--bg2);
-    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
-  }
-  .back-btn {
-    background:var(--bg3); border:1px solid var(--border); color:var(--text);
-    width:36px; height:36px; border-radius:8px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    text-decoration:none; transition:all .2s; flex-shrink:0;
-  }
-  .back-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
-  .back-btn svg { width:18px; height:18px; }
-  .header h1 { font-size:1.2rem; font-weight:700; display:flex; align-items:center; gap:10px; }
-  .avatar { width:32px; height:32px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:.9rem; }
-  .header-right { margin-left:auto; display:flex; gap:8px; }
-  .icon-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text); width:36px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
-  .icon-btn:hover { background:var(--accent); color:#fff; }
-  .icon-btn svg { width:16px; height:16px; }
+/* cabeceira */
+header{display:flex;align-items:center;gap:12px;padding:14px max(20px,env(safe-area-inset-left,0px));
+  border-bottom:1px solid var(--bd);background:var(--bg2)}
+.b{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;
+  border:1px solid var(--bd);background:var(--card);color:var(--tx2);cursor:pointer;text-decoration:none}
+.b:hover{color:var(--tx)} .b .i{width:18px;height:18px}
+.marca{font-weight:700;letter-spacing:-.02em;font-size:1.05rem;display:flex;align-items:center;gap:10px}
+.av{width:30px;height:30px;border-radius:50%;background:#4f7cff;color:#fff;display:grid;place-items:center;font-weight:800;font-size:.9rem}
+.spacer{flex:1}
 
-  .layout { display:flex; min-height:calc(100vh - 65px); }
+main{max-width:1160px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-left,0px)) 40px}
 
-  /* Sidebar */
-  .sidebar {
-    width:240px; background:var(--bg2); border-right:1px solid var(--border);
-    padding:20px 0; flex-shrink:0; overflow-y:auto;
-  }
-  .sidebar-title {
-    padding:8px 20px; font-size:.68rem; font-weight:600; color:var(--text2);
-    text-transform:uppercase; letter-spacing:1.5px;
-  }
-  .sidebar-toggle {
-    display:flex; align-items:center; gap:8px; padding:10px 20px;
-    font-size:.85rem; font-weight:600; color:var(--text); cursor:pointer;
-    transition:all .15s; border:none; background:none; width:100%; text-align:left;
-  }
-  .sidebar-toggle:hover { background:var(--bg3); }
-  .sidebar-toggle svg { width:14px; height:14px; color:var(--text2); transition:transform .2s; flex-shrink:0; }
-  .sidebar-toggle.open svg { transform:rotate(90deg); }
-  .sidebar-toggle .st-badge {
-    margin-left:auto; font-size:.65rem; background:var(--bg3); color:var(--text2);
-    padding:2px 8px; border-radius:10px;
-  }
-  .sidebar-items { display:none; padding:2px 0; }
-  .sidebar-items.open { display:block; }
-  .sidebar-item {
-    display:flex; align-items:center; gap:8px; padding:8px 20px 8px 36px;
-    font-size:.82rem; color:var(--text2); text-decoration:none;
-    transition:all .15s; border-left:2px solid transparent;
-  }
-  .sidebar-item:hover { background:var(--bg3); color:var(--text); border-left-color:var(--accent); }
-  .sidebar-item .si-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+/* hero curto */
+.hero{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-radius:18px;padding:14px 20px;margin-bottom:16px;
+  border:1px solid var(--bd);box-shadow:var(--sh);
+  background:linear-gradient(120deg,color-mix(in srgb,var(--ef) 24%,var(--card)),color-mix(in srgb,var(--av) 18%,var(--card)) 55%,color-mix(in srgb,var(--ti) 18%,var(--card)))}
+.hero-tx{flex:1;min-width:240px}
+.hero h1{margin:0;font-size:1.3rem;letter-spacing:-.01em}
+.hero p{margin:2px 0 0;color:var(--tx2);font-size:.9rem}
+#busca{background:var(--bg2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:9px 12px;font:inherit;font-size:.92rem;width:260px}
+#busca:focus{outline:none;border-color:var(--ef)}
+.accions{display:flex;gap:8px;flex-wrap:wrap}
+.bt{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:10px;border:1px solid var(--bd);
+  background:var(--card);text-decoration:none;font-size:.88rem;font-weight:600;color:var(--tx)}
+.bt:hover{border-color:var(--ef)} .bt .i{width:16px;height:16px;color:var(--ef)}
 
-  /* Main */
-  .main { flex:1; padding:28px 32px; overflow-y:auto; }
-  .main h2 { font-size:1.1rem; margin-bottom:20px; display:flex; align-items:center; gap:8px; }
-  .main h2 span { color:var(--accent2); }
+/* compartimentos */
+.areas{display:grid;gap:14px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.areas2{display:grid;gap:14px;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px}
+.col{position:relative;border:1px solid color-mix(in srgb,var(--ac) 30%,var(--bd));border-top:3px solid var(--ac);
+  border-radius:16px;padding:14px 16px 12px;box-shadow:var(--sh);min-width:0;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 16%,var(--card)) 0%,var(--card) 62%)}
+.col h2{display:flex;align-items:center;gap:8px;margin:0 0 8px;min-height:40px;padding-right:52px;
+  font-size:.8rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ac);font-weight:700}
+.c-cs{--ac:var(--cs)} .c-ma{--ac:var(--ma)} .c-ef{--ac:var(--ef)} .c-li{--ac:var(--li)}
+.c-ti{--ac:var(--ti)} .c-av{--ac:var(--av)} .c-ce{--ac:var(--ce)}
+.et{font-size:.76rem;color:var(--tx3);margin:10px 0 4px}
+.et:first-of-type{margin-top:0}
+a.l{display:flex;align-items:center;gap:9px;padding:6px 8px;margin:0 -8px;border-radius:9px;text-decoration:none;font-size:.94rem;min-width:0}
+a.l:hover{background:var(--card2)}
+a.l .ic{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;flex:none;
+  color:var(--ac);background:color-mix(in srgb,var(--ac) 18%,transparent);transition:transform .2s}
+a.l .ic .i{width:16px;height:16px}
+a.l:hover .ic{transform:rotate(-8deg) scale(1.08)}
+a.l .tx{min-width:0;overflow:hidden;text-overflow:ellipsis}
+a.l small{color:var(--tx3);font-size:.75rem;white-space:nowrap}
+a.l .fr{width:15px;height:15px;color:var(--tx3);margin-left:auto;transition:transform .15s}
+a.l:hover .fr{transform:translateX(2px);color:var(--ac)}
+.tag{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:5px;
+  color:var(--ac);background:color-mix(in srgb,var(--ac) 16%,transparent);white-space:nowrap}
+.tag.priv{color:var(--tx2);background:var(--card2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+a.chip{display:inline-flex;align-items:center;height:30px;padding:0 10px;border-radius:9px;text-decoration:none;font-size:.86rem;font-weight:600;
+  border:1px solid color-mix(in srgb,var(--ac) 35%,var(--bd));background:color-mix(in srgb,var(--ac) 12%,var(--card2));transition:transform .15s,background .15s}
+a.chip:hover{background:var(--ac);color:var(--bg);border-color:var(--ac);transform:translateY(-2px)}
+.oculto{display:none!important}
+.col h2 .cnt{margin-left:4px;font-size:.68rem;letter-spacing:0;padding:1px 7px;border-radius:99px;color:var(--ac);
+  background:color-mix(in srgb,var(--ac) 16%,transparent)}
+.novas{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px;font-size:.88rem}
+.novas b{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--tx3)}
+a.nova{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:99px;text-decoration:none;
+  border:1px solid color-mix(in srgb,var(--ac) 40%,var(--bd));background:color-mix(in srgb,var(--ac) 12%,var(--card))}
+a.nova:hover{border-color:var(--ac)}
+a.nova i{width:8px;height:8px;border-radius:50%;background:var(--ac)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ef);outline-offset:2px}
 
-  .resource-list { display:flex; flex-direction:column; gap:12px; }
-  .res-card {
-    display:flex; align-items:center; gap:14px;
-    background:var(--bg2); border:1px solid var(--border); border-radius:12px;
-    padding:18px 20px; text-decoration:none; color:var(--text); transition:all .2s;
-  }
-  .res-card:hover { border-color:var(--accent); transform:translateX(4px); }
-  .res-icon {
-    width:44px; height:44px; border-radius:10px;
-    display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  }
-  .res-icon svg { width:22px; height:22px; stroke:#fff; }
-  .res-info { flex:1; }
-  .res-title { font-weight:700; font-size:.92rem; margin-bottom:2px; }
-  .res-desc { font-size:.78rem; color:var(--text2); }
-  .res-arrow svg { width:16px; height:16px; color:var(--text2); }
-  .res-badge { font-size:.6rem; font-weight:600; padding:2px 8px; border-radius:8px; text-transform:uppercase; letter-spacing:.5px; margin-left:8px; }
-  .res-badge-priv { background:rgba(245,158,11,.15); color:#fbbf24; }
-  .res-badge-sda { background:rgba(59,130,246,.15); color:var(--accent2); }
-  .res-badge-bat { background:rgba(168,85,247,.15); color:#c084fc; }
-  .res-badge-xogo { background:rgba(16,185,129,.15); color:#34d399; }
-  .res-badge-marco { background:rgba(225,29,72,.15); color:#fb7185; }
-  .res-badge-tabla { background:rgba(236,72,153,.15); color:#f9a8d4; }
-  .res-badge-ficha { background:rgba(34,197,94,.15); color:#4ade80; }
-  .res-badge-logica { background:rgba(124,58,237,.15); color:#a78bfa; }
-  .res-badge-rubrica { background:rgba(148,163,184,.15); color:#cbd5e1; }
-  .res-badge-prog { background:rgba(20,184,166,.15); color:#2dd4bf; }
+/* debuxos de cada compartimento */
+.dibu{position:absolute;top:10px;right:12px;width:42px;height:42px;color:var(--ac);fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.dibu .f{fill:color-mix(in srgb,var(--ac) 22%,transparent)}
+.dibu .xira{transform-box:view-box;transform-origin:32px 32px;animation:xira 8s linear infinite}
+.dibu .bota{animation:bota 1.4s ease-in-out infinite alternate}
+.dibu .onda{stroke-dasharray:40;stroke-dashoffset:40;animation:trazo 2.6s ease-in-out infinite}
+@keyframes xira{to{transform:rotate(360deg)}}
+@keyframes bota{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+@keyframes trazo{0%,15%{stroke-dashoffset:40}60%,100%{stroke-dashoffset:0}}
+.col:hover .dibu{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--ac) 55%,transparent))}
+@media(prefers-reduced-motion:reduce){.dibu *{animation:none!important;stroke-dashoffset:0!important}}
 
-  .sidebar-hamburger {
-    display:none; background:var(--bg3); border:1px solid var(--border);
-    color:var(--text); width:36px; height:36px; border-radius:8px; cursor:pointer;
-    align-items:center; justify-content:center;
-  }
-  .sidebar-hamburger svg { width:18px; height:18px; }
+footer{text-align:center;color:var(--tx3);font-size:.8rem;padding:6px 16px 26px}
+.sen{display:none;color:var(--tx3);text-align:center;padding:30px}
 
-  @media (max-width:768px) {
-    .sidebar { position:fixed; left:-260px; top:65px; bottom:0; z-index:50; transition:left .3s; width:240px; }
-    .sidebar.open { left:0; box-shadow:4px 0 20px rgba(0,0,0,.5); }
-    .sidebar-hamburger { display:flex; }
-    .main { padding:20px 16px; }
-  }
+@media(max-width:1000px){.areas2{grid-template-columns:1fr 1fr}}
+@media(max-width:860px){.areas{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.areas,.areas2{grid-template-columns:1fr} #busca{width:100%}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <a class="back-btn" href="../index.html" title="Volver ao portal">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-  </a>
-  <button class="sidebar-hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-  </button>
-  <h1><div class="avatar">B</div> Brais — Recursos</h1>
-  <div class="header-right">
-    <button class="icon-btn" onclick="document.body.classList.toggle('light');localStorage.setItem('ef_theme',document.body.classList.contains('light')?'light':'dark');document.getElementById('m').classList.toggle('hidden');document.getElementById('s').classList.toggle('hidden')">
-      <svg id="m" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-      <svg id="s" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-    </button>
-  </div>
-</div>
+<header>
+  <a class="b" href="../index.html" title="Volver ao portal" aria-label="Volver ao portal"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></a>
+  <div class="marca"><span class="av">B</span>Brais · Recursos</div>
+  <span class="spacer"></span>
+  <button class="b" id="tema" type="button" aria-label="Cambiar tema"></button>
+</header>
 
-<div class="layout">
-  <nav class="sidebar">
-    <div class="sidebar-title">Recursos</div>
-
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Programación didáctica
-      <span class="st-badge">4</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="aprendizaxes-imprescindibles/index.html">
-        <span class="si-dot" style="background:#fbbf24"></span>
-        Imprescindibles por ciclo
-      </a>
-      <a class="sidebar-item" href="programacions-didacticas/presentacion/index.html">
-        <span class="si-dot" style="background:#2dd4bf"></span>
-        Presentación · manual Xunta
-      </a>
-      <a class="sidebar-item" href="programacions-didacticas/graduacion-vs-indicadores/index.html">
-        <span class="si-dot" style="background:#a78bfa"></span>
-        Graos, niveis e indicadores
-      </a>
-      <a class="sidebar-item" href="programacions-didacticas/avaliacion-funcional/index.html">
-        <span class="si-dot" style="background:#f472b6"></span>
-        Avaliación funcional
-      </a>
+<main>
+  <section class="hero">
+    <div class="hero-tx">
+      <h1>Espazo de Brais Prados</h1>
+      <p>Mestre de Educación Física · CEIP Condesa de Fenosa (O Barco) · materiais para a aula e para a formación</p>
     </div>
-
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Educación Física
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="pinfuvote-6ep/index.html">
-        <span class="si-dot" style="background:#06b6d4"></span>
-        Pinfuvote (SdA · 6.º)
-      </a>
+    <input id="busca" type="search" placeholder="Buscar: SdA, xogo, avaliación…  ( / )" aria-label="Buscar recursos">
+    <div class="accions">
+      <a class="bt" href="programacions-didacticas/index.html"><svg class="i" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>Programación didáctica</a>
     </div>
+  </section>
 
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Educación Infantil
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="psicomotricidade-ei/index.html">
-        <span class="si-dot" style="background:#14b8a6"></span>
-        Psicomotricidade (3-4-5)
-      </a>
-    </div>
-
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Ciencias
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="xogos-ciencias-3a/index.html">
-        <span class="si-dot" style="background:#16a34a"></span>
-        Xogos de Ciencias (3.º)
-      </a>
-    </div>
-
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Matemáticas
-      <span class="st-badge">6</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="rubricas-4ep/index.html">
-        <span class="si-dot" style="background:#94a3b8"></span>
-        Rúbricas 4.º EP
-      </a>
-      <a class="sidebar-item" href="sda-xogos-pantalla/login.html">
-        <span class="si-dot" style="background:#3b82f6"></span>
-        Xogos vs Pantalla
-      </a>
-      <a class="sidebar-item" href="medida-justa/index.html">
-        <span class="si-dot" style="background:#10b981"></span>
-        A Medida Xusta
-      </a>
-      <a class="sidebar-item" href="suma-resta/index.html">
-        <span class="si-dot" style="background:#f59e0b"></span>
-        ¿Suma ou resta?
-      </a>
-      <a class="sidebar-item" href="marco-evaluacion-mate-2ep/login.html">
-        <span class="si-dot" style="background:#e11d48"></span>
-        Marco de avaliación
-      </a>
-      <a class="sidebar-item" href="marco-evaluacion-mate-2ep/tabla.html">
-        <span class="si-dot" style="background:#ec4899"></span>
-        Táboa criterios+indicadores
-      </a>
-    </div>
-
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Audición
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="sonidos-nenos/login.html">
-        <span class="si-dot" style="background:#6366f1"></span>
-        ¿Que escoito? (sons)
-      </a>
-    </div>
-
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Lingua
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="lectoescritura-shrek/index.html">
-        <span class="si-dot" style="background:#22c55e"></span>
-        Ler con Shrek (ficha)
-      </a>
-    </div>
-
-    <button class="sidebar-toggle open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      Lóxica
-      <span class="st-badge">1</span>
-    </button>
-    <div class="sidebar-items open">
-      <a class="sidebar-item" href="murdocus/index.html">
-        <span class="si-dot" style="background:#7c3aed"></span>
-        Murdocus (misterios)
-      </a>
-    </div>
+  <nav class="novas" aria-label="Novidades">
+    <b>Novidades</b>
+    <a class="nova c-cs" href="xogos-ciencias-3a/index.html"><i></i>Xogos de Ciencias 3.º</a>
+    <a class="nova c-av" href="programacions-didacticas/graduacion-vs-indicadores/index.html"><i></i>Graos, niveis e indicadores</a>
+    <a class="nova c-av" href="aprendizaxes-imprescindibles/index.html"><i></i>Imprescindibles por ciclo</a>
   </nav>
 
-  <main class="main">
-    <h2>Recursos de <span>Brais</span></h2>
-    <div class="resource-list">
+  <!-- ÁREAS -->
+  <div class="areas">
+    <section class="col c-av">
+      <h2>Programación e avaliación</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><path class="f" d="M10 52h12V40h12V28h12V16h8v36z"/><path d="M10 52h44"/><path class="onda" d="M14 36 30 22l8 6 14-14"/></svg>
+      <p class="et">A programación didáctica</p>
+      <a class="l" href="programacions-didacticas/presentacion/index.html" title="38 diapositivas sobre o manual da Xunta · foco en avaliación · formación e oposicións"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span><span class="tx">Presentación · manual Xunta</span><small>38 diap.</small><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="programacions-didacticas/graduacion-vs-indicadores/index.html" title="Graos de complexidade, niveis de consecución N0-N3 e indicadores · base legal · 30/40/30"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 20h4v-4h4v-4h4V8h4V4"/></svg></span><span class="tx">Graos, niveis e indicadores</span><span class="tag">Guía</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="programacions-didacticas/avaliacion-funcional/index.html" title="Protocolo de avaliación funcional con 6 plantillas A4"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg></span><span class="tx">Avaliación funcional</span><span class="tag">Plantillas</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <p class="et">Ciclo e rúbricas</p>
+      <a class="l" href="aprendizaxes-imprescindibles/index.html" title="Guía de ciclo · Matemáticas 1º ciclo (piloto) · progresión 1º→2º e chan mínimo · D. 155/2022"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="tx">Aprendizaxes imprescindibles</span><span class="tag">Borrador</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="rubricas-4ep/index.html" title="Rúbricas de 5 áreas · Matemáticas, Lingua Galega, Lingua Castelá, CCNN, CCSS · 5 PDF"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 12h6M9 16h6"/></svg></span><span class="tx">Rúbricas 4.º EP</span><small>5 áreas</small><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
 
-      <a class="res-card" href="aprendizaxes-imprescindibles/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#b45309,#fbbf24)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Guía de ciclo · Aprendizaxes imprescindibles <span class="res-badge res-badge-prog">Borrador</span></div>
-          <div class="res-desc">Guía de ciclo para o profesorado · Matemáticas 1º ciclo (piloto) · 6 imprescindibles con criterios de 2º, progresión 1º→2º e chan mínimo · Base legal D. 155/2022</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
+    <section class="col c-ma">
+      <h2>Matemáticas</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><rect class="f" x="12" y="12" width="40" height="40" rx="6"/><path class="onda" d="M20 44 30 30l6 8 8-14"/><path d="M12 52h40"/></svg>
+      <p class="et">2.º Primaria</p>
+      <a class="l" href="sda-xogos-pantalla/login.html" title="SdA UD9 · medida do tempo · 29 sesións · 4 UD articuladas"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span class="tx">Xogos vs Pantalla</span><span class="tag">SdA</span><span class="tag priv">Privado</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="marco-evaluacion-mate-2ep/login.html" title="Graos de complexidade por competencia específica · adaptación INEE → D. 155/2022"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tx">Marco de avaliación</span><span class="tag priv">Privado</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="marco-evaluacion-mate-2ep/tabla.html" title="49 criterios cos seus indicadores e grao de complexidade · ordenable por bloques ou grao"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg></span><span class="tx">Táboa criterios + indicadores</span><span class="tag priv">Privado</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <p class="et">Xogos</p>
+      <div class="chips">
+        <a class="chip" href="medida-justa/index.html" title="Xogo · escolle a unidade de medida axeitada · mm, cm, m, km, g, kg, ml, l">A Medida Xusta</a>
+        <a class="chip" href="suma-resta/index.html" title="Xogo · 20 problemas para clasificar a operación sen calcular · imprimible">Suma ou resta?</a>
+      </div>
+    </section>
 
-      <a class="res-card" href="programacions-didacticas/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#0f766e,#2dd4bf)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">A programación didáctica · 3 recursos <span class="res-badge res-badge-prog">Programación</span></div>
-          <div class="res-desc">Formación e oposicións · Presentación de 38 diapositivas sobre o manual da Xunta (foco en avaliación) · Guía «Graos de complexidade, niveis de consecución e indicadores» con base legal · Protocolo de avaliación funcional con 6 plantillas A4</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
+    <section class="col c-ef">
+      <h2>Educación Física</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><ellipse cx="32" cy="54" rx="12" ry="3" class="f"/><g class="bota"><circle class="f" cx="32" cy="28" r="16"/><path d="M16 28h32M32 12c-6 6-6 26 0 32M32 12c6 6 6 26 0 32"/></g></svg>
+      <p class="et">Primaria</p>
+      <a class="l" href="pinfuvote-6ep/index.html" title="Deporte alternativo · 6 sesións · modelo FI·FA·LO·VC · I Torneo de Pinfuvote"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0z"/></svg></span><span class="tx">Pinfuvote · a unión na rede</span><span class="tag">SdA</span><small>6º</small><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <p class="et">Educación Infantil</p>
+      <a class="l" href="psicomotricidade-ei/index.html" title="Programación anual 2026-27 · «A Escola Ninja» con cintos de cores · 13 fichas do 1.º trimestre + rexistro"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0ZM20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0ZM16 17h4M4 13h4"/></svg></span><span class="tx">Psicomotricidade</span><small>3-4-5</small><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
+  </div>
 
-      <a class="res-card" href="pinfuvote-6ep/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#155e75,#06b6d4)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Pinfuvote: a unión na rede <span class="res-badge res-badge-sda">SdA</span></div>
-          <div class="res-desc">SdA · 6.º Primaria · Educación Física · Deporte alternativo · 6 sesións · Modelo FI·FA·LO·VC · Produto: I Torneo de Pinfuvote</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
+  <!-- MÁIS COMPARTIMENTOS -->
+  <div class="areas2">
+    <section class="col c-cs">
+      <h2>Ciencias</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><path class="f" d="M32 54C18 54 12 42 14 26 28 26 40 32 32 54z"/><path class="f" d="M32 54c14 0 20-14 18-30-14 2-24 12-18 30z"/><path class="onda" d="M32 54V30"/></svg>
+      <a class="l" href="xogos-ciencias-3a/index.html" title="CCNN e CCSS · 1.º trimestre · 8 xogos para pantalla e tableta · clave dicotómica, cadeas alimentarias, climograma, mapa de Valdeorras"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span><span class="tx">Xogos de Ciencias</span><span class="tag">Xogo</span><small>3º</small><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
 
-      <a class="res-card" href="psicomotricidade-ei/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#0f766e,#14b8a6)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/><path d="M16 17h4"/><path d="M4 13h4"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Psicomotricidade 3-4-5 anos <span class="res-badge res-badge-prog">Programación</span></div>
-          <div class="res-desc">Educación Infantil · Programación anual 2026-27 · Enfoque misto (Aucouturier + dirixido) · Fío condutor «A Escola Ninja» con cintos de cores · Montaxe común con variantes por idade · 13 fichas do 1.º trimestre + folla de rexistro</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
+    <section class="col c-li">
+      <h2>Lingua e audición</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><path class="f" d="M12 26h10l12-10v32L22 38H12z"/><path class="onda" d="M42 24a12 12 0 0 1 0 16"/><path class="onda" d="M48 18a20 20 0 0 1 0 28"/></svg>
+      <a class="l" href="lectoescritura-shrek/index.html" title="Completa a frase elixindo a palabra · 12 frases en maiúsculas · A4 · adaptada TEA"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span class="tx">Ler con Shrek</span><span class="tag">Ficha</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+      <a class="l" href="sonidos-nenos/login.html" title="Discriminación auditiva · 4 xogos · 10 categorías × 8 sons · trilingüe gl/es/en"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span><span class="tx">Que escoito? · sons</span><span class="tag priv">Privado</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
 
-      <a class="res-card" href="rubricas-4ep/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#475569,#94a3b8)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="8" height="4" x="8" y="3" rx="1"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Rúbricas 4.º EP <span class="res-badge res-badge-rubrica">Rúbricas</span></div>
-          <div class="res-desc">4.º Primaria · Rúbricas de avaliación de 5 áreas (Matemáticas, Lingua Galega, Lingua Castelá, Ciencias da Natureza, Ciencias Sociais) · 5 PDFs · Material de referencia para reutilizar</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
+    <section class="col c-ti">
+      <h2>Lóxica</h2>
+      <svg class="dibu" viewBox="0 0 64 64"><circle class="f" cx="28" cy="28" r="14"/><path d="m38 38 14 14"/><path class="onda" d="M22 28h12M28 22v12"/></svg>
+      <a class="l" href="murdocus/index.html" title="1.º ciclo · tipo sudoku · 9 casos graduados (3×3 · 4×4 · 5×5) · autocorrección + imprimible · gl/es"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><span class="tx">Murdocus · misterios</span><span class="tag">Xogo</span><svg class="i fr" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+    </section>
+  </div>
 
-      <a class="res-card" href="sda-xogos-pantalla/login.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Xogos vs Pantalla <span class="res-badge res-badge-sda">SdA</span> <span class="res-badge res-badge-priv">Privado</span></div>
-          <div class="res-desc">SdA UD9 · 2.º Primaria · Matemáticas · Medida do tempo · 29 sesións · 4 UDs articuladas</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
+  <p class="sen" id="sen">Non hai ningún recurso con esa palabra.</p>
+</main>
 
-      <a class="res-card" href="medida-justa/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#065f46,#10b981)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">A Medida Xusta <span class="res-badge res-badge-xogo">Xogo</span></div>
-          <div class="res-desc">Xogo interactivo · Escolle a unidade de medida axeitada (mm, cm, m, km · g, kg · ml, l) para distintos obxectos</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card" href="suma-resta/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#92400e,#f59e0b)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">¿Suma ou resta? <span class="res-badge res-badge-xogo">Xogo</span></div>
-          <div class="res-desc">2.º Primaria · 20 problemas para clasificar a operación (sumar/restar) sen calcular · Contextos: Minecraft, arte, ximnasia rítmica, arquitectura, cromos, trens · Inclúe versión imprimible</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card" href="marco-evaluacion-mate-2ep/login.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#7f1d1d,#e11d48)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Marco de avaliación · Matemáticas <span class="res-badge res-badge-marco">Marco</span> <span class="res-badge res-badge-priv">Privado</span></div>
-          <div class="res-desc">2.º Primaria · Graos de complexidade (baixa/media/alta) por competencia específica · Adaptación INEE → Decreto 155/2022</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card" href="marco-evaluacion-mate-2ep/tabla.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#831843,#ec4899)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 12h18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 3v18"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Táboa criterios + indicadores <span class="res-badge res-badge-tabla">Táboa</span> <span class="res-badge res-badge-priv">Privado</span></div>
-          <div class="res-desc">49 criterios de avaliación cos seus indicadores e grao de complexidade · Ordenable por bloques ou por grao</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card" href="sonidos-nenos/login.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#3730a3,#6366f1)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">¿Que escoito? · Sons <span class="res-badge res-badge-xogo">Xogo</span> <span class="res-badge res-badge-priv">Privado</span></div>
-          <div class="res-desc">Discriminación auditiva · Infantil/Primaria · 4 xogos (Que escoito?, Memoria sonora, Intruso auditivo, Bingo sonoro) · 10 categorías × 8 sons · Trilingüe gl/es/en</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card" href="lectoescritura-shrek/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#166534,#22c55e)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Ler con Shrek <span class="res-badge res-badge-ficha">Ficha</span></div>
-          <div class="res-desc">Lectoescritura · Completa a frase elixindo a palabra correcta · 12 frases en maiúsculas con apoio visual · Imprimible A4 · Adaptada para alumnado TEA</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card" href="murdocus/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#5b21b6,#a855f7)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Murdocus · Misterios de lóxica <span class="res-badge res-badge-logica">Lóxica</span> <span class="res-badge res-badge-xogo">Xogo</span></div>
-          <div class="res-desc">1.º ciclo · Razoamento lóxico tipo sudoku · 9 casos graduados (3×3 · 4×4 · 5×5) · Animais, cole/EF, contos, Minecraft, arte · Interactivo con autocorrección + versión imprimible · Bilingüe gl/es</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-      <a class="res-card" href="xogos-ciencias-3a/index.html">
-        <div class="res-icon" style="background:linear-gradient(135deg,#15803d,#4ade80)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
-        </div>
-        <div class="res-info">
-          <div class="res-title">Xogos de Ciencias · 3.º <span class="res-badge res-badge-xogo">Xogo</span></div>
-          <div class="res-desc">Ciencias da Natureza e Sociais · 1.º trimestre · 8 xogos para pantalla dixital e tableta (clasificar seres vivos, clave dicotómica, cadeas alimentarias, climograma, mapa de Valdeorras…) · Complemento da Caixa dos Retos</div>
-        </div>
-        <div class="res-arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-      </a>
-
-    </div>
-  </main>
-</div>
+<footer>Brais Prados González · CEIP Condesa de Fenosa (O Barco de Valdeorras) · Espazo educativo de Brais e Diego</footer>
 
 <script>
-if(localStorage.getItem('ef_theme')==='light'){document.body.classList.add('light');document.getElementById('m').classList.add('hidden');document.getElementById('s').classList.remove('hidden')}
+// Tema: escuro por defecto e lembrado entre páxinas do espazo (ef_theme). Lúa en escuro, sol en claro.
+(function(){
+  var b=document.getElementById('tema');
+  var lua='<svg class="i" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+  var sol='<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+  function pon(t){ document.documentElement.setAttribute('data-theme',t); b.innerHTML = t==='dark'?lua:sol;
+    try{ localStorage.setItem('ef_theme', t); }catch(e){} }
+  var t='dark'; try{ if(localStorage.getItem('ef_theme')==='light') t='light'; }catch(e){}
+  pon(t); b.onclick=function(){ pon(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); };
+})();
+
+// Contador de recursos en cada compartimento
+document.querySelectorAll('.col').forEach(function(col){
+  var n=col.querySelectorAll('a.l, a.chip').length, h=col.querySelector('h2');
+  if(h && n) h.insertAdjacentHTML('beforeend','<span class="cnt">'+n+'</span>');
+});
+// Atallos: «/» vai ao buscador e Esc baléirao
+document.addEventListener('keydown',function(e){
+  var b=document.getElementById('busca'), enCampo=/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName);
+  if(e.key==='/' && !enCampo){ e.preventDefault(); b.focus(); }
+  else if(e.key==='Escape' && document.activeElement===b){ b.value=''; b.dispatchEvent(new Event('input')); b.blur(); }
+});
+
+// Buscador: deixa só as ligazóns que levan a palabra e agocha os compartimentos baleiros
+(function(){
+  var caixa=document.getElementById('busca'), sen=document.getElementById('sen');
+  function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
+  caixa.addEventListener('input', function(){
+    try{
+      var q=norm(caixa.value.trim()), algun=false;
+      document.querySelectorAll('.col').forEach(function(col){
+        var visibles=0, area=norm(col.querySelector('h2').textContent);
+        col.querySelectorAll('a.l, a.chip').forEach(function(a){
+          var ok=!q || area.indexOf(q)>-1 || norm(a.textContent+' '+(a.title||'')).indexOf(q)>-1;
+          a.classList.toggle('oculto', !ok); if(ok) visibles++;
+        });
+        col.querySelectorAll('.et, .chips').forEach(function(el){ el.classList.toggle('oculto', !!q); });
+        col.classList.toggle('oculto', visibles===0); if(visibles) algun=true;
+      });
+      sen.style.display = algun ? 'none' : 'block';
+    }catch(e){ console.error('Busca:', e); }
+  });
+})();
 </script>
 </body>
 </html>
