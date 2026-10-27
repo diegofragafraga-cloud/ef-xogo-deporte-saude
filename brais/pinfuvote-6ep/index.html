@@ -118,6 +118,11 @@
   .panel p { color: var(--text-dim); font-size: 14px; margin-bottom: 10px; }
   .panel p:last-child { margin-bottom: 0; }
   .panel strong { color: var(--text); }
+  /* Ligazón á ficha M2 (tarefa competencial) */
+  .ficha-m2 { display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; border-left: 4px solid var(--accent); }
+  .ficha-m2:hover { background: var(--accent-bg); }
+  .ficha-m2 svg { width: 26px; height: 26px; flex: none; color: var(--accent); }
+  .ficha-m2 .seta { width: 20px; height: 20px; margin-left: auto; }
 
   /* ===== Reto / narrativa ===== */
   .reto {
@@ -620,6 +625,11 @@
       <h3 class="block-title">Competencias clave (LOMLOE) máis presentes</h3>
       <p><strong>CPSAA</strong> (persoal, social e de aprender a aprender) · <strong>CC</strong> (cidadá) · <strong>CE</strong> (emprendedora, na organización do torneo) · <strong>STEM</strong> (cadro de competición, puntuacións) · <strong>CCL</strong> (acordar regras, arbitrar e comunicar).</p>
     </div>
+    <a class="panel ficha-m2" style="margin-top:14px" href="tarefa-competencial-m2.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+      <span><strong>Ficha da tarefa competencial (M2)</strong><br><span style="color:var(--text-dim);font-size:14px">Criterios literais de 6.º (D. 155/2022), niveis de pensamento de Webb, descritores operativos e revisión da SdA.</span></span>
+      <svg class="seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
   </section>
 
   <!-- ============ MODELO FI/FA/LO/VC ============ -->
