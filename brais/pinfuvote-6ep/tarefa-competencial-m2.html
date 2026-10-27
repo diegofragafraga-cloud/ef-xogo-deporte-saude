@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="gl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pinfuvote · Tarefa competencial M2</title>
+<style>
+  /* Paleta: escuro por defecto, claro con data-theme="light" */
+  :root{
+    --bg:#0f1115; --card:#171a21; --card2:#1d212a; --text:#e6e8ee; --muted:#9aa3b2; --line:#2a2f3a;
+    --c-desc:#60a5fa; --c-incl:#a78bfa; --c-curr:#34d399; --c-cont:#2dd4bf; --c-trans:#fb923c; --c-act:#f472b6; --c-rev:#facc15;
+    --ok:#22c55e; --warn:#eab308; --ko:#ef4444; --ph:#facc15;
+  }
+  [data-theme="light"]{
+    --bg:#f6f7f9; --card:#ffffff; --card2:#f1f3f6; --text:#1b1f27; --muted:#5b6474; --line:#dde1e7;
+    --c-desc:#2563eb; --c-incl:#7c3aed; --c-curr:#059669; --c-cont:#0d9488; --c-trans:#ea580c; --c-act:#db2777; --c-rev:#a16207;
+    --ok:#15803d; --warn:#a16207; --ko:#b91c1c; --ph:#a16207;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1040px;margin:0 auto;padding:28px 16px 60px}
+  .ico{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;flex:none}
+  .tools{position:fixed;top:14px;right:14px;display:flex;gap:8px;z-index:5}
+  .tools button{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;display:flex}
+  header{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px}
+  .kicker{color:var(--muted);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+  h1{font-size:28px;margin:6px 0 4px}
+  h1 small{display:block;font-size:16px;color:var(--muted);font-weight:500;margin-top:4px}
+  .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px}
+  .meta div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .meta b{display:block;font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+  section{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:12px;padding:18px 20px;margin:18px 0}
+  section h2{margin:0 0 4px;font-size:19px;color:var(--acc)}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+  .eval{background:var(--card2);border:1px dashed var(--line);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--muted);margin:10px 0}
+  .eval b{color:var(--acc)}
+  h3{font-size:15.5px;margin:16px 0 6px}
+  ul,ol{margin:6px 0;padding-left:22px}
+  li{margin:2px 0}
+  .ph{color:var(--ph);border-bottom:1px dashed var(--ph)}
+  .tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;border:1px solid var(--line);background:var(--card2);margin:1px 2px 1px 0;white-space:nowrap}
+  .tbl{width:100%;overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:8px 9px;vertical-align:top;text-align:left}
+  th{background:var(--card2);font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  td.c{text-align:center}
+  .webb{display:inline-flex;gap:3px}
+  .webb span{width:24px;height:24px;border-radius:6px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+  .webb span.on{background:var(--acc);border-color:var(--acc);color:#0f1115;font-weight:700}
+  .cod{font-weight:700;white-space:nowrap}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin:10px 0}
+  .legend div{background:var(--card2);border-radius:8px;padding:8px 10px;font-size:13px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .box{background:var(--card2);border-radius:10px;padding:12px 14px}
+  .box h3{margin-top:0}
+  .st{display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:13px;white-space:nowrap}
+  .st.ok{color:var(--ok)} .st.warn{color:var(--warn)} .st.ko{color:var(--ko)}
+  .desc-list dt{font-weight:700;margin-top:8px}
+  .desc-list dd{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+  footer{color:var(--muted);font-size:12.5px;margin-top:26px;border-top:1px solid var(--line);padding-top:12px}
+  @media (max-width:720px){.grid2{grid-template-columns:1fr} h1{font-size:23px} .kicker{padding-right:96px}}
+  @media print{
+    :root,[data-theme="dark"]{--bg:#fff;--card:#fff;--card2:#f3f4f6;--text:#111;--muted:#444;--line:#bbb;
+      --c-desc:#1d4ed8;--c-incl:#6d28d9;--c-curr:#047857;--c-cont:#0f766e;--c-trans:#c2410c;--c-act:#be185d;--c-rev:#854d0e;
+      --ok:#15803d;--warn:#854d0e;--ko:#b91c1c;--ph:#854d0e}
+    .tools{display:none} .wrap{padding:0;max-width:none} body{font-size:11.5pt}
+    /* Un contedor con overflow non se parte entre páxinas: deixalo visible ao imprimir */
+    .tbl{overflow:visible} table{min-width:0}
+    .nova-paxina{break-before:page}
+    section{break-inside:auto;page-break-inside:auto} tr,.box,.legend div{break-inside:avoid}
+    .webb span.on{color:#fff}
+    .webb span{width:20px;height:20px;font-size:10.5px}
+    @page{size:A4;margin:14mm}
+  }
+</style>
+</head>
+<body>
+<div class="tools">
+  <button id="tema" title="Cambiar tema" aria-label="Cambiar tema"></button>
+  <button onclick="window.print()" title="Imprimir" aria-label="Imprimir"><svg class="ico" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg></button>
+</div>
+
+<div class="wrap">
+<header>
+  <div class="kicker">Traballo e avaliación por competencias · Módulo 2 · Tarefa M2.1</div>
+  <h1>Deseño dunha tarefa competencial<small>Plantilla do curso G2501125 (Platega) aplicada á SdA «Pinfuvote: a unión na rede»</small></h1>
+  <div class="meta">
+    <div><b>Nome e apelidos</b>Brais Prados González</div>
+    <div><b>Título da tarefa</b>Pinfuvote: a unión na rede · I Torneo de Pinfuvote de 6.º</div>
+    <div><b>Curso</b>6.º de Educación Primaria</div>
+    <div><b>Área(s)</b>Educación Física <span class="ph">(+ proposta interdisciplinar: Matemáticas, Lingua galega)</span></div>
+  </div>
+</header>
+
+<!-- 1. DESCRICIÓN XERAL -->
+<section style="--acc:var(--c-desc)">
+  <h2>1. Descrición xeral</h2>
+  <p class="sub">Sinopse da tarefa, a súa estrutura e os obxectivos didácticos.</p>
+  <p>Chega ao cole un deporte descoñecido, o <b>Pinfuvote</b> (Juan Lorenzo Roca, 1992), creado para que ninguén quede fóra do xogo. O reto do alumnado de 6.º é dominalo entre todos e <b>organizar o I Torneo de Pinfuvote</b>, no que serán xogadores e xogadoras, árbitros, anotadores e organizadores. A SdA ten 6 sesións (≈55 min) co modelo de sesión do centro FI·FA·LO·VC: descubrimento do deporte → técnica e regras → táctica e variante propia → organización do torneo → torneo arbitrado polo alumnado.</p>
+  <h3>Obxectivos didácticos</h3>
+  <ol>
+    <li>Coñecer a orixe inclusiva do Pinfuvote e as súas regras esenciais, e valorar o seu sentido como deporte alternativo.</li>
+    <li>Integrar de forma autónoma o quecemento, a dosificación do esforzo e a volta á calma na práctica.</li>
+    <li>Tomar decisións tácticas en situacións 3×3 de colaboración-oposición: construír o ataque en 3 toques, ocupar zonas e enviar o balón a onde sexa difícil devolvelo.</li>
+    <li>Respectar as regras, o árbitro e as persoas rivais, actuando desde o xogo limpo.</li>
+    <li>Planificar e levar a cabo en equipo un torneo, asumindo roles e valorando o proceso e o resultado.</li>
+  </ol>
+  <div class="eval"><b>Que avaliaremos aquí?</b> A transmisión dos obxectivos didácticos.</div>
+</section>
+
+<!-- 2. INCLUSIÓN -->
+<section style="--acc:var(--c-incl)">
+  <h2>2. Atención á inclusión educativa</h2>
+  <p class="sub">Perfil de aula e principios DUA.</p>
+  <h3>Perfil de aula</h3>
+  <p class="ph">[A completar co grupo real de 6.º: número de alumnos/as, NEAE, diferenzas de competencia motriz, intereses, resultados da avaliación inicial.]</p>
+  <p>O propio deporte é unha ferramenta inclusiva: o <b>bote no chan permitido</b> e o <b>golpeo con calquera parte do corpo</b> igualan niveis, e a regra de «non repetir persoa» obriga a contar con todo o equipo.</p>
+  <div class="grid2">
+    <div class="box">
+      <h3>Pautas DUA</h3>
+      <ul>
+        <li><b>Representación:</b> demostración, visual thinking das regras, concurso de repaso.</li>
+        <li><b>Acción e expresión:</b> golpeo libre, bote, campo e rede axustables, roles diversos (xogar, arbitrar, anotar, organizar).</li>
+        <li><b>Implicación:</b> reto cooperativo con sentido, premio ao xogo limpo, variante deseñada polo grupo.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Tarefa multinivel (mesmo criterio, mesmo verbo)</h3>
+      <p class="sub" style="margin:0 0 6px">O que cambia é a axuda, as regras ou o contexto, non o que pide o criterio. Exemplo con <b>CA3.2</b> (aplicar decisións en colaboración-oposición):</p>
+      <ul>
+        <li><b>Reforzo · con apoyo:</b> 3×3 con bote libre, zonas do campo marcadas con conos e consigna visual («busca o oco»).</li>
+        <li><b>Base · autónomo:</b> partido 3×3 coas regras adaptadas de 6.º, sen axudas.</li>
+        <li><b>Ampliación · transferencia:</b> a mesma decisión nunha situación nova: campo máis grande, 1 bote como máximo ou 2×3 en inferioridade.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. CONCRECIÓN CURRICULAR -->
+<section class="nova-paxina" style="--acc:var(--c-curr)">
+  <h2>3. Concreción curricular</h2>
+  <p class="sub">Máximo 5 criterios de avaliación (Decreto 155/2022, EF 6.º curso, texto literal). Para cada un: nivel de profundidade de pensamento (Webb), obxectivo da área e descritores operativos do perfil de saída.</p>
+  <div class="legend">
+    <div><b>N1</b> · Recordar e reproducir</div>
+    <div><b>N2</b> · Aplicar habilidades e conceptos</div>
+    <div><b>N3</b> · Pensamento estratéxico</div>
+    <div><b>N4</b> · Pensamento estendido (proxecto no tempo)</div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th style="width:44px">Área</th><th style="width:62px">Código</th><th>Criterio de avaliación (literal)</th><th style="width:118px">Webb</th><th style="width:54px">Obx.</th><th style="width:118px">Descritores operativos</th></tr></thead>
+    <tbody>
+      <tr><td>EF</td><td class="cod">CA5.5</td><td>Participar activamente en xogos motores e noutras manifestacións artístico-expresivas con arraigamento na cultura propia, tradicional ou actual, así como noutros procedentes de diversas culturas, recoñecendo e transmitindo o seu valor cultural e o seu potencial como espazo xerador de interaccións construtivas entre persoas con orixes diferentes e entendendo as vantaxes da súa conservación.</td>
+        <td><span class="webb"><span class="on">1</span><span>2</span><span>3</span><span>4</span></span></td><td class="c">OBX4</td><td><span class="tag">CP3</span><span class="tag">CC3</span><span class="tag">CCEC1</span></td></tr>
+      <tr><td>EF</td><td class="cod">CA2.2</td><td>Integrar os procesos de activación corporal, dosificación do esforzo, relaxación e hixiene na práctica de actividades motrices, interiorizando as rutinas propias dunha práctica motriz saudable e responsable.</td>
+        <td><span class="webb"><span>1</span><span class="on">2</span><span>3</span><span>4</span></span></td><td class="c">OBX1</td><td><span class="tag">STEM5</span><span class="tag">CPSAA2</span></td></tr>
+      <tr><td>EF</td><td class="cod">CA4.4</td><td>Respectar as normas consensuadas, así como as regras dos xogos, e actuar desde os parámetros da deportividade e do xogo limpo, recoñecendo as actuacións dos compañeiros e dos rivais.</td>
+        <td><span class="webb"><span>1</span><span class="on">2</span><span>3</span><span>4</span></span></td><td class="c">OBX3</td><td><span class="tag">CPSAA1</span><span class="tag">CPSAA3</span><span class="tag">CC2</span></td></tr>
+      <tr><td>EF</td><td class="cod">CA3.2</td><td>Aplicar principios básicos de decisións en situacións lúdicas, xogos modificados e actividades deportivas a partir da anticipación, axustándoos ás demandas derivadas dos obxectivos motores e á lóxica interna de situacións individuais, de cooperación, de oposición e de colaboración-oposición, en contextos reais ou en simulados de actuación.</td>
+        <td><span class="webb"><span>1</span><span>2</span><span class="on">3</span><span>4</span></span></td><td class="c">OBX2</td><td><span class="tag">STEM1</span><span class="tag">CPSAA4</span></td></tr>
+      <tr><td>EF</td><td class="cod">CA2.4</td><td>Desenvolver proxectos motores de carácter individual, cooperativo ou colaborativo, definindo metas, secuenciando accións, introducindo se é preciso cambios durante o proceso, xerando producións motrices de calidade e valorando o grao de axuste ao proceso seguido e ao resultado obtido.</td>
+        <td><span class="webb"><span>1</span><span>2</span><span>3</span><span class="on">4</span></span></td><td class="c">OBX2</td><td><span class="tag">STEM1</span><span class="tag">CPSAA5</span><span class="tag">CD3*</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="sub" style="margin-top:8px">* CD3 só se o cadro de competición e a clasificación se fan cunha ferramenta dixital (folla de cálculo, Edixgal). Os descritores escollidos son só os que o decreto vincula a cada obxectivo da área (táboa OBX–competencias clave, DOG páx. 49731).</p>
+  <dl class="desc-list">
+    <dt>Correspondencia coa SdA orixinal</dt>
+    <dd>CE1 Vida activa → CA2.2 · CE2 Resolución de problemas → CA3.2 · CE3 Proxecto cooperativo → CA2.4 · CE4 Cultura motriz → CA5.5 · CE5 Xogo limpo → CA4.4.</dd>
+  </dl>
+  <div class="eval"><b>Que avaliaremos aquí?</b> Os niveis de profundidade de pensamento traballados (aquí N1–N4: <b>cuberto</b>) · A interdisciplinaridade da tarefa.</div>
+</section>
+
+<!-- 4. CONTIDOS -->
+<section style="--acc:var(--c-cont)">
+  <h2>4. Contidos</h2>
+  <p class="sub">Contidos de EF 6.º (Decreto 155/2022, literal) e proposta para outras áreas.</p>
+  <div class="grid2">
+    <div class="box">
+      <h3>Educación Física</h3>
+      <ul>
+        <li><b>B2</b> · Planificación e autorregulación de proxectos motores: seguimento e valoración durante o proceso e o resultado.</li>
+        <li><b>B2</b> · Prevención de accidentes e lesións nas prácticas motrices: quecemento xeral, dosificación do esforzo e volta á calma.</li>
+        <li><b>B3</b> · Selección de zonas de envío do móbil desde onde sexa difícil devolvelo, en situacións motrices de persecución e de interacción cun móbil.</li>
+        <li><b>B3</b> · Desmarque e localización nun lugar desde o que constitúa un apoio para os demais en situacións motrices de colaboración-oposición.</li>
+        <li><b>B3</b> · Estruturación espacial (…) percepción e interceptación de traxectorias.</li>
+        <li><b>B4</b> · Concepto de fairplay ou xogo limpo.</li>
+        <li><b>B4</b> · Habilidades sociais: estratexias de traballo en equipo para a resolución construtiva de conflitos nas diversas situacións motrices.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Proposta interdisciplinar <span class="ph">(a concretar co titor/a)</span></h3>
+      <ul>
+        <li><b>Matemáticas:</b> deseño do cadro de competición (liga por grupos: cantos partidos?), táboa de clasificación, medias e porcentaxes de puntos.</li>
+        <li><b>Lingua galega:</b> regulamento do torneo (texto instrutivo) e crónica ou locución da final.</li>
+        <li><b>Educación Plástica:</b> cartel do torneo.</li>
+      </ul>
+      <p class="sub" style="margin-top:8px">Ollo: a plantilla permite <b>5 criterios en total</b>. Se entra un criterio de Matemáticas ou de Lingua, hai que retirar un de EF (o candidato é CA5.5).</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. TRANSPOSICIÓN DIDÁCTICA -->
+<section style="--acc:var(--c-trans)">
+  <h2>5. Transposición didáctica</h2>
+  <div class="grid2">
+    <div class="box">
+      <h3>Situación de aprendizaxe</h3>
+      <p>Un deporte novo que ninguén domina e un encargo real: <b>organizar o primeiro torneo do cole</b>. O reto conecta cunha práctica social auténtica (as competicións deportivas que o alumnado ve e vive fóra da escola) e cun problema que coñecen ben: hai xente que case non xoga nos deportes de equipo. O Pinfuvote naceu precisamente para iso, e o torneo ten que demostralo.</p>
+      <div class="eval"><b>Que avaliaremos aquí?</b> A contextualización · A relación con feitos reais ou problemas cotiáns · A significatividade e transferencia.</div>
+    </div>
+    <div class="box">
+      <h3>Meta pedagóxica (produto final)</h3>
+      <p><b>I Torneo de Pinfuvote de 6.º</b>, arbitrado, anotado e organizado polo alumnado, cun regulamento propio que inclúe unha variante inclusiva acordada polo grupo e un <b>premio ao xogo limpo</b>.</p>
+      <p>Produtos intermedios: cadro de competición, 3 normas de xogo limpo por equipo, follas de anotación. <span class="ph">Proposta: regulamento escrito/cartel e crónica oral para ampliar os formatos.</span></p>
+      <div class="eval"><b>Que avaliaremos aquí?</b> As modalidades de resposta contempladas.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. RESUMO DE ACTIVIDADES -->
+<section style="--acc:var(--c-act)">
+  <h2>6. Resumo de actividades</h2>
+  <p class="sub">Como se desenvolven as sesións, explicado como se lle contaría ás familias.</p>
+  <div class="tbl"><table>
+    <thead><tr><th style="width:15%"></th><th>Introdutorias</th><th>Aplicación</th><th>Síntese ou avaliación</th></tr></thead>
+    <tbody>
+      <tr><th>Descrición</th>
+        <td>Descubrimos o Pinfuvote: de onde vén, por que é inclusivo e cal é o reto do torneo. Exploración libre do golpeo e diana inicial de autoavaliación.</td>
+        <td>Control e pase co bote como recurso; regras e mini-partidos 3×3 con árbitro-aprendiz; táctica en 3 toques e acordo dunha variante propia.</td>
+        <td>Comité organizador (cadro, roles, normas de xogo limpo) e torneo arbitrado e anotado polo alumnado. Coavaliación e diana final.</td></tr>
+      <tr><th>Sesións</th><td>1 (S1)</td><td>3 (S2–S4)</td><td>2 (S5–S6)</td></tr>
+      <tr><th>Estratexia didáctica</th>
+        <td>Descubrimento guiado e exploración libre.</td>
+        <td>Xogos modificados e resolución de problemas tácticos (ensino comprensivo do deporte); traballo cooperativo por parellas e tríos.</td>
+        <td>Aprendizaxe baseada en proxectos con roles; auto e coavaliación.</td></tr>
+      <tr><th>Recursos ou ferramentas</th>
+        <td>Balón de gomaespuma, visual thinking das regras, diana de autoavaliación.</td>
+        <td>Circuíto de estacións, corda/rede mini, conos, apoio visual de regras, táboa de regras adaptadas.</td>
+        <td>Cadro de competición, follas de anotación, concurso de regras (Kahoot), rúbricas e escala de xogo limpo.</td></tr>
+      <tr><th>Contexto de aprendizaxe</th>
+        <td>Pavillón; individual e pequenos grupos.</td>
+        <td>Parellas e equipos 3×3 con rotación.</td>
+        <td>Equipos fixos con roles. <span class="ph">Proposta: público (outro curso ou familias).</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="eval"><b>Que avaliaremos aquí?</b> A complexidade e socialización da tarefa · Se fomenta o pensamento autónomo · Se se proporciona diversidade de formatos.</div>
+</section>
+
+<!-- 7. REVISIÓN -->
+<section style="--acc:var(--c-rev)">
+  <h2>7. Revisión fronte aos indicadores do curso</h2>
+  <p class="sub">Cada recadro «Que avaliaremos aquí?» da plantilla, aplicado á SdA tal e como está publicada.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Indicador</th><th>Estado</th><th>Observación / mellora</th></tr></thead>
+    <tbody>
+      <tr><td>Niveis de profundidade de pensamento</td><td><span class="st ok"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Cumpre</span></td><td>Os 5 criterios cobren N1–N4. Ollo: o nivel de Webb <b>clasifica o criterio</b>; non serve para graduar a tarefa.</td></tr>
+      <tr><td>Graduación da tarefa (DUA)</td><td><span class="st warn"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Mellorable</span></td><td>A SdA gradúa con «Identifica · Emprega · Crea», o que cambia o verbo do criterio segundo o nivel. Substituír por Reforzo · Base · Ampliación do mesmo criterio (apartado 2).</td></tr>
+      <tr><td>Contextualización e feitos reais</td><td><span class="st ok"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Cumpre</span></td><td>Torneo real, organizado e arbitrado polo alumnado.</td></tr>
+      <tr><td>Pensamento autónomo</td><td><span class="st ok"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Cumpre</span></td><td>Variante propia consensuada (S4) e comité organizador (S5).</td></tr>
+      <tr><td>Transmisión dos obxectivos</td><td><span class="st warn"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Mellorable</span></td><td>O reto está moi claro, pero a SdA non enumera obxectivos didácticos. Engadidos no apartado 1.</td></tr>
+      <tr><td>Concreción curricular</td><td><span class="st warn"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Mellorable</span></td><td>A SdA usa criterios <b>parafraseados e sen código</b>. Substituír polos CA literais de 6.º do apartado 3 (é o que pide PROENS).</td></tr>
+      <tr><td>Complexidade e socialización</td><td><span class="st warn"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Mellorable</span></td><td>Os roles dan complexidade. Abrir o torneo a público (outro curso, familias) dálle un destinatario real ao produto.</td></tr>
+      <tr><td>Significatividade e transferencia</td><td><span class="st warn"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Mellorable</span></td><td>Falta a saída fóra da sesión: p. ex., deixar o material e o regulamento para unha liga de recreo.</td></tr>
+      <tr><td>Diversidade de formatos / modalidades de resposta</td><td><span class="st warn"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Mellorable</span></td><td>Case todo é motor. Engadir un produto escrito ou oral (regulamento, cartel, crónica).</td></tr>
+      <tr><td>Interdisciplinaridade</td><td><span class="st ko"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Non cumpre</span></td><td>Só EF. Ver proposta con Matemáticas e Lingua no apartado 4.</td></tr>
+      <tr><td>Perfil de aula</td><td><span class="st ko"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Falta</span></td><td>A SdA deseñouse para o CEIP Coirón-Dena (25/26). Completar co grupo real.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>Fontes: plantilla «M2.1 Deseño dunha tarefa competencial» (curso Platega G2501125) · SdA Pinfuvote (brais/pinfuvote-6ep/index.html) · Decreto 155/2022, EF 6.º curso e táboa OBX–competencias clave (DOG 183, 26/09/2022). Niveis de pensamento segundo a taxonomía de Webb empregada no curso.</footer>
+</div>
+
+<script>
+  // Alternancia de tema: lúa en escuro → sol en claro
+  (function(){
+    const raiz = document.documentElement, btn = document.getElementById('tema');
+    const LUA = '<svg class="ico" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+    const SOL = '<svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
+    function pintar(){ btn.innerHTML = raiz.dataset.theme === 'dark' ? LUA : SOL; }
+    try { const t = localStorage.getItem('tema-m2'); if (t) raiz.dataset.theme = t; } catch (e) { /* sen almacenamento: queda o tema por defecto */ }
+    pintar();
+    btn.addEventListener('click', function(){
+      raiz.dataset.theme = raiz.dataset.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('tema-m2', raiz.dataset.theme); } catch (e) { /* ignorar */ }
+      pintar();
+    });
+  })();
+</script>
+</body>
+</html>
