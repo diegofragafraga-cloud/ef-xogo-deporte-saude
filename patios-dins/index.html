@@ -2,716 +2,569 @@
 <html lang="gl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patios DINS - CEIP Coiron Dena</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Patios DINS · CEIP de Coirón-Dena</title>
+<meta name="description" content="Patios Dinámicos, Inclusivos e Sostibles no CEIP de Coirón-Dena, curso 2026-27.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
+  /* ===== Tema Creative Voltage (escuro por defecto) ===== */
   :root {
-    --bg: #0b0d13; --bg2: #13161f; --bg3: #1c2030;
-    --text: #e8eaf0; --text2: #8b92a8; --accent: #f59e0b;
-    --accent2: #fbbf24; --border: #252a3a; --radius: 14px;
-    --green: #4ade80; --red: #f87171;
+    --bg: #0f1230;
+    --bg2: #171b42;
+    --ink: #f4f6ff;
+    --muted: #a7aed6;
+    --line: rgba(255,255,255,.12);
+    --dot: rgba(255,255,255,.07);
+    --blue: #2f6bff; --yellow: #d4ff00; --pink: #ff3d8b; --orange: #ff8a1f; --teal: #00d6a8; --violet: #9b6bff; --red: #ff5148;
+    --ac: var(--yellow);
+    --display: 'Syne', 'Arial Black', sans-serif;
+    --body: 'Space Grotesk', system-ui, sans-serif;
+    --mono: 'Space Mono', ui-monospace, monospace;
+    --title-size: clamp(2.2rem, 8vw, 7rem);
+    --h2-size: clamp(1.6rem, 4.6vw, 3.6rem);
+    --h3-size: clamp(1rem, 2vw, 1.5rem);
+    --body-size: clamp(.85rem, 1.45vw, 1.2rem);
+    --small-size: clamp(.7rem, 1vw, .9rem);
+    --slide-padding: clamp(1rem, 4.5vw, 4.5rem);
+    --gap: clamp(.5rem, 1.6vw, 1.4rem);
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .light {
-    --bg: #f0f2f7; --bg2: #ffffff; --bg3: #e8eaf0;
-    --text: #13161f; --text2: #6b7280; --border: #d1d5db;
+  body.light {
+    --bg: #e4e8f0; --bg2: #ffffff; --ink: #11143a; --muted: #4a5078; --line: rgba(17,20,58,.14); --dot: rgba(17,20,58,.07);
+    --yellow: #b8de00;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg); color: var(--text); min-height: 100vh;
-  }
-  .header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 24px; background: var(--bg2);
-    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
-  }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .back-btn {
-    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
-    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    text-decoration: none; transition: all .2s; flex-shrink: 0;
-  }
-  .back-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .back-btn svg { width: 18px; height: 18px; }
-  .header h1 { font-size: 1.2rem; font-weight: 700; }
-  .header h1 span { color: var(--accent2); }
-  .icon-btn {
-    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
-    width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; transition: all .2s;
-  }
-  .icon-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .icon-btn svg { width: 18px; height: 18px; }
-  .hidden { display: none !important; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-snap-type: y mandatory; scroll-behavior: smooth; height: 100%; }
+  body { height: 100%; overflow-x: hidden; background: var(--bg); color: var(--ink); font-family: var(--body); }
+  svg.i { width: 1em; height: 1em; flex-shrink: 0; }
 
-  .tabs {
-    display: flex; background: var(--bg2); border-bottom: 1px solid var(--border);
-    padding: 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  /* ===== Viewport fitting ===== */
+  .slide {
+    width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; scroll-snap-align: start;
+    display: flex; flex-direction: column; position: relative;
+    background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px); background-size: 22px 22px;
   }
-  .tab {
-    padding: 12px 18px; cursor: pointer; font-weight: 600; font-size: .82rem;
-    color: var(--text2); border-bottom: 3px solid transparent;
-    transition: all .2s; white-space: nowrap;
-  }
-  .tab:hover { color: var(--text); }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .slide-content { flex: 1; display: flex; flex-direction: column; justify-content: center; max-height: 100%; overflow: hidden; padding: var(--slide-padding); padding-right: calc(var(--slide-padding) + 28px); gap: var(--gap); max-width: 1400px; width: 100%; margin: 0 auto; }
 
-  /* Layout de colexios (sidebar vertical + contido) */
-  .col-layout { display: flex; min-height: calc(100vh - 65px); }
-  .col-sidebar {
-    width: 200px; background: var(--bg2); border-right: 1px solid var(--border);
-    padding: 18px 12px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;
-  }
-  .col-sidebar-title {
-    font-size: .65rem; font-weight: 700; color: var(--text2);
-    text-transform: uppercase; letter-spacing: 2px; padding: 4px 8px; margin-bottom: 4px;
-  }
-  .col-item {
-    display: flex; flex-direction: column; align-items: flex-start;
-    gap: 4px; padding: 14px 14px; border-radius: 12px;
-    background: var(--bg3); border: 1.5px solid var(--border); color: var(--text);
-    text-align: left; cursor: pointer; transition: all .2s; font-family: inherit;
-    position: relative; overflow: hidden;
-  }
-  .col-item::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 4px; background: var(--accent); transform: scaleY(0); transition: transform .2s; transform-origin: center;
-  }
-  .col-item:hover { border-color: var(--accent); background: var(--bg3); }
-  .col-item.active { border-color: var(--accent); background: rgba(245,158,11,.08); }
-  .col-item.active::before { transform: scaleY(1); }
-  .col-item.active .col-name { color: var(--accent2); }
-  .col-badge {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.25);
-  }
-  .col-item.col-presaras .col-badge { background: rgba(59,130,246,.1); border-color: rgba(59,130,246,.3); }
-  .col-item.col-presaras.active { border-color: #3b82f6; background: rgba(59,130,246,.08); }
-  .col-item.col-presaras.active::before { background: #3b82f6; }
-  .col-item.col-presaras.active .col-name { color: #60a5fa; }
-  .col-name { font-weight: 700; font-size: .9rem; line-height: 1.2; }
-  .col-sub { font-size: .72rem; color: var(--text2); font-weight: 500; }
+  /* Tipografía */
+  .tag { font-family: var(--mono); font-size: var(--small-size); letter-spacing: .14em; text-transform: uppercase; color: var(--ac); display: inline-flex; align-items: center; gap: .6em; }
+  .tag::before { content: ''; width: 2.2em; height: 3px; background: var(--ac); }
+  h1 { font-family: var(--display); font-size: var(--title-size); line-height: .88; letter-spacing: -.03em; font-weight: 800; }
+  h2 { font-family: var(--display); font-size: var(--h2-size); line-height: .98; letter-spacing: -.02em; font-weight: 800; max-width: 18ch; }
+  .accent { color: var(--ac); }
+  .hl { background: var(--ac); color: #0f1230; padding: 0 .18em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .lead { font-size: var(--body-size); color: var(--muted); max-width: 60ch; line-height: 1.45; }
 
-  .col-content { flex: 1; min-width: 0; overflow: hidden; }
-  .col-iframe-wrap { width: 100%; height: calc(100vh - 65px); background: var(--bg); }
-  .col-iframe-wrap iframe { width: 100%; height: 100%; border: 0; display: block; background: #fff; }
+  /* Bloques */
+  .block { background: var(--bg2); border: 2px solid var(--line); border-radius: clamp(12px, 1.6vw, 22px); padding: clamp(.8rem, 1.8vw, 1.6rem); position: relative; }
+  .block.pop { border-color: var(--c); box-shadow: 6px 6px 0 var(--c); }
+  .num { font-family: var(--display); font-weight: 800; font-size: clamp(1.8rem, 4vw, 3.4rem); line-height: 1; color: var(--c); }
+  .ico { width: clamp(2.2rem, 4vw, 3.4rem); height: clamp(2.2rem, 4vw, 3.4rem); border-radius: 30%; display: grid; place-items: center; background: var(--c); color: #0f1230; font-size: clamp(1.1rem, 2vw, 1.6rem); flex-shrink: 0; }
+  .ico svg { width: 55%; height: 55%; }
+  .row { display: grid; gap: var(--gap); }
 
-  .content { max-width: 960px; margin: 0 auto; padding: 24px; }
+  /* ===== 1 · Portada ===== */
+  .cover h1 .d { color: var(--yellow); display: block; }
+  .sticker { position: absolute; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 800; color: #0f1230; text-align: center; line-height: 1; }
+  .s1 { width: clamp(90px, 14vw, 190px); height: clamp(90px, 14vw, 190px); background: var(--pink); right: 10vw; top: 14vh; font-size: clamp(.8rem, 1.5vw, 1.3rem); transform: rotate(12deg); }
+  .s2 { width: clamp(70px, 10vw, 140px); height: clamp(70px, 10vw, 140px); background: var(--blue); color: #fff; right: 24vw; bottom: 16vh; font-size: clamp(.7rem, 1.2vw, 1.05rem); transform: rotate(-10deg); }
+  .s3 { width: clamp(56px, 7vw, 100px); height: clamp(56px, 7vw, 100px); background: var(--teal); right: 6vw; bottom: 26vh; font-size: clamp(1rem, 2vw, 1.8rem); }
+  .stripe { position: absolute; left: 0; right: 0; bottom: 0; height: clamp(10px, 2vh, 18px); background: repeating-linear-gradient(90deg, var(--blue) 0 16.6%, var(--yellow) 16.6% 33.2%, var(--pink) 33.2% 49.8%, var(--orange) 49.8% 66.4%, var(--teal) 66.4% 83%, var(--violet) 83% 100%); }
 
-  .section-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
-  }
-  .section-card h2 {
-    font-size: 1.05rem; margin-bottom: 16px; color: var(--accent2);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-card p { font-size: .88rem; line-height: 1.7; margin-bottom: 10px; }
+  /* ===== 2 · D I S ===== */
+  .dis { grid-template-columns: repeat(3, 1fr); }
+  .dis .block { display: flex; flex-direction: column; gap: .4em; }
+  .letter { font-family: var(--display); font-weight: 800; font-size: clamp(4rem, 14vw, 12rem); line-height: .8; color: var(--c); }
+  .dis b { font-family: var(--display); font-size: var(--h3-size); }
+  .dis p { color: var(--muted); font-size: var(--small-size); line-height: 1.4; }
 
-  .img-full {
-    width: 100%; border-radius: 10px; margin: 12px 0;
-    border: 1px solid var(--border);
-  }
+  /* ===== 3 · Obxectivos ===== */
+  .goals { grid-template-columns: repeat(2, 1fr); }
+  .goals .block { display: flex; gap: clamp(.6rem, 1.5vw, 1.2rem); align-items: center; }
+  .goals b { font-family: var(--display); font-size: var(--h3-size); display: block; }
+  .goals p { color: var(--muted); font-size: var(--body-size); }
 
-  /* Obxectivos */
-  .obx-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px; margin: 12px 0;
-  }
-  .obx-card {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 10px; padding: 16px; text-align: center;
-  }
-  .obx-card .obx-label { font-size: .68rem; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-  .obx-card .obx-text { font-size: .85rem; font-weight: 600; }
+  /* ===== 4 · Como funciona ===== */
+  .steps { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+  .steps .block { display: flex; flex-direction: column; gap: .5em; }
+  .steps b { font-family: var(--display); font-size: var(--h3-size); }
+  .steps p { color: var(--muted); font-size: var(--body-size); line-height: 1.4; }
+  .loop { display: flex; align-items: center; gap: clamp(4px, .8vw, 10px); flex-wrap: wrap; margin-top: .3em; }
+  .loop span { width: clamp(26px, 3vw, 40px); height: clamp(34px, 4vw, 52px); border-radius: 8px; background: var(--c); color: #0f1230; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: var(--small-size); }
+  .loop svg { color: var(--muted); width: clamp(10px, 1.2vw, 16px); height: auto; }
 
-  /* Funcions */
-  .funcions-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 12px; margin-top: 12px;
-  }
-  .funcion-card {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 10px; padding: 16px; text-align: center;
-  }
-  .funcion-card h4 { font-size: .85rem; color: var(--accent2); margin-bottom: 6px; }
-  .funcion-card p { font-size: .78rem; color: var(--text2); line-height: 1.5; }
-  .funcion-icon { font-size: 1.5rem; margin-bottom: 8px; }
+  /* ===== 5 · Unha tarxeta por dentro ===== */
+  .inside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(1rem, 4vw, 4rem); align-items: center; }
+  .bigcard { border-radius: clamp(16px, 2vw, 26px); overflow: hidden; background: var(--bg2); border: 3px solid var(--pink); box-shadow: 10px 10px 0 var(--pink); max-width: 440px; width: 100%; justify-self: center; }
+  .bigcard header { background: var(--pink); color: #0f1230; padding: clamp(.6rem, 1.4vw, 1.1rem) clamp(.9rem, 1.8vw, 1.4rem); display: flex; justify-content: space-between; align-items: center; font-family: var(--display); font-weight: 800; }
+  .bigcard header span { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1; }
+  .bigcard header small { font-family: var(--mono); letter-spacing: .14em; font-size: var(--small-size); }
+  .bigcard li { list-style: none; display: flex; gap: .8em; align-items: center; padding: clamp(.6rem, 1.3vw, 1rem) clamp(.9rem, 1.8vw, 1.4rem); border-top: 2px solid var(--line); font-size: var(--h3-size); font-family: var(--display); font-weight: 700; }
+  .bigcard li:first-of-type { border-top: none; }
+  .types { display: flex; flex-direction: column; gap: var(--gap); }
+  .type { display: flex; gap: clamp(.6rem, 1.4vw, 1rem); align-items: center; }
+  .type b { font-family: var(--display); font-size: var(--h3-size); display: block; }
+  .type p { color: var(--muted); font-size: var(--body-size); }
 
-  /* ========== TARXETAS HTML ========== */
-  .tarxetas-html-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 14px; margin-top: 16px;
-  }
-  .tarxeta-html {
-    border-radius: 14px; padding: 24px 20px; text-align: center;
-    position: relative; min-height: 160px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    cursor: grab; user-select: none; transition: transform .2s, box-shadow .2s;
-  }
-  .tarxeta-html:active { cursor: grabbing; }
-  .tarxeta-html:hover { transform: scale(1.03); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
-  .tarxeta-html .t-num {
-    position: absolute; bottom: 10px; left: 0; right: 0;
-    text-align: center; font-style: italic; font-size: .8rem; opacity: .7;
-  }
-  .tarxeta-html .t-xogo { font-weight: 800; font-size: 1.1rem; margin: 3px 0; text-shadow: 0 1px 2px rgba(0,0,0,.15); }
-  .tarxeta-html .t-lite { font-weight: 700; color: #c0392b; font-size: 1rem; }
-  .tarxeta-html .t-free { font-weight: 800; font-size: 1.1rem; color: #1a1a2e; }
-  .t1 { background: linear-gradient(135deg, #87ceeb, #5dade2); color: #1a1a2e; }
-  .t2 { background: linear-gradient(135deg, #f5cba7, #e8a87c); color: #1a1a2e; }
-  .t3 { background: linear-gradient(135deg, #f9d423, #f8961e); color: #1a1a2e; }
-  .t4 { background: linear-gradient(135deg, #f7dc6f, #f1c40f); color: #1a1a2e; }
-  .t5 { background: linear-gradient(135deg, #f5cba7, #f8a5c2); color: #1a1a2e; }
-  .t6 { background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #d4fc79); color: #1a1a2e; }
+  /* ===== 6 · As 6 tarxetas ===== */
+  .deck { grid-template-columns: repeat(3, 1fr); }
+  .mini { border-radius: clamp(10px, 1.4vw, 18px); overflow: hidden; background: var(--bg2); border: 2px solid var(--c); }
+  .mini header { background: var(--c); color: #0f1230; padding: clamp(.3rem, .8vw, .6rem) clamp(.6rem, 1.2vw, 1rem); display: flex; justify-content: space-between; align-items: center; font-family: var(--display); font-weight: 800; font-size: clamp(1rem, 2vw, 1.6rem); }
+  .mini header small { font-family: var(--mono); font-size: var(--small-size); letter-spacing: .12em; }
+  .mini li { list-style: none; padding: clamp(.25rem, .7vw, .55rem) clamp(.6rem, 1.2vw, 1rem); font-size: var(--body-size); font-weight: 600; display: flex; gap: .55em; align-items: center; border-top: 1px solid var(--line); }
+  .mini li:first-of-type { border-top: none; }
+  .mini li i { width: .65em; height: .65em; border-radius: 50%; background: var(--tc); flex-shrink: 0; }
+  .mini li em { font-style: normal; font-family: var(--mono); font-size: .62em; color: var(--pink); margin-left: auto; letter-spacing: .06em; }
+  .legend { display: flex; gap: clamp(.6rem, 2vw, 1.6rem); flex-wrap: wrap; font-size: var(--small-size); color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: .45em; }
+  .legend i { width: .8em; height: .8em; border-radius: 50%; background: var(--tc); }
 
-  /* ========== PANEL ROTATIVO INTERACTIVO ========== */
-  .panel-rotativo { margin-top: 16px; }
-  .panel-instruccion {
-    background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-    padding: 12px 16px; margin-bottom: 16px; font-size: .82rem; color: var(--text2);
-    text-align: center;
-  }
-  .panel-instruccion svg { width: 16px; height: 16px; vertical-align: middle; margin-right: 4px; }
+  /* ===== 7 · Da clase de EF ao patio ===== */
+  .stat { display: grid; grid-template-columns: auto 1fr; gap: clamp(1rem, 4vw, 4rem); align-items: center; }
+  .big { font-family: var(--display); font-weight: 800; font-size: clamp(5rem, 20vw, 17rem); line-height: .8; color: var(--ac); letter-spacing: -.05em; }
+  .big small { font-size: .32em; color: var(--muted); letter-spacing: 0; }
+  .bar18 { display: grid; grid-template-columns: repeat(18, 1fr); gap: 4px; margin-top: .6em; }
+  .bar18 i { height: clamp(14px, 2.4vh, 26px); border-radius: 4px; background: var(--line); }
+  .bar18 i.on { background: var(--ac); }
+  .chips { display: flex; flex-wrap: wrap; gap: clamp(.3rem, .7vw, .55rem); }
+  .chips span { padding: .35em .8em; border-radius: 99px; border: 2px solid var(--c, var(--line)); font-size: var(--small-size); font-weight: 700; background: var(--bg2); }
 
-  /* Panel visual con imaxe de fondo */
-  .panel-visual {
-    position: relative; width: 100%; max-width: 700px; margin: 0 auto 24px;
-  }
-  .panel-visual img { width: 100%; display: block; border-radius: 12px; }
-  .drop-zone {
-    position: absolute; border: 2px dashed transparent; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s; overflow: hidden;
-  }
-  .drop-zone:hover { border-color: rgba(255,255,255,.4); }
-  .drop-zone.drag-over { border-color: var(--accent); background: rgba(245,158,11,.2); }
-  .drop-zone.has-card { border-color: transparent; background: none; }
-  .drop-zone .dz-placeholder {
-    font-size: .6rem; color: rgba(255,255,255,.4); text-align: center;
-    pointer-events: none;
-  }
-  .drop-zone.has-card .dz-placeholder { display: none; }
-  .drop-zone img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; pointer-events: none; }
+  /* ===== 8 · Zonas ===== */
+  .zones { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(1rem, 3vw, 3rem); align-items: center; }
+  .zones img { width: auto; max-width: 100%; height: auto; max-height: 62vh; justify-self: center; border-radius: clamp(12px, 1.6vw, 20px); border: 3px solid var(--ac); box-shadow: 8px 8px 0 var(--ac); display: block; }
+  .zlist { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(.35rem, .8vw, .7rem); }
+  .zlist div { display: flex; align-items: center; gap: .6em; font-weight: 700; font-size: var(--body-size); }
+  .zlist b { width: 2em; height: 2em; border-radius: 50%; display: grid; place-items: center; background: var(--zc); color: #fff; font-family: var(--display); flex-shrink: 0; }
 
-  /* Tarxeta mini dentro do slot */
-  .tarxeta-mini {
-    width: 100%; border-radius: 10px; padding: 12px; text-align: center;
-    cursor: grab; user-select: none; font-size: .82rem;
-  }
-  .tarxeta-mini:active { cursor: grabbing; }
-  .tarxeta-mini .tm-num { font-size: .7rem; opacity: .6; }
-  .tarxeta-mini .tm-xogos { font-weight: 700; font-size: .85rem; }
+  /* ===== 9 · Encargados ===== */
+  .roles { grid-template-columns: repeat(4, 1fr); }
+  .roles .block { display: flex; flex-direction: column; gap: .5em; }
+  .roles b { font-family: var(--display); font-size: var(--h3-size); }
+  .roles small { font-family: var(--mono); color: var(--c); font-size: var(--small-size); letter-spacing: .06em; }
+  .roles p { color: var(--muted); font-size: var(--body-size); line-height: 1.4; }
+  .pairs { display: flex; gap: 4px; }
+  .pairs i { width: clamp(14px, 1.6vw, 20px); height: clamp(14px, 1.6vw, 20px); border-radius: 50%; background: var(--c); }
 
-  /* Tarxetas arrastrables (pool) */
-  .tarxetas-pool {
-    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-    padding: 16px; background: var(--bg3); border: 1px solid var(--border);
-    border-radius: var(--radius); min-height: 60px;
-  }
-  .tarxetas-pool-label {
-    width: 100%; text-align: center; font-size: .75rem; color: var(--text2);
-    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;
-  }
-  .pool-card {
-    padding: 10px 16px; border-radius: 10px; cursor: grab; user-select: none;
-    font-weight: 700; font-size: .82rem; transition: transform .15s;
-    touch-action: none;
-  }
-  .pool-card:active { cursor: grabbing; transform: scale(1.08); }
-  .pool-card.dragging { opacity: .4; }
-  .pool-card img { width: 100%; border-radius: 8px; display: block; pointer-events: none; }
+  /* ===== 10 · Equipos ===== */
+  .teams { grid-template-columns: repeat(3, 1fr); }
+  .team { border-radius: clamp(10px, 1.4vw, 16px); padding: clamp(.6rem, 1.4vw, 1.2rem) clamp(.8rem, 1.6vw, 1.4rem); background: var(--tc); color: #0f1230; display: flex; justify-content: space-between; align-items: baseline; gap: .5em; }
+  .team b { font-family: var(--display); font-size: clamp(1rem, 2.2vw, 1.8rem); font-weight: 800; line-height: 1; }
+  .team span { font-family: var(--mono); font-size: var(--small-size); opacity: .8; }
 
-  .tarxeta-mini img { width: 100%; border-radius: 8px; display: block; pointer-events: none; }
+  /* ===== 11 · Ideas ===== */
+  .ideas { grid-template-columns: repeat(3, 1fr); }
+  .ideas .block { display: flex; flex-direction: column; gap: .7em; }
+  .ideas b { font-family: var(--display); font-size: var(--h3-size); display: flex; align-items: center; gap: .5em; }
 
-  .btn-reset {
-    margin-top: 12px; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
-    background: var(--bg3); color: var(--text2); font-size: .8rem; cursor: pointer;
-    display: block; margin-left: auto; margin-right: auto;
-  }
-  .btn-reset:hover { color: var(--red); border-color: var(--red); }
+  /* ===== 12 · Superliga ===== */
+  .liga { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .liga .block { display: flex; flex-direction: column; gap: .5em; }
+  .liga b { font-family: var(--display); font-size: var(--h3-size); }
+  .liga p { color: var(--muted); font-size: var(--body-size); }
+  .cta { display: inline-flex; align-items: center; gap: .6em; padding: .8em 1.3em; border-radius: 99px; background: var(--ac); color: #0f1230; font-weight: 800; text-decoration: none; font-family: var(--display); font-size: var(--body-size); align-self: flex-start; box-shadow: 4px 4px 0 var(--ink); }
+  .foot { font-family: var(--mono); font-size: var(--small-size); color: var(--muted); }
+  .foot a { color: var(--ink); }
 
-  /* ========== PARTICIPACION TABLA ========== */
-  .part-table {
-    width: 100%; border-collapse: collapse; font-size: .8rem;
-    background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
-  }
-  .part-table th {
-    background: var(--bg3); padding: 8px 6px; text-align: center;
-    font-size: .68rem; color: var(--text2); text-transform: uppercase; letter-spacing: .5px;
-    border-bottom: 1px solid var(--border);
-  }
-  .part-table td {
-    padding: 8px 6px; text-align: center; border-bottom: 1px solid var(--border);
-  }
-  .part-table tr:last-child td { border-bottom: none; }
-  .part-equipo {
-    font-weight: 700; font-size: .78rem; color: #fff; padding: 4px 10px;
-    border-radius: 6px; display: inline-block; min-width: 90px;
-  }
+  /* ===== Interface ===== */
+  .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: var(--ac); z-index: 50; transition: width .4s var(--ease), background .4s; width: 0; }
+  .nav-dots { position: fixed; right: clamp(8px, 1.2vw, 18px); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 9px; z-index: 50; }
+  .nav-dots button { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--muted); background: transparent; cursor: pointer; padding: 0; transition: all .3s; }
+  .nav-dots button.on { background: var(--yellow); border-color: var(--yellow); transform: scale(1.35); }
+  .ui { position: fixed; top: clamp(8px, 1.4vw, 18px); right: clamp(8px, 1.4vw, 18px); display: flex; gap: 8px; align-items: center; z-index: 50; }
+  .counter { font-family: var(--mono); font-size: var(--small-size); color: var(--muted); }
+  .theme-toggle { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--line); background: var(--bg2); color: var(--ink); display: grid; place-items: center; cursor: pointer; }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  .hint { position: fixed; bottom: clamp(22px, 4vh, 36px); left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: var(--small-size); color: var(--muted); z-index: 40; transition: opacity .4s; display: flex; gap: .5em; align-items: center; }
+  .hint.off { opacity: 0; pointer-events: none; }
 
-  .toast {
-    position: fixed; bottom: 24px; right: 24px; background: var(--green);
-    color: #000; padding: 12px 20px; border-radius: 8px; font-weight: 600;
-    font-size: .85rem; opacity: 0; transform: translateY(10px);
-    transition: all .3s; z-index: 200;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
+  /* ===== Animacións ===== */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.pop-in { transform: scale(.85) rotate(-6deg); }
+  .slide.visible .reveal { opacity: 1; transform: none; }
+  .slide.visible .bigcard.reveal { transform: rotate(-2deg); }
+  .slide.visible .reveal:nth-child(2) { transition-delay: .08s; } .slide.visible .reveal:nth-child(3) { transition-delay: .16s; }
+  .slide.visible .reveal:nth-child(4) { transition-delay: .24s; } .slide.visible .reveal:nth-child(5) { transition-delay: .32s; }
+  .slide.visible .reveal:nth-child(6) { transition-delay: .4s; } .slide.visible .reveal:nth-child(7) { transition-delay: .48s; }
+  .slide.visible .reveal:nth-child(8) { transition-delay: .56s; } .slide.visible .reveal:nth-child(9) { transition-delay: .64s; }
+  @keyframes floaty { 50% { translate: 0 -10px; } }
+  .slide.visible .sticker { animation: floaty 4s ease-in-out infinite; }
+  .slide.visible .s2 { animation-delay: -1.3s; } .slide.visible .s3 { animation-delay: -2.6s; }
 
-  @media (max-width: 768px) {
-    .header h1 { font-size: 1rem; }
-    .content { padding: 16px; }
-    .section-card { padding: 20px; }
-    .equipos-drop-grid { grid-template-columns: 1fr 1fr; }
-    .tarxetas-html-grid { grid-template-columns: 1fr; }
-    .col-layout { flex-direction: column; }
-    .col-sidebar { flex-direction: row; width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 10px; overflow-x: auto; }
-    .col-sidebar-title { display: none; }
-    .col-item { flex-direction: row; align-items: center; flex-shrink: 0; padding: 10px 14px; }
-    .col-iframe-wrap { height: calc(100vh - 180px); }
+  /* ===== Breakpoints ===== */
+  @media (max-height: 700px) {
+    :root { --slide-padding: clamp(.75rem, 3vw, 2rem); --gap: clamp(.4rem, 1.2vw, .9rem); --title-size: clamp(2rem, 7vw, 5rem); --h2-size: clamp(1.3rem, 3.6vw, 2.4rem); }
   }
-  @media (max-width: 500px) {
-    .equipos-drop-grid { grid-template-columns: 1fr; }
+  @media (max-height: 600px) {
+    :root { --body-size: clamp(.72rem, 1.2vw, .95rem); --h3-size: clamp(.9rem, 1.6vw, 1.15rem); }
+    .nav-dots, .hint, .sticker { display: none; }
+    .lead { display: none; }
+  }
+  @media (max-height: 500px) {
+    :root { --slide-padding: clamp(.4rem, 2vw, 1rem); --title-size: clamp(1.6rem, 5vw, 3rem); --h2-size: clamp(1rem, 2.6vw, 1.5rem); }
+  }
+  @media (max-width: 760px) {
+    :root { --title-size: clamp(2.6rem, 15vw, 4.4rem); --h2-size: clamp(1.4rem, 7vw, 2.2rem); --body-size: clamp(.78rem, 3.4vw, .95rem); --h3-size: clamp(.9rem, 4vw, 1.1rem); --small-size: clamp(.62rem, 2.8vw, .78rem); --gap: .5rem; }
+    .slide-content { padding-right: calc(var(--slide-padding) + 14px); }
+    .nav-dots { right: 4px; gap: 6px; } .nav-dots button { width: 7px; height: 7px; }
+    .dis, .steps, .ideas, .liga { grid-template-columns: 1fr; }
+    .dis .block { flex-direction: row; align-items: center; gap: .8em; }
+    .letter { font-size: clamp(2.6rem, 14vw, 4rem); }
+    .goals, .roles, .zlist { grid-template-columns: 1fr 1fr; }
+    .goals .block { flex-direction: column; align-items: flex-start; }
+    .goals p, .roles p, .steps p { font-size: var(--small-size); }
+    .roles .ico, .steps .ico { display: none; }
+    .deck { grid-template-columns: 1fr 1fr; }
+    .mini li { font-size: var(--small-size); padding: .2rem .5rem; }
+    .mini li em { display: none; }
+    .inside, .zones, .stat { grid-template-columns: 1fr; }
+    .bigcard { max-width: 300px; }
+    .bigcard li { font-size: var(--body-size); }
+    .types .type p { display: none; }
+    .zones img { max-height: 38vh; }
+    .teams { grid-template-columns: 1fr 1fr; }
+    .s1 { right: 5vw; top: 9vh; } .s2 { right: 8vw; bottom: 12vh; } .s3 { display: none; }
+    .lead { font-size: var(--small-size); }
+    .ideas .block { padding: .6rem .8rem; }
+    .liga .block { flex-direction: row; align-items: center; padding: .6rem .8rem; }
+    .liga .block p { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .2s !important; }
+    html { scroll-behavior: auto; }
+  }
+  @media print {
+    html { scroll-snap-type: none; }
+    .slide { height: auto; min-height: 100vh; page-break-after: always; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .progress-bar, .nav-dots, .ui, .hint { display: none; }
   }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <a class="back-btn" href="../index.html" title="Volver ao portal">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-    </a>
-    <h1>Patios <span>DINS</span></h1>
-  </div>
-  <button class="icon-btn" onclick="toggleTheme()">
-    <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-    <svg id="iconSun" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-  </button>
+<div class="progress-bar" id="bar"></div>
+<nav class="nav-dots" id="dots" aria-label="Diapositivas"></nav>
+<div class="ui">
+  <span class="counter" id="counter">1/12</span>
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" aria-label="Cambiar tema"></button>
 </div>
+<div class="hint" id="hint"><i data-ic="arrowDown"></i>Desliza ou usa as frechas</div>
 
-<div class="col-layout">
-
-<aside class="col-sidebar">
-  <div class="col-sidebar-title">Colexios</div>
-  <button class="col-item active" onclick="switchColexio('coiron')">
-    <div class="col-badge">🏫</div>
-    <div>
-      <div class="col-name">CEIP Coirón Dena</div>
-      <div class="col-sub">Proxecto activo 2025-26</div>
+<main>
+  <!-- 1 · Portada -->
+  <section class="slide cover" style="--ac:var(--yellow)" aria-label="Portada">
+    <div class="slide-content">
+      <span class="tag reveal">CEIP de Coirón-Dena · 2026-27</span>
+      <h1 class="reveal">Patios<span class="d">DINS</span></h1>
+      <p class="lead reveal">Un recreo onde <span class="accent">todo o alumnado atopa o seu xogo</span>.</p>
     </div>
-  </button>
-  <button class="col-item col-presaras" onclick="switchColexio('presaras')">
-    <div class="col-badge">🎓</div>
-    <div>
-      <div class="col-name">CEIP Présaras</div>
-      <div class="col-sub">Presentación externa</div>
-    </div>
-  </button>
-</aside>
+    <div class="sticker s1 decorative">6<br>tarxetas</div>
+    <div class="sticker s2 decorative">18<br>xogos</div>
+    <div class="sticker s3 decorative"><i data-ic="sprout"></i></div>
+    <div class="stripe"></div>
+  </section>
 
-<div class="col-content">
-
-<div id="viewColCoiron">
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('presentacion')">Presentacion</div>
-  <div class="tab" onclick="switchTab('tarxetas')">Tarxetas</div>
-  <div class="tab" onclick="switchTab('zonas')">Zonas do patio</div>
-  <div class="tab" onclick="switchTab('responsables')">Responsables</div>
-  <div class="tab" onclick="switchTab('participacion')">Participacion</div>
-</div>
-
-<div class="content">
-
-  <!-- ==================== PRESENTACION ==================== -->
-  <div id="viewPresentacion">
-    <div class="section-card">
-      <h2>Que son os Patios DINS?</h2>
-      <p><strong>Dinamicos, Inclusivos e Sostibles.</strong> Unha proposta para favorecer a inclusion entre o alumnado e lograr que coñezan gran variedade de recursos ludicos para o seu tempo libre.</p>
-      <p>O enfoque fusiona o dinamico co inclusivo e sostible: fomentar a actividade fisica, ofrecer alternativas de xogo e tamen coidar a saude mental e social.</p>
-    </div>
-    <div class="section-card">
-      <h2>Obxectivos</h2>
-      <div class="obx-grid">
-        <div class="obx-card"><div class="obx-label">Potenciar</div><div class="obx-text">O xogo e o deporte entre o alumnado menos participativo</div></div>
-        <div class="obx-card"><div class="obx-label">Diminuir</div><div class="obx-text">Os conflitos no patio</div></div>
-        <div class="obx-card"><div class="obx-label">Mellorar</div><div class="obx-text">A coeducacion e as habilidades sociais</div></div>
-        <div class="obx-card"><div class="obx-label">Ofrecer</div><div class="obx-text">Alternativas para ocupar o tempo libre</div></div>
+  <!-- 2 · DIS -->
+  <section class="slide" style="--ac:var(--blue)" aria-label="Que significa DINS">
+    <div class="slide-content">
+      <span class="tag reveal">Que significa</span>
+      <h2 class="reveal">Tres palabras, <span class="accent">un patio novo</span></h2>
+      <div class="row dis">
+        <div class="block pop reveal" style="--c:var(--yellow)"><span class="letter">D</span><div><b>Dinámicos</b><p>Máis actividade física e moitas alternativas de xogo.</p></div></div>
+        <div class="block pop reveal" style="--c:var(--pink)"><span class="letter">I</span><div><b>Inclusivos</b><p>Que ninguén quede fóra: hai xogo para cada quen.</p></div></div>
+        <div class="block pop reveal" style="--c:var(--teal)"><span class="letter">S</span><div><b>Sostibles</b><p>Coidamos o patio, o material e a saúde mental e social.</p></div></div>
       </div>
     </div>
-    <div class="section-card">
-      <h2>Funcions dos encargados</h2>
-      <p>Cada equipo ten 4 encargados rotativos:</p>
-      <div class="funcions-grid">
-        <div class="funcion-card"><div class="funcion-icon">📦</div><h4>Material</h4><p>Levar e recoller o material do patio.</p></div>
-        <div class="funcion-card"><div class="funcion-icon">🌿</div><h4>Hixiene ambiental</h4><p>Coidar o contorno, evitar lixo. Ecopatrulla.</p></div>
-        <div class="funcion-card"><div class="funcion-icon">✅</div><h4>Seguridade</h4><p>Que todos xoguen respectando normas.</p></div>
-        <div class="funcion-card"><div class="funcion-icon">📋</div><h4>Secretario/a</h4><p>Anotar participacion e puntos.</p></div>
+  </section>
+
+  <!-- 3 · Obxectivos -->
+  <section class="slide" style="--ac:var(--pink)" aria-label="Obxectivos">
+    <div class="slide-content">
+      <span class="tag reveal">Para que</span>
+      <h2 class="reveal">Catro <span class="accent">obxectivos</span></h2>
+      <div class="row goals">
+        <div class="block reveal" style="--c:var(--yellow)"><span class="num">01</span><div><b>Potenciar</b><p>O xogo e o deporte entre o alumnado menos participativo.</p></div></div>
+        <div class="block reveal" style="--c:var(--pink)"><span class="num">02</span><div><b>Diminuír</b><p>Os conflitos no patio.</p></div></div>
+        <div class="block reveal" style="--c:var(--teal)"><span class="num">03</span><div><b>Mellorar</b><p>A coeducación e as habilidades sociais.</p></div></div>
+        <div class="block reveal" style="--c:var(--orange)"><span class="num">04</span><div><b>Ofrecer</b><p>Alternativas para ocupar o tempo libre.</p></div></div>
       </div>
     </div>
-    <div class="section-card">
-      <h2>Como funciona?</h2>
-      <p>Hai <strong>6 tarxetas</strong> con xogos diferentes. Cada clase comeza cunha e cada 6 dias lectivos rotan. Os xogos marcados como <strong style="color:#c0392b">lite</strong> requiren alugar material na Ecotenda cos lites da Superliga.</p>
-    </div>
-  </div>
+  </section>
 
-  <!-- ==================== TARXETAS ==================== -->
-  <div id="viewTarxetas" class="hidden">
-    <!-- Panel interactivo -->
-    <div class="section-card">
-      <h2>Panel rotativo interactivo</h2>
-      <div class="panel-instruccion">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M10 20H4v-6"/><path d="m20 4-6.7 6.7"/><path d="m4 20 6.7-6.7"/></svg>
-        Arrastra cada tarxeta ao equipo correspondente para configurar a rotacion actual
-      </div>
-
-      <div class="panel-visual" id="panelVisual">
-        <img src="pd_tarxetas_rotacion.png" alt="Panel rotativo">
-        <!-- As drop zones posicionanse con JS sobre cada equipo -->
-      </div>
-
-      <div class="tarxetas-pool" id="tarxetasPool">
-        <div class="tarxetas-pool-label">Tarxetas disponibles (arrastra arriba)</div>
-      </div>
-
-      <button class="btn-reset" onclick="resetPanel()">Resetear panel</button>
-    </div>
-
-    <!-- As 6 tarxetas en HTML -->
-    <div class="section-card">
-      <h2>Tarxetas de xogos 2025-2026</h2>
-      <div class="tarxetas-html-grid" id="tarxetasGrid"></div>
-    </div>
-  </div>
-
-  <!-- ==================== ZONAS ==================== -->
-  <div id="viewZonas" class="hidden">
-    <div class="section-card">
-      <h2>Zonas do patio</h2>
-      <p>O patio esta dividido en 6 zonas para os diferentes xogos:</p>
-      <img class="img-full" src="pd_zonas.png" alt="Mapa de zonas do patio">
-    </div>
-  </div>
-
-  <!-- ==================== RESPONSABLES ==================== -->
-  <div id="viewResponsables" class="hidden">
-    <div class="section-card">
-      <h2>Parellas responsables - Curso 2025-2026</h2>
-      <p>Encargados de Material, Hixiene ambiental, Seguridade e Secretariado por equipo:</p>
-      <img class="img-full" src="pd_parellas.png" alt="Parellas responsables">
-    </div>
-  </div>
-
-  <!-- ==================== PARTICIPACION ==================== -->
-  <div id="viewParticipacion" class="hidden">
-    <div class="section-card">
-      <h2>Lista de participacion - 3º Trimestre</h2>
-      <p>Reconto de participacion do alumnado. Cada 6 dias lectivos rotanse as tarxetas:</p>
-      <div style="overflow-x:auto; margin-top:12px;">
-        <table class="part-table">
-          <thead>
-            <tr>
-              <th>Equipo</th>
-              <th>T1<br><span style="font-weight:400;font-size:.6rem">Colpbol<br>Slackline<br>Combas</span></th>
-              <th>T2<br><span style="font-weight:400;font-size:.6rem">Bolos<br>Badminton<br>T.Musical</span></th>
-              <th>T3<br><span style="font-weight:400;font-size:.6rem">Palas<br>21 Basket<br>Recre-Arte</span></th>
-              <th>T4<br><span style="font-weight:400;font-size:.6rem">Dachball<br>Pinfuvote<br>Diana</span></th>
-              <th>T5<br><span style="font-weight:400;font-size:.6rem">T.Mesa<br>Beisbol<br>Xadrez</span></th>
-              <th>T6<br><span style="font-weight:400;font-size:.6rem">P.Inimiga<br>Estructura<br>Aros</span></th>
-            </tr>
-          </thead>
-          <tbody id="partBody"></tbody>
-        </table>
+  <!-- 4 · Como funciona -->
+  <section class="slide" style="--ac:var(--teal)" aria-label="Como funciona">
+    <div class="slide-content">
+      <span class="tag reveal">Como funciona</span>
+      <h2 class="reveal">Tan doado como <span class="accent">1, 2, 3</span></h2>
+      <div class="row steps">
+        <div class="block pop reveal" style="--c:var(--blue)"><span class="ico"><i data-ic="users"></i></span><b>1 · Cada clase é un equipo</b><p>Nove equipos de 1º a 6º, cada un co seu nome e a súa cor.</p></div>
+        <div class="block pop reveal" style="--c:var(--pink)"><span class="ico"><i data-ic="layers"></i></span><b>2 · Cada equipo ten unha tarxeta</b><p>Na tarxeta hai tres xogos para escoller durante o recreo.</p></div>
+        <div class="block pop reveal" style="--c:var(--yellow)"><span class="ico"><i data-ic="refresh"></i></span><b>3 · Cada 6 días, rota</b><p>A tarxeta pasa ao seguinte equipo. Ao longo do trimestre, todos proban todo.</p>
+          <div class="loop" id="loop"></div></div>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="toast" id="toast"></div>
+  <!-- 5 · Unha tarxeta por dentro -->
+  <section class="slide" style="--ac:var(--pink)" aria-label="Unha tarxeta por dentro">
+    <div class="slide-content">
+      <span class="tag reveal">Unha tarxeta por dentro</span>
+      <h2 class="reveal">Tres xogos, <span class="accent">tres maneiras</span> de xogar</h2>
+      <div class="inside">
+        <div class="bigcard reveal pop-in">
+          <header><small>TARXETA</small><span>4</span></header>
+          <ul>
+            <li><span class="ico" style="--c:var(--blue)"><i data-ic="ball"></i></span>Tchoukball</li>
+            <li><span class="ico" style="--c:var(--orange)"><i data-ic="zap"></i></span>Pilla con desxeo</li>
+            <li><span class="ico" style="--c:var(--violet)"><i data-ic="puzzle"></i></span>Xogos de mesa</li>
+          </ul>
+        </div>
+        <div class="types">
+          <div class="type reveal"><span class="ico" style="--c:var(--blue)"><i data-ic="ball"></i></span><div><b>Xogo de equipo</b><p>Para quen quere correr, competir e cooperar.</p></div></div>
+          <div class="type reveal"><span class="ico" style="--c:var(--orange)"><i data-ic="zap"></i></span><div><b>Habilidade</b><p>Retos de equilibrio, puntería ou destreza.</p></div></div>
+          <div class="type reveal"><span class="ico" style="--c:var(--violet)"><i data-ic="puzzle"></i></span><div><b>Tranquilo</b><p>Para quen prefire xogar con calma ou descansar.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · As 6 tarxetas -->
+  <section class="slide" style="--ac:var(--orange)" aria-label="As seis tarxetas">
+    <div class="slide-content">
+      <span class="tag reveal">Tarxetas 2026-27</span>
+      <h2 class="reveal">As <span class="accent">6 tarxetas</span></h2>
+      <div class="row deck" id="deck"></div>
+      <div class="legend reveal">
+        <span style="--tc:var(--blue)"><i></i>Equipo</span><span style="--tc:var(--orange)"><i></i>Habilidade</span><span style="--tc:var(--violet)"><i></i>Tranquilo</span>
+        <span style="color:var(--pink);font-family:var(--mono)">NOVO = sae da clase de EF</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · Da clase de EF ao patio -->
+  <section class="slide" style="--ac:var(--yellow)" aria-label="Da clase de EF ao patio">
+    <div class="slide-content">
+      <span class="tag reveal">Da clase de EF ao patio</span>
+      <div class="stat">
+        <div class="big reveal" id="bigNum">13<small>/18</small></div>
+        <div class="reveal">
+          <h2>xogos novos <span class="hl">saen das unidades de EF</span></h2>
+          <div class="bar18" id="bar18"></div>
+          <p class="lead" style="margin-top:.8em">O que se aprende na clase pásase ao recreo, onde o alumnado o xoga con liberdade.</p>
+        </div>
+      </div>
+      <div class="chips reveal" id="newChips"></div>
+    </div>
+  </section>
+
+  <!-- 8 · Zonas -->
+  <section class="slide" style="--ac:var(--teal)" aria-label="Zonas do patio">
+    <div class="slide-content">
+      <span class="tag reveal">Zonas do patio</span>
+      <h2 class="reveal">Cada xogo, <span class="accent">o seu sitio</span></h2>
+      <div class="zones">
+        <img class="reveal" src="zonas-2627.jpg" alt="Plano do patio do CEIP de Coirón-Dena dividido en seis zonas de xogo e unha zona verde" width="719" height="631">
+        <div class="reveal">
+          <p class="lead" style="margin-bottom:1em">O patio divídese en seis zonas e unha zona verde. Así conviven o balón, as habilidades e os xogos tranquilos.</p>
+          <div class="zlist">
+            <div style="--zc:#14b8a6"><b>1</b>Zona 1</div><div style="--zc:#fb923c"><b>2</b>Zona 2</div>
+            <div style="--zc:#f97316"><b>3</b>Zona 3</div><div style="--zc:#eab308"><b>4</b>Zona 4</div>
+            <div style="--zc:#8b5cf6"><b>5</b>Zona 5</div><div style="--zc:#3b82f6"><b>6</b>Zona 6</div>
+            <div style="--zc:#22c55e"><b><i data-ic="leaf"></i></b>Zona verde</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · Encargados -->
+  <section class="slide" style="--ac:var(--violet)" aria-label="Encargados">
+    <div class="slide-content">
+      <span class="tag reveal">Encargados</span>
+      <h2 class="reveal">O patio <span class="accent">organízao o alumnado</span></h2>
+      <p class="lead reveal">Catro roles por equipo, cada un nunha parella: oito encargados por clase.</p>
+      <div class="row roles">
+        <div class="block pop reveal" style="--c:var(--orange)"><span class="ico"><i data-ic="package"></i></span><small>MATERIAL</small><b>Levar e recoller</b><p>O material do patio, ao comezo e ao final.</p><div class="pairs"><i></i><i></i></div></div>
+        <div class="block pop reveal" style="--c:var(--teal)"><span class="ico"><i data-ic="leaf"></i></span><small>ECOPATRULLA</small><b>Hixiene ambiental</b><p>Que o patio quede limpo e sen tápers polo chan.</p><div class="pairs"><i></i><i></i></div></div>
+        <div class="block pop reveal" style="--c:var(--pink)"><span class="ico"><i data-ic="heart"></i></span><small>SEGURIDADE</small><b>Benestar</b><p>Que se respecten as normas e o equipo estea ben.</p><div class="pairs"><i></i><i></i></div></div>
+        <div class="block pop reveal" style="--c:var(--blue)"><span class="ico"><i data-ic="clipboard"></i></span><small>SECRETARÍA</small><b>Reconto</b><p>Anotar a participación cada 6 días lectivos.</p><div class="pairs"><i></i><i></i></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · Equipos -->
+  <section class="slide" style="--ac:var(--orange)" aria-label="Equipos">
+    <div class="slide-content">
+      <span class="tag reveal">Equipos 2026-27</span>
+      <h2 class="reveal">Nove clases, <span class="accent">nove equipos</span></h2>
+      <div class="row teams" id="teams"></div>
+    </div>
+  </section>
+
+  <!-- 11 · Ideas -->
+  <section class="slide" style="--ac:var(--teal)" aria-label="A voz do alumnado">
+    <div class="slide-content">
+      <span class="tag reveal">A voz do alumnado</span>
+      <h2 class="reveal">As tarxetas tamén <span class="accent">as propoñen eles</span></h2>
+      <p class="lead reveal">O 6 de outubro cada clase achegou ideas para os xogos do patio.</p>
+      <div class="row ideas">
+        <div class="block reveal"><b><span class="ico" style="--c:var(--blue)"><i data-ic="ball"></i></span>Equipo e deportes</b><div class="chips"><span style="--c:var(--blue)">Balonmán</span><span style="--c:var(--blue)">Fútbol</span><span style="--c:var(--blue)">Hockey</span><span style="--c:var(--blue)">Palas e tenis</span></div></div>
+        <div class="block reveal"><b><span class="ico" style="--c:var(--orange)"><i data-ic="zap"></i></span>Habilidades e retos</b><div class="chips"><span style="--c:var(--orange)">Sobre rodas</span><span style="--c:var(--orange)">Tirolina</span><span style="--c:var(--orange)">Cintas de rítmica</span><span style="--c:var(--orange)">Trompos</span></div></div>
+        <div class="block reveal"><b><span class="ico" style="--c:var(--violet)"><i data-ic="puzzle"></i></span>Talleres e calma</b><div class="chips"><span style="--c:var(--violet)">Legos</span><span style="--c:var(--violet)">Maquetas</span><span style="--c:var(--violet)">Robótica</span><span style="--c:var(--violet)">Disfraces</span><span style="--c:var(--violet)">Maquillaxe</span><span style="--c:var(--violet)">Slime</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · Superliga -->
+  <section class="slide" style="--ac:var(--yellow)" aria-label="Superliga Saudable">
+    <div class="slide-content">
+      <span class="tag reveal">Superliga Saudable</span>
+      <h2 class="reveal">Os Patios DINS <span class="accent">xogan en equipo</span> coa Superliga</h2>
+      <div class="row liga">
+        <div class="block pop reveal" style="--c:var(--teal)"><span class="ico"><i data-ic="apple"></i></span><b>Hábitos saudables</b><p>Froita, actividade física e simulacros dan puntos á clase.</p></div>
+        <div class="block pop reveal" style="--c:var(--yellow)"><span class="ico"><i data-ic="coins"></i></span><b>Lites</b><p>Os puntos convértense en lites, a moeda da Superliga.</p></div>
+        <div class="block pop reveal" style="--c:var(--pink)"><span class="ico"><i data-ic="store"></i></span><b>Ecotenda</b><p>Cos lites, as clases alugan material para o recreo.</p></div>
+      </div>
+      <a class="cta reveal" href="https://superliga-saudable.pages.dev/" target="_blank" rel="noopener"><i data-ic="trophy"></i>Ver a Superliga</a>
+      <p class="foot reveal">CEIP de Coirón-Dena · Patios DINS 2026-27 · <a href="../index.html">Espazo educativo</a></p>
+    </div>
+    <div class="stripe"></div>
+  </section>
+</main>
 
 <script>
-// Datos
+// ===== Iconas Lucide =====
+const IC = {
+  sprout: '<path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>',
+  arrowDown: '<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
+  arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  layers: '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+  ball: '<circle cx="12" cy="12" r="10"/><path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94"/><path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32"/><path d="M8.56 2.75c4.37 6 6 9.42 8 17.72"/>',
+  zap: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
+  puzzle: '<path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"/>',
+  leaf: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>',
+  package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>',
+  heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  clipboard: '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>',
+  apple: '<path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/>',
+  coins: '<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>',
+  store: '<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/>',
+  trophy: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+  moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+};
+const ic = n => `<svg class="i" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[n] || ''}</svg>`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// ===== Datos 26-27 (fonte: patios-dins-2627/tarxetas-2627.html) =====
+const CORES = ['var(--teal)', 'var(--blue)', 'var(--yellow)', 'var(--pink)', 'var(--violet)', 'var(--orange)'];
+const TC = { e: 'var(--blue)', h: 'var(--orange)', t: 'var(--violet)' };
+// [xogo, tipo, novo]: novo = 1 se sae dunha unidade de EF; 0 se se mantén de 25-26
 const TARXETAS = [
-  { id: 1, bg: 'linear-gradient(135deg, #87ceeb, #5dade2)', xogos: ['Colpbol-Tenis', 'Slackline', 'Combas'], lites: [false, true, false] },
-  { id: 2, bg: 'linear-gradient(135deg, #f5cba7, #e8a87c)', xogos: ['Bolos', 'Badminton', 'Taller Musical'], lites: [false, true, true] },
-  { id: 3, bg: 'linear-gradient(135deg, #f9d423, #f8961e)', xogos: ['Palas', '21 Basket', 'Recre-Arte'], lites: [false, true, true] },
-  { id: 4, bg: 'linear-gradient(135deg, #f7dc6f, #f1c40f)', xogos: ['Dachball', 'Pinfuvote', 'Diana'], lites: [true, false, true] },
-  { id: 5, bg: 'linear-gradient(135deg, #f5cba7, #f8a5c2)', xogos: ['Tenis de Mesa', 'Beisbol', 'Xadrez'], lites: [false, true, false] },
-  { id: 6, bg: 'linear-gradient(135deg, #a1c4fd, #c2e9fb, #c6f6d5)', xogos: ['Pelota Inimiga', 'Estructura', 'Aros-Raqueta'], lites: [false, false, true] },
+  [['Colpbol', 'e', 1], ['Combas', 'h', 1], ['Xadrez', 't', 0]],
+  [['Floorball', 'e', 1], ['Slackline', 'h', 1], ['Recre-arte', 't', 0]],
+  [['Disc-golf', 'e', 1], ['Billarda e bolos', 'h', 1], ['Mímica', 't', 1]],
+  [['Tchoukball', 'e', 1], ['Pilla con desxeo', 'h', 1], ['Xogos de mesa', 't', 0]],
+  [['Netball · 21 basket', 'e', 1], ['Retos cooperativos', 'h', 1], ['Taller musical', 't', 0]],
+  [['Xadrezball', 'e', 1], ['Futbolín humano', 'h', 1], ['Zona tranquila', 't', 0]],
 ];
-
+// Equipos-clase de Primaria 26-27 (mesmos nomes ca na Superliga)
 const EQUIPOS = [
-  { curso: '1º', names: 'XIRASOIS', color: '#e74c3c' },
-  { curso: '2º', names: 'NUBE / DRAKYS', color: '#9b59b6' },
-  { curso: '3º', names: 'A TRIBO', color: '#e67e22' },
-  { curso: '4º', names: 'TERRA / PLANTA', color: '#f1c40f' },
-  { curso: '5º', names: 'BOLBORETA A / B', color: '#87ceeb' },
-  { curso: '6º', names: 'FANTASMA / MUNDIAL', color: '#27ae60' },
+  ['1º', 'Primeiro', '#ff8a65'], ['XIRASOIS', '2º', '#ff5148'], ['NUBE', '3ºA', '#4d8dff'], ['DRAKIS', '3ºB', '#b07cff'],
+  ['A TRIBO', '4º', '#ff8a1f'], ['TERRA', '5ºA', '#2fd07b'], ['PLANTA', '5ºB', '#7ee36b'], ['BOLBORETA A', '6ºA', '#ffb21f'], ['BOLBORETA B', '6ºB', '#e6d000'],
 ];
 
-const EQUIPOS_PART = [
-  { name: 'XIRASOIS', color: '#e74c3c' },
-  { name: 'NUBE', color: '#3498db' },
-  { name: 'DRAKYS', color: '#9b59b6' },
-  { name: 'A TRIBO', color: '#e67e22' },
-  { name: 'TERRA', color: '#27ae60' },
-  { name: 'PLANTA', color: '#2ecc71' },
-  { name: 'BOLBORETA A', color: '#f39c12' },
-  { name: 'BOLBORETA B', color: '#d4ac0d' },
-  { name: 'FANTASMA', color: '#95a5a6' },
-  { name: 'MUNDIAL', color: '#1abc9c' },
-];
+function render() {
+  document.getElementById('deck').innerHTML = TARXETAS.map((xs, i) => `
+    <div class="mini reveal" style="--c:${CORES[i]}">
+      <header><small>TARXETA</small>${i + 1}</header>
+      <ul>${xs.map(([x, t, n]) => `<li style="--tc:${TC[t]}"><i></i>${esc(x)}${n ? '<em>NOVO</em>' : ''}</li>`).join('')}</ul>
+    </div>`).join('');
 
-// Estado do panel (que tarxeta ten cada equipo)
-let panelState = JSON.parse(localStorage.getItem('patios_panel') || 'null') || {};
+  const todos = TARXETAS.flat();
+  const novos = todos.filter(g => g[2]);
+  document.getElementById('bigNum').innerHTML = `${novos.length}<small>/${todos.length}</small>`;
+  document.getElementById('bar18').innerHTML = todos.map(g => `<i class="${g[2] ? 'on' : ''}"></i>`).join('');
+  document.getElementById('newChips').innerHTML = novos.map(([x, t]) => `<span style="--c:${TC[t]}">${esc(x)}</span>`).join('');
 
-// Render tarxetas HTML (vista)
-function renderTarxetasGrid() {
-  document.getElementById('tarxetasGrid').innerHTML = TARXETAS.map(t => `
-    <div class="tarxeta-card-img" style="border-radius:14px;overflow:hidden;border:2px solid var(--border);transition:all .2s">
-      <img src="pd_tarxeta_${t.id}.png" alt="Tarxeta ${t.id}" style="width:100%;display:block">
-    </div>
-  `).join('');
+  document.getElementById('loop').innerHTML = CORES.map((c, i) => `<span style="--c:${c}">${i + 1}</span>${i < 5 ? ic('arrowRight') : ic('refresh')}`).join('');
+
+  document.getElementById('teams').innerHTML = EQUIPOS.map(([n, c, col]) =>
+    `<div class="team reveal" style="--tc:${col}"><b>${esc(n)}</b><span>${esc(c)}</span></div>`).join('');
+
+  document.querySelectorAll('i[data-ic]').forEach(el => { el.outerHTML = ic(el.dataset.ic); });
 }
 
-// Posicions das drop zones sobre a imaxe (en % relativo)
-// Correspondencia coa imaxe pd_tarxetas_rotacion.png:
-// 0=1º Xirasois (esquerda arriba), 1=2º Nube/Drakys (centro arriba),
-// 2=3º A Tribo (dereita arriba), 3=4º Terra/Planta (esquerda abaixo),
-// 4=5º Bolboreta (centro abaixo), 5=6º Fantasma/Mundial (dereita abaixo)
-const DROP_POSITIONS = [
-  { left: 3, top: 5, width: 28, height: 42 },    // 1º
-  { left: 36, top: 0, width: 28, height: 42 },    // 2º
-  { left: 69, top: 5, width: 28, height: 42 },    // 3º
-  { left: 3, top: 52, width: 28, height: 44 },    // 4º
-  { left: 36, top: 56, width: 28, height: 44 },   // 5º
-  { left: 69, top: 52, width: 28, height: 44 },   // 6º
-];
-
-// Render panel rotativo
-function renderPanel() {
-  const panel = document.getElementById('panelVisual');
-  const pool = document.getElementById('tarxetasPool');
-  const assigned = Object.values(panelState);
-
-  // Eliminar drop zones anteriores
-  panel.querySelectorAll('.drop-zone').forEach(el => el.remove());
-
-  // Crear drop zones sobre a imaxe
-  EQUIPOS.forEach((eq, i) => {
-    const pos = DROP_POSITIONS[i];
-    const tid = panelState[i];
-    const tarxeta = tid != null ? TARXETAS.find(t => t.id === tid) : null;
-    const dz = document.createElement('div');
-    dz.className = 'drop-zone' + (tarxeta ? ' has-card' : '');
-    dz.dataset.equipo = i;
-    dz.style.cssText = `left:${pos.left}%;top:${pos.top}%;width:${pos.width}%;height:${pos.height}%`;
-    dz.ondragover = (e) => { e.preventDefault(); dz.classList.add('drag-over'); };
-    dz.ondragleave = () => dz.classList.remove('drag-over');
-    dz.ondrop = (e) => dropCard(e, i);
-
-    if (tarxeta) {
-      dz.innerHTML = renderMiniCard(tarxeta, i);
-    } else {
-      dz.innerHTML = '<span class="dz-placeholder">Soltar aqui</span>';
-    }
-    panel.appendChild(dz);
-  });
-
-  // Pool con tarxetas non asignadas
-  const unassigned = TARXETAS.filter(t => !assigned.includes(t.id));
-  pool.innerHTML = '<div class="tarxetas-pool-label">Tarxetas disponibles (arrastra arriba)</div>' +
-    (unassigned.length === 0 ? '<div style="color:var(--green);font-size:.82rem">Todas as tarxetas asignadas</div>' : '') +
-    unassigned.map(t => `
-      <div class="pool-card" draggable="true" ondragstart="dragStart(event, ${t.id})" data-tid="${t.id}" style="padding:4px;background:var(--bg2);border-radius:10px;max-width:140px">
-        <img src="pd_tarxeta_${t.id}.png" alt="Tarxeta ${t.id}">
-      </div>
-    `).join('');
-
-  // Touch events para movil
-  addTouchDrag();
-}
-
-function renderMiniCard(t, eqIdx) {
-  return `<div class="tarxeta-mini" draggable="true" ondragstart="dragStartFromSlot(event, ${t.id}, ${eqIdx})" data-tid="${t.id}">
-    <img src="pd_tarxeta_${t.id}.png" alt="Tarxeta ${t.id}">
-  </div>`;
-}
-
-// Drag & Drop
-let draggedTid = null;
-let draggedFromEquipo = null;
-
-function dragStart(e, tid) {
-  draggedTid = tid;
-  draggedFromEquipo = null;
-  e.dataTransfer.effectAllowed = 'move';
-  e.target.classList.add('dragging');
-}
-
-function dragStartFromSlot(e, tid, eqIdx) {
-  draggedTid = tid;
-  draggedFromEquipo = eqIdx;
-  e.dataTransfer.effectAllowed = 'move';
-}
-
-function dropCard(e, eqIdx) {
-  e.preventDefault();
-  e.currentTarget.classList.remove('drag-over');
-  if (draggedTid == null) return;
-
-  // Se xa hai tarxeta neste equipo, devolvela ao pool
-  if (panelState[eqIdx] != null && panelState[eqIdx] !== draggedTid) {
-    // A anterior volve ao pool
+// ===== Navegación entre diapositivas =====
+class SlidePresentation {
+  constructor() {
+    this.slides = [...document.querySelectorAll('.slide')];
+    this.current = 0;
+    this.total = this.slides.length;
+    const dots = document.getElementById('dots');
+    dots.innerHTML = this.slides.map((s, i) => `<button aria-label="${esc(s.getAttribute('aria-label'))}" data-i="${i}"></button>`).join('');
+    dots.addEventListener('click', e => { const b = e.target.closest('button'); if (b) this.go(+b.dataset.i); });
+    this.initKeyboard(); this.initTouch(); this.initObserver(); this.updateUI();
   }
-
-  // Se vinha doutro equipo, limpar o anterior
-  if (draggedFromEquipo != null && draggedFromEquipo !== eqIdx) {
-    delete panelState[draggedFromEquipo];
+  go(i) {
+    if (i < 0 || i >= this.total) return;
+    this.current = i;
+    this.slides[i].scrollIntoView({ behavior: 'smooth' });
+    this.updateUI();
   }
-
-  panelState[eqIdx] = draggedTid;
-  draggedTid = null;
-  draggedFromEquipo = null;
-  savePanelState();
-  renderPanel();
-  showToast('Tarxeta asignada');
-}
-
-function resetPanel() {
-  panelState = {};
-  savePanelState();
-  renderPanel();
-  showToast('Panel reseteado');
-}
-
-function savePanelState() {
-  localStorage.setItem('patios_panel', JSON.stringify(panelState));
-}
-
-// Touch drag para movil
-function addTouchDrag() {
-  document.querySelectorAll('[draggable="true"]').forEach(el => {
-    el.addEventListener('touchstart', handleTouchStart, { passive: false });
-    el.addEventListener('touchmove', handleTouchMove, { passive: false });
-    el.addEventListener('touchend', handleTouchEnd, { passive: false });
-  });
-}
-
-let touchClone = null;
-let touchTid = null;
-let touchFromEq = null;
-
-function handleTouchStart(e) {
-  const el = e.currentTarget;
-  touchTid = parseInt(el.dataset.tid || el.closest('[draggable]')?.dataset?.tid);
-  if (!touchTid) {
-    // Tarxeta mini dentro dun slot
-    const mini = el.closest('.tarxeta-mini');
-    if (mini) {
-      const match = mini.outerHTML.match(/Tarxeta n.º (\d)/);
-      if (match) touchTid = parseInt(match[1]);
-    }
+  move(d) { this.go(this.current + d); }
+  initKeyboard() {
+    document.addEventListener('keydown', e => {
+      if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); this.move(1); }
+      if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); this.move(-1); }
+      if (e.key === 'Home') { e.preventDefault(); this.go(0); }
+      if (e.key === 'End') { e.preventDefault(); this.go(this.total - 1); }
+    });
   }
-  touchFromEq = el.closest('.equipo-drop')?.dataset?.equipo;
-  touchFromEq = touchFromEq != null ? parseInt(touchFromEq) : null;
-
-  touchClone = el.cloneNode(true);
-  touchClone.style.position = 'fixed';
-  touchClone.style.zIndex = '1000';
-  touchClone.style.opacity = '.8';
-  touchClone.style.pointerEvents = 'none';
-  touchClone.style.width = el.offsetWidth + 'px';
-  document.body.appendChild(touchClone);
-  const touch = e.touches[0];
-  touchClone.style.left = (touch.clientX - 40) + 'px';
-  touchClone.style.top = (touch.clientY - 20) + 'px';
-}
-
-function handleTouchMove(e) {
-  e.preventDefault();
-  if (!touchClone) return;
-  const touch = e.touches[0];
-  touchClone.style.left = (touch.clientX - 40) + 'px';
-  touchClone.style.top = (touch.clientY - 20) + 'px';
-}
-
-function handleTouchEnd(e) {
-  if (touchClone) {
-    touchClone.remove();
-    touchClone = null;
+  initTouch() {
+    // Deslizamento lateral; o vertical xa o fai o scroll con snap
+    let x0 = 0, y0 = 0;
+    document.addEventListener('touchstart', e => { x0 = e.changedTouches[0].screenX; y0 = e.changedTouches[0].screenY; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = x0 - e.changedTouches[0].screenX, dy = Math.abs(y0 - e.changedTouches[0].screenY);
+      if (Math.abs(dx) > 50 && dy < 80) this.move(dx > 0 ? 1 : -1);
+    }, { passive: true });
   }
-  if (touchTid == null) return;
-  const touch = e.changedTouches[0];
-  const target = document.elementFromPoint(touch.clientX, touch.clientY);
-  const dropZone = target?.closest('.equipo-drop');
-  if (dropZone) {
-    const eqIdx = parseInt(dropZone.dataset.equipo);
-    if (touchFromEq != null && touchFromEq !== eqIdx) delete panelState[touchFromEq];
-    panelState[eqIdx] = touchTid;
-    savePanelState();
-    renderPanel();
-    showToast('Tarxeta asignada');
+  initObserver() {
+    const io = new IntersectionObserver(es => es.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('visible');
+        this.current = this.slides.indexOf(en.target);
+        this.updateUI();
+      }
+    }), { threshold: .5 });
+    this.slides.forEach(s => io.observe(s));
   }
-  touchTid = null;
-  touchFromEq = null;
+  updateUI() {
+    document.getElementById('counter').textContent = `${this.current + 1}/${this.total}`;
+    const bar = document.getElementById('bar');
+    bar.style.width = `${((this.current + 1) / this.total) * 100}%`;
+    document.querySelectorAll('#dots button').forEach((b, i) => b.classList.toggle('on', i === this.current));
+    document.getElementById('hint').classList.toggle('off', this.current > 0);
+  }
 }
 
-// Participacion
-function renderParticipacion() {
-  document.getElementById('partBody').innerHTML = EQUIPOS_PART.map(eq => `
-    <tr>
-      <td><span class="part-equipo" style="background:${eq.color}">${eq.name}</span></td>
-      <td></td><td></td><td></td><td></td><td></td><td></td>
-    </tr>
-  `).join('');
-}
-
-// Tabs
-const TABS = ['presentacion','tarxetas','zonas','responsables','participacion'];
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((el, i) => el.classList.toggle('active', TABS[i] === tab));
-  TABS.forEach(t => {
-    const v = document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1));
-    if (v) v.classList.toggle('hidden', t !== tab);
-  });
-  if (tab === 'tarxetas') { renderPanel(); renderTarxetasGrid(); }
-  if (tab === 'participacion') renderParticipacion();
-}
-
+// Tema: lúa en escuro, sol en claro (mesma clave ca no resto do espazo)
+function setThemeIcon() { document.getElementById('themeBtn').innerHTML = ic(document.body.classList.contains('light') ? 'sun' : 'moon'); }
 function toggleTheme() {
   document.body.classList.toggle('light');
-  const l = document.body.classList.contains('light');
-  document.getElementById('iconMoon').classList.toggle('hidden', l);
-  document.getElementById('iconSun').classList.toggle('hidden', !l);
-  localStorage.setItem('ef_theme', l ? 'light' : 'dark');
+  try { localStorage.setItem('ef_theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch (e) {}
+  setThemeIcon();
 }
+try { if (localStorage.getItem('ef_theme') === 'light') document.body.classList.add('light'); } catch (e) {}
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 1500);
-}
-
-// Cambio entre colexios na sidebar
-function switchColexio(col) {
-  if (col === 'presaras') {
-    window.location.href = 'presentacion-presaras.html';
-    return;
-  }
-  // 'coiron' xa é a vista por defecto
-  document.querySelectorAll('.col-item').forEach(b => b.classList.remove('active'));
-  document.querySelector('.col-item:not(.col-presaras)').classList.add('active');
-}
-
-// Init
-if (localStorage.getItem('ef_theme') === 'light') {
-  document.body.classList.add('light');
-  document.getElementById('iconMoon').classList.add('hidden');
-  document.getElementById('iconSun').classList.remove('hidden');
-}
+render();
+setThemeIcon();
+new SlidePresentation();
 </script>
 </body>
 </html>
