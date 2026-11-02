@@ -149,7 +149,7 @@ svg.map.grabbing{cursor:grabbing}
 </div>
 <script>
 (function(){
-  const HASH='e49ae5dc21c06b242735a5a7dbf8d371cbb0d6286d243c9b6d0ef27710558fe2';
+  const HASH='6a8328b1da171410d67e3c0eb4c1904bfc18a4e0c4ef6e76d5bdaab8ae7a72b7';
   const gate=document.getElementById('gate');
   if(sessionStorage.getItem('proba_ue_ok')==='1'){gate.classList.add('ok');return;}
   async function sha(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));
