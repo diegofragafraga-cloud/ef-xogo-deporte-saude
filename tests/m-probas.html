@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Probas da versión móbil</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;margin:24px;background:#0e1116;color:#e6ebf2}.ok{color:#34d399}.erro{color:#f87171}</style>
+</head>
+<body>
+<h1>Probas da versión móbil</h1>
+<p>Compara as ligazóns que le a versión móbil con as que ten cada páxina de ordenador.</p>
+<ul id="saida"></ul>
+<script src="/m/m.js"></script>
+<script>
+// Abrir con servidor (python3 -m http.server ou wrangler pages dev) en /tests/m-probas.html
+(async function () {
+  const saida = document.getElementById("saida");
+  const PARES = [["Portada", "/index.html"], ["Diego", "/diego/index.html"], ["Brais", "/brais/index.html"]];
+  let todo = true;
+  for (const [nome, pc] of PARES) {
+    try {
+      const html = await fetch(pc, { headers: { "X-Vista": "m" } }).then(r => r.text());
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const esperadas = doc.querySelectorAll("main section.col a.l, main section.col a.ch, main section.col a.chip").length;
+      const { seccions } = window.MovilBD.extraer(doc, location.origin + pc);
+      const ligazons = seccions.flatMap(s => s.grupos.flatMap(g => g.ligazons));
+      const baleiras = ligazons.filter(l => !l.texto || !l.href).length;
+      const ok = esperadas > 0 && ligazons.length === esperadas && baleiras === 0;
+      todo = todo && ok;
+      saida.insertAdjacentHTML("beforeend", `<li class="${ok ? "ok" : "erro"}">${ok ? "OK" : "ERRO"} · ${nome}: PC ${esperadas} · móbil ${ligazons.length} · sen texto/href ${baleiras}</li>`);
+    } catch (e) {
+      todo = false;
+      saida.insertAdjacentHTML("beforeend", `<li class="erro">ERRO · ${nome}: ${e.message}</li>`);
+    }
+  }
+  document.title = todo ? "OK" : "ERRO";
+})();
+</script>
+</body>
+</html>

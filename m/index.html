@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="gl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#151a21">
+<title>Brais e Diego · móbil</title>
+<script>/* tema antes de pintar: escuro por defecto (ef_theme, o mesmo da versión PC) */
+try{if(localStorage.getItem('ef_theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+<link rel="stylesheet" href="/m/m.css">
+</head>
+<body class="c-di" data-fonte="/index.html" data-pc="/?pc=1" data-buzon="suxerencias" data-suxerencias="https://superliga-api.diegofragafraga.workers.dev/suxerencias" data-abertas="todas">
+
+<header class="cab">
+  <h1>Brais e Diego<small>CEIP Coirón-Dena · recursos de EF, Mates, Sociais e máis</small></h1>
+  <button class="bi" id="mTema" type="button" aria-label="Cambiar tema"></button>
+</header>
+
+<div class="busca">
+  <label><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+  <input id="mBusca" type="search" placeholder="Buscar…" aria-label="Buscar recursos" autocomplete="off"></label>
+</div>
+
+<main>
+  <div class="accesos" id="mAccesos"></div>
+  <div id="mLista"><div class="carga"></div><div class="carga"></div><div class="carga"></div></div>
+  <p class="aviso oculto" id="mSen">Non hai ningún recurso con esa palabra.</p>
+</main>
+
+<div class="pe"><a href="/?pc=1"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Versión de ordenador</a></div>
+
+<nav class="tabs" aria-label="Espazos">
+  <a href="/m/" aria-current="page"><svg class="i" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Inicio</a>
+  <a href="/m/diego/" class="c-di"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>Diego</a>
+  <a href="/m/brais/" class="c-br"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>Brais</a>
+</nav>
+
+<script src="/m/m.js"></script>
+</body>
+</html>
